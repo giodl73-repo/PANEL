@@ -18,6 +18,7 @@ ${CLAUDE_PLUGIN_ROOT}/templates/
 ├── RESEARCH.md                  # Paper inventory template
 ├── REVIEWERS.md                 # Module reviewer subset template
 ├── REVIEW_PANEL.md              # Cross-portfolio panel placeholder
+├── references.bib               # Global bibliography catalog (1200+ entries)
 ├── review-template.md           # Individual review structure
 ├── synthesis-template.md        # Synthesis document structure
 └── revision-plan-template.md    # Revision plan structure
@@ -131,6 +132,7 @@ cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWER-DATABASE.md" "${targetDir}/REVIEWER
 cp "${CLAUDE_PLUGIN_ROOT}/templates/RESEARCH.md" "${targetDir}/RESEARCH.md"
 cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWERS.md" "${targetDir}/REVIEWERS.md"
 cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEW_PANEL.md" "${targetDir}/REVIEW_PANEL.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/references.bib" "${targetDir}/references.bib"
 ```
 
 Resulting layout (all inside `research/`):
@@ -140,6 +142,7 @@ research/
 ├── RESEARCH.md
 ├── REVIEWERS.md
 ├── REVIEW_PANEL.md
+├── references.bib        ← global bibliography for papers to draw from
 ├── docs/
 └── panel-*/              ← paper directories go here too
 ```
@@ -359,6 +362,7 @@ Infrastructure (all inside research/):
   ✓ research/RESEARCH.md           (paper inventory template)
   ✓ research/REVIEWERS.md          (module reviewer subset)
   ✓ research/REVIEW_PANEL.md       (placeholder)
+  ✓ research/references.bib        (global bibliography — 1200+ entries)
   ✓ research/Makefile              (master build)
 
 Papers: 3 detected (1 existing + 2 imported from waves)
@@ -532,6 +536,7 @@ Infrastructure (research/):
   ✓ research/RESEARCH.md           (2 papers listed)
   ✓ research/REVIEWERS.md          present
   ✓ research/REVIEW_PANEL.md       present
+  ✓ research/references.bib        present (1200+ entries)
   ✓ research/Makefile              present
 
 Reviewer Panel:
@@ -621,6 +626,7 @@ After project-level or per-paper setup completes, auto-commit:
 - shared/topic-discovery.md — Waves scanning for topic discovery, `discover_from_waves()` for paper import
 - shared/paper-generator.md — `generate_paper()` for creating papers from wave proposals
 - shared/reviewer-selector.md — `select_panel()` for per-paper reviewers, `filter_reviewers()` for category-based selection
+- templates/references.bib — Global bibliography catalog for papers
 - templates/REVIEWER-DATABASE.md — Bundled reviewer database
 - templates/RESEARCH.md — Paper inventory template
 - templates/REVIEWERS.md — Module reviewer subset template
