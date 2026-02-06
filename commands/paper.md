@@ -66,9 +66,10 @@ Paper-level reviews bubble up to `panel:panel`. Panel-level revision items (PP1/
 - Gate: SYNTHESIS.md exists with P1/P2/P3 classification
 
 ### revision → recheck
-- Create `REVISION-PLAN.md` from synthesis P1/P2/P3 items
+- Create `REVISION-PLAN.md` in the paper root directory from synthesis P1/P2/P3 items using `${CLAUDE_PLUGIN_ROOT}/templates/revision-plan-template.md`
+- **MUST always produce this file** — if it already exists (from setup), update it with current P1/P2/P3 items
 - Track P1 item completion in `_panel.yaml.p1_items`
-- Gate: All P1 items marked `addressed: true`
+- Gate: `REVISION-PLAN.md` exists AND all P1 items marked `addressed: true`
 
 ### recheck → ready (or → synthesis)
 - Generate Round N reviews: `reviews/ROUND{N}-REVIEW-{NAME}.md`
@@ -131,5 +132,6 @@ panel:paper --round 3
 - shared/panel-utils.md — PP item integration, panel readiness checks
 - config/stages.yaml — Stage definitions
 - config/scoring.yaml — Scoring rubrics
-- templates/review-template.md — Review structure
+- templates/review-template.md — Review structure (via `${CLAUDE_PLUGIN_ROOT}/templates/`)
 - templates/synthesis-template.md — Synthesis structure
+- templates/revision-plan-template.md — Revision plan structure

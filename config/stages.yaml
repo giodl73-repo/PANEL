@@ -16,7 +16,7 @@ stages:
 
   - name: revision
     description: Author revising based on synthesis
-    gate: All P1 items marked addressed in _panel.yaml
+    gate: REVISION-PLAN.md exists AND all P1 items marked addressed in _panel.yaml
     artifacts: [REVISION-PLAN.md, updated sections/]
 
   - name: recheck
