@@ -1,5 +1,9 @@
 # {MODULE} Module — Expert Reviewer Subset
 
+> **AI Simulation Disclosure**: The reviewers listed below are AI personas, not
+> actual participants. See [REVIEWER-DATABASE.md](REVIEWER-DATABASE.md) for full
+> methodology disclosure.
+
 **Module**: {MODULE_DESCRIPTION}
 **Papers**: 0
 **Global database**: See [REVIEWER-DATABASE.md](REVIEWER-DATABASE.md)

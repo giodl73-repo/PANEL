@@ -1,5 +1,9 @@
 # Panel Module — Expert Reviewer Subset
 
+> **AI Simulation Disclosure**: The reviewers listed below are AI personas, not
+> actual participants. See [REVIEWER-DATABASE.md](REVIEWER-DATABASE.md) for full
+> methodology disclosure.
+
 **Module**: Panel (AI-Simulated Expert Review Methodology)
 **Papers**: 5
 **Global database**: See [REVIEWER-DATABASE.md](../../research/REVIEWER-DATABASE.md) in monorepo root

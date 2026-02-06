@@ -1,5 +1,14 @@
 # Expert Reviewer Database
 
+> **AI Simulation Disclosure**: This database supports an AI-simulated peer review
+> system. The named researchers are **not** actual reviewers of this work. Their
+> names, affiliations, and expertise areas are used to construct AI personas that
+> emulate the *perspective and priorities* each researcher is known for, based on
+> their published work, public talks, and documented research philosophy. No
+> endorsement, affiliation, or participation by these individuals is implied.
+> All reviews generated from these personas are synthetic outputs produced by a
+> large language model (Claude, Anthropic). See the project README for methodology.
+
 A comprehensive pool of expert reviewers for AI-simulated paper reviews across all research modules. Select reviewers based on paper topic and contribution type.
 
 **Scope**: Global - shared across all modules in this monorepo.
