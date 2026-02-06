@@ -1,7 +1,7 @@
 paper: panel-review-methodology
 title: "AI-Simulated Expert Review: A Methodology for Pre-Submission Paper Assessment"
 venue: "CHI / CSCW"
-stage: ready
+stage: submit
 round: 2
 reviewers:
   - name: Michael Bernstein
@@ -84,3 +84,6 @@ history:
   - stage: ready
     date: "2026-02-05"
     note: "Round 2 complete — all reviewers Accept (3/4). Avg 3.0/4, gate passed. Paper ready for submission."
+  - stage: submit
+    date: "2026-02-05"
+    note: "Submission confirmed by author. Target venue: CHI / CSCW."
