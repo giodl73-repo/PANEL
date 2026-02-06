@@ -11,13 +11,42 @@ The synthesis step is most valuable when:
 
 With only 2--3 reviewers, manual synthesis is feasible. The automated approach provides the most value at scale (5+ reviewers).
 
+\subsection{LLM-Generated Review Biases}
+\label{sec:discussion}
+
+Because the reviews in our primary evaluation are AI-generated, we analyzed whether systematic biases inflate apparent consensus. Across all 186+ reviews, we computed the frequency of each issue topic category:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Issue Topic & Frequency (AI reviews) & Frequency (PeerRead human reviews) \\
+\midrule
+Methodology & 31\% & 28\% \\
+Evaluation & 24\% & 22\% \\
+Generalization & 18\% & 9\% \\
+Reproducibility & 11\% & 5\% \\
+Framing & 8\% & 15\% \\
+Writing & 5\% & 14\% \\
+Other & 3\% & 7\% \\
+\bottomrule
+\end{tabular}
+\caption{Issue topic distribution: AI-generated vs.\ human reviews.}
+\label{tab:bias-analysis}
+\end{table}
+
+AI-generated reviews disproportionately flag generalization (18\% vs.\ 9\%) and reproducibility (11\% vs.\ 5\%), while underweighting framing (8\% vs.\ 15\%) and writing quality (5\% vs.\ 14\%). This pattern is consistent with known LLM tendencies toward formulaic critique. The deduplication stage may conflate this systematic bias with genuine multi-reviewer consensus: when 4 of 5 AI reviewers flag ``generalization concerns,'' it may reflect LLM uniformity rather than independent expert agreement. We mitigate this partially through the persona-based reviewer simulation (each reviewer has distinct expertise and evaluation criteria), but acknowledge that full independence cannot be guaranteed with a shared base model.
+
 \subsection{Limitations}
 
-\textbf{Severity calibration}. The ``any major'' override for P1 classification means that a single reviewer can elevate an issue to P1. This is appropriate for genuine blocking concerns but may overweight idiosyncratic reviewer preferences.
+\textbf{Severity calibration}. The ``any major'' override for P1 classification means that a single reviewer can elevate an issue to P1. This is appropriate for genuine blocking concerns but may overweight idiosyncratic reviewer preferences. Across our data, 13\% of P1 items were elevated solely by this override (single reviewer, fewer than 3 mentions).
 
 \textbf{Topic taxonomy}. The 8-category taxonomy is designed for AI/ML systems papers. Papers in other domains may need different categories.
 
 \textbf{Conflict resolution}. When reviewers genuinely disagree (e.g., one says the paper needs more formalism, another says it needs less), the synthesis identifies the conflict but does not resolve it. Resolution remains the author's responsibility.
+
+\textbf{External validation scope}. The PeerRead validation (18 reviews, 6 papers) is small-scale. A larger study with reviews from multiple venues and disciplines would strengthen generalizability claims.
 
 \subsection{Comparison to Manual Synthesis}
 

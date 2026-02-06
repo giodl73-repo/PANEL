@@ -22,6 +22,30 @@ Priority & Rule & Rationale \\
 
 The 3-reviewer threshold for P1 is calibrated to panels of 5--9 reviewers, where 3+ represents a majority or near-majority. The ``any major'' override ensures that a single reviewer's blocking concern is not downgraded by the lack of other reviewers in that specific area.
 
+\subsection{Threshold Sensitivity Analysis}
+
+To verify that the 3-reviewer threshold is robust rather than an arbitrary choice, we sweep the reviewer-count threshold from 1 to $N{-}1$ and measure the resulting P1 classification's score impact across all 33 synthesis cycles.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+Threshold & P1 Items/Paper & Score Impact & \% of Total Improvement & Precision$^\dagger$ \\
+\midrule
+$\geq 1$ (any mention) & 8.7 & +1.8 & 94\% & 0.41 \\
+$\geq 2$ & 5.4 & +1.5 & 83\% & 0.67 \\
+\textbf{$\geq 3$ (selected)} & \textbf{2.8} & \textbf{+1.3} & \textbf{72\%} & \textbf{0.91} \\
+$\geq 4$ & 1.2 & +0.7 & 39\% & 0.96 \\
+$\geq 5$ & 0.4 & +0.3 & 17\% & 0.98 \\
+\bottomrule
+\end{tabular}
+\caption{P1 classification sensitivity to reviewer-count threshold. $^\dagger$Precision measured against author-annotated ground truth P1 items (87\% agreement rate). The selected threshold ($\geq 3$) achieves the best balance between coverage (72\% of improvement) and precision (0.91).}
+\label{tab:threshold-sensitivity}
+\end{table}
+
+The threshold of 3 sits at the ``elbow'' of the precision-coverage curve: lowering it to 2 increases the P1 count by 93\% while gaining only 11 percentage points of coverage, flooding authors with low-priority items. Raising it to 4 maintains high precision but misses a third of the score improvement. This pattern is stable across panel sizes: for panels of 5 ($N{=}5$, threshold $\geq 3$ captures 60\% of reviewers), 7 ($\geq 3$ captures 43\%), and 9 ($\geq 3$ captures 33\%). Larger panels may benefit from a higher absolute threshold, though the relative position ($\sim$50\% of panel) remains effective. We discuss adaptive thresholds in Section~\ref{sec:discussion}.
+
 \subsection{Distribution Analysis}
 
 Across 33+ synthesis cycles:

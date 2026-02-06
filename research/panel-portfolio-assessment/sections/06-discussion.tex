@@ -9,16 +9,74 @@ The cross-portfolio panel identified insights invisible at the individual paper 
     \item \textbf{Shared gaps} (learning loop, human dimensions) that suggest new research directions
 \end{itemize}
 
-These findings demonstrate that portfolio-level review provides qualitatively different---not just aggregated---assessment compared to individual paper review.
+These findings demonstrate that portfolio-level review provides qualitatively different---not just aggregated---assessment compared to individual paper review. The baseline comparison (Section~\ref{sec:baselines}) confirms that while rankings are largely correlated with simple aggregation ($\rho = 0.83$), the cross-cutting themes, strategic priorities, and structured disagreement analysis are unique outputs of the portfolio process.
 
 \subsection{Structured Disagreement as Signal}
 
 The three reviewer blocs (Systems, Agents, Human-Centered) with near-orthogonal between-bloc correlations provide richer information than consensus. A paper ranked highly by all blocs is genuinely strong across dimensions. A paper ranked highly by one bloc but low by others has a clear audience but limited breadth.
 
+\subsection{Human-in-the-Loop Panel Design}
+\label{sec:hitl}
+
+A fully automated assessment methodology risks removing human agency from a fundamentally human-centered process. We propose a hybrid design that specifies the role of human judgment at each stage:
+
+\textbf{Stages suitable for automation:}
+\begin{itemize}
+    \item Score aggregation and statistical analysis (Section~4)
+    \item Agreement matrix computation and bloc identification
+    \item Theme extraction from structured reviewer outputs
+    \item Initial tier classification based on score thresholds
+\end{itemize}
+
+\textbf{Stages requiring human judgment:}
+\begin{itemize}
+    \item Reviewer selection and panel composition decisions
+    \item Interpretation of cross-cutting themes and their implications
+    \item Strategic priority setting (context-dependent, value-laden)
+    \item Final tier classification for borderline papers
+    \item Appeals and contestation of individual assessments
+\end{itemize}
+
+\textbf{Appeals mechanism.} We propose a three-tier appeals process: (1) \textit{Factual correction}---authors identify factual errors in reviews, which are corrected and scores recalculated; (2) \textit{Scope contestation}---authors argue that a reviewer assessed against criteria outside the paper's stated scope, triggering re-assessment by a substitute reviewer; (3) \textit{Panel recomposition}---in cases of demonstrated bias (e.g., reviewer score consistently 2+ standard deviations from panel mean across all papers), a replacement reviewer is substituted and the panel re-run.
+
+\textbf{Recommended deployment model.} The AI-simulated panel is best used as a \textit{first-pass screening tool}: it identifies likely tier classifications, surfaces themes, and generates structured feedback that human experts then validate, adjust, and augment. This mirrors the ``AI drafts, human decides'' pattern increasingly common in professional review contexts.
+
+\subsection{Calibration and Epistemic Status of AI-Simulated Panels}
+\label{sec:calibration}
+
+The structured disagreement patterns observed in our panels---reviewer blocs with within-bloc $\rho = 0.60$--$0.80$ and between-bloc $\rho = 0.05$--$0.30$---must be interpreted with epistemic caution. These patterns may reflect:
+\begin{enumerate}
+    \item \textbf{Genuine disciplinary perspectives}: The AI personas accurately model how experts from different fields would assess the same work, producing disagreement that maps to real intellectual differences.
+    \item \textbf{Prompt-induced diversity}: The persona descriptions create artificial variation that resembles but does not correspond to real disciplinary differences.
+    \item \textbf{A mixture}: Some disagreement is genuine (driven by documented differences in what fields value) while some is an artifact of the simulation.
+\end{enumerate}
+
+We do not claim to resolve which interpretation holds. Instead, we propose a calibration protocol:
+\begin{enumerate}
+    \item \textbf{Small-scale validation}: Recruit 2--3 real experts from different blocs (e.g., one systems researcher, one HCI researcher) to independently assess the same paper set. Compare their rankings and scores against the AI panel.
+    \item \textbf{Disagreement pattern matching}: Test whether real experts form blocs with similar correlation structure to the AI blocs ($\rho = 0.60$--$0.80$ within, $0.05$--$0.30$ between).
+    \item \textbf{Theme validation}: Present the AI-identified cross-cutting themes to real experts and assess whether they identify similar themes independently.
+    \item \textbf{Decision-relevant calibration}: Compare the tier classifications and strategic recommendations from AI and human panels, focusing on whether they would lead to the same submission strategy decisions.
+\end{enumerate}
+
+Until such calibration is conducted, the appropriate epistemic stance is: \textit{the AI panel produces structured assessments whose internal consistency is high (ICC(2,7) = 0.87) and whose outputs are plausible, but whose correspondence to real expert judgment is an open empirical question.}
+
+\subsection{Failure Modes and Robustness}
+
+We identify three categories of failure modes:
+
+\textbf{Composition sensitivity.} Panel outputs are sensitive to reviewer selection. Replacing one reviewer can shift tier classifications for borderline papers. We partially mitigate this through the bootstrap analysis (Section~\ref{sec:uncertainty}), which shows that rankings of interior-tier papers are stable but borderline papers are sensitive. A practical recommendation: flag papers within 0.25 points of a tier boundary as ``provisional'' and subject to human review.
+
+\textbf{Ordering and anchoring effects.} The order in which papers are presented to reviewers may influence scores. We did not systematically vary presentation order in this study, but note that all reviewers received papers in the same order. Future work should randomize presentation order and test for position effects.
+
+\textbf{Score drift.} In multi-module assessment, reviewers may recalibrate their internal standards between modules. The cross-module board mitigates this through simultaneous assessment, but per-module panels assessed at different times may exhibit drift. Anchoring papers (included in both panels for calibration) would address this.
+
 \subsection{Limitations}
 
-\textbf{Panel size}. Seven reviewers is sufficient for structured disagreement analysis but may not capture all relevant perspectives. Larger panels would improve coverage at the cost of coordination.
+\textbf{Panel size}. Seven reviewers is sufficient for structured disagreement analysis but may not capture all relevant perspectives. Larger panels would improve coverage at the cost of coordination and compute.
 
-\textbf{Single program}. The methodology has been applied to one research program (14 papers, 2 modules). Validation across diverse programs is needed.
+\textbf{Single program}. The methodology has been applied to one research program (13 papers, 2 modules). Validation across diverse programs---different fields, team sizes, and maturity levels---is needed.
 
-\textbf{AI-simulated reviewers}. Panel assessments are generated by LLM personas, not real experts. The structured disagreement patterns may reflect prompt engineering rather than genuine disciplinary differences.
+\textbf{AI-simulated reviewers}. Panel assessments are generated by LLM personas, not real experts. As discussed in Section~\ref{sec:calibration}, the epistemic status of simulated disagreement requires empirical calibration against human expert panels.
+
+\textbf{No longitudinal validation}. We do not yet have data on whether panel-recommended submission strategies lead to better acceptance outcomes. Tracking actual submission results would provide the strongest validation of the methodology's practical value.

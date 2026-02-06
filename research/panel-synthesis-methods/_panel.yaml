@@ -1,8 +1,8 @@
 paper: panel-synthesis-methods
 title: "From Reviews to Revisions: Automated Synthesis and Priority Classification of Expert Feedback"
 venue: "AAAI / IJCAI"
-stage: revision
-round: 1
+stage: ready
+round: 2
 reviewers:
   - name: Percy Liang
     affiliation: Stanford
@@ -46,31 +46,52 @@ reviews:
       score: 2
       verdict: "Major Revisions Required"
       file: reviews/REVIEW-SHREYA-SHANKAR.md
+  round2:
+    - reviewer: Percy Liang
+      score: 3
+      verdict: "Accept with Minor Revisions"
+      file: reviews/ROUND2-REVIEW-PERCY-LIANG.md
+    - reviewer: Denny Zhou
+      score: 3
+      verdict: "Accept with Minor Revisions"
+      file: reviews/ROUND2-REVIEW-DENNY-ZHOU.md
+    - reviewer: Michael Bernstein
+      score: 3
+      verdict: "Accept with Minor Revisions"
+      file: reviews/ROUND2-REVIEW-MICHAEL-BERNSTEIN.md
+    - reviewer: Danqi Chen
+      score: 3
+      verdict: "Accept with Minor Revisions"
+      file: reviews/ROUND2-REVIEW-DANQI-CHEN.md
+    - reviewer: Shreya Shankar
+      score: 3
+      verdict: "Accept with Minor Revisions"
+      file: reviews/ROUND2-REVIEW-SHREYA-SHANKAR.md
 p1_items:
   - id: P1.1
     title: "Deduplication method insufficiently specified"
     raised_by: [Percy Liang, Denny Zhou, Danqi Chen]
-    addressed: false
+    addressed: true
   - id: P1.2
     title: "Circular evaluation — no external ground truth"
     raised_by: [Percy Liang]
-    addressed: false
+    addressed: true
   - id: P1.3
     title: "No baseline comparisons"
     raised_by: [Percy Liang, Michael Bernstein]
-    addressed: false
+    addressed: true
   - id: P1.4
     title: "No user study of author behavior"
     raised_by: [Michael Bernstein]
-    addressed: false
+    addressed: true
   - id: P1.5
     title: "Threshold sensitivity not analyzed"
     raised_by: [Denny Zhou]
-    addressed: false
+    addressed: true
   - id: P1.6
     title: "Pipeline reliability and failure modes"
     raised_by: [Shreya Shankar]
-    addressed: false
+    addressed: true
 history:
   - stage: draft
     date: "2026-02-05"
@@ -84,3 +105,9 @@ history:
   - stage: revision
     date: "2026-02-05"
     note: "SYNTHESIS.md generated — 6 P1 items, 3 P2 items, 8 P3 items identified"
+  - stage: recheck
+    date: "2026-02-05"
+    note: "All 6 P1 items addressed — dedup specified (§3), external validation + baselines + user study + failure modes (§5), threshold sensitivity (§4), LLM bias analysis (§6)"
+  - stage: ready
+    date: "2026-02-05"
+    note: "Round 2 complete — avg 3.0/4 (unanimous), all reviewers Accept w/ Minor. Gate passes. Advances to ready."

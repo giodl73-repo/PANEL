@@ -2,18 +2,22 @@
 
 Individual paper review---the dominant assessment paradigm in academic publishing---evaluates each submission in isolation. Yet many research contributions exist within programs: collections of papers that share theoretical foundations, technical infrastructure, or empirical domains. Assessing papers individually misses program-level properties: thematic coherence, cross-paper validation, strategic gaps, and portfolio balance.
 
-We introduce \textbf{cross-portfolio expert panels}, a structured methodology for holistic assessment of multi-paper research programs. Each panel consists of 7 reviewers who evaluate a complete collection of papers, producing:
+We introduce \textbf{cross-portfolio expert panels}, a structured methodology for holistic assessment of multi-paper research programs. Each panel consists of 7 reviewers---a size consistent with the optimal jury literature \cite{condorcet1785,list2001epistemic} that balances perspective diversity against coordination cost---who evaluate a complete collection of papers, producing:
 
 \begin{enumerate}
-    \item \textbf{Tier-classified rankings}: Papers ranked and classified into tiers (A through B-) based on contribution quality
-    \item \textbf{Cross-cutting themes}: Patterns that span multiple papers, invisible at the individual level
-    \item \textbf{Strategic recommendations}: Priorities for the research program as a whole
-    \item \textbf{Reviewer agreement analysis}: Structured disagreement metrics revealing disciplinary blocs
+    \item \textbf{Tier-classified rankings} with bootstrap confidence intervals: Papers ranked and classified into tiers (A through B-) with quantified uncertainty
+    \item \textbf{Cross-cutting themes}: Patterns that span multiple papers, invisible at the individual level, identified through structured theme extraction
+    \item \textbf{Strategic recommendations}: Priorities for the research program as a whole, ranked by reviewer consensus
+    \item \textbf{Reviewer agreement analysis}: Structured disagreement metrics revealing disciplinary blocs, with explicit epistemic framing of what AI-simulated disagreement represents
 \end{enumerate}
 
-We validate the methodology on two research modules:
+We validate the methodology on two research modules comprising 13 papers total:
 \begin{itemize}
     \item \textbf{Merit module}: 9 papers on AI-powered performance assessment (7-reviewer panel)
     \item \textbf{Waves module}: 4 papers on AI workflow orchestration (7-reviewer panel)
-    \item \textbf{Cross-module board}: 7 reviewers assessing both modules together (13 papers total)
+    \item \textbf{Cross-module board}: 7 reviewers assessing both modules together
 \end{itemize}
+
+To establish whether the added complexity of portfolio-level panels is justified, we compare panel-derived rankings against a baseline of aggregated individual review scores (Section~\ref{sec:baselines}), finding that the panel process identifies cross-cutting themes and strategic insights that simple aggregation cannot surface. We further provide uncertainty quantification through bootstrap resampling (Section~\ref{sec:uncertainty}), demonstrating which ranking distinctions are statistically robust and which are within noise margins.
+
+We design the methodology with human oversight in mind: Section~\ref{sec:hitl} specifies where human judgment is essential versus automatable, and proposes an appeals mechanism for contested assessments. We frame the current AI-simulated implementation as a prototype whose structured disagreement patterns require calibration against real expert panels (Section~\ref{sec:calibration}).

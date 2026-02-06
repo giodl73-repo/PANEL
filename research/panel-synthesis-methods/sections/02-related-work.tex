@@ -12,6 +12,10 @@ The P1/P2/P3 classification draws directly from software engineering bug triage,
 
 Consolidating multiple reviews is a form of multi-document summarization with the additional constraint that outputs must be \emph{actionable}---not just summarized, but classified by priority and linked to specific paper sections. Standard summarization methods optimize for coverage and coherence but not actionability.
 
+\subsection{Crowd Aggregation and Answer Quality}
+
+Multi-reviewer synthesis is fundamentally a crowd aggregation problem: given noisy labels from multiple annotators, estimate the true underlying quality. Dawid and Skene~\cite{dawid1979} introduced an EM-based approach to estimate annotator reliability and true labels jointly, and subsequent work (GLAD~\cite{whitehill2009}, spectral methods~\cite{zhang2014spectral}) has refined these estimates. Our pipeline differs from classical crowd aggregation in two ways: (1) the ``labels'' are free-text issues rather than categorical responses, requiring deduplication before aggregation, and (2) the goal is priority classification rather than ground-truth estimation. Structured crowd workflows~\cite{bernstein2015crowd} decompose complex tasks into subtasks with quality control---analogous to our three-stage decomposition, but applied to the synthesis rather than the review generation. We compare against a Dawid-Skene-inspired baseline in Section~5.
+
 \subsection{Consensus Detection}
 
 Identifying reviewer agreement and disagreement relates to work on opinion mining and stance detection. Our approach uses a simpler signal---cross-reviewer mention count---which proves effective because the reviewer pool is small (5--9) and the issues are concrete.
