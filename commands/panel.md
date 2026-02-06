@@ -24,6 +24,7 @@ Panel reviews consume paper-level reviews (bubble up) and produce revision items
 - `--review` — Run or re-run the cross-portfolio panel review
 - `--member <name>` — Regenerate one panel member's assessment (preserves others)
 - `--revisions` — Show PP1/PP2/PP3 progress across all papers in the module
+- `--apply` — Apply PP1/PP2/PP3 revision items across all papers (edits LaTeX source)
 - `--dry-run` — Preview what would happen without writing files
 
 ## Prerequisites
@@ -68,6 +69,21 @@ Use `panel:panel --status` to check readiness.
    - Per-paper PP items noted in each paper's assessment
 6. **Snapshot round**: Archive to `panel-reviews/round-{N}/`
 7. **Update state**: Set round number, update history
+8. **Offer to apply revisions**: After generating the revision plan, offer to apply PP1/PP2 items immediately (runs the `--apply` behavior inline). Use AskUserQuestion:
+
+   ```
+   question: "Panel review complete. Apply {N} PP1 and {M} PP2 revision items now?"
+   header: "Apply revisions"
+   options:
+     - label: "Yes, apply all revisions (Recommended)"
+       description: "Edits paper LaTeX source across all papers to address panel findings"
+     - label: "Apply PP1 only (blocking items)"
+       description: "Only addresses items blocking submission"
+     - label: "No, I'll apply later"
+       description: "Run panel:panel --apply when ready"
+   ```
+
+   If user selects apply: execute the `--apply` behavior (see below) inline.
 
 ### --member <name>
 
@@ -90,6 +106,73 @@ Use `panel:panel --status` to check readiness.
     2  Weak threat models      2 papers   0/2
    ```
 
+### --apply
+
+Drives the PANEL-REVISION-PLAN.md items across all papers in the module, editing LaTeX source to address PP1 and PP2 items.
+
+1. **Load revision plan**: Read `PANEL-REVISION-PLAN.md` from the module root
+2. **Assess scope**: Count unaddressed PP1 and PP2 items, group by paper
+3. **Prompt**: Use AskUserQuestion:
+
+   ```
+   question: "Panel revision plan has {N} PP1 items and {M} PP2 items across {K} papers. Apply revisions?"
+   header: "Panel revisions"
+   options:
+     - label: "Apply PP1 + PP2 across all papers (Recommended)"
+       description: "Edits sections/*.tex in each paper to address panel-level findings"
+     - label: "Apply PP1 only (blocking items)"
+       description: "Only addresses the items blocking submission"
+     - label: "Apply to specific paper"
+       description: "Choose which paper(s) to revise"
+     - label: "No, I'll revise manually"
+       description: "Shows the revision plan and stops"
+   ```
+
+4. **If "specific paper"**: Follow up with AskUserQuestion listing papers with unaddressed items, `multiSelect: true`
+
+5. **Apply revisions per paper**: For each paper in scope, in ranking order (highest-ranked first):
+
+   a. Read the paper's `sections/*.tex` files and `_panel.yaml`
+   b. Read the relevant PP items from PANEL-REVISION-PLAN.md
+   c. For **module-level items** (e.g., "cross-paper references across all 5 papers"):
+      - Apply the same type of revision to each affected paper
+      - Ensure consistency (e.g., same framing of the research program across papers)
+   d. For **paper-specific items** (e.g., "stratify reliability metric in P5"):
+      - Read the paper's SYNTHESIS.md for additional context
+      - Edit the target section(s) to address the item
+   e. Mark items as addressed: check off `- [ ]` boxes in PANEL-REVISION-PLAN.md
+   f. Update the paper's `_panel.yaml` to note panel revision applied
+
+6. **Report**: Show summary after all revisions:
+
+   ```
+   Panel Revisions Applied — craft
+   ═══════════════════════════════════════════════════════════════════════
+
+   PP1 items (blocking):
+     ✓ PP1.1  Cross-paper references          5 papers updated
+     ✓ PP1.2  Stratify reliability metric      panel-shared-generator-framework
+
+   PP2 items (important):
+     ✓ PP2.1  Differentiate evaluation         3 papers updated
+     ✓ PP2.2  Calibrate generalizability       4 papers updated
+     ✓ PP2.3  Single-ecosystem derivation      5 papers updated
+     ✓ PP2.4  Methodology uniformity           2 papers updated
+     ✓ PP2.5  Model sensitivity for P5         panel-shared-generator-framework
+
+   All PP1 items addressed — ready for panel:panel --review (round 2)
+   or panel:board if other modules are also ready.
+   ```
+
+7. **Auto-commit**: Commit all changes across all affected papers
+
+**Revision principles** (same as panel:paper):
+- Address the specific concern raised — don't rewrite sections unnecessarily
+- Add content rather than remove
+- When a PP item applies to multiple papers, maintain consistent framing across all
+- For cross-paper items (like "add research program context"), use a shared paragraph adapted to each paper's introduction
+- Preserve existing `\label{}` and `\ref{}` references
+
 ## Round Cycle
 
 ```
@@ -98,8 +181,12 @@ panel:panel --review (round 1)
   → Writes PANEL-REVISION-PLAN.md (module root)
   → Archives to panel-reviews/round-1/
   → PP1/PP2/PP3 items created per paper
+  → Offers to apply revisions immediately (--apply behavior)
 
-Papers revise via panel:paper (addresses PP1 items)
+panel:panel --apply (if not applied during --review)
+  → Reads PANEL-REVISION-PLAN.md
+  → Edits sections/*.tex across all affected papers
+  → Marks PP1/PP2 items as addressed
 
 panel:panel --review (round 2)
   → Checks PP1 items addressed
