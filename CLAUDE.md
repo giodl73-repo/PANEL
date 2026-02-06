@@ -126,14 +126,16 @@ git commit -m "[panel] <message>"
 # 2. Push
 git push
 
-# 3. Sync plugin → C:\src\plugins\panel
-./scripts/sync-to-plugin.sh
+# 3. Sync plugin → C:\src\plugins\panel (pulls, copies, commits, pushes in target repo)
+./scripts/sync-to-plugin.sh --push
 
-# 4. Sync research → C:\src\research\panel
-./scripts/sync-to-research.sh
+# 4. Sync research → C:\src\research\panel (pulls, copies, commits, pushes in target repo)
+./scripts/sync-to-research.sh --push
 ```
 
 All four steps run in order. If any step fails, stop and report.
+
+Sync scripts support: `--push` (push to remote), `--dry-run` (preview), `--message "msg"` (custom commit message).
 
 ## Conventions
 
