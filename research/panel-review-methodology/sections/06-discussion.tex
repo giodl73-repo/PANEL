@@ -20,11 +20,24 @@ The methodology is most valuable for:
     \item Multi-module programs where cross-portfolio assessment adds strategic value
 \end{itemize}
 
-\subsection{Ethical Considerations}
+\subsection{Author Experience and Interactivity}
 
-AI-simulated review supplements but does not replace human peer review. The methodology:
-\begin{itemize}
-    \item Uses real researcher names/profiles for persona construction, which should be done respectfully and transparently
-    \item Does not generate fake reviews for submission to venues
-    \item Aims to improve paper quality before human review, not circumvent it
-\end{itemize}
+\textbf{Author reflection.} As the sole author of all 14 papers, I offer a structured reflection on the experience of receiving AI-simulated reviews. The reviews were most useful when they identified structural gaps (missing baselines, insufficient statistical analysis) and least useful when they made generic stylistic suggestions. Receiving feedback attributed to named researchers (e.g., ``Percy Liang would ask how this was evaluated'') created a useful heuristic for anticipating venue-specific concerns, though I remained aware that these were simulated perspectives rather than actual expert opinions.
+
+\textbf{Trust calibration.} I found myself trusting AI reviews at approximately 70\% of the level I would trust human expert feedback. Reviews on methodology and evaluation rigor were most credible; reviews on conceptual novelty and domain positioning were least credible. This asymmetry suggests the methodology is best suited for identifying ``craft'' issues (structure, evidence, clarity) rather than ``vision'' issues (novelty, significance, framing).
+
+\textbf{Design space for interactivity.} The current implementation operates in batch mode: generate all reviews, then synthesize. Future versions could support interactive modes: (a) author clarification before synthesis, allowing authors to respond to reviewer questions; (b) focus steering, where authors direct reviewers to specific sections or concerns; (c) iterative dialogue, where authors can push back on specific issues and receive reviewer responses. These would transform the process from a one-way assessment to a collaborative refinement dialogue.
+
+\textbf{Author agency.} The gate-based lifecycle currently enforces compliance: all P1 items must be addressed before advancing. A more nuanced design would distinguish between ``address'' (provide evidence that the concern has been considered) and ``resolve'' (fully fix the issue), allowing authors to respectfully disagree with reviewer concerns while still demonstrating engagement.
+
+\subsection{Ethical Framework}
+
+The use of AI-simulated personas constructed from real researchers raises several ethical considerations that we address explicitly:
+
+\textbf{Consent and attribution.} The reviewer personas are constructed from publicly available information (publications, research interests, conference participation). No private information is used, and no claim is made that the generated reviews represent the actual opinions of the named researchers. We recommend that users of this methodology include a clear disclaimer in any published discussion of AI-generated reviews.
+
+\textbf{Risk of misrepresentation.} There is a risk that AI-generated feedback attributed to a named researcher could be mistaken for that researcher's actual views. To mitigate this, review artifacts are labeled as AI-simulated and are intended for internal pre-submission use only, never for external attribution.
+
+\textbf{Supplementation, not replacement.} The methodology is designed as a complement to human peer review, not a substitute. AI-simulated reviews identify likely concerns and improve paper quality before submission, but the actual evaluation of research contribution remains the domain of human experts and venue review committees.
+
+\textbf{Author agency.} AI-simulated review should empower authors, not constrain them. The priority classification is advisory: authors should use their judgment about which feedback to incorporate, especially for P2 and P3 items where reasonable experts might disagree.

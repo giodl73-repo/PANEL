@@ -1,0 +1,86 @@
+paper: panel-synthesis-methods
+title: "From Reviews to Revisions: Automated Synthesis and Priority Classification of Expert Feedback"
+venue: "AAAI / IJCAI"
+stage: revision
+round: 1
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford
+    expertise: HELM, benchmarks, foundations
+    category: ML Research / Learning
+  - name: Denny Zhou
+    affiliation: Google DeepMind
+    expertise: Least-to-most, self-consistency
+    category: Prompting & LLM Capabilities
+  - name: Michael Bernstein
+    affiliation: Stanford
+    expertise: Crowdsourcing, human computation
+    category: Human-AI Interaction
+  - name: Danqi Chen
+    affiliation: Princeton
+    expertise: Dense retrieval, QA
+    category: NLP & Information Retrieval
+  - name: Shreya Shankar
+    affiliation: Berkeley
+    expertise: ML ops, observability, pipelines
+    category: Software Engineering & DevOps
+reviews:
+  round1:
+    - reviewer: Percy Liang
+      score: 2
+      verdict: "Major Revisions Required"
+      file: reviews/REVIEW-PERCY-LIANG.md
+    - reviewer: Denny Zhou
+      score: 3
+      verdict: "Accept with Minor Revisions"
+      file: reviews/REVIEW-DENNY-ZHOU.md
+    - reviewer: Michael Bernstein
+      score: 2
+      verdict: "Major Revisions Required"
+      file: reviews/REVIEW-MICHAEL-BERNSTEIN.md
+    - reviewer: Danqi Chen
+      score: 3
+      verdict: "Accept with Minor Revisions"
+      file: reviews/REVIEW-DANQI-CHEN.md
+    - reviewer: Shreya Shankar
+      score: 2
+      verdict: "Major Revisions Required"
+      file: reviews/REVIEW-SHREYA-SHANKAR.md
+p1_items:
+  - id: P1.1
+    title: "Deduplication method insufficiently specified"
+    raised_by: [Percy Liang, Denny Zhou, Danqi Chen]
+    addressed: false
+  - id: P1.2
+    title: "Circular evaluation — no external ground truth"
+    raised_by: [Percy Liang]
+    addressed: false
+  - id: P1.3
+    title: "No baseline comparisons"
+    raised_by: [Percy Liang, Michael Bernstein]
+    addressed: false
+  - id: P1.4
+    title: "No user study of author behavior"
+    raised_by: [Michael Bernstein]
+    addressed: false
+  - id: P1.5
+    title: "Threshold sensitivity not analyzed"
+    raised_by: [Denny Zhou]
+    addressed: false
+  - id: P1.6
+    title: "Pipeline reliability and failure modes"
+    raised_by: [Shreya Shankar]
+    addressed: false
+history:
+  - stage: draft
+    date: "2026-02-05"
+    note: "Paper initialized via panel:setup"
+  - stage: panel
+    date: "2026-02-05"
+    note: "Panel assembled: Percy Liang, Denny Zhou, Michael Bernstein, Danqi Chen, Shreya Shankar"
+  - stage: synthesis
+    date: "2026-02-05"
+    note: "5 reviews complete — avg 2.4/4, range 2-3, 3 Major Revisions, 2 Accept w/ Minor"
+  - stage: revision
+    date: "2026-02-05"
+    note: "SYNTHESIS.md generated — 6 P1 items, 3 P2 items, 8 P3 items identified"

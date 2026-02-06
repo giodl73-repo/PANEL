@@ -10,6 +10,10 @@ Unlike these systems, our methodology does not aim to replace human reviewers. I
 
 The priority classification approach (P1/P2/P3) draws on established triage methodologies from software engineering (bug severity classification) and medical triage. Our contribution is applying structured triage to multi-reviewer academic feedback, enabling authors to focus revision effort where it matters most.
 
+\subsection{Crowdsourcing Quality Control}
+
+The 8-stage lifecycle shares structural parallels with crowdsourcing workflows. Kittur et al. (2011) established that complex crowd tasks benefit from structured decomposition with quality gates---our stage-based progression with gate conditions follows this pattern. Bernstein et al.'s work on crowd-powered systems demonstrates that role-specific workers (analogous to our domain-specific reviewer personas) produce higher-quality outputs than undifferentiated workers. The synthesis engine's aggregation of multiple reviewer perspectives relates to agreement-based filtering in crowd systems, where redundancy improves output quality. We extend these principles from crowd workers to AI-simulated expert personas, preserving the quality benefits of structured multi-perspective review while eliminating the coordination overhead of assembling human review panels.
+
 \subsection{Iterative Refinement}
 
 The recheck loop in our lifecycle relates to iterative refinement processes in software development (CI/CD) and machine learning (hyperparameter tuning). The key insight is that setting explicit quantitative thresholds (average $\geq$ 2.5/4, no score $<$ 2/4) provides a clear, measurable definition of ``ready'' that avoids both premature submission and endless revision.

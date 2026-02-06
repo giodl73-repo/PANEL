@@ -53,3 +53,21 @@ Score & Meaning \\
 \end{table}
 
 Cross-portfolio panels use a 10-point scale with tier classifications (A through C).
+
+\subsection{Reproducibility: Prompts and Parameters}
+
+For full reproducibility, we specify the review generation pipeline:
+
+\textbf{Model.} All reviews are generated using Claude (Anthropic), specifically Claude Sonnet 4.5 (\texttt{claude-sonnet-4-5-20250929}). Temperature is set to 1.0 (default) with no top-$k$ or top-$p$ overrides.
+
+\textbf{Prompt template.} Each review is generated from a structured prompt with four components:
+\begin{enumerate}
+    \item \textbf{Persona block}: Reviewer name, affiliation, expertise, characteristic question, and venue alignment drawn from the reviewer database.
+    \item \textbf{Paper content}: Full paper text (all sections), injected as context.
+    \item \textbf{Review template}: The structured review format (overall assessment, score, major/minor issues, strengths, questions, recommendations, verdict).
+    \item \textbf{Calibration instruction}: ``Score relative to the target venue's acceptance standards. A score of 3/4 means the paper would be competitive at [venue].''
+\end{enumerate}
+
+\noindent The prompt template, reviewer database, scoring rubrics, and stage definitions are available as open-source components of the \texttt{panel} plugin. The persona injection protocol concatenates the persona block with the review template, ensuring each reviewer's expertise and characteristic concerns are reflected in the generated review.
+
+\textbf{Context management.} Each review is generated independently---reviewer $i$'s output is not visible to reviewer $j$. Synthesis is generated with all individual reviews in context. Round 2+ reviews include the synthesis and revision plan from the previous round, simulating a reviewer who has seen the author's response.

@@ -1,0 +1,65 @@
+paper: panel-revision-dynamics
+title: "Multi-Round Revision Dynamics: Measuring Paper Quality Improvement Through Iterative AI Review"
+venue: "NeurIPS D&B"
+stage: revision
+round: 1
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford
+    expertise: HELM, benchmarks, foundations
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Michael Bernstein
+    affiliation: Stanford
+    expertise: Crowdsourcing, human computation
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Saleema Amershi
+    affiliation: Microsoft Research
+    expertise: Interactive ML, HITL
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Ludwig Schmidt
+    affiliation: UW
+    expertise: Distribution shift, robustness
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Shreya Shankar
+    affiliation: Berkeley
+    expertise: ML ops, observability, pipelines
+    score: 2
+    verdict: "Major Revisions Required"
+reviews:
+  round1:
+    - REVIEW-PERCY-LIANG.md
+    - REVIEW-MICHAEL-BERNSTEIN.md
+    - REVIEW-SALEEMA-AMERSHI.md
+    - REVIEW-LUDWIG-SCHMIDT.md
+    - REVIEW-SHREYA-SHANKAR.md
+  round1_synthesis: SYNTHESIS.md
+p1_items:
+  - id: P1.1
+    title: "Statistical methodology insufficient for N=14 single-author dataset"
+    addressed: false
+  - id: P1.2
+    title: "Circularity / ecological validity — AI reviews studying AI review dynamics"
+    addressed: false
+  - id: P1.3
+    title: "Logarithmic improvement model asserted but not tested"
+    addressed: false
+  - id: P1.4
+    title: "Revision process treated as black box / no failure mode analysis"
+    addressed: false
+history:
+  - stage: draft
+    date: "2026-02-05"
+    note: "Paper initialized via panel:setup"
+  - stage: panel
+    date: "2026-02-05"
+    note: "Panel assembled: Percy Liang, Michael Bernstein, Saleema Amershi, Ludwig Schmidt, Shreya Shankar"
+  - stage: synthesis
+    date: "2026-02-05"
+    note: "5 reviews complete. All reviewers: 2/4 (Weak Accept / Major Revisions Required). Avg: 2.0/4"
+  - stage: revision
+    date: "2026-02-05"
+    note: "Synthesis complete with 4 P1 items, 4 P2 items, 6 P3 items. Entering revision stage."
