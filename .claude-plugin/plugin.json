@@ -12,15 +12,5 @@
     "./commands/report.md",
     "./commands/help.md",
     "./commands/venue.md"
-  ],
-  "shared": [
-    "shared/stage-machine.md",
-    "shared/state-loader.md",
-    "shared/reviewer-selector.md",
-    "shared/synthesis-engine.md",
-    "shared/score-utils.md",
-    "shared/display-utils.md",
-    "shared/topic-discovery.md",
-    "shared/paper-generator.md"
   ]
 }
