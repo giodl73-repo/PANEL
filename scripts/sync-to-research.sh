@@ -13,16 +13,31 @@ echo "  To:   $DEST"
 
 mkdir -p "$DEST"
 
-# Sync research directory
-rsync -av --delete \
-    --exclude='*.aux' \
-    --exclude='*.log' \
-    --exclude='*.out' \
-    --exclude='*.toc' \
-    --exclude='*.fls' \
-    --exclude='*.fdb_latexmk' \
-    --exclude='*.synctex.gz' \
-    "$SRC/" "$DEST/"
+# LaTeX build artifacts to exclude
+LATEX_EXCLUDE="*.aux *.log *.out *.toc *.fls *.fdb_latexmk *.synctex.gz"
+
+if command -v rsync &>/dev/null; then
+    rsync -av --delete \
+        --exclude='*.aux' \
+        --exclude='*.log' \
+        --exclude='*.out' \
+        --exclude='*.toc' \
+        --exclude='*.fls' \
+        --exclude='*.fdb_latexmk' \
+        --exclude='*.synctex.gz' \
+        "$SRC/" "$DEST/"
+else
+    SRC_WIN="$(cygpath -w "$SRC")"
+    DEST_WIN="$(cygpath -w "$DEST")"
+    MSYS_NO_PATHCONV=1 robocopy "$SRC_WIN" "$DEST_WIN" /MIR \
+        /XF $LATEX_EXCLUDE \
+        /NFL /NDL /NJH /NJS /NC /NS || RC=$?
+    RC=${RC:-0}
+    if [ $RC -ge 8 ]; then
+        echo "ERROR: robocopy failed with exit code $RC"
+        exit 1
+    fi
+fi
 
 echo ""
 echo "Sync complete. Research at: $DEST"
