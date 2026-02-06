@@ -72,7 +72,7 @@ Stage        Description                                    Gate to advance
 | `panel:status` | Overview of all papers: stage, round, score, next action |
 | `panel:show` | Detailed view of one paper |
 | `panel:reviewers` | Browse/filter reviewer database |
-| `panel:setup` | Initialize panel in a project |
+| `panel:setup` | Initialize project or add a new paper |
 | `panel:import` | Import existing review process |
 | `panel:report` | Generate review reports |
 | `panel:help` | Interactive help system |
