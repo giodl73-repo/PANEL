@@ -3,60 +3,15 @@
   "version": "1.0.0",
   "description": "AI-simulated expert review lifecycle for research papers. Drives papers through 8 stages from draft to acceptance via structured reviewer panels.",
   "commands": [
-    {
-      "name": "panel:go",
-      "description": "The one command — moves paper through all 8 lifecycle stages",
-      "file": "commands/go.md",
-      "user_invocable": true
-    },
-    {
-      "name": "panel:status",
-      "description": "Overview of all papers: current stage, round, score, next action",
-      "file": "commands/status.md",
-      "user_invocable": true
-    },
-    {
-      "name": "panel:show",
-      "description": "Detailed view of one paper — reviews, synthesis, score history, stage timeline",
-      "file": "commands/show.md",
-      "user_invocable": true
-    },
-    {
-      "name": "panel:reviewers",
-      "description": "Browse, search, filter reviewer database by category/venue/expertise",
-      "file": "commands/reviewers.md",
-      "user_invocable": true
-    },
-    {
-      "name": "panel:setup",
-      "description": "Initialize panel in a project — create directory structure, copy reviewer database",
-      "file": "commands/setup.md",
-      "user_invocable": true
-    },
-    {
-      "name": "panel:import",
-      "description": "Discover and generate papers from roadmap/waves/commits, or import existing review artifacts",
-      "file": "commands/import.md",
-      "user_invocable": true
-    },
-    {
-      "name": "panel:report",
-      "description": "Generate review reports — per-paper, per-round, portfolio-level",
-      "file": "commands/report.md",
-      "user_invocable": true
-    },
-    {
-      "name": "panel:help",
-      "description": "Interactive help system with topics (stages, reviewers, scoring, workflow)",
-      "file": "commands/help.md",
-      "user_invocable": true
-    },
-    {
-      "name": "panel:venue",
-      "description": "Venue recommendation + submission strategy based on review scores",
-      "file": "commands/venue.md",
-      "user_invocable": true
-    }
+    "./commands/go.md",
+    "./commands/status.md",
+    "./commands/show.md",
+    "./commands/reviewers.md",
+    "./commands/setup.md",
+    "./commands/import.md",
+    "./commands/report.md",
+    "./commands/help.md",
+    "./commands/venue.md"
   ],
   "shared": [
     "shared/stage-machine.md",
