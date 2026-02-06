@@ -61,7 +61,7 @@ Each stage handler performs the work needed at that stage:
 - **draft_handler**: Verify paper structure, prompt for venue if missing
 - **panel_handler**: Select reviewers (shared/reviewer-selector.md), generate reviews
 - **synthesis_handler**: Consolidate reviews (shared/synthesis-engine.md)
-- **revision_handler**: Create or update REVISION-PLAN.md from synthesis P1/P2/P3 items (MUST always produce this file), track P1 items in _panel.yaml
+- **revision_handler**: Create or update REVISION-PLAN.md from synthesis P1/P2/P3 items (MUST always produce this file), track P1 items in _panel.yaml, then offer to apply revisions to sections/*.tex (editing LaTeX source to address each P1/P2 item, marking items complete in both REVISION-PLAN.md and _panel.yaml)
 - **recheck_handler**: Generate round N reviews, calculate scores
 - **ready_handler**: Check REVIEW_PANEL.md from panel:panel, verify PP1 items addressed
 - **submit_handler**: Prompt for submission confirmation

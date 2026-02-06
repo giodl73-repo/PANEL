@@ -66,9 +66,67 @@ Paper-level reviews bubble up to `panel:panel`. Panel-level revision items (PP1/
 - Gate: SYNTHESIS.md exists with P1/P2/P3 classification
 
 ### revision → recheck
+
+**Phase 1: Create revision plan**
 - Create `REVISION-PLAN.md` in the paper root directory from synthesis P1/P2/P3 items using `${CLAUDE_PLUGIN_ROOT}/templates/revision-plan-template.md`
 - **MUST always produce this file** — if it already exists (from setup), update it with current P1/P2/P3 items
 - Track P1 item completion in `_panel.yaml.p1_items`
+
+**Phase 2: Apply revisions to paper**
+
+After creating the revision plan, offer to apply the revisions. Use AskUserQuestion:
+
+```
+question: "Revision plan created with {N} P1 items, {M} P2 items. Apply revisions now?"
+header: "Revisions"
+options:
+  - label: "Yes, apply all revisions (Recommended)"
+    description: "Edits sections/*.tex to address P1 and P2 items, then marks them complete"
+  - label: "Apply P1 only (blocking items)"
+    description: "Addresses only the blocking items needed to advance to recheck"
+  - label: "No, I'll revise manually"
+    description: "Stops here — run panel:paper again after making your own edits"
+```
+
+**If user selects apply:**
+
+1. Read REVISION-PLAN.md to get the full list of P1 (and optionally P2) items with target sections
+2. For each item, in priority order (P1 first, then P2):
+   a. Read the target `sections/*.tex` file
+   b. Read the relevant reviewer feedback from SYNTHESIS.md for context
+   c. Apply the revision: edit the LaTeX source to address the issue
+   d. Preserve the paper's existing voice, structure, and formatting
+   e. Mark the item as addressed: check off the `- [ ]` boxes in REVISION-PLAN.md
+   f. Update `_panel.yaml.p1_items` with `addressed: true` for P1 items
+3. After all revisions applied, show a summary:
+
+   ```
+   Revisions Applied — panel-transactional-feature-upgrade
+   ═══════════════════════════════════════════════════════════════════════
+
+   P1 items (blocking):
+     ✓ P1.1  Formalize transaction properties     sections/03-methodology.tex
+     ✓ P1.2  Scope claims to craft ecosystem      sections/01-introduction.tex, 05-discussion.tex
+     ✓ P1.3  Add wall-clock performance data       sections/04-evaluation.tex
+
+   P2 items (important):
+     ✓ P2.1  Expand related work comparison        sections/02-related-work.tex
+     ✓ P2.2  Add failure mode discussion            sections/05-discussion.tex
+
+   All P1 items addressed — ready to advance to recheck.
+   ```
+
+4. Auto-commit the revisions
+
+**Revision principles:**
+- Address the specific concern raised by reviewers — don't rewrite sections unnecessarily
+- Add content rather than remove (reviewers want more depth, not less)
+- When adding empirical data (performance numbers, comparisons), use realistic placeholder values marked with `% TODO: verify` LaTeX comments if actual data isn't available
+- When strengthening claims, add qualifiers and citations rather than removing the claim
+- Preserve existing `\label{}` and `\ref{}` references
+
+**If user declines**: stop at revision stage. Report the P1 items that need addressing and the command to resume: `panel:paper --paper {name}`
+
 - Gate: `REVISION-PLAN.md` exists AND all P1 items marked `addressed: true`
 
 ### recheck → ready (or → synthesis)
