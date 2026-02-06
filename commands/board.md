@@ -43,8 +43,24 @@ The board operates at the monorepo level. Path resolution (via shared/board-util
 Before `panel:board --review` can run:
 1. At least 2 modules must have completed `REVIEW_PANEL.md` (via `panel:panel`)
 2. Panel reviews must be substantive (not placeholders)
+3. **Synced modules must be up-to-date**: Modules authored in external repos (e.g., boost at `C:\src\boost\research/`, waves at `C:\src\waves\research/`) must be synced to the monorepo before the board can see their latest state. The board reads from the monorepo — it does not reach into source repos.
 
 Use `panel:board --status` to check readiness.
+
+## Module Source Repos
+
+Some modules are authored in external source repos, with their `research/` subdirectory synced to the monorepo:
+
+| Module | Source Repo | Research Path | Sync Target |
+|--------|-------------|---------------|-------------|
+| merit | `C:\src\research\merit` | (in-repo) | — |
+| waves | `C:\src\waves` | `C:\src\waves\research\` | `{repo}/waves/` |
+| panel | `C:\src\research\panel` | (in-repo) | — |
+| boost | `C:\src\boost` | `C:\src\boost\research\` | `{repo}/boost/` |
+
+**Sync workflow**: Module-level files (RESEARCH.md, REVIEW_PANEL.md, REVIEWERS.md, paper directories) are authored in the source repo's `research/` directory. The sync mechanism copies them to the monorepo. The canonical authoring location is the source repo — never edit synced files directly in the monorepo.
+
+**Before `--review`**: Ensure all external modules have been synced. Use `waves:sync` or manual git operations (commit format: `[module] Sync from {module} repo`).
 
 ## Behavior
 
@@ -79,7 +95,13 @@ Use `panel:board --status` to check readiness.
 6. **Generate revision plans**: Create per-module `BOARD-REVISION-PLAN-{module}.md`:
    - B1/B2/B3 items specific to each module
    - Derived from cross-module themes and board findings
-7. **Snapshot round**: Archive to `board-reviews/round-{N}/`
+   - These are also written as `{module}/REVISION-PLAN.md` (or appended as a board-directives section)
+     so `panel:paper` can discover and work on them
+7. **Snapshot round**: Archive to `board-reviews/round-{N}/` via shared/board-utils.snapshot_round():
+   - `REVIEW_BOARD.md` (board snapshot)
+   - `BOARD-REVISION-PLAN-*.md` (per-module revision plans)
+   - Per-module `REVIEW_PANEL.md` and `RESEARCH.md` (module state at time of review)
+   - `MANIFEST.md` (index with date, modules, file list, program score)
 
 ### --update <section>
 
@@ -157,27 +179,50 @@ Cross-module synergies are also identified:
 ```
 {repo}/
 ├── REVIEW_BOARD.md                      ← always the latest/canonical
-├── BOARD-REVISION-PLAN-merit.md         ← per-module revision plan
+├── BOARD-REVISION-PLAN-merit.md         ← per-module revision plan (latest)
 ├── BOARD-REVISION-PLAN-waves.md
 ├── BOARD-REVISION-PLAN-panel.md
+├── BOARD-REVISION-PLAN-boost.md
 ├── board-reviews/
 │   ├── round-1/
-│   │   ├── REVIEW_BOARD.md              ← snapshot
+│   │   ├── MANIFEST.md                  ← index: date, modules, files, score
+│   │   ├── REVIEW_BOARD.md              ← board snapshot
 │   │   ├── BOARD-REVISION-PLAN-merit.md
-│   │   └── BOARD-REVISION-PLAN-waves.md
+│   │   ├── BOARD-REVISION-PLAN-waves.md
+│   │   ├── merit/                       ← module state snapshot
+│   │   │   ├── REVIEW_PANEL.md
+│   │   │   └── RESEARCH.md
+│   │   └── waves/
+│   │       ├── REVIEW_PANEL.md
+│   │       └── RESEARCH.md
 │   └── round-2/
+│       ├── MANIFEST.md
 │       ├── REVIEW_BOARD.md
-│       ├── BOARD-REVISION-PLAN-merit.md
-│       ├── BOARD-REVISION-PLAN-waves.md
-│       └── BOARD-REVISION-PLAN-panel.md
+│       ├── BOARD-REVISION-PLAN-*.md
+│       ├── merit/
+│       │   ├── REVIEW_PANEL.md
+│       │   └── RESEARCH.md
+│       ├── waves/
+│       │   ├── REVIEW_PANEL.md
+│       │   └── RESEARCH.md
+│       ├── panel/
+│       │   ├── REVIEW_PANEL.md
+│       │   └── RESEARCH.md
+│       └── boost/
+│           ├── REVIEW_PANEL.md
+│           └── RESEARCH.md
 ├── merit/
-│   ├── REVIEW_PANEL.md
-│   └── research/
+│   ├── REVIEW_PANEL.md                  ← live/canonical
+│   └── RESEARCH.md
 ├── waves/
 │   └── ...
-└── panel/
+├── panel/
+│   └── ...
+└── boost/
     └── ...
 ```
+
+**Archive principle**: Each round snapshot captures the *complete state* needed to understand the board's decision — including the module-level panel reviews and research inventories that informed it. This enables round-over-round comparison and ensures the board can always reconstruct what it saw.
 
 ## Completion Criteria
 
@@ -187,8 +232,20 @@ The board review is complete when:
 3. No individual module scores below 6.0/10
 4. Board consensus is at least Moderate (avg Spearman's rho > 0.6)
 
+## Auto-Commit
+
+After `--review`, `--update`, or `--member` completes, auto-commit:
+
+1. Call `auto_commit()` from shared/git-utils.md
+2. Scope: repo root (REVIEW_BOARD.md, BOARD-REVISION-PLAN-*.md, board-reviews/)
+3. Message: `[panel] Board review round {round}`
+4. For `--update`: `[panel] Board: update {section}`
+5. For `--member`: `[panel] Board: update member {name}`
+6. Skipped for `--status`, `--revisions` (read-only), and `--dry-run`
+
 ## Dependencies
 
+- shared/git-utils.md — Auto-commit after board reviews
 - shared/board-utils.md — Board-specific utilities
 - shared/panel-utils.md — Panel data parsing
 - shared/reviewer-selector.md — Board member selection

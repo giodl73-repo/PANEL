@@ -10,7 +10,8 @@ Shared utility for managing monorepo-level board reviews across modules, includi
 Input:  path to monorepo root
 Output: array of {
   name: string,              # directory name (e.g., "merit", "waves", "panel")
-  path: string,              # full path to module
+  path: string,              # full path to module in monorepo
+  source_repo: string|null,  # external source repo path, if synced (e.g., "C:\src\boost")
   has_research: bool,        # contains research/ subdirectory
   paper_count: number,       # number of paper directories
   panel_status: "completed"|"placeholder"|"missing",
@@ -24,6 +25,8 @@ Scans `repo_path` for directories containing:
 - A `REVIEW_PANEL.md` file (panel review output)
 
 Excludes: `.git`, `node_modules`, `.claude`, `docs`, `scripts`, hidden directories.
+
+**Synced modules**: Some modules are authored in external source repos (e.g., boost at `C:\src\boost\research/`, waves at `C:\src\waves\research/`) and synced to the monorepo. The board always reads from the monorepo copy — the `source_repo` field is informational only, used for status messages (e.g., "boost: last synced 2h ago, source may be ahead").
 
 ### detect_panel_status(module_path)
 
@@ -200,17 +203,24 @@ Pairwise Spearman's rank correlation:
 
 ## Round Management
 
-### snapshot_round(source_dir, round_dir)
+### snapshot_round(source_dir, round_dir, modules)
 
 ```
-Input:  source directory (repo root), round directory path
+Input:  source directory (repo root), round directory path, discovered modules
 Output: creates round directory with snapshot files, returns file list
 ```
 
 1. Create `board-reviews/round-{N}/` directory
 2. Copy canonical `REVIEW_BOARD.md` → round directory
 3. Copy all `BOARD-REVISION-PLAN-*.md` files → round directory
-4. Return list of files archived
+4. **For each module with panel_status == "completed"**:
+   a. Create `round-{N}/{module}/` subdirectory
+   b. Copy `{module}/REVIEW_PANEL.md` → `round-{N}/{module}/`
+   c. Copy `{module}/RESEARCH.md` → `round-{N}/{module}/`
+5. Write `round-{N}/MANIFEST.md` listing all archived files, modules, date, program score
+6. Return list of files archived
+
+**Why archive module state**: REVIEW_PANEL.md and RESEARCH.md evolve between board rounds as papers complete revisions, new reviews come in, and scores change. Without per-round snapshots of module state, the board cannot compare what changed between rounds. The MANIFEST.md provides a quick index.
 
 ### get_board_round(repo_path)
 

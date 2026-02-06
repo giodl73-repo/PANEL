@@ -103,6 +103,15 @@ After each stage transition, `_panel.yaml` is updated:
 - History entry appended with date and note
 - Review completion counts updated
 
+## Auto-Commit
+
+After each stage transition that writes files, auto-commit all changes in the paper directory:
+
+1. Call `auto_commit()` from shared/git-utils.md
+2. Scope: the paper directory (`{paper_dir}/` — includes `_panel.yaml`, `reviews/`, `REVISION-PLAN.md`)
+3. Message: `[panel] {paper}: advance to {stage} (round {round})`
+4. Skipped when `--dry-run` is set or not in a git repo
+
 ## Examples
 
 ```bash
@@ -124,6 +133,7 @@ panel:paper --round 3
 
 ## Dependencies
 
+- shared/git-utils.md — Auto-commit after stage transitions
 - shared/stage-machine.md — Stage progression logic
 - shared/state-loader.md — Read/write _panel.yaml
 - shared/reviewer-selector.md — Match reviewers to papers

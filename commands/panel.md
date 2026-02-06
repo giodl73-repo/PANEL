@@ -154,8 +154,19 @@ The panel review is complete when:
 
 When complete, individual papers can advance past `ready` stage in `panel:paper`.
 
+## Auto-Commit
+
+After `--review` or `--member` completes (modes that write files), auto-commit:
+
+1. Call `auto_commit()` from shared/git-utils.md
+2. Scope: module directory (REVIEW_PANEL.md, PANEL-REVISION-PLAN.md, panel-reviews/)
+3. Message: `[panel] {module}: panel review round {round}`
+4. For `--member`: `[panel] {module}: update panel member {name}`
+5. Skipped for `--status`, `--revisions` (read-only), and `--dry-run`
+
 ## Dependencies
 
+- shared/git-utils.md — Auto-commit after panel reviews
 - shared/panel-utils.md — Panel-specific utilities
 - shared/state-loader.md — Paper discovery, state loading
 - shared/reviewer-selector.md — Panel member selection

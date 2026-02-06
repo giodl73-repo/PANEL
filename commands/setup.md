@@ -324,8 +324,19 @@ Papers:
 All 2 papers ready. Run panel:paper --paper <name> to begin reviews.
 ```
 
+## Auto-Commit
+
+After project-level or per-paper setup completes, auto-commit:
+
+1. Call `auto_commit()` from shared/git-utils.md
+2. Scope: the research directory
+3. Message (project): `[panel] Setup: initialize {module} research infrastructure`
+4. Message (paper): `[panel] Setup: add paper {paper-name} ({venue})`
+5. Skipped for `--check` (read-only) and `--dry-run`
+
 ## Dependencies
 
+- shared/git-utils.md — Auto-commit after setup
 - shared/state-loader.md — Create/validate _panel.yaml files
 - shared/display-utils.md — Terminal formatting
 - shared/topic-discovery.md — Waves scanning for topic discovery

@@ -294,8 +294,19 @@ Examples:
 
 ---
 
+## Auto-Commit
+
+After papers are generated or artifacts imported, auto-commit:
+
+1. Call `auto_commit()` from shared/git-utils.md
+2. Scope: the research directory
+3. Message (discovery): `[panel] Import: {count} papers from {source}`
+4. Message (artifact): `[panel] Import: artifacts for {paper}`
+5. Skipped for `--dry-run` and when user selects "None" in approval
+
 ## Dependencies
 
+- shared/git-utils.md — Auto-commit after import
 - shared/topic-discovery.md — discover_from_roadmap(), discover_from_waves(), discover_from_commits()
 - shared/paper-generator.md — generate_paper() for creating paper directories and content
 - shared/state-loader.md — save_state() for _panel.yaml creation, discover_papers() for duplicate check
