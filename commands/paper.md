@@ -1,12 +1,22 @@
 ---
-name: panel:go
-description: The one command — moves paper through all 8 lifecycle stages
+name: panel:paper
+description: Per-paper review lifecycle — moves a paper through all 8 stages
 user-invocable: true
 ---
 
-# panel:go — Stage-Driven Review Lifecycle
+# panel:paper — Per-Paper Review Lifecycle
 
-The one command. Moves a paper through all 8 lifecycle stages, reading `_panel.yaml` for re-entrancy.
+Moves a single paper through all 8 lifecycle stages, reading `_panel.yaml` for re-entrancy. This is the paper-level tier of the three-tier review architecture.
+
+## Three-Tier Context
+
+```
+panel:board   — monorepo level (cross-module)
+panel:panel   — module level (cross-portfolio)
+panel:paper   — paper level (individual reviews) ← this command
+```
+
+Paper-level reviews bubble up to `panel:panel`. Panel-level revision items (PP1/PP2/PP3) flow down to individual papers.
 
 ## Arguments
 
@@ -23,7 +33,7 @@ The one command. Moves a paper through all 8 lifecycle stages, reading `_panel.y
 3. synthesis  → Reviews consolidated → SYNTHESIS.md with P1/P2/P3 tiering
 4. revision   → Author revises based on synthesis (P1 items addressed)
 5. recheck    → Round N reviews; loops to synthesis if scores insufficient
-6. ready      → All reviewers Accept; cross-portfolio panel complete
+6. ready      → REVIEW_PANEL.md completed by panel:panel
 7. submit     → Paper submitted to target venue
 8. accepted   → Paper accepted at venue
 ```
@@ -68,11 +78,21 @@ The one command. Moves a paper through all 8 lifecycle stages, reading `_panel.y
 - If gate fails: loop back to `synthesis`, increment round
 
 ### ready → submit
-- If multi-paper module: verify REVIEW_PANEL.md exists
-- Gate: User confirms submission
+- Gate: `REVIEW_PANEL.md` exists and is completed (produced by `panel:panel`)
+- `panel:paper` does NOT generate the panel review — it waits for `panel:panel` to produce it
+- If `REVIEW_PANEL.md` is missing or placeholder: report that `panel:panel --review` must be run first
+- Also checks for any unaddressed PP1 items from the panel revision plan
 
 ### submit → accepted
 - Gate: User confirms acceptance
+
+## PP Item Integration
+
+When `panel:panel` generates PP1/PP2/PP3 items for this paper, they appear in `PANEL-REVISION-PLAN.md` in the paper's directory. During the `revision` and `recheck` stages, `panel:paper` checks both:
+- P1/P2/P3 items from individual reviews (SYNTHESIS.md)
+- PP1/PP2/PP3 items from panel review (PANEL-REVISION-PLAN.md)
+
+Both P1 and PP1 items must be addressed before advancing past `revision`.
 
 ## State File Updates
 
@@ -86,19 +106,19 @@ After each stage transition, `_panel.yaml` is updated:
 
 ```bash
 # Run full lifecycle on current paper
-panel:go
+panel:paper
 
 # Run until synthesis only
-panel:go --until synthesis
+panel:paper --until synthesis
 
 # Target specific paper
-panel:go --paper panel-review-methodology
+panel:paper --paper panel-review-methodology
 
 # Dry run to see what would happen
-panel:go --dry-run
+panel:paper --dry-run
 
 # Force round 3 recheck
-panel:go --round 3
+panel:paper --round 3
 ```
 
 ## Dependencies
@@ -108,6 +128,7 @@ panel:go --round 3
 - shared/reviewer-selector.md — Match reviewers to papers
 - shared/synthesis-engine.md — Consolidate reviews
 - shared/score-utils.md — Score aggregation
+- shared/panel-utils.md — PP item integration, panel readiness checks
 - config/stages.yaml — Stage definitions
 - config/scoring.yaml — Scoring rubrics
 - templates/review-template.md — Review structure

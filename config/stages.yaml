@@ -26,9 +26,10 @@ stages:
     loop_to: synthesis  # if gate fails
 
   - name: ready
-    description: All reviewers Accept, cross-portfolio panel complete
-    gate: REVIEW_PANEL.md exists (if multi-paper module)
-    artifacts: [REVIEW_PANEL.md]
+    description: Panel review complete, paper cleared for submission
+    gate: REVIEW_PANEL.md completed by panel:panel AND all PP1 items addressed
+    requires: panel:panel  # paper-level command waits for panel-level output
+    artifacts: [REVIEW_PANEL.md, PANEL-REVISION-PLAN.md]
 
   - name: submit
     description: Paper submitted to target venue

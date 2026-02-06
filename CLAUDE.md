@@ -1,15 +1,50 @@
 # Panel — AI-Simulated Expert Review Lifecycle
 
-A Claude Code plugin that drives research papers through a complete AI-simulated expert review lifecycle via stage-driven commands.
+A Claude Code plugin that drives research papers through a complete AI-simulated expert review lifecycle via a three-tier review architecture: paper-level reviews, module-level panels, and monorepo-level board reviews.
+
+## Three-Tier Review Architecture
+
+```
+                    ┌───────────────┐
+                    │  panel:board  │  Monorepo level
+                    │  REVIEW_BOARD │  Cross-module synthesis
+                    └───────┬───────┘
+                        ↕ findings bubble up
+                        ↕ revisions flow down
+                    ┌───────────────┐
+                    │ panel:panel   │  Module level
+                    │ REVIEW_PANEL  │  Cross-portfolio panel (7 reviewers)
+                    └───────┬───────┘
+                        ↕ findings bubble up
+                        ↕ revisions flow down
+              ┌─────────────────────────┐
+              │      panel:paper        │  Individual paper level
+              │  REVIEW-*.md, SYNTHESIS │  Per-paper review rounds
+              └─────────────────────────┘
+```
+
+**Bidirectional flow:**
+- **Up**: Paper reviews surface issues → panel sees patterns across papers → board sees patterns across modules
+- **Down**: Board generates B1/B2/B3 per module → panel generates PP1/PP2/PP3 per paper → papers revise
+
+**Priority classification at each tier:**
+
+| Tier | Prefix | Blocking | Important | Nice-to-have |
+|------|--------|----------|-----------|--------------|
+| Paper | P1/P2/P3 | 3+ reviewers or major issue | 2+ reviewers | 1 reviewer |
+| Panel | PP1/PP2/PP3 | Cross-paper pattern or threatens module | 2+ papers affected | 1 paper |
+| Board | B1/B2/B3 | 3+ board members or threatens program | 2+ modules affected | 1 module |
 
 ## Project Layout
 
 ```
 panel/
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin manifest (9 commands)
+│   └── plugin.json              # Plugin manifest (11 commands)
 ├── commands/
-│   ├── go.md                    # Stage-driven lifecycle command
+│   ├── paper.md                 # Per-paper review lifecycle (8 stages)
+│   ├── panel.md                 # Module-level cross-portfolio panel
+│   ├── board.md                 # Monorepo-level board review
 │   ├── status.md                # Overview of all papers
 │   ├── show.md                  # Detailed paper view
 │   ├── reviewers.md             # Reviewer database browser
@@ -26,7 +61,9 @@ panel/
 │   ├── score-utils.md           # Score aggregation, consensus metrics
 │   ├── display-utils.md         # Terminal formatting
 │   ├── topic-discovery.md       # Scan sources → propose paper topics
-│   └── paper-generator.md       # Paper content generation logic
+│   ├── paper-generator.md       # Paper content generation logic
+│   ├── panel-utils.md           # Module-level panel utilities (PP1/PP2/PP3, rounds)
+│   └── board-utils.md           # Board-level utilities (module discovery, B1/B2/B3)
 ├── templates/
 │   ├── help/                    # Help topic files
 │   ├── review-template.md       # Individual review structure
@@ -43,7 +80,7 @@ panel/
 │   ├── Makefile                # Master build
 │   ├── RESEARCH.md             # Paper inventory + dependency graph
 │   ├── REVIEWERS.md            # Module reviewer subset
-│   └── REVIEW_PANEL.md         # Placeholder
+│   └── REVIEW_PANEL.md         # Module-level panel review
 ├── docs/                        # Plugin documentation
 ├── scripts/
 │   ├── sync-to-plugin.sh       # → C:\src\plugins\panel
@@ -61,24 +98,26 @@ Stage        Description                                    Gate to advance
 3. synthesis Reviews consolidated → SYNTHESIS.md            P1/P2/P3 tiering complete
 4. revision  Author revising based on synthesis             All P1 items addressed
 5. recheck   Round N reviews (N≥2), may loop → synthesis    Avg score ≥ 2.5/4, none < 2/4
-6. ready     All reviewers Accept or better                 Cross-portfolio panel done
+6. ready     Panel review complete (panel:panel)             REVIEW_PANEL.md + PP1 addressed
 7. submit    Paper submitted to target venue                Submission confirmed
 8. accepted  Paper accepted at venue                        Acceptance confirmed
 ```
 
-## Commands (9)
+## Commands (11)
 
-| Command | Purpose |
-|---------|---------|
-| `panel:go` | The one command — moves paper through all 8 stages |
-| `panel:status` | Overview of all papers: stage, round, score, next action |
-| `panel:show` | Detailed view of one paper |
-| `panel:reviewers` | Browse/filter reviewer database |
-| `panel:setup` | Initialize project or add a new paper |
-| `panel:import` | Discover papers from roadmap/waves/commits, or import existing artifacts |
-| `panel:report` | Generate review reports |
-| `panel:help` | Interactive help system |
-| `panel:venue` | Venue recommendation + submission strategy |
+| Command | Tier | Purpose |
+|---------|------|---------|
+| `panel:paper` | Paper | Per-paper review lifecycle — moves paper through all 8 stages |
+| `panel:panel` | Module | Cross-portfolio panel review with rounds (7 reviewers, PP1/PP2/PP3) |
+| `panel:board` | Monorepo | Cross-module board review with rounds (7 members, B1/B2/B3) |
+| `panel:status` | — | Overview of all papers: stage, round, score, next action |
+| `panel:show` | — | Detailed view of one paper |
+| `panel:reviewers` | — | Browse/filter reviewer database |
+| `panel:setup` | — | Initialize project or add a new paper |
+| `panel:import` | — | Discover papers from roadmap/waves/commits, or import existing artifacts |
+| `panel:report` | — | Generate review reports |
+| `panel:help` | — | Interactive help system |
+| `panel:venue` | — | Venue recommendation + submission strategy |
 
 ## Per-Paper State (`_panel.yaml`)
 
@@ -88,6 +127,31 @@ Each paper directory contains a `_panel.yaml` tracking lifecycle state:
 - Review completion status by round
 - P1 item tracking (addressed/not addressed)
 - Stage transition history
+
+## Round Tracking (Panel + Board Tiers)
+
+Paper-level keeps flat file pattern (`ROUND2-REVIEW-*.md`). Panel and board tiers use round directories:
+
+```
+{module}/
+├── REVIEW_PANEL.md              ← always the latest/canonical
+├── panel-reviews/
+│   ├── round-1/
+│   │   ├── REVIEW_PANEL.md      ← snapshot
+│   │   └── PANEL-REVISION-PLAN.md
+│   └── round-2/
+│       └── ...
+
+{repo}/
+├── REVIEW_BOARD.md              ← always the latest/canonical
+├── BOARD-REVISION-PLAN-{module}.md
+├── board-reviews/
+│   ├── round-1/
+│   │   ├── REVIEW_BOARD.md      ← snapshot
+│   │   └── BOARD-REVISION-PLAN-*.md
+│   └── round-2/
+│       └── ...
+```
 
 ## Research Papers (5)
 
