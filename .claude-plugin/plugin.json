@@ -35,7 +35,7 @@
     },
     {
       "name": "panel:import",
-      "description": "Import existing review process — creates _panel.yaml from existing REVIEW-*.md files",
+      "description": "Discover and generate papers from roadmap/waves/commits, or import existing review artifacts",
       "file": "commands/import.md",
       "user_invocable": true
     },
@@ -64,6 +64,8 @@
     "shared/reviewer-selector.md",
     "shared/synthesis-engine.md",
     "shared/score-utils.md",
-    "shared/display-utils.md"
+    "shared/display-utils.md",
+    "shared/topic-discovery.md",
+    "shared/paper-generator.md"
   ]
 }

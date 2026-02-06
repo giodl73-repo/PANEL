@@ -14,7 +14,7 @@ panel/
 │   ├── show.md                  # Detailed paper view
 │   ├── reviewers.md             # Reviewer database browser
 │   ├── setup.md                 # Project initialization
-│   ├── import.md                # Import existing review process
+│   ├── import.md                # Discover + generate papers, or import artifacts
 │   ├── report.md                # Generate reports
 │   ├── help.md                  # Interactive help
 │   └── venue.md                 # Venue recommendation
@@ -24,7 +24,9 @@ panel/
 │   ├── reviewer-selector.md     # Match reviewers to papers
 │   ├── synthesis-engine.md      # Consolidate reviews → P1/P2/P3
 │   ├── score-utils.md           # Score aggregation, consensus metrics
-│   └── display-utils.md         # Terminal formatting
+│   ├── display-utils.md         # Terminal formatting
+│   ├── topic-discovery.md       # Scan sources → propose paper topics
+│   └── paper-generator.md       # Paper content generation logic
 ├── templates/
 │   ├── help/                    # Help topic files
 │   ├── review-template.md       # Individual review structure
@@ -73,7 +75,7 @@ Stage        Description                                    Gate to advance
 | `panel:show` | Detailed view of one paper |
 | `panel:reviewers` | Browse/filter reviewer database |
 | `panel:setup` | Initialize project or add a new paper |
-| `panel:import` | Import existing review process |
+| `panel:import` | Discover papers from roadmap/waves/commits, or import existing artifacts |
 | `panel:report` | Generate review reports |
 | `panel:help` | Interactive help system |
 | `panel:venue` | Venue recommendation + submission strategy |
