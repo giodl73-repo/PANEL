@@ -112,6 +112,27 @@ cd research
 make dist
 ```
 
+## Ship It
+
+When the user says "ship it", run the full deploy sequence:
+
+```bash
+# 1. Commit (with [panel] prefix)
+git add <changed files>
+git commit -m "[panel] <message>"
+
+# 2. Push
+git push
+
+# 3. Sync plugin → C:\src\plugins\panel
+./scripts/sync-to-plugin.sh
+
+# 4. Sync research → C:\src\research\panel
+./scripts/sync-to-research.sh
+```
+
+All four steps run in order. If any step fails, stop and report.
+
 ## Conventions
 
 - Commit messages prefixed with `[panel]`
