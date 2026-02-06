@@ -1,4 +1,8 @@
-<command-name>panel:setup</command-name>
+---
+name: panel:setup
+description: Initialize panel in a project — create directory structure, copy reviewer database
+user-invocable: true
+---
 
 # panel:setup — Initialize Panel (Project or Paper)
 

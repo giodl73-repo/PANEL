@@ -1,4 +1,8 @@
-<command-name>panel:import</command-name>
+---
+name: panel:import
+description: Discover and generate papers from roadmap/waves/commits, or import existing review artifacts
+user-invocable: true
+---
 
 # panel:import — Discover, Generate, and Import Papers
 

@@ -1,4 +1,8 @@
-<command-name>panel:status</command-name>
+---
+name: panel:status
+description: Overview of all papers — current stage, round, score, next action
+user-invocable: true
+---
 
 # panel:status — Portfolio Overview
 

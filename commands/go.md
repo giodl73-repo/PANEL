@@ -1,4 +1,8 @@
-<command-name>panel:go</command-name>
+---
+name: panel:go
+description: The one command — moves paper through all 8 lifecycle stages
+user-invocable: true
+---
 
 # panel:go — Stage-Driven Review Lifecycle
 

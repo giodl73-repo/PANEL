@@ -1,4 +1,8 @@
-<command-name>panel:report</command-name>
+---
+name: panel:report
+description: Generate review reports — per-paper, per-round, portfolio-level
+user-invocable: true
+---
 
 # panel:report — Generate Review Reports
 

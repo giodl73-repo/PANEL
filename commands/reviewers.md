@@ -1,4 +1,8 @@
-<command-name>panel:reviewers</command-name>
+---
+name: panel:reviewers
+description: Browse, search, filter reviewer database by category/venue/expertise
+user-invocable: true
+---
 
 # panel:reviewers — Reviewer Database Browser
 

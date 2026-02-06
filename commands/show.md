@@ -1,4 +1,8 @@
-<command-name>panel:show</command-name>
+---
+name: panel:show
+description: Detailed view of one paper — reviews, synthesis, score history, stage timeline
+user-invocable: true
+---
 
 # panel:show — Detailed Paper View
 

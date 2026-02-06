@@ -1,4 +1,8 @@
-<command-name>panel:help</command-name>
+---
+name: panel:help
+description: Interactive help system with topics (stages, reviewers, scoring, workflow)
+user-invocable: true
+---
 
 # panel:help — Interactive Help System
 

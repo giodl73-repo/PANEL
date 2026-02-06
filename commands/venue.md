@@ -1,4 +1,8 @@
-<command-name>panel:venue</command-name>
+---
+name: panel:venue
+description: Venue recommendation + submission strategy based on review scores
+user-invocable: true
+---
 
 # panel:venue — Venue Recommendation & Submission Strategy
 
