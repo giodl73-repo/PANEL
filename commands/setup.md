@@ -123,12 +123,25 @@ mkdir -p "${targetDir}/docs"
 
 ### Step 3: Copy infrastructure files from plugin
 
+**CRITICAL**: All infrastructure files go inside `research/` (i.e., `${targetDir}`), NOT the project root. These files live alongside the paper directories inside `research/`.
+
 ```bash
-# Copy from plugin templates to research directory
+# Copy from plugin templates INTO research/ directory — NOT project root
 cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWER-DATABASE.md" "${targetDir}/REVIEWER-DATABASE.md"
 cp "${CLAUDE_PLUGIN_ROOT}/templates/RESEARCH.md" "${targetDir}/RESEARCH.md"
 cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWERS.md" "${targetDir}/REVIEWERS.md"
 cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEW_PANEL.md" "${targetDir}/REVIEW_PANEL.md"
+```
+
+Resulting layout (all inside `research/`):
+```
+research/
+├── REVIEWER-DATABASE.md
+├── RESEARCH.md
+├── REVIEWERS.md
+├── REVIEW_PANEL.md
+├── docs/
+└── panel-*/              ← paper directories go here too
 ```
 
 After copying, fill in template placeholders:
@@ -141,7 +154,7 @@ Skip files that already exist (don't overwrite).
 
 ### Step 4: Create Makefile
 
-If `research/Makefile` doesn't exist, create a master Makefile:
+If `research/Makefile` doesn't exist, create it inside `research/` (same directory as the infrastructure files):
 
 ```makefile
 PAPERS = $(wildcard panel-*/)
@@ -341,12 +354,12 @@ Discovered from waves:
   - Command DSL compilation (2 waves)
   → Suggested reviewer categories: Compilers & PL Theory, Software Engineering
 
-Infrastructure:
-  ✓ REVIEWER-DATABASE.md  (copied from plugin — 45+ reviewers, 10 categories)
-  ✓ RESEARCH.md           (paper inventory template)
-  ✓ REVIEWERS.md          (module reviewer subset)
-  ✓ REVIEW_PANEL.md       (placeholder)
-  ✓ Makefile              (master build)
+Infrastructure (all inside research/):
+  ✓ research/REVIEWER-DATABASE.md  (copied from plugin — 45+ reviewers, 10 categories)
+  ✓ research/RESEARCH.md           (paper inventory template)
+  ✓ research/REVIEWERS.md          (module reviewer subset)
+  ✓ research/REVIEW_PANEL.md       (placeholder)
+  ✓ research/Makefile              (master build)
 
 Papers: 3 detected (1 existing + 2 imported from waves)
 ```
@@ -514,17 +527,17 @@ Panel Setup Check — C:\src\boost\research
 
 Plugin: ${CLAUDE_PLUGIN_ROOT} ✓
 
-Infrastructure:
-  ✓ REVIEWER-DATABASE.md        (45 reviewers, 10 categories)
-  ✓ RESEARCH.md                 (2 papers listed)
-  ✓ REVIEWERS.md                present
-  ✓ REVIEW_PANEL.md             present
-  ✓ Makefile                    present
+Infrastructure (research/):
+  ✓ research/REVIEWER-DATABASE.md  (45 reviewers, 10 categories)
+  ✓ research/RESEARCH.md           (2 papers listed)
+  ✓ research/REVIEWERS.md          present
+  ✓ research/REVIEW_PANEL.md       present
+  ✓ research/Makefile              present
 
 Reviewer Panel:
-  ✓ REVIEWERS.md                 populated (12 reviewers, 7 panel members)
+  ✓ research/REVIEWERS.md           populated (12 reviewers, 7 panel members)
   — or —
-  ⚠ REVIEWERS.md                 template only (run panel:setup to populate)
+  ⚠ research/REVIEWERS.md           template only (run panel:setup to populate)
 
 Research Monorepo:
   ✓ scripts/sync-to-research.sh  present
