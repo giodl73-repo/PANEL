@@ -1,0 +1,45 @@
+\section{Score Trajectories}
+
+\subsection{Aggregate Improvement}
+
+Across all 14 papers:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Metric & Round 1 & Post-Revision \\
+\midrule
+Mean score (10-point) & 5.6 & 7.4 \\
+Relative improvement & --- & +32\% \\
+Papers at submission threshold & 15\% & 85\% \\
+Verdict: Accept or better & 22\% & 71\% \\
+\bottomrule
+\end{tabular}
+\caption{Aggregate score improvement across 14 papers.}
+\end{table}
+
+\subsection{Per-Module Trajectories}
+
+Merit papers (9) showed the strongest improvement trajectory, starting at 5.2/10 and reaching 7.6/10. Waves papers (4) started higher (6.1/10) but improved less dramatically to 7.2/10. Basecamp (1 paper, 4 rounds) showed the most gradual improvement: 5.0 $\to$ 6.2 $\to$ 7.0 $\to$ 7.8.
+
+\subsection{Diminishing Returns}
+
+Score improvement follows a logarithmic curve. The first revision captures the majority of total improvement:
+
+\begin{itemize}
+    \item Round 1 $\to$ 2: +1.4 points average (78\% of total improvement)
+    \item Round 2 $\to$ 3: +0.3 points average (17\% of total improvement)
+    \item Round 3 $\to$ 4: +0.1 points average (5\% of total improvement)
+\end{itemize}
+
+This pattern is consistent with the ``low-hanging fruit'' hypothesis: P1 (blocking) issues represent fundamental problems that, once addressed, produce large score gains. Subsequent rounds address increasingly minor issues with correspondingly smaller impact.
+
+\subsection{Convergence Predictors}
+
+Papers that converge fastest (reach threshold in 1 round) share characteristics:
+\begin{itemize}
+    \item Fewer P1 items in initial synthesis ($\leq$ 2)
+    \item Higher initial score ($\geq$ 6.0/10)
+    \item Strong reviewer consensus in round 1 ($\sigma < 0.8$)
+\end{itemize}

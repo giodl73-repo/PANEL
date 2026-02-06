@@ -1,0 +1,50 @@
+\section{Synthesis Pipeline}
+
+\subsection{Stage 1: Issue Extraction}
+
+From each review, we extract discrete issues as structured records:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+Field & Description \\
+\midrule
+\texttt{text} & Issue description (1--3 sentences) \\
+\texttt{severity} & Major or minor (from review structure) \\
+\texttt{topic} & Theme category (methodology, evaluation, framing, etc.) \\
+\texttt{section} & Target paper section (if specified) \\
+\texttt{reviewer} & Source reviewer identity \\
+\texttt{actionable} & Whether the issue suggests a concrete action \\
+\bottomrule
+\end{tabular}
+\caption{Structured issue record extracted from individual reviews.}
+\end{table}
+
+Extraction leverages the structured review template: major issues and minor issues are already separated in the review format, providing severity labels. Topic classification uses a fixed taxonomy of 8 categories: methodology, evaluation, framing, related work, writing, reproducibility, scalability, and ethics.
+
+\subsection{Stage 2: Cross-Reviewer Deduplication}
+
+Issues from different reviewers that address the same underlying concern are grouped:
+
+\begin{enumerate}
+    \item \textbf{Topic clustering}: Issues in the same topic category are candidate duplicates
+    \item \textbf{Semantic similarity}: Within each topic cluster, compute pairwise similarity
+    \item \textbf{Merge threshold}: Issues above similarity threshold are merged into a single ``issue group''
+    \item \textbf{Representative selection}: The most specific issue description becomes the group's representative
+\end{enumerate}
+
+Each issue group records which reviewers contributed, preserving the multi-reviewer signal for priority classification.
+
+\subsection{Stage 3: Output Generation}
+
+The synthesis document follows a structured template:
+\begin{itemize}
+    \item Score summary (average, range, consensus level)
+    \item P1 section (blocking issues with reviewer attribution)
+    \item P2 section (important improvements)
+    \item P3 section (minor suggestions)
+    \item Areas of strength (positive consensus)
+    \item Recommended next steps (prioritized action items)
+\end{itemize}

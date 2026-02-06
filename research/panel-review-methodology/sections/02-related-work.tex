@@ -1,0 +1,15 @@
+\section{Related Work}
+
+\subsection{AI-Assisted Peer Review}
+
+Recent work has explored using large language models for aspects of peer review. ReviewerGPT explores automated review generation, finding that LLM-generated reviews can identify surface-level issues but struggle with deep domain expertise. MARG (Multi-Agent Review Generation) uses multiple LLM agents with different perspectives, similar to our persona-based approach but without the structured lifecycle management.
+
+Unlike these systems, our methodology does not aim to replace human reviewers. Instead, it provides \emph{pre-submission quality assurance}---a structured process for identifying and addressing likely reviewer concerns before the paper reaches actual reviewers.
+
+\subsection{Structured Feedback Systems}
+
+The priority classification approach (P1/P2/P3) draws on established triage methodologies from software engineering (bug severity classification) and medical triage. Our contribution is applying structured triage to multi-reviewer academic feedback, enabling authors to focus revision effort where it matters most.
+
+\subsection{Iterative Refinement}
+
+The recheck loop in our lifecycle relates to iterative refinement processes in software development (CI/CD) and machine learning (hyperparameter tuning). The key insight is that setting explicit quantitative thresholds (average $\geq$ 2.5/4, no score $<$ 2/4) provides a clear, measurable definition of ``ready'' that avoids both premature submission and endless revision.

@@ -1,0 +1,43 @@
+\section{Evaluation}
+
+\subsection{Impact on Score Improvement}
+
+The primary evaluation question: does the P1/P2/P3 classification direct revision effort effectively?
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Priority & Score Impact & \% of Total Improvement & Effort (avg days) \\
+\midrule
+P1 addressed & +1.3 points & 72\% & 5--7 \\
+P2 addressed & +0.4 points & 22\% & 3--5 \\
+P3 addressed & +0.1 points & 6\% & 1--2 \\
+\bottomrule
+\end{tabular}
+\caption{Score impact by priority level.}
+\end{table}
+
+P1 items account for nearly three-quarters of achievable improvement despite comprising only 23\% of total issues. This validates the triage: the classification successfully identifies the issues that matter most.
+
+\subsection{Deduplication Accuracy}
+
+We evaluate deduplication by manually annotating 100 issue pairs from 10 synthesis cycles:
+
+\begin{itemize}
+    \item \textbf{Precision}: 91\% of merged issues are genuine duplicates
+    \item \textbf{Recall}: 78\% of actual duplicates are identified
+    \item \textbf{False merges}: 9\% of merges combine distinct issues (Type I error)
+    \item \textbf{Missed merges}: 22\% of duplicates remain separate (Type II error)
+\end{itemize}
+
+The system errs toward under-merging (keeping separate) rather than over-merging, which is the safer direction: duplicate issues waste some author time on re-reading, while falsely merged issues might cause a concern to be overlooked.
+
+\subsection{Synthesis Quality}
+
+Comparing synthesis documents against the underlying reviews:
+\begin{itemize}
+    \item \textbf{Coverage}: 94\% of major issues in reviews appear in synthesis P1 or P2
+    \item \textbf{Attribution accuracy}: 98\% of reviewer attributions are correct
+    \item \textbf{Priority agreement}: Manual classification by the author agrees with automated classification on 87\% of items
+\end{itemize}

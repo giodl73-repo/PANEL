@@ -1,0 +1,48 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[table]{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,arrows}
+\usepackage{amsmath}
+
+\definecolor{primaryblue}{RGB}{0,120,212}
+\definecolor{textgray}{RGB}{50,50,50}
+\definecolor{codebg}{RGB}{248,248,248}
+
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{codebg},breaklines=true,frame=single,framerule=0pt}
+\hypersetup{colorlinks=true,linkcolor=primaryblue,urlcolor=primaryblue,citecolor=primaryblue}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries AI-Simulated Expert Review:\\[0.3em]A Methodology for Pre-Submission Paper Assessment\par}
+\vspace{0.8cm}
+{\large Gio Della-Libera, VP Engineering\par}
+{\normalsize Business \& Industry Copilots Agents 365\par}
+\vspace{0.3cm}
+{\normalsize February 2026\par}
+\vspace{0.8cm}
+\end{center}
+
+\begin{abstract}
+\noindent
+Pre-submission peer review remains one of the most effective mechanisms for improving research quality, yet access to expert feedback before venue submission is limited. We present a methodology for AI-simulated expert review that drives papers through an 8-stage lifecycle---from draft through reviewer panel assembly, synthesis, revision, and iterative recheck---before venue submission. The methodology draws on domain-specific reviewer personas constructed from real expert profiles, structured priority classification (P1/P2/P3) of feedback, and quantitative gate conditions for stage progression. Validated across 14 papers spanning three research modules (merit, waves, basecamp), the process demonstrates consistent score improvement: average first-round scores of 5.6/10 improved to 7.4/10 after revision, with 85\% of papers reaching submission readiness within two review rounds. We detail the 8-stage lifecycle, reviewer persona construction, synthesis engine, and scoring rubrics, providing a reproducible framework for pre-submission quality assurance applicable to any research program.
+\end{abstract}
+
+\vspace{0.5cm}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-methodology}
+\input{sections/04-stage-lifecycle}
+\input{sections/05-evaluation}
+\input{sections/06-discussion}
+\input{sections/07-conclusion}
+
+\end{document}

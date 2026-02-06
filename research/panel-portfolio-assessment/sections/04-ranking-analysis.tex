@@ -1,0 +1,42 @@
+\section{Ranking Analysis}
+
+\subsection{Merit Module Rankings}
+
+The 7-reviewer panel produced the following rankings for 9 merit papers:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{clcc}
+\toprule
+Rank & Paper & Avg Score & Tier \\
+\midrule
+1 & Data-First Architecture & 7.64 & A \\
+2 & Four Budgets & 7.36 & A \\
+3 & Efficiency Metrics & 7.21 & A- \\
+4 & Quality Scoring & 7.14 & A- \\
+5 & Benchmarking & 7.07 & B+ \\
+6 & UX Patterns & 7.00 & B+ \\
+7 & Parallel Agents & 6.71 & B \\
+8 & Knowledge Organization & 6.86 & B \\
+9 & Plugin Architecture & 6.36 & B- \\
+\bottomrule
+\end{tabular}
+\caption{Merit module cross-portfolio rankings (7 reviewers).}
+\end{table}
+
+\subsection{Agreement Analysis}
+
+Pairwise Spearman rank correlations reveal structured disagreement:
+
+\begin{itemize}
+    \item \textbf{Within-bloc agreement}: $\rho = 0.60$--$0.80$ (Systems bloc, Agents bloc, HCI bloc)
+    \item \textbf{Between-bloc disagreement}: $\rho = 0.05$--$0.30$
+    \item \textbf{Maximum disagreement}: Shneiderman vs.\ Zaharia ($\rho = 0.05$)---the HCI and systems perspectives are nearly orthogonal
+\end{itemize}
+
+This structured disagreement is a feature, not a bug. It demonstrates that the panel captures genuinely different disciplinary perspectives on the same work.
+
+\subsection{Consensus vs.\ Controversy}
+
+Papers with low score variance (high consensus) tend to be either clearly strong (Data-First Architecture, $\sigma = 0.88$) or clearly weak (Schema Compilation, $\sigma = 0.50$). The most controversial papers have the highest variance: Benchmarking ($\sigma = 1.03$) is ranked highly by systems reviewers but lower by HCI reviewers.

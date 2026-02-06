@@ -1,0 +1,57 @@
+\section{The 8-Stage Lifecycle}
+
+\subsection{Stage Overview}
+
+The lifecycle consists of 8 stages, each with defined gate conditions and artifacts:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{clll}
+\toprule
+\# & Stage & Gate Condition & Key Artifact \\
+\midrule
+1 & Draft & \texttt{main.tex} exists + venue set & Paper source \\
+2 & Panel & 5+ reviews generated & \texttt{REVIEW-*.md} \\
+3 & Synthesis & P1/P2/P3 classification complete & \texttt{SYNTHESIS.md} \\
+4 & Revision & All P1 items addressed & \texttt{REVISION-PLAN.md} \\
+5 & Recheck & Avg $\geq$ 2.5/4, min $\geq$ 2/4 & Round N reviews \\
+6 & Ready & Cross-portfolio panel done & \texttt{REVIEW\_PANEL.md} \\
+7 & Submit & User confirms submission & --- \\
+8 & Accepted & User confirms acceptance & --- \\
+\bottomrule
+\end{tabular}
+\caption{The 8-stage review lifecycle with gate conditions.}
+\end{table}
+
+\subsection{Re-entrancy and the Recheck Loop}
+
+A critical design decision is the loop between stages 5 (Recheck) and 3 (Synthesis). If recheck scores fail the threshold---average below 2.5/4 or any individual score below 2/4---the paper returns to synthesis for another round. This creates an iterative refinement loop:
+
+\begin{center}
+\texttt{recheck} $\xrightarrow{\text{fail}}$ \texttt{synthesis} $\to$ \texttt{revision} $\to$ \texttt{recheck} $\xrightarrow{\text{pass}}$ \texttt{ready}
+\end{center}
+
+The state file (\texttt{\_panel.yaml}) tracks the current round number, enabling re-entrancy. The process can be interrupted and resumed at any point---the state machine reads current state from disk on every invocation.
+
+\subsection{The Synthesis Engine}
+
+The synthesis stage consolidates individual reviews into a unified document with priority classification:
+
+\begin{itemize}
+    \item \textbf{P1 (Blocking)}: Raised by 3+ reviewers OR flagged as major by any reviewer. Must address before resubmission.
+    \item \textbf{P2 (Important)}: Raised by 2+ reviewers. Should address; strengthens paper significantly.
+    \item \textbf{P3 (Nice-to-have)}: Single reviewer suggestion. Address if time permits.
+\end{itemize}
+
+This classification focuses revision effort on the highest-impact changes, preventing the common failure mode of addressing minor stylistic concerns while leaving fundamental issues unresolved.
+
+\subsection{Cross-Portfolio Panel}
+
+For multi-paper research modules, a cross-portfolio panel of 7 reviewers evaluates the complete collection. Panel members are selected for breadth across the module's papers, producing:
+\begin{itemize}
+    \item Rankings across all papers in the module
+    \item Tier classifications (A through B-)
+    \item Cross-cutting themes and strategic recommendations
+    \item Spearman rank correlations to quantify reviewer agreement
+\end{itemize}

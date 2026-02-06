@@ -1,0 +1,20 @@
+\section{Introduction}
+
+The peer review process serves as the primary quality control mechanism for academic research, yet pre-submission access to expert feedback remains limited. Researchers typically rely on informal collegial review, advisor feedback, or internal reading groups---none of which systematically simulate the multi-perspective expert scrutiny of a formal review process.
+
+We present a methodology for \textbf{AI-simulated expert review} that addresses this gap. Our approach constructs domain-specific reviewer personas from real expert profiles (45+ researchers across 10 categories), drives papers through a structured 8-stage lifecycle, and applies quantitative gate conditions to ensure consistent quality improvement before venue submission.
+
+The methodology has been validated across 14 papers in three research modules:
+\begin{itemize}
+    \item \textbf{Merit} (9 papers): AI-powered performance assessment systems, targeting venues including NeurIPS, MLSys, ICSE, and CHI.
+    \item \textbf{Waves} (4 papers): AI-powered project management orchestration, targeting MLSys, OSDI, CHI, and PLDI.
+    \item \textbf{Basecamp} (1 paper): Session-aware AI orchestration, targeting MLSys 2026.
+\end{itemize}
+
+\noindent Key contributions:
+\begin{enumerate}
+    \item An \textbf{8-stage review lifecycle} with explicit gate conditions, supporting re-entrancy and iterative refinement.
+    \item A \textbf{reviewer persona framework} that constructs domain-specific expert perspectives without fine-tuning, using profile-based prompting from a database of 45+ researchers.
+    \item A \textbf{synthesis engine} that consolidates multi-reviewer feedback into prioritized action items (P1/P2/P3), enabling focused revision.
+    \item \textbf{Empirical evidence} from 14 papers showing consistent score improvement (5.6/10 $\to$ 7.4/10) and 85\% submission readiness within two rounds.
+\end{enumerate}

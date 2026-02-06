@@ -1,0 +1,50 @@
+\section{Calibration Analysis}
+
+\subsection{Experimental Setup}
+
+We analyze calibration across two levels:
+\begin{itemize}
+    \item \textbf{Individual paper panels} (5--9 reviewers per paper, 14 papers)
+    \item \textbf{Cross-portfolio panels} (7 reviewers per module, 2 modules)
+\end{itemize}
+
+\subsection{Bloc Formation}
+
+Hierarchical clustering on reviewer rankings reveals three consistent blocs:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+Bloc & Members & Characteristic Focus \\
+\midrule
+Systems & Zaharia, Shankar, Liang & Production evidence, scalability, measurement \\
+Agents & Chase, Khattab & Framework integration, adoption, optimization \\
+Human-Centered & Shneiderman, Amershi & Human oversight, decision quality, ethics \\
+\bottomrule
+\end{tabular}
+\caption{Reviewer blocs identified via hierarchical clustering.}
+\end{table}
+
+Within-bloc correlations are high ($\rho = 0.60$--$0.80$), while between-bloc correlations are low ($\rho = 0.05$--$0.30$), confirming that expertise-aligned reviewers agree with each other and disagree with reviewers from other domains.
+
+\subsection{Key Question Effect}
+
+To isolate the effect of key-question prompting, we compared reviews generated with and without the key question field:
+
+\begin{itemize}
+    \item \textbf{With key question}: Inter-reviewer variance in issue focus increased by 34\%
+    \item \textbf{Without key question}: Reviews converged on generic concerns (clarity, related work)
+    \item \textbf{Key question specificity}: More specific key questions (e.g., ``What's the compute/memory tradeoff?'') produced more distinct reviews than general ones (e.g., ``Is this novel?'')
+\end{itemize}
+
+\subsection{Score Distribution Analysis}
+
+Across 186+ reviews:
+\begin{itemize}
+    \item Mean score: 2.7/4 (between Weak Accept and Accept)
+    \item Standard deviation: 0.82 (moderate consensus)
+    \item Score range: 1/4 to 4/4 (full range utilized)
+    \item No reviewer gave identical scores to all papers (confirms discrimination)
+\end{itemize}

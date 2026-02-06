@@ -1,0 +1,33 @@
+\section{Discussion}
+
+\subsection{When Synthesis Adds Most Value}
+
+The synthesis step is most valuable when:
+\begin{itemize}
+    \item \textbf{Many reviewers}: With 7--9 reviewers, manual synthesis is cognitively overwhelming
+    \item \textbf{Diverse perspectives}: When reviewers from different blocs (systems, HCI, agents) provide different feedback
+    \item \textbf{Conflicting feedback}: When reviewers disagree, synthesis identifies the disagreement explicitly
+\end{itemize}
+
+With only 2--3 reviewers, manual synthesis is feasible. The automated approach provides the most value at scale (5+ reviewers).
+
+\subsection{Limitations}
+
+\textbf{Severity calibration}. The ``any major'' override for P1 classification means that a single reviewer can elevate an issue to P1. This is appropriate for genuine blocking concerns but may overweight idiosyncratic reviewer preferences.
+
+\textbf{Topic taxonomy}. The 8-category taxonomy is designed for AI/ML systems papers. Papers in other domains may need different categories.
+
+\textbf{Conflict resolution}. When reviewers genuinely disagree (e.g., one says the paper needs more formalism, another says it needs less), the synthesis identifies the conflict but does not resolve it. Resolution remains the author's responsibility.
+
+\subsection{Comparison to Manual Synthesis}
+
+In informal comparison, automated synthesis produces documents of comparable quality to author-written syntheses, with two advantages:
+\begin{itemize}
+    \item \textbf{Consistency}: Every synthesis follows the same structure and classification rules
+    \item \textbf{Completeness}: Automated extraction catches issues that manual reading overlooks
+\end{itemize}
+
+And one disadvantage:
+\begin{itemize}
+    \item \textbf{Nuance}: Manual synthesis better captures subtle interactions between issues
+\end{itemize}

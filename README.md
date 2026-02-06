@@ -1,0 +1,76 @@
+# Panel
+
+AI-simulated expert review lifecycle plugin for Claude Code. Drives research papers through 8 stages from draft to venue acceptance.
+
+## Quick Start
+
+```bash
+# Initialize in your research project
+panel:setup
+
+# Run the review lifecycle
+panel:go --paper my-paper
+
+# Check status
+panel:status
+```
+
+## Commands
+
+| Command | Purpose |
+|---------|---------|
+| `panel:go` | Stage-driven lifecycle — moves paper through all 8 stages |
+| `panel:status` | Overview of all papers: stage, round, score, next action |
+| `panel:show` | Detailed view of one paper — reviews, synthesis, scores |
+| `panel:reviewers` | Browse, search, filter reviewer database |
+| `panel:setup` | Initialize panel in a project |
+| `panel:import` | Import existing review process from REVIEW-*.md files |
+| `panel:report` | Generate review reports (per-paper, portfolio) |
+| `panel:help` | Interactive help (stages, reviewers, scoring, workflow) |
+| `panel:venue` | Venue recommendation + submission strategy |
+
+## The 8-Stage Lifecycle
+
+```
+1. draft      → Paper exists, venue identified
+2. panel      → 5+ reviewers assigned, individual reviews generated
+3. synthesis  → Reviews consolidated → SYNTHESIS.md with P1/P2/P3 tiering
+4. revision   → Author revises based on synthesis (P1 items addressed)
+5. recheck    → Round N reviews; loops to synthesis if scores insufficient
+6. ready      → All reviewers Accept; cross-portfolio panel complete
+7. submit     → Paper submitted to target venue
+8. accepted   → Paper accepted at venue
+```
+
+Re-entrancy: `panel:go` reads `_panel.yaml` to determine current stage, picks up where it left off.
+
+## Research Papers
+
+5 papers documenting the methodology:
+
+| # | Paper | Title | Venue |
+|---|-------|-------|-------|
+| 1 | [panel-review-methodology](research/panel-review-methodology/) | AI-Simulated Expert Review: A Methodology for Pre-Submission Paper Assessment | CHI / CSCW |
+| 2 | [panel-reviewer-calibration](research/panel-reviewer-calibration/) | Calibrating AI Reviewer Personas: Domain Expertise Simulation Without Fine-Tuning | EMNLP / ACL |
+| 3 | [panel-revision-dynamics](research/panel-revision-dynamics/) | Multi-Round Revision Dynamics: Measuring Paper Quality Improvement Through Iterative AI Review | NeurIPS D&B |
+| 4 | [panel-portfolio-assessment](research/panel-portfolio-assessment/) | Cross-Portfolio Expert Panels: Holistic Assessment of Multi-Paper Research Programs | JCDL / Scientometrics |
+| 5 | [panel-synthesis-methods](research/panel-synthesis-methods/) | From Reviews to Revisions: Automated Synthesis and Priority Classification of Expert Feedback | AAAI / IJCAI |
+
+## Building Papers
+
+```bash
+cd research
+make all          # Build all papers
+make dist         # Copy PDFs to docs/
+make clean        # Remove build artifacts
+```
+
+## Syncing
+
+```bash
+# Sync plugin to plugins directory
+./scripts/sync-to-plugin.sh
+
+# Sync research to research monorepo
+./scripts/sync-to-research.sh
+```

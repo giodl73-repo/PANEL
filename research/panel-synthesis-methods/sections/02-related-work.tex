@@ -1,0 +1,17 @@
+\section{Related Work}
+
+\subsection{Review Aggregation}
+
+Meta-review in academic venues (area chair summaries) performs a form of synthesis, but the process is informal and varies by chair. OpenReview and other platforms display reviews side-by-side but do not consolidate them. Our method automates the consolidation step with explicit priority classification.
+
+\subsection{Bug Triage in Software Engineering}
+
+The P1/P2/P3 classification draws directly from software engineering bug triage, where issues are classified by severity (blocker, major, minor, trivial). We adapt this to academic feedback: P1 maps to ``blocker'' (threatens paper validity), P2 to ``major'' (significant improvement opportunity), and P3 to ``minor'' (cosmetic or optional).
+
+\subsection{Multi-Document Summarization}
+
+Consolidating multiple reviews is a form of multi-document summarization with the additional constraint that outputs must be \emph{actionable}---not just summarized, but classified by priority and linked to specific paper sections. Standard summarization methods optimize for coverage and coherence but not actionability.
+
+\subsection{Consensus Detection}
+
+Identifying reviewer agreement and disagreement relates to work on opinion mining and stance detection. Our approach uses a simpler signal---cross-reviewer mention count---which proves effective because the reviewer pool is small (5--9) and the issues are concrete.

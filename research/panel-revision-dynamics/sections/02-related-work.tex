@@ -1,0 +1,13 @@
+\section{Related Work}
+
+\subsection{Peer Review Outcome Studies}
+
+Prior work has studied peer review from the reviewer's perspective: inter-reviewer agreement, bias detection, and review quality. Studies of major ML venues (NeurIPS, ICLR) report moderate inter-reviewer agreement (Cohen's $\kappa \approx 0.2$--$0.4$) and significant noise in accept/reject decisions. Our work complements this by studying the \emph{author's} side: how papers improve in response to structured feedback.
+
+\subsection{Iterative Refinement in Software Engineering}
+
+The revision dynamics we observe parallel patterns in software engineering: code review iterations show diminishing returns after 2--3 rounds, with critical bugs caught early and style issues dominating later rounds. Our P1/P2/P3 priority classification maps directly to this pattern.
+
+\subsection{Score Prediction and Paper Quality}
+
+Models for predicting review scores have been explored using textual features of papers. Our work differs in that we study score \emph{change} rather than absolute prediction, focusing on the intervention (revision) that connects two review rounds.

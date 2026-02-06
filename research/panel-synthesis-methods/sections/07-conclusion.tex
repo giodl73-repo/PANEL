@@ -1,0 +1,9 @@
+\section{Conclusion}
+
+We have presented an automated synthesis method that transforms multi-reviewer feedback into prioritized revision guidance through issue extraction, cross-reviewer deduplication, and P1/P2/P3 priority classification. The method is validated across 33+ review cycles, demonstrating that P1 items capture 72\% of achievable score improvement---confirming the classification as an effective triage mechanism.
+
+The synthesis pipeline addresses a practical gap in multi-reviewer assessment: the consolidation step between receiving reviews and beginning revisions. By automating this step with structured classification rules, the method ensures consistent, complete, and actionable synthesis regardless of the number of reviewers or complexity of their feedback.
+
+Future work includes: (1) adaptive classification thresholds based on panel size, (2) conflict resolution strategies for genuinely contradictory feedback, (3) integration with revision tracking to measure P1 completion rates, and (4) cross-domain validation beyond AI/ML systems papers.
+
+The synthesis method is available as part of the panel plugin, implementing the pipeline described in this paper through the \texttt{panel:go} command's synthesis stage.

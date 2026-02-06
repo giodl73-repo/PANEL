@@ -1,0 +1,48 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[table]{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,arrows}
+\usepackage{amsmath}
+
+\definecolor{primaryblue}{RGB}{0,120,212}
+\definecolor{textgray}{RGB}{50,50,50}
+\definecolor{codebg}{RGB}{248,248,248}
+
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{codebg},breaklines=true,frame=single,framerule=0pt}
+\hypersetup{colorlinks=true,linkcolor=primaryblue,urlcolor=primaryblue,citecolor=primaryblue}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries From Reviews to Revisions:\\[0.3em]Automated Synthesis and Priority Classification of Expert Feedback\par}
+\vspace{0.8cm}
+{\large Gio Della-Libera, VP Engineering\par}
+{\normalsize Business \& Industry Copilots Agents 365\par}
+\vspace{0.3cm}
+{\normalsize February 2026\par}
+\vspace{0.8cm}
+\end{center}
+
+\begin{abstract}
+\noindent
+When multiple expert reviewers assess a research paper, their feedback must be consolidated into actionable revision guidance. This synthesis step---transforming diverse, potentially conflicting reviews into a prioritized action plan---is critical yet underspecified in current review processes. We present an automated synthesis method that consolidates multi-reviewer feedback through three stages: issue extraction, cross-reviewer deduplication, and priority classification into three tiers (P1: blocking, P2: important, P3: nice-to-have). Applied to 33+ review cycles across 14 papers with 5--9 reviewers each, the method produces synthesis documents that direct revision effort effectively: addressing P1 items accounts for 72\% of total score improvement, while P2 contributes 22\% and P3 has negligible impact. We analyze the classification rules, deduplication strategies, and consensus detection methods, demonstrating that structured synthesis transforms multi-reviewer feedback from an overwhelming collection of individual opinions into a focused, prioritized revision roadmap.
+\end{abstract}
+
+\vspace{0.5cm}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-synthesis-pipeline}
+\input{sections/04-priority-classification}
+\input{sections/05-evaluation}
+\input{sections/06-discussion}
+\input{sections/07-conclusion}
+
+\end{document}

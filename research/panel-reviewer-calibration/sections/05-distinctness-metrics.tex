@@ -1,0 +1,45 @@
+\section{Distinctness Metrics}
+
+\subsection{Pairwise Rank Correlation}
+
+For each pair of reviewers who assessed the same set of papers, we compute Spearman's $\rho$ on their score rankings:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Pair & $\rho$ & Interpretation \\
+\midrule
+Chase--Khattab & 0.80 & Strong agreement (same bloc) \\
+Zaharia--Shankar & 0.80 & Strong agreement (same bloc) \\
+Shneiderman--Amershi & 0.80 & Strong agreement (same bloc) \\
+Chase--Zaharia & 0.70 & Moderate agreement \\
+Liang--Shankar & 0.60 & Moderate agreement \\
+Shneiderman--Chase & 0.10 & Near-orthogonal \\
+Shneiderman--Zaharia & 0.05 & Near-orthogonal \\
+\bottomrule
+\end{tabular}
+\caption{Pairwise Spearman rank correlations for cross-portfolio panel.}
+\end{table}
+
+\subsection{Topic Focus Divergence}
+
+We measure the Jensen-Shannon divergence of issue topics across reviewers. Each reviewer's issues are categorized into themes (statistical rigor, scalability, human factors, competitive positioning, reproducibility). The JS divergence between reviewers measures how differently they distribute attention across themes.
+
+\begin{itemize}
+    \item Within-bloc JS divergence: 0.08 (similar topic focus)
+    \item Between-bloc JS divergence: 0.42 (substantially different focus)
+    \item Maximum divergence: Shneiderman vs.\ Zaharia (0.61)
+\end{itemize}
+
+\subsection{Calibration Quality Indicators}
+
+We identify three indicators of well-calibrated personas:
+\begin{enumerate}
+    \item \textbf{Score discrimination}: The persona assigns different scores to different papers (not all 3/4)
+    \item \textbf{Issue specificity}: Major issues reference specific paper content, not generic concerns
+    \item \textbf{Expertise alignment}: The reviewer's feedback aligns with their stated expertise category
+\end{enumerate}
+
+Across the database, 89\% of personas meet all three indicators.

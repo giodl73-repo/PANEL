@@ -1,0 +1,48 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[table]{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,arrows}
+\usepackage{amsmath}
+
+\definecolor{primaryblue}{RGB}{0,120,212}
+\definecolor{textgray}{RGB}{50,50,50}
+\definecolor{codebg}{RGB}{248,248,248}
+
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{codebg},breaklines=true,frame=single,framerule=0pt}
+\hypersetup{colorlinks=true,linkcolor=primaryblue,urlcolor=primaryblue,citecolor=primaryblue}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Calibrating AI Reviewer Personas:\\[0.3em]Domain Expertise Simulation Without Fine-Tuning\par}
+\vspace{0.8cm}
+{\large Gio Della-Libera, VP Engineering\par}
+{\normalsize Business \& Industry Copilots Agents 365\par}
+\vspace{0.3cm}
+{\normalsize February 2026\par}
+\vspace{0.8cm}
+\end{center}
+
+\begin{abstract}
+\noindent
+Simulating domain-specific expert review with large language models requires that generated personas produce distinct, expertise-consistent feedback rather than generic commentary. We present a profile-based persona construction method that creates reviewer identities from real expert profiles---including research interests, publication venues, institutional affiliations, and characteristic ``key questions''---without any model fine-tuning. Applied to a database of 45+ researchers across 10 expertise categories, our method generates review panels whose members exhibit measurable distinctness: pairwise Spearman rank correlations range from $\rho = 0.05$ (near-orthogonal perspectives) to $\rho = 0.80$ (within-bloc agreement), with three consistent reviewer blocs (Systems, Agents, Human-Centered) emerging across independent review sessions. We analyze persona calibration across 186+ reviews of 14 papers, demonstrating that expertise tags, venue alignment, and key-question prompting are the three factors most predictive of review distinctness. The method provides a practical framework for constructing calibrated reviewer panels for AI-simulated pre-submission review.
+\end{abstract}
+
+\vspace{0.5cm}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-persona-construction}
+\input{sections/04-calibration-analysis}
+\input{sections/05-distinctness-metrics}
+\input{sections/06-discussion}
+\input{sections/07-conclusion}
+
+\end{document}
