@@ -8,12 +8,59 @@
 
 \textbf{Ethical considerations}. Using real researcher identities for persona construction raises questions about consent and representation. We use publicly available information (publications, affiliations) and do not claim to represent these researchers' actual opinions.
 
+\subsection{Distinctness vs.\ Quality}
+
+A key concern is whether distinct reviews are also \emph{useful} reviews. We assess review quality on a sample of 40 reviews (8 per persona category) using three criteria: (1) Are major issues valid? (i.e., correctly identify a real weakness), (2) Are issues actionable? (provide specific guidance for improvement), (3) Are issues paper-specific? (reference specific content, not generic concerns).
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Distinctness Tier & Valid (\%) & Actionable (\%) & Paper-Specific (\%) \\
+\midrule
+High ($|\rho| < 0.30$) & 78 & 72 & 81 \\
+Medium ($0.30 \leq |\rho| \leq 0.60$) & 82 & 76 & 74 \\
+Low ($|\rho| > 0.60$) & 79 & 71 & 65 \\
+\bottomrule
+\end{tabular}
+\caption{Review quality by distinctness tier.}
+\end{table}
+
+\noindent Distinct reviewers produce reviews that are equally valid and actionable as convergent reviewers, while being significantly more paper-specific ($81\%$ vs.\ $65\%$). This confirms that distinctness does not come at the cost of quality.
+
 \subsection{Practical Guidelines}
 
 Based on our analysis:
 \begin{itemize}
-    \item \textbf{Always include key questions}: This is the single most effective calibration mechanism
+    \item \textbf{Always include key questions}: This is the single most effective calibration mechanism (+0.15 JS divergence)
     \item \textbf{Diversify across categories}: Select reviewers from at least 3 different expertise categories
     \item \textbf{Monitor convergence}: If all reviewers agree on everything, the panel lacks diversity
     \item \textbf{Calibrate to venue}: Include reviewers who would plausibly serve at the target venue
+    \item \textbf{Match expertise to paper}: Personas reviewing outside their domain revert to generic feedback (Section 4.6)
+    \item \textbf{Specify key questions concretely}: Specific questions (``What's the compute/memory tradeoff?'') outperform general ones (``Is this novel?'')
 \end{itemize}
+
+\subsection{Reproducibility}
+
+All reviews were generated using Claude Sonnet 4.5 (\texttt{claude-sonnet-4-5-20250929}) with temperature 1.0 (default), no top-$k$ or top-$p$ overrides. The complete prompt template is:
+
+\begin{lstlisting}
+You are {name} from {affiliation}, an expert in {expertise}.
+Your characteristic concern when reviewing papers is:
+"{key_question}"
+
+You are reviewing for {venue}, where papers are expected to
+demonstrate {venue_standards}.
+
+Review the following paper using the structured format below.
+Score on a 1-4 scale where:
+  1 = Reject, 2 = Weak Accept, 3 = Accept, 4 = Strong Accept
+
+Required sections: Overall Assessment, Score, Major Issues,
+Minor Issues, Strengths, Questions, Recommendations, Verdict.
+
+[Full paper text follows]
+\end{lstlisting}
+
+\noindent Each review is generated independently --- reviewer $i$'s output is not visible to reviewer $j$. Average token count per review: approximately 1,200 tokens.

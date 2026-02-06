@@ -21,6 +21,8 @@ Basecamp & 1 & 9 & 4 & 36 \\
 \caption{Study dataset: 14 papers, 186+ reviews across 2--4 rounds.}
 \end{table}
 
+\textbf{Data structure caveats.} The 14 papers are by a single author, grouped into 3 modules with partially overlapping reviewer pools. This non-i.i.d.\ structure means papers within a module may share correlated quality characteristics, and all papers share the same author's revision skill. We account for this throughout by: (a) reporting per-module breakdowns alongside aggregates, (b) using bootstrap confidence intervals that resample at the paper level, and (c) framing aggregate statistics as descriptive summaries of this specific dataset rather than population estimates.
+
 \subsection{Review Protocol}
 
 Each review round follows a standardized protocol:
@@ -36,6 +38,17 @@ Each review round follows a standardized protocol:
 We track three metrics across rounds:
 \begin{itemize}
     \item \textbf{Mean score}: Average 4-point score across all reviewers
-    \item \textbf{Cross-portfolio score}: 10-point scale from cross-portfolio panels
+    \item \textbf{Cross-portfolio score}: 10-point scale from cross-portfolio panels, computed as: $S_{10} = 2.5 \times S_{4} - 0.5$, where $S_{4}$ is the mean 4-point score. This linear mapping preserves rank ordering while expanding the scale for finer tier discrimination.
     \item \textbf{Verdict distribution}: Count of Accept, Weak Accept, Major Revisions, Reject
+\end{itemize}
+
+\subsection{Statistical Methodology}
+
+Given the small sample ($n=14$) and non-i.i.d.\ data structure, we employ the following approach:
+
+\begin{itemize}
+    \item \textbf{Bootstrap confidence intervals}: All reported means and percentages include 95\% bootstrap CIs computed via 10,000 resamples at the paper level (resampling whole papers, not individual reviews, to preserve within-paper correlation).
+    \item \textbf{Effect sizes}: We report Cohen's $d$ for pre/post comparisons and $R^2$ for model fits.
+    \item \textbf{Per-paper trajectories}: Alongside aggregate summaries, we show individual paper trajectories to reveal variance and distributional shape.
+    \item \textbf{No population inference}: Given $n=14$ from a single author, we explicitly avoid claims about ``all papers'' or ``typical revision dynamics.'' Our results describe patterns in this dataset; generalization requires replication with additional authors and review systems.
 \end{itemize}

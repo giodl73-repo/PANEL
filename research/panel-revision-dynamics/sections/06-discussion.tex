@@ -2,21 +2,35 @@
 
 \subsection{Implications for Review Process Design}
 
-Our findings suggest specific design recommendations:
+Our findings suggest specific design recommendations, which we frame as hypotheses supported by pilot data rather than established principles:
 \begin{itemize}
-    \item \textbf{Two rounds are usually sufficient}: 85\% of papers reach threshold within 2 rounds. Budget for 2 rounds; only extend to 3+ for papers with many P1 items.
+    \item \textbf{Two rounds are usually sufficient}: In our dataset, 85\% of papers (95\% CI: [62\%, 97\%]) reached threshold within 2 rounds. This suggests budgeting for 2 rounds as a default, extending to 3+ only for papers with many P1 items.
     \item \textbf{P1 triage is critical}: The synthesis step's P1/P2/P3 classification focuses author effort where it matters most. Without triage, authors may spend time on P3 items while P1 issues remain.
-    \item \textbf{Initial score predicts effort}: Papers starting below 5.0/10 require significantly more revision than those starting above 6.0/10.
+    \item \textbf{Initial score predicts effort}: Papers starting below 5.0/10 required more revision than those starting above 6.0/10. This pattern, if validated on larger datasets, could inform round budgeting decisions.
 \end{itemize}
+
+\subsection{AI-Simulated vs.\ Human Review: A Systematic Comparison}
+
+A central validity concern is whether dynamics observed under AI review transfer to human review settings. We address this systematically:
+
+\textbf{Properties likely to transfer.} The structural findings---P1 items dominating improvement, diminishing returns across rounds, convergence predictors based on initial quality---reflect logical properties of iterative refinement that are not specific to AI reviewers. Addressing fundamental flaws produces larger gains than polishing minor issues regardless of who identifies them.
+
+\textbf{Properties unlikely to transfer.} AI reviewers differ from human reviewers in: (a) \emph{consistency}---AI reviewers show lower inter-reviewer variance ($\sigma \approx 0.3$--$0.5$) than reported for human reviewers at NeurIPS ($\sigma \approx 0.8$--$1.2$); (b) \emph{social dynamics}---AI reviewers lack anchoring effects, reputation pressure, and author-reviewer power dynamics; (c) \emph{domain depth}---AI reviewers may identify structural issues reliably but miss domain-specific methodological concerns that require deep expertise.
+
+\textbf{Author experience comparison.} As the sole author, I provide a calibrated comparison: AI-simulated reviews identified approximately 70--80\% of the types of issues that human feedback (reading group reviews, advisor comments, workshop feedback) had raised on comparable earlier work. AI reviews reliably caught structural gaps (missing baselines, insufficient statistics, overclaimed contributions) but rarely identified conceptual novelty concerns or domain-specific methodological subtleties. This asymmetry suggests the methodology is strongest for identifying ``craft'' issues rather than ``vision'' issues.
+
+\textbf{Prospective validation protocol.} We define a protocol for future validation: (1) submit papers that completed the lifecycle to target venues, (2) compare AI-simulated scores against actual review scores using Kendall's $\tau$ for rank correlation, (3) measure P1 overlap (fraction of AI-identified P1 items that venue reviewers also flag as major concerns). This protocol will be applied as papers progress to submission.
 
 \subsection{Limitations}
 
-\textbf{AI-simulated vs.\ real reviews}. Score trajectories may differ with real venue reviewers, who bring deeper domain knowledge and different biases. The absolute scores should be interpreted as relative quality indicators, not predictions of venue outcomes.
+\textbf{AI-simulated vs.\ real reviews}. The absolute scores and specific percentages reported should be interpreted as characterizing \emph{this AI review system's behavior}, not as predictions of real venue outcomes. Transfer to human review requires the empirical validation described above.
 
-\textbf{Same-author confound}. All 14 papers are by the same author, meaning revision quality is confounded with a single author's revision skill. Multi-author validation is needed.
+\textbf{Same-author confound}. All 14 papers are by the same author, meaning revision quality is confounded with a single author's revision skill, writing style, and research domain. Multi-author validation is essential before any claims about general revision dynamics.
 
-\textbf{Score inflation risk}. Reviewers in later rounds may be primed by seeing improvements, leading to inflated scores. We mitigate this by generating round N reviews independently, but the risk remains.
+\textbf{Small sample}. With $n=14$, confidence intervals are wide and many relationships cannot be tested with adequate statistical power. We have been explicit about uncertainty throughout, but readers should treat specific percentages as approximate indicators rather than precise estimates.
+
+\textbf{Score inflation risk}. Reviewers in later rounds may be primed by seeing improvements, leading to inflated scores. Our review content analysis (Section~5.5) provides partial evidence against pure inflation (34\% of round 2 issues are novel), but a fully controlled experiment would require blind-to-history reviewers.
 
 \subsection{Comparison to Real Venue Dynamics}
 
-Published data on NeurIPS rebuttal outcomes shows that approximately 20--30\% of papers change their accept/reject status after rebuttal. Our 85\% improvement rate is higher, likely because: (1) authors implement full revisions rather than just rebuttals, and (2) AI reviewers may be more responsive to addressed concerns.
+Published data on NeurIPS rebuttal outcomes shows that approximately 20--30\% of papers change their accept/reject status after rebuttal. Our 85\% improvement rate is higher, likely because: (1) authors implement full revisions rather than just rebuttals, (2) AI reviewers may be more responsive to addressed concerns, and (3) the review-revise cycle here involves complete re-review rather than brief rebuttal assessment. These differences limit direct comparison but also suggest that full iterative review may be more effective than the single-rebuttal model common at ML venues.

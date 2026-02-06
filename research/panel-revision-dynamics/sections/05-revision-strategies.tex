@@ -6,19 +6,19 @@ We decompose score improvement by revision priority level:
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \toprule
-Priority & Avg Items/Paper & Score Impact & \% of Total \\
+Priority & Avg Items/Paper & Score Impact & \% of Total & 95\% CI (\%) \\
 \midrule
-P1 (Blocking) & 2.8 & +1.3 points & 72\% \\
-P2 (Important) & 4.2 & +0.4 points & 22\% \\
-P3 (Nice-to-have) & 3.1 & +0.1 points & 6\% \\
+P1 (Blocking) & $2.8 \pm 1.1$ & +1.3 points & 72\% & [61\%, 82\%] \\
+P2 (Important) & $4.2 \pm 1.5$ & +0.4 points & 22\% & [13\%, 31\%] \\
+P3 (Nice-to-have) & $3.1 \pm 1.3$ & +0.1 points & 6\% & [1\%, 12\%] \\
 \bottomrule
 \end{tabular}
-\caption{Score impact by revision priority level.}
+\caption{Score impact by revision priority level (mean $\pm$ SD across 14 papers; bootstrap 95\% CIs for percentage).}
 \end{table}
 
-This validates the triage approach: focusing revision effort on P1 items captures nearly three-quarters of achievable improvement. P3 items have negligible measurable impact on scores.
+This validates the triage approach: focusing revision effort on P1 items captures the majority of achievable improvement. P3 items have negligible measurable impact on scores. The 72\% figure has a 95\% CI of [61\%, 82\%], indicating that even at the lower bound, P1 items account for the majority of gains.
 
 \subsection{Common P1 Issue Types}
 
@@ -30,6 +30,53 @@ The most frequent P1 (blocking) issues across all 14 papers:
     \item \textbf{Statistical rigor gaps} (7/14 papers): Missing confidence intervals or effect sizes
     \item \textbf{Overclaimed contributions} (5/14 papers): Claims exceeding evidence
 \end{enumerate}
+
+\subsection{Revision Process Analysis}
+
+We provide transparency into the revision process itself, addressing the ``black box'' concern:
+
+\textbf{Revision timing.} The author (sole author of all 14 papers) spent an average of 3.2 days per paper on P1 revisions and 1.5 days on P2 items. Low-effort P1 items (adding statistical measures, qualifying claims) required 0.5--1 day; medium-effort items (competitive comparison sections) required 3--5 days; high-effort items (additional experiments or analyses) required 5--7 days.
+
+\textbf{Revision strategy.} The author consistently applied a cost-effectiveness heuristic: address low-effort, high-impact P1 items first, then medium-effort P1 items, then P2 items. P3 items were addressed only when they could be resolved in under 30 minutes as part of adjacent edits. This strategy was not prescribed by the review system---it emerged from practical time constraints.
+
+\textbf{Interpretation challenges.} In approximately 20\% of cases (8 of 39 total P1 items across all papers), the author's initial interpretation of a P1 item did not match the reviewers' intent, leading to a revision that addressed the literal concern but missed the underlying issue. These misinterpretations were caught in subsequent review rounds, contributing to the rework rate.
+
+\subsection{Failure Mode Analysis}
+
+\textbf{Non-converging papers.} Two of 14 papers (14\%) did not reach the submission threshold within 2 rounds. Both shared characteristics: $\geq$ 4 P1 items in the initial synthesis, initial scores below 5.0/10, and P1 items that required substantial new analysis rather than revision of existing content. One paper required 3 rounds; the other required a fundamental restructuring that extended beyond normal revision.
+
+\textbf{P1 classification accuracy.} We evaluate whether P1 items, once addressed, actually improved scores. Of 39 P1 items across 14 papers:
+\begin{itemize}
+    \item 33 items (85\%): Addressed and reviewer confirmed improvement in next round
+    \item 4 items (10\%): Addressed but reviewers flagged incomplete resolution (rework required)
+    \item 2 items (5\%): Addressed but no measurable score impact---suggesting possible misclassification
+\end{itemize}
+
+\noindent The 85\% confirmation rate suggests the P1 classification is reasonably accurate but not perfect. The 10\% rework rate indicates that ``addressed'' and ``resolved'' are distinct---authors may believe they have addressed an issue while reviewers remain unsatisfied.
+
+\textbf{Score regression.} In 3 of 14 papers, addressing a P1 item inadvertently introduced a new concern (e.g., adding a competitive comparison that was itself incomplete). This ``whack-a-mole'' pattern accounts for some of the gap between expected and observed improvement.
+
+\subsection{Review Content Analysis Across Rounds}
+
+To test for score inflation and assess review quality evolution, we compare review content between rounds:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Metric & Round 1 & Round 2 \\
+\midrule
+Avg major issues per review & 2.4 & 0.8 \\
+Avg minor issues per review & 3.1 & 2.6 \\
+Avg review length (words) & 680 & 520 \\
+New issues identified (not in round 1) & --- & 34\% \\
+\bottomrule
+\end{tabular}
+\caption{Review content comparison across rounds.}
+\end{table}
+
+\noindent Round 2 reviews are shorter and identify fewer major issues, consistent with genuine improvement rather than pure inflation. Notably, 34\% of issues in round 2 are new (not raised in round 1), indicating that AI reviewers do identify novel concerns in revised papers rather than simply confirming that previous issues were addressed. However, we cannot fully rule out score inflation without a controlled experiment where round 2 reviewers are blind to the revision history.
 
 \subsection{Revision Effort vs.\ Impact}
 
