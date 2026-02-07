@@ -2,6 +2,7 @@
   "default": "panel",
   "projects": {
     "panel": {
+      "projectType": "plugin",
       "wavesPath": "context/waves",
       "disciplinesPath": "context/waves/disciplines",
       "description": "panel waves",

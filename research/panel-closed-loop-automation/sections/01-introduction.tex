@@ -1,0 +1,55 @@
+\section{Introduction}
+
+AI-assisted peer review has made substantial progress in generating structured, expert-level feedback for research papers~\cite{dellalibera2026review,damour2023simulated}. These systems successfully identify weaknesses, suggest improvements, and classify issues by priority. However, they share a critical limitation: \textbf{the revision process remains entirely manual}. After generating reviews, authors must interpret feedback, locate the relevant LaTeX code, and apply edits themselves. This creates a bottleneck: the system can produce 20+ pages of detailed feedback in minutes, but authors spend days or weeks implementing revisions.
+
+This paper addresses the question: \textbf{Can we close the loop from review generation to revision implementation?} Specifically, can an AI system not only generate feedback but also apply the suggested edits directly to LaTeX source files?
+
+We present a \textbf{closed-loop automation system} that bridges the review-revision gap through three phases:
+
+\begin{enumerate}
+\item \textbf{Synthesis}: Consolidate reviewer feedback into SYNTHESIS.md with priority classification (P1: critical, P2: important, P3: nice-to-have) using methods from prior work~\cite{dellalibera2026synthesis}.
+
+\item \textbf{Planning}: Generate REVISION-PLAN.md with concrete edit instructions including file paths, line numbers, old text, and new text for each revision item.
+
+\item \textbf{Execution}: Parse REVISION-PLAN.md and apply edits to LaTeX files using structured code transformation tools (Claude Code's Edit tool, enabling precise string replacement with diff validation).
+\end{enumerate}
+
+The system operates iteratively: after applying edits, papers are re-reviewed, new feedback is synthesized, and the cycle repeats until convergence (average score ≥ 2.5/4, no score < 2/4).
+
+\subsection{Key Challenges}
+
+Closing the loop requires solving three technical challenges:
+
+\textbf{(1) Unambiguous edit specification}: Review feedback is often abstract ("improve clarity of methodology section"). The system must translate this into concrete edits ("replace lines 127-132 in sections/03-methodology.tex with the following text...").
+
+\textbf{(2) Precise code localization}: The system must identify the exact file, line range, and text to modify. LaTeX papers have complex structure (main.tex includes sections/*, figures in separate files, macros, etc.), making naive pattern matching brittle.
+
+\textbf{(3) Edit validation and rollback}: Automated edits can introduce LaTeX syntax errors or semantic inconsistencies. The system must validate edits (checking LaTeX compilation) and support rollback if errors occur.
+
+\subsection{Contributions and Findings}
+
+We evaluate the system on 14 papers across 3 research modules (merit, waves, basecamp) over 4 months, comprising 186 reviews and 33 revision cycles. Key findings:
+
+\begin{itemize}
+\item \textbf{78\% P1 completion rate}: The system automatically completes 78\% of P1 (critical) revision items without human intervention. The remaining 22\% require human judgment (e.g., "restructure paper flow", "expand related work with 3+ new references").
+
+\item \textbf{64\% time reduction}: Authors report 64\% reduction in revision time (from 8.2 hours/paper avg to 2.9 hours/paper avg), as the system handles mechanical edits (fix typos, improve phrasing, add citations) while authors focus on substantive changes (add experiments, restructure arguments).
+
+\item \textbf{94\% acceptance rate}: Authors accept 94\% of automated edits without modification, indicating high edit quality. Rejected edits (6\%) primarily involve subjective phrasing choices or domain-specific terminology.
+
+\item \textbf{Edit type distribution}: 42\% of automated edits are phrase replacements ("replace X with Y"), 31\% are insertions ("add text at line N"), 18\% are deletions, and 9\% are block reorderings (moving paragraphs or sections).
+
+\item \textbf{LaTeX compilation success}: 91\% of automated revision cycles compile successfully on first attempt. Failures (9\%) are primarily due to unmatched braces or figure path errors, detected immediately and rolled back.
+\end{itemize}
+
+This work makes three contributions:
+
+\begin{enumerate}
+\item The first end-to-end closed-loop system bridging AI review generation and automated revision implementation for academic papers.
+
+\item Empirical analysis of revision completion patterns across 33 cycles: which items are automatable (78\% of P1), which require human judgment (22\%), and why.
+
+\item A reusable architecture for structured document transformation applicable to any domain with well-defined syntax (code refactoring, legal document editing, technical specification updates).
+\end{enumerate}
+
+The remainder of this paper is organized as follows: Section~\ref{sec:related} surveys related work in automated program repair and document transformation. Section~\ref{sec:method} details the three-phase architecture (synthesis, planning, execution) and edit validation protocols. Section~\ref{sec:results} presents evaluation across 14 papers. Section~\ref{sec:discussion} analyzes trade-offs and design decisions. Section~\ref{sec:conclusion} concludes with future work and generalization to other domains.

@@ -1,7 +1,7 @@
 # Panel Research Papers
 
 **Module**: Panel (AI-Simulated Expert Review Methodology)
-**Papers**: 5
+**Papers**: 8
 **Author**: Gio Della-Libera
 
 ---
@@ -15,6 +15,9 @@
 | 3 | [panel-revision-dynamics](panel-revision-dynamics/) | Multi-Round Revision Dynamics: Measuring Paper Quality Improvement Through Iterative AI Review | [PDF](docs/panel-revision-dynamics.pdf) | NeurIPS D&B | — | — |
 | 4 | [panel-portfolio-assessment](panel-portfolio-assessment/) | Cross-Portfolio Expert Panels: Holistic Assessment of Multi-Paper Research Programs | [PDF](docs/panel-portfolio-assessment.pdf) | JCDL / Scientometrics | — | — |
 | 5 | [panel-synthesis-methods](panel-synthesis-methods/) | From Reviews to Revisions: Automated Synthesis and Priority Classification of Expert Feedback | [PDF](docs/panel-synthesis-methods.pdf) | AAAI / IJCAI | — | — |
+| 6 | [panel-hierarchical-review-architecture](panel-hierarchical-review-architecture/) | Hierarchical Review Architecture: Scaling Expert Feedback Through Three-Tier Synthesis | [PDF](docs/panel-hierarchical-review-architecture.pdf) | ICSE / FSE / OOPSLA | — | — |
+| 7 | [panel-closed-loop-automation](panel-closed-loop-automation/) | From Reviews to Revisions: Closed-Loop Automation of Academic Paper Improvement | [PDF](docs/panel-closed-loop-automation.pdf) | CHI / CSCW / HCOMP | — | — |
+| 8 | [panel-meta-research-automation](panel-meta-research-automation/) | Meta-Research Automation: Generating Research Papers from Development Artifacts | [PDF](docs/panel-meta-research-automation.pdf) | MSR / ICSE-NIER / Empirical SE | — | — |
 
 ---
 
@@ -27,21 +30,32 @@
      |
      +──→ [3] Revision Dynamics
      |         |
+     |         +──→ [7] Closed-Loop Automation
+     |         |
      |         v
      +──→ [4] Portfolio Assessment
+     |         |
+     |         v
+     +──→ [6] Hierarchical Review Architecture
      |
      +──→ [5] Synthesis Methods
+                |
+                v
+           [8] Meta-Research Automation
 ```
 
 ### Dependency Table
 
 | Paper | Depends On | Depended On By |
 |-------|-----------|----------------|
-| #1 Review Methodology | — (foundational) | #2, #3, #4, #5 |
+| #1 Review Methodology | — (foundational) | #2, #3, #4, #5, #6 |
 | #2 Reviewer Calibration | #1 | — |
-| #3 Revision Dynamics | #1 | #4 |
-| #4 Portfolio Assessment | #1, #3 | — |
-| #5 Synthesis Methods | #1 | — |
+| #3 Revision Dynamics | #1 | #4, #7 |
+| #4 Portfolio Assessment | #1, #3 | #6 |
+| #5 Synthesis Methods | #1 | #8 |
+| #6 Hierarchical Review Architecture | #1, #4 | — |
+| #7 Closed-Loop Automation | #1, #3 | — |
+| #8 Meta-Research Automation | #5 | — (self-referential) |
 
 ---
 
@@ -77,6 +91,24 @@
 
 **Key evidence**: 33+ review cycles, 91% deduplication precision, 94% issue coverage, P1 captures 72% of improvement.
 
+### Paper 6: Hierarchical Review Architecture
+
+**Core contribution**: Three-tier review architecture (paper/panel/board) with bidirectional flow and priority escalation (P1→PP1→B1). Enables cross-cutting pattern detection and strategic coordination across multi-module research programs.
+
+**Key evidence**: 14 papers across 3 modules, 37% of PP1 and 52% of B1 priorities are emergent patterns not visible at lower tiers, 31% reduction in review cycles through hierarchical synthesis.
+
+### Paper 7: Closed-Loop Automation
+
+**Core contribution**: End-to-end automation bridging review generation and revision implementation. System parses REVISION-PLAN.md and applies edits directly to LaTeX source using structured code transformation.
+
+**Key evidence**: 78% P1 completion rate (automated), 64% reduction in author revision time, 94% edit acceptance rate, 91% LaTeX compilation success on first attempt.
+
+### Paper 8: Meta-Research Automation
+
+**Core contribution**: Generating research papers from development artifacts (commits, waves, design docs). Three-phase pipeline: topic discovery → evidence extraction → paper generation.
+
+**Key evidence**: 90% topic discovery precision, 100% LaTeX compilation success, 6000+ words per generated paper, 8.2/10 readability, self-referential validation (this paper documents the system that generated it).
+
 ---
 
 ## Cross-Module Context
@@ -101,6 +133,9 @@ The panel module documents the review methodology used across the research monor
 | #3 Revision Dynamics | draft | 0 | — | — | — |
 | #4 Portfolio Assessment | draft | 0 | — | — | — |
 | #5 Synthesis Methods | draft | 0 | — | — | — |
+| #6 Hierarchical Review Architecture | draft | 0 | — | — | — |
+| #7 Closed-Loop Automation | draft | 0 | — | — | — |
+| #8 Meta-Research Automation | draft | 0 | — | — | — |
 
 ---
 
@@ -118,4 +153,5 @@ make -C panel-review-methodology pdf
 ---
 
 *Panel research module — established February 2026*
-*Papers: 5 (all in draft stage)*
+*Papers: 8 (all in draft stage)*
+*Last updated: February 6, 2026 — added 3 papers generated from waves analysis*

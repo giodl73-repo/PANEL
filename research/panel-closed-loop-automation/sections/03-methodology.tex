@@ -1,0 +1,200 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{System Architecture Overview}
+
+Figure~\ref{fig:architecture} illustrates the three-phase closed-loop architecture. Each review cycle proceeds through synthesis → planning → execution → validation.
+
+\begin{figure}[t]
+\centering
+\begin{verbatim}
+   ┌─────────────┐
+   │  Reviews    │ REVIEW-ALICE.md, REVIEW-BOB.md, ...
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │  Synthesis  │ SYNTHESIS.md (P1/P2/P3 items)
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │  Planning   │ REVISION-PLAN.md (file, line, old, new)
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │  Execution  │ Apply edits to LaTeX source
+   └──────┬──────┘
+          ↓
+   ┌─────────────┐
+   │  Validation │ Compile LaTeX, re-review, repeat
+   └─────────────┘
+\end{verbatim}
+\caption{Three-phase closed-loop architecture from reviews to revisions.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Phase 1: Review Synthesis}
+
+Review synthesis follows methods from prior work~\cite{dellalibera2026synthesis}:
+
+\textbf{Inputs}: 5-7 review files (REVIEW-EXPERT-NAME.md) with structured feedback (strengths, weaknesses, questions, score).
+
+\textbf{Process}:
+\begin{enumerate}
+\item Extract all issues from weaknesses sections.
+\item Deduplicate issues using semantic similarity (cosine similarity on sentence embeddings, threshold 0.85).
+\item Classify priority based on reviewer consensus:
+  \begin{itemize}
+  \item P1: 3+ reviewers flag issue OR issue threatens acceptance
+  \item P2: 2+ reviewers flag issue
+  \item P3: 1 reviewer flags issue
+  \end{itemize}
+\item Generate SYNTHESIS.md with prioritized issue list.
+\end{enumerate}
+
+\textbf{Outputs}: SYNTHESIS.md with P1/P2/P3 sections listing issues in order of priority.
+
+\subsection{Phase 2: Revision Planning}
+
+Revision planning translates abstract feedback into concrete edit instructions.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item SYNTHESIS.md with prioritized issues
+\item Paper LaTeX source (main.tex, sections/*.tex)
+\item Prior REVISION-PLAN.md (if round ≥ 2) to avoid redundant edits
+\end{itemize}
+
+\textbf{Process}: For each issue in SYNTHESIS.md (P1 first, then P2, then P3):
+\begin{enumerate}
+\item \textbf{Localize}: Identify the file and line range where the issue occurs. Use grep to search for relevant keywords (e.g., issue "methodology section lacks detail" → search for "methodology" in sections/*.tex).
+
+\item \textbf{Propose edit}: Generate old text (exact text to replace) and new text (replacement). Ensure old text is unique within the file to avoid ambiguous matches.
+
+\item \textbf{Validate}: Check that old text exists in the file at the specified location. If not found, mark issue as "requires human judgment" (cannot localize automatically).
+
+\item \textbf{Format}: Write edit as structured entry in REVISION-PLAN.md:
+\begin{verbatim}
+## P1-3: Methodology lacks statistical power analysis
+
+**File**: sections/03-methodology.tex
+**Lines**: 127-132
+**Action**: Insert
+
+**Old text**: (none - insertion)
+
+**New text**:
+We conducted a power analysis using G*Power 3.1 \cite{faul2007gpower}.
+With $\alpha = 0.05$ and desired power $1-\beta = 0.80$, the minimum
+sample size is $n = 47$ for detecting a medium effect size ($d = 0.5$).
+
+**Rationale**: Reviewers Alice, Bob, and Carol all noted the lack of
+statistical justification for sample size. Adding power analysis
+addresses this P1 concern.
+\end{verbatim}
+\end{enumerate}
+
+\textbf{Outputs}: REVISION-PLAN.md with structured edit entries for all addressable issues. Issues requiring human judgment (e.g., "restructure paper", "expand related work with 3+ new citations") are marked but not assigned concrete edits.
+
+\subsection{Phase 3: Edit Execution}
+
+Edit execution parses REVISION-PLAN.md and applies edits to LaTeX files.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item REVISION-PLAN.md with structured edit entries
+\item Paper LaTeX source (writable)
+\end{itemize}
+
+\textbf{Process}:
+\begin{enumerate}
+\item Parse REVISION-PLAN.md to extract edit entries (file, action, old text, new text).
+
+\item For each edit entry in priority order (P1 → P2 → P3):
+  \begin{enumerate}
+  \item Read target file.
+  \item Verify old text exists (exact match). If not found, skip edit and log warning.
+  \item Apply edit using string replacement:
+    \begin{itemize}
+    \item \textbf{Replace}: Substitute old text with new text.
+    \item \textbf{Insert}: Add new text at specified line.
+    \item \textbf{Delete}: Remove old text.
+    \end{itemize}
+  \item Write modified file.
+  \item Mark edit as completed in \_panel.yaml state file.
+  \end{enumerate}
+
+\item After all edits applied, run \texttt{make pdf} to compile LaTeX.
+
+\item If compilation fails:
+  \begin{itemize}
+  \item Identify the failing edit (last edit before error).
+  \item Rollback that edit (restore old text).
+  \item Mark edit as "requires human judgment".
+  \item Recompile to verify rollback succeeded.
+  \end{itemize}
+
+\item If compilation succeeds, commit changes to git with message listing completed P1 items.
+\end{enumerate}
+
+\textbf{Outputs}:
+\begin{itemize}
+\item Modified LaTeX files with edits applied
+\item Compiled PDF (if successful)
+\item \_panel.yaml updated with completion status per revision item
+\end{itemize}
+
+\subsection{Phase 4: Validation and Iteration}
+
+After edits are applied, the paper enters the recheck stage for re-review.
+
+\textbf{Process}:
+\begin{enumerate}
+\item Compile paper to PDF.
+\item Generate round 2 reviews (ROUND2-REVIEW-EXPERT-NAME.md) from the same reviewers.
+\item Synthesize round 2 feedback into new SYNTHESIS.md.
+\item Check convergence criteria:
+  \begin{itemize}
+  \item Average score ≥ 2.5/4 (weak accept or better)
+  \item No individual score < 2/4 (no rejects)
+  \item All P1 items from prior round addressed
+  \end{itemize}
+\item If converged: paper advances to ready stage (panel tier review).
+\item If not converged: generate new REVISION-PLAN.md and repeat phases 2-4.
+\end{enumerate}
+
+Iteration continues until convergence or a maximum of 4 rounds (empirically, 85\% of papers converge within 2 rounds~\cite{dellalibera2026dynamics}).
+
+\subsection{Edit Types and Complexity}
+
+We classify edits by complexity:
+
+\textbf{Simple edits} (fully automatable):
+\begin{itemize}
+\item Phrase replacement: "replace X with Y"
+\item Insertion: "add text at line N"
+\item Deletion: "remove text at line N"
+\item Typo fixes: "change 'recieve' to 'receive'"
+\end{itemize}
+
+\textbf{Complex edits} (require human judgment):
+\begin{itemize}
+\item Structural changes: "move section 4 before section 3"
+\item Content expansion: "add 3 paragraphs explaining X"
+\item Figure creation: "add figure showing Y"
+\item Major rewrites: "rewrite introduction for clarity"
+\end{itemize}
+
+The system attempts all simple edits automatically. Complex edits are flagged in REVISION-PLAN.md with \texttt{[HUMAN REQUIRED]} tags, signaling that author intervention is needed.
+
+\subsection{Implementation}
+
+The system is implemented as part of the panel plugin for Claude Code:
+
+\begin{itemize}
+\item \textbf{Synthesis}: \texttt{panel:paper} command, synthesis stage
+\item \textbf{Planning}: \texttt{panel:paper} command, revision stage (plan generation)
+\item \textbf{Execution}: \texttt{panel:paper} command, revision stage (edit application)
+\item \textbf{Validation}: \texttt{panel:paper} command, recheck stage
+\end{itemize}
+
+Edits use Claude Code's Edit tool, which performs exact string matching and diff validation, ensuring edits are applied precisely as specified or fail with clear error messages.

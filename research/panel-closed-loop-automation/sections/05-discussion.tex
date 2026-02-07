@@ -1,0 +1,80 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Why 78\% P1 Completion Matters}
+
+The core finding is that \textbf{78\% of critical (P1) revision items are automatable}. This validates the central hypothesis: the gap between review generation and revision implementation is tractable for structured documents like LaTeX papers.
+
+The 22\% of P1 items requiring human judgment (Table~\ref{tab:human-required}) are inherently complex: structural changes, content expansion, and major rewrites. These tasks require author judgment about what to say and how to say it, not just where to edit. The system correctly identifies these as non-automatable rather than attempting edits that would likely be rejected.
+
+\subsection{64\% Time Reduction: What Authors Gained}
+
+The 64\% reduction in revision time (Table~\ref{tab:time}) represents a shift in how authors spend effort:
+
+\textbf{Before automation}:
+\begin{itemize}
+\item 60\% mechanical edits (fix typos, improve phrasing, add citations)
+\item 30\% complex edits (restructure, expand content)
+\item 10\% coordination (track feedback, locate code, validate changes)
+\end{itemize}
+
+\textbf{After automation}:
+\begin{itemize}
+\item 41\% review automated edits (verify correctness)
+\item 48\% complex edits (same as before)
+\item 11\% coordination (same as before)
+\end{itemize}
+
+The system eliminates the 60\% spent on mechanical edits, freeing authors to focus on complex edits requiring domain expertise. Reviewing automated edits takes substantially less time (41\%) than implementing them manually would have (60\%), as authors need only verify correctness rather than locate code and apply changes.
+
+\subsection{94\% Acceptance Rate: Edit Quality}
+
+The 94\% acceptance rate (Table~\ref{tab:acceptance}) indicates high edit quality. Authors reject only 2\% of edits, primarily for subjective style reasons rather than correctness issues.
+
+This success stems from two architectural decisions:
+
+\textbf{(1) Exact text matching}: The Edit tool requires exact match of old text before applying replacement. This prevents ambiguous or incorrect edits (e.g., replacing the wrong occurrence of a phrase).
+
+\textbf{(2) Concrete revision plans}: The system generates REVISION-PLAN.md with specific old text and new text before executing edits. This intermediate representation allows authors to review planned edits before they're applied, catching potential issues.
+
+\subsection{Generalization to Other Domains}
+
+The closed-loop architecture generalizes to any domain with:
+
+\textbf{(1) Structured documents}: The target artifact has well-defined syntax (LaTeX, code, HTML, JSON, YAML). This enables precise text matching and validation.
+
+\textbf{(2) Automated validation}: There exists a compiler, linter, or test suite that can validate edits (LaTeX compiler, unit tests, type checker).
+
+\textbf{(3) Concrete feedback}: Review feedback can be translated to specific edit locations (file, line, old text, new text).
+
+\textbf{Applicable domains}:
+\begin{itemize}
+\item \textbf{Code review}: Apply reviewer suggestions to source code (rename variable, extract function, add error handling).
+\item \textbf{Documentation}: Update technical docs based on review feedback (fix typos, clarify instructions, add examples).
+\item \textbf{Legal document editing}: Apply attorney comments to contracts (modify clause, add disclaimer).
+\item \textbf{Configuration files}: Apply admin feedback to config files (update ports, add feature flags).
+\end{itemize}
+
+The key requirement is that feedback can be mapped to concrete edits. Domains with purely subjective feedback (creative writing, art) are less suitable.
+
+\subsection{Limitations and Challenges}
+
+\textbf{LaTeX syntax complexity}: While LaTeX has well-defined syntax, papers use diverse packages and macros, making some edits fragile. For example, edits inside custom environments (\texttt{\textbackslash{}begin\{theorem\}}) require understanding environment semantics.
+
+\textbf{Semantic validation gap}: LaTeX compilation checks syntax but not semantics. An edit can compile successfully while introducing logical errors (e.g., citing wrong reference, stating incorrect claim). The system relies on re-review to catch semantic errors.
+
+\textbf{Ambiguous feedback}: Some reviewer comments are vague ("improve clarity") without specifying what to change. The system attempts to localize and propose edits, but vague feedback often ends up in the "requires human judgment" category.
+
+\textbf{Multi-file coordination}: LaTeX papers span multiple files (main.tex, sections/*.tex, figures/). Edits that require coordinated changes across files (e.g., rename section and update references) are not currently automated.
+
+\subsection{Future Work}
+
+\textbf{Semantic validation}: Integrate fact-checking and claim verification to detect semantic errors introduced by automated edits. For example, check that all citations exist in the bibliography, numerical claims are consistent across sections.
+
+\textbf{Multi-file refactoring}: Extend the system to handle coordinated edits across multiple files (rename section and update all references, move figure and update caption numbering).
+
+\textbf{Learning from rejections}: When authors reject an automated edit, learn why (collect rejection reason) and use it to improve future edit generation. Build a corpus of rejected edits and train a classifier to predict which proposed edits will be rejected.
+
+\textbf{Human-in-the-loop planning}: Before executing edits, show authors the planned edits (REVISION-PLAN.md) and allow them to approve, modify, or reject each edit. This shifts the automation model from "execute then review" to "plan then execute," giving authors more control.
+
+\textbf{Generalization to code}: Extend the architecture to source code (Python, JavaScript, etc.) where test suites provide stronger validation than LaTeX compilation. Key challenge: code edits have side effects (changing function signature affects all callers), requiring global reasoning.

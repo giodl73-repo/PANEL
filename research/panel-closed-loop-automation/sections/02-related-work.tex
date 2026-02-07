@@ -1,0 +1,42 @@
+\section{Related Work}
+\label{sec:related}
+
+\subsection{AI-Assisted Review Generation}
+
+Recent work demonstrates AI's capability to generate structured paper reviews matching expert quality~\cite{damour2023simulated}. Our prior work~\cite{dellalibera2026review} presents an 8-stage lifecycle for AI-simulated reviews, achieving 32\% score improvement across 14 papers. However, these systems generate feedback without implementing revisions, leaving a manual gap between review and revision.
+
+Yuan et al.~\cite{yuan2024llm} use LLMs to generate meta-reviews consolidating multiple reviews. While this aggregates feedback, it does not translate recommendations into code edits. Our system extends this by generating executable revision plans with specific file paths and text replacements.
+
+\subsection{Automated Program Repair}
+
+Automated program repair (APR) systems fix bugs by generating and validating code patches~\cite{monperrus2018automatic}. GenProg~\cite{le2012genprog} uses genetic programming to evolve patches that pass test suites. More recent neural approaches~\cite{chen2019sequencer} use sequence-to-sequence models to generate fixes.
+
+Our system applies APR techniques to LaTeX documents rather than source code. The key difference: LaTeX compilation provides weaker validation than test suites (it checks syntax but not semantics), requiring additional quality assurance (reviewer re-assessment after edits).
+
+\subsection{Code Refactoring and Transformation}
+
+Refactoring tools like IntelliJ IDEA and Eclipse automate code transformations (rename variable, extract method) using abstract syntax tree (AST) manipulation~\cite{opdyke1992refactoring}. These tools guarantee behavior preservation through static analysis.
+
+LaTeX lacks a standard AST representation, making AST-based refactoring infeasible. Our system uses structured string replacement with diff validation: match exact text spans, apply replacements, verify compilation. This is less rigorous than AST manipulation but sufficient for LaTeX's relatively simple syntax.
+
+\subsection{Document Editing and Revision Tracking}
+
+Track changes in Microsoft Word and Google Docs enable collaborative document editing with revision history~\cite{sun1998operational}. These systems track who made which edits and when, supporting rollback and merge conflict resolution.
+
+Our system generates edits automatically rather than tracking human edits. However, we adopt the revision tracking model: each edit is logged with justification (which review item prompted it), enabling rollback if edits are rejected.
+
+\subsection{Prompt Engineering for Code Editing}
+
+Recent work shows LLMs can edit code when prompted with specific instructions~\cite{chen2021codex}. Copilot~\cite{chen2021evaluating} generates code completions, while Cursor and Aider~\cite{aider2023} enable conversational code editing.
+
+Our system differs in two ways: (1) edits are driven by structured review feedback rather than freeform prompts, and (2) we use deterministic string replacement (Edit tool) rather than generative completion, ensuring edits exactly match the revision plan.
+
+\subsection{LaTeX-Specific Tools}
+
+Overleaf~\cite{overleaf2023} provides real-time collaborative LaTeX editing with change tracking. Grammarly and LanguageTool~\cite{naber2003languagetool} detect grammar and style issues in text, including LaTeX.
+
+These tools focus on syntax/grammar checking or human collaboration, not automated revision implementation from structured feedback. Our system integrates review synthesis (identifying what to change) with edit execution (making the change), closing the loop from feedback to code.
+
+\subsection{Gaps in Existing Work}
+
+No prior work combines AI review generation, concrete revision planning, and automated edit execution for academic papers. Existing systems either: (1) generate feedback without implementing it (AI review), (2) implement fixes without high-level feedback (APR), or (3) support human editing without automation (collaborative editing tools). Our contribution is an end-to-end closed-loop system spanning all three phases.

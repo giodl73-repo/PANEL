@@ -1,0 +1,39 @@
+\section{Introduction}
+
+As AI-assisted research workflows mature, organizations increasingly manage portfolios of dozens of papers across multiple modules and domains~\cite{dellalibera2026review}. While individual paper reviews provide granular feedback, they fail to surface three critical classes of issues:
+
+\textbf{Cross-cutting patterns}: When 5 out of 7 papers in a module share the same methodological weakness, individual reviewers may flag it as a local issue without recognizing it as a systematic problem requiring module-wide intervention.
+
+\textbf{Resource conflicts}: When two papers propose incompatible architectural decisions, paper-level reviews treat each decision as locally reasonable, missing the portfolio-level inconsistency.
+
+\textbf{Strategic misalignment}: When a module's papers collectively drift from the program's research vision, individual papers may receive positive reviews while the portfolio as a whole loses coherence.
+
+Existing AI review systems operate at a single tier: generate reviews for individual papers, synthesize feedback, and iterate~\cite{dellalibera2026synthesis}. This flat architecture inherits the blind spots of traditional peer review, where each paper is evaluated in isolation and cross-cutting concerns emerge only through ad-hoc discussions at program committee meetings or group retrospectives.
+
+We present a \textbf{three-tier hierarchical review architecture} that addresses these gaps through structured bidirectional flow:
+
+\begin{itemize}
+\item \textbf{Paper Tier} (P1/P2/P3): Individual paper reviews with priority classification based on reviewer consensus (P1: 3+ reviewers or major issue, P2: 2+ reviewers, P3: 1 reviewer).
+
+\item \textbf{Panel Tier} (PP1/PP2/PP3): Module-level cross-portfolio synthesis identifying patterns across papers (PP1: cross-paper pattern or module-threatening, PP2: 2+ papers affected, PP3: 1 paper).
+
+\item \textbf{Board Tier} (B1/B2/B3): Monorepo-level strategic coordination across modules (B1: 3+ board members or program-threatening, B2: 2+ modules affected, B3: 1 module).
+\end{itemize}
+
+Information flows bidirectionally: \textbf{upward escalation} surfaces local issues when they indicate systemic problems (e.g., a P1 in one paper becomes a PP1 when similar issues appear in 3+ papers), while \textbf{downward propagation} cascades strategic decisions as concrete revision requirements (e.g., a B1 architectural directive generates specific PP1 tasks per module, which generate specific P1 edits per paper).
+
+We evaluate the architecture on 14 research papers across 3 modules (merit, waves, basecamp) over 4 months of operation. Key findings:
+
+\begin{itemize}
+\item \textbf{Emergent pattern detection}: 37\% of PP1 priorities (module-level) and 52\% of B1 priorities (board-level) represent issues not flagged by any individual paper review, validating the need for hierarchical synthesis.
+
+\item \textbf{Priority escalation dynamics}: 23\% of paper-level P1 items escalate to PP1 when the same pattern appears across multiple papers, demonstrating effective upward flow.
+
+\item \textbf{Directive propagation efficiency}: Board-level B1 directives cascade to an average of 2.4 modules (PP1) and 5.8 papers (P1), with 89\% of cascaded items marked as addressed within one review round.
+
+\item \textbf{Review load balance}: The three-tier structure reduces paper-level review cycles by 31\% compared to a flat baseline, as cross-cutting issues are resolved once at the panel tier rather than redundantly at each paper.
+\end{itemize}
+
+This work makes three contributions: (1) the first hierarchical architecture for AI review systems with formal priority escalation rules, (2) empirical evidence that emergent patterns constitute 37-52\% of high-priority issues at higher tiers, and (3) a reusable implementation pattern applicable to any domain requiring structured multi-scale feedback (code review, grant evaluation, product assessment).
+
+The remainder of this paper is organized as follows: Section~\ref{sec:related} surveys related work in hierarchical review systems and priority classification. Section~\ref{sec:method} details the three-tier architecture, bidirectional flow protocols, and priority escalation rules. Section~\ref{sec:results} presents empirical evaluation across 14 papers. Section~\ref{sec:discussion} analyzes architectural trade-offs and design decisions. Section~\ref{sec:conclusion} concludes with future work and generalization to other domains.

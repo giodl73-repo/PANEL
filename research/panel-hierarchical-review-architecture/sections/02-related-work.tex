@@ -1,0 +1,30 @@
+\section{Related Work}
+\label{sec:related}
+
+\subsection{AI-Assisted Peer Review}
+
+Recent work demonstrates AI's capability to generate structured paper reviews. D'Amour et al.~\cite{damour2023simulated} show that LLMs can produce reviews matching expert quality on 60\% of evaluation dimensions. Our prior work~\cite{dellalibera2026review} demonstrates an 8-stage lifecycle for AI-simulated reviews, achieving 32\% score improvement across 14 papers. However, these systems operate at a single tier: individual paper reviews without cross-portfolio synthesis.
+
+Yuan et al.~\cite{yuan2024llm} explore using LLMs for meta-review generation, consolidating multiple reviews into a single summary. While this aggregates opinions, it does not identify cross-cutting patterns or escalate issues to higher organizational tiers. Our architecture extends this with explicit hierarchical structure and bidirectional flow.
+
+\subsection{Hierarchical Feedback Systems}
+
+Software engineering has long employed hierarchical review structures. Code review systems like Gerrit and GitHub use multi-level approval: individual reviewers, module owners, and repository administrators~\cite{rigby2013convergent}. However, these systems lack automated pattern detection and priority escalation rules.
+
+Agile sprint retrospectives~\cite{schwaber2020scrum} follow a two-tier structure: team-level retrospectives feed into cross-team coordination meetings. Our architecture formalizes this with explicit priority classification (P1/P2/P3 → PP1/PP2/PP3 → B1/B2/B3) and bidirectional flow protocols.
+
+\subsection{Priority Classification and Issue Triage}
+
+Bug triage systems classify issues by severity (critical, major, minor) based on impact and frequency~\cite{anvik2006automating}. Our P1/P2/P3 classification adapts this model to review feedback, using reviewer consensus as the primary signal. The key innovation is \textbf{priority escalation}: a P3 issue at the paper tier can escalate to PP1 at the panel tier if it appears across multiple papers, indicating a systemic problem.
+
+Enterprise governance frameworks like ITIL~\cite{axelos2019itil} use hierarchical incident management: local incidents escalate to major incidents when they affect multiple services. Our board tier (B1/B2/B3) applies this concept to research program coordination, escalating module-level patterns to program-level strategic decisions.
+
+\subsection{Cross-Cutting Concern Detection}
+
+Aspect-oriented programming~\cite{kiczales1997aspect} identifies cross-cutting concerns (logging, security) that span multiple modules. Our panel tier performs analogous pattern detection across papers, identifying methodological weaknesses or architectural inconsistencies that cut across the portfolio.
+
+Mining software repositories research~\cite{hassan2008road} detects patterns in commit history and issue trackers. Our system applies similar techniques to review corpora, identifying repeated phrases and shared concerns across multiple review documents.
+
+\subsection{Gaps in Existing Work}
+
+No prior work combines hierarchical structure, automated pattern detection, priority escalation, and bidirectional flow in a single architecture for AI review systems. Existing systems either operate at a single tier or rely on manual coordination between tiers. Our contribution is a formal architecture with explicit protocols for upward issue escalation and downward directive propagation, validated on 14 papers across 3 modules.

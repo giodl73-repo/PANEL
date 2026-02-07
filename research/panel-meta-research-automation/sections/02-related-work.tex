@@ -1,0 +1,49 @@
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Automated Documentation Generation}
+
+Javadoc~\cite{kramer1999javadoc} and Doxygen~\cite{doxygen2023} generate API documentation from source code comments. Sphinx~\cite{sphinx2023} extends this to narrative documentation with reStructuredText. These tools document APIs but do not generate research papers.
+
+Recent work uses LLMs to generate code documentation~\cite{chen2021codex}. GitHub Copilot~\cite{chen2021evaluating} suggests docstrings based on function signatures. These systems focus on code-level documentation rather than paper-level research contributions.
+
+\subsection{Mining Software Repositories (MSR)}
+
+MSR research extracts insights from software development artifacts~\cite{hassan2008road}. Studies analyze commit messages~\cite{mockus2000identifying}, issue trackers~\cite{bird2009promises}, and code review systems~\cite{rigby2013convergent} to understand developer behavior and software evolution.
+
+Our system extends MSR by generating research papers directly from artifacts rather than extracting data for manual analysis. We automate the full pipeline from commit history to publication-ready LaTeX.
+
+\subsection{Automated Scientific Writing}
+
+Recent work explores LLM-based scientific writing assistance. Elicit~\cite{elicit2023} helps researchers find and summarize papers. Semantic Scholar's TLDR~\cite{cachola2020tldr} generates paper summaries. These systems assist human authors rather than generating complete papers autonomously.
+
+Scholarly writing evaluation studies~\cite{yuan2024llm} show LLMs can assess paper quality. Our system goes further: not just evaluating papers but generating them from development artifacts.
+
+\subsection{Meta-Research and Replication Studies}
+
+Meta-research examines the research process itself~\cite{ioannidis2005most}. Replication studies~\cite{juristo2010replication} validate prior findings by repeating experiments. Our approach automates meta-research: analyzing development history to generate papers about the development process.
+
+Software engineering has a tradition of tool papers describing novel systems~\cite{ernst2014tool}. These are typically written manually by tool authors. We automate this process, generating tool papers from commit history and design documents.
+
+\subsection{Self-Documenting Systems}
+
+Knuth's literate programming~\cite{knuth1984literate} interleaves code and documentation in a single source. The system generates both executable code and readable documentation from the same input.
+
+Our approach inverts this: instead of embedding documentation in code, we extract documentation from code history. This enables retroactive documentation: generating papers about systems after they're built, using commits and development logs as evidence.
+
+\subsection{Program Synthesis and Code Generation}
+
+Program synthesis research~\cite{gulwani2017program} generates code from specifications. Recent LLM-based systems~\cite{chen2021codex,austin2021program} generate code from natural language descriptions.
+
+Our system performs the inverse transformation: generating natural language (research papers) from code and development artifacts. This is conceptually similar to code summarization~\cite{haiduc2010supporting} but at paper scale rather than function scale.
+
+\subsection{Gaps in Existing Work}
+
+No prior work combines topic discovery from development artifacts, evidence extraction across multiple sources (commits, waves, docs), and complete research paper generation with substantive content. Existing systems either:
+\begin{itemize}
+\item Generate code-level documentation (Javadoc, Copilot) without paper-level narrative
+\item Extract data for manual analysis (MSR) without generating papers
+\item Assist human writing (Elicit, TLDR) without autonomous generation
+\end{itemize}
+
+Our contribution is end-to-end automation from artifacts to papers, with self-referential validation demonstrating the system can document itself.

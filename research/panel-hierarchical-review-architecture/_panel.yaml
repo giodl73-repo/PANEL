@@ -1,0 +1,32 @@
+stage: panel
+round: 1
+venue: ICSE / FSE / OOPSLA
+created: 2026-02-06
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford
+    expertise: HELM, benchmarks, evaluation methodology
+    score: 2
+  - name: Ben Shneiderman
+    affiliation: University of Maryland
+    expertise: Human-Centered AI, human agency, oversight
+    score: 3
+  - name: Ece Kamar
+    affiliation: Microsoft Research
+    expertise: AI complementarity, human-AI deferral
+    score: 3
+  - name: Shreya Shankar
+    affiliation: UC Berkeley
+    expertise: ML ops, observability, production systems
+    score: 2
+  - name: Michael Bernstein
+    affiliation: Stanford
+    expertise: Crowdsourcing, human computation
+    score: 3
+history:
+  - stage: draft
+    entered: 2026-02-06
+    notes: Paper generated from waves analysis (Wave 3: Three-Tier Architecture)
+  - stage: panel
+    entered: 2026-02-07
+    notes: 5 reviewers assigned, reviews generated

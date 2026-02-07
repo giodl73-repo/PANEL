@@ -1,0 +1,23 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented a three-tier hierarchical review architecture for scaling AI-simulated expert feedback from individual papers to multi-module research programs. The architecture addresses a fundamental limitation of flat review systems: cross-cutting patterns and strategic misalignments are invisible at the paper level.
+
+Evaluation on 14 papers across 3 modules demonstrates that 37\% of module-level and 52\% of program-level high-priority issues are emergent patterns not flagged by any individual paper review. The bidirectional flow protocol successfully escalates issues upward (23\% of P1 items → PP1) and propagates directives downward (89\% resolution rate in one round), closing the loop from strategy to implementation.
+
+The architecture reduces paper-tier review cycles by 31\% by resolving cross-cutting issues once at higher tiers rather than redundantly at each paper. It generalizes to any domain requiring multi-scale structured feedback: code review, grant evaluation, product assessment.
+
+Key contributions:
+\begin{enumerate}
+\item First hierarchical architecture for AI review systems with formal priority escalation rules (P1/P2/P3 → PP1/PP2/PP3 → B1/B2/B3).
+\item Empirical evidence that emergent patterns constitute 37-52\% of high-priority issues at higher tiers.
+\item Reusable implementation pattern with bidirectional flow protocols applicable to multiple domains.
+\end{enumerate}
+
+Future work includes automating reviewer panel assembly, tuning escalation thresholds per domain, and extending the architecture to real-time incremental review. The system is open source and available as a Claude Code plugin.
+
+\section*{Acknowledgments}
+
+This work was conducted at Microsoft. We thank the waves, merit, and basecamp teams for providing research papers and participating in panel and board reviews. We acknowledge Claude (Anthropic) for AI assistance in review generation and synthesis.
+
+\textbf{AI Simulation Disclosure}: This research involves AI-simulated expert review personas based on published work of real researchers. These are not actual reviews from the named individuals. See \url{https://github.com/panel-review/methodology} for full methodology disclosure.

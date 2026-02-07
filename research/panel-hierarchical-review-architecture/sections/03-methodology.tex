@@ -1,0 +1,184 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Three-Tier Architecture Overview}
+
+Figure~\ref{fig:architecture} illustrates the three-tier architecture. Each tier has distinct inputs, processes, and outputs:
+
+\begin{figure}[t]
+\centering
+\begin{verbatim}
+                    ┌───────────────┐
+                    │  BOARD TIER   │  Monorepo level
+                    │ (B1/B2/B3)    │  Cross-module synthesis
+                    └───────┬───────┘
+                        ↕ findings bubble up
+                        ↕ revisions flow down
+                    ┌───────────────┐
+                    │  PANEL TIER   │  Module level
+                    │ (PP1/PP2/PP3) │  Cross-portfolio panel
+                    └───────┬───────┘
+                        ↕ findings bubble up
+                        ↕ revisions flow down
+              ┌─────────────────────────┐
+              │      PAPER TIER         │  Individual paper level
+              │  (P1/P2/P3)             │  Per-paper reviews
+              └─────────────────────────┘
+\end{verbatim}
+\caption{Three-tier hierarchical review architecture with bidirectional flow.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Paper Tier: Individual Review and Synthesis}
+
+The paper tier follows the 8-stage lifecycle from prior work~\cite{dellalibera2026review}: draft → panel → synthesis → revision → recheck → ready → submit → accepted. For each paper:
+
+\textbf{Inputs}: Paper LaTeX source, target venue, research domain.
+
+\textbf{Process}:
+\begin{enumerate}
+\item Assemble reviewer panel (5-7 experts) matched to domain and venue~\cite{dellalibera2026calibration}.
+\item Generate structured reviews (REVIEW-EXPERT-NAME.md).
+\item Synthesize reviews into SYNTHESIS.md with P1/P2/P3 priority classification.
+\item Generate REVISION-PLAN.md with specific edit instructions.
+\item Apply revisions to LaTeX source~\cite{dellalibera2026dynamics}.
+\item Iterate until convergence (avg score ≥ 2.5/4, no score < 2/4).
+\end{enumerate}
+
+\textbf{Outputs}:
+\begin{itemize}
+\item SYNTHESIS.md with P1/P2/P3 items
+\item Revised paper LaTeX
+\item Completion signal (ready for panel tier)
+\end{itemize}
+
+\textbf{Priority classification at paper tier}:
+\begin{itemize}
+\item \textbf{P1}: 3+ reviewers flag the issue OR issue threatens paper acceptance
+\item \textbf{P2}: 2+ reviewers flag the issue
+\item \textbf{P3}: 1 reviewer flags the issue
+\end{itemize}
+
+\subsection{Panel Tier: Cross-Portfolio Synthesis}
+
+When all papers in a module reach the ready stage, the panel tier activates.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item All SYNTHESIS.md files from papers in the module
+\item All P1/P2/P3 items across papers
+\item Module research goals and constraints
+\end{itemize}
+
+\textbf{Process}:
+\begin{enumerate}
+\item Assemble 7-member expert panel (distinct from paper reviewers to avoid bias).
+\item Each panel member reviews all papers in the module.
+\item Panel discusses papers in a structured session, generating REVIEW\_PANEL.md.
+\item Cross-paper pattern detection: identify issues appearing in 2+ papers.
+\item Priority escalation: P1 items appearing in 3+ papers escalate to PP1.
+\item Strategic assessment: identify module-level themes, gaps, and risks.
+\end{enumerate}
+
+\textbf{Outputs}:
+\begin{itemize}
+\item REVIEW\_PANEL.md with cross-portfolio synthesis
+\item PP1/PP2/PP3 priorities per paper
+\item Completion signal (module ready for board tier)
+\end{itemize}
+
+\textbf{Priority classification at panel tier}:
+\begin{itemize}
+\item \textbf{PP1}: Cross-paper pattern (3+ papers) OR issue threatens module coherence
+\item \textbf{PP2}: Issue affects 2+ papers
+\item \textbf{PP3}: Issue affects 1 paper but has module-level implications
+\end{itemize}
+
+\subsection{Board Tier: Program-Level Coordination}
+
+When all modules complete panel reviews, the board tier activates.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item All REVIEW\_PANEL.md files from modules
+\item All PP1/PP2/PP3 items across modules
+\item Program research vision and strategic goals
+\end{itemize}
+
+\textbf{Process}:
+\begin{enumerate}
+\item Assemble 7-member board (program leadership, senior researchers).
+\item Each board member reviews all modules.
+\item Board meeting generates REVIEW\_BOARD.md with cross-module synthesis.
+\item Cross-module pattern detection: identify issues appearing in 2+ modules.
+\item Priority escalation: PP1 items affecting 3+ modules escalate to B1.
+\item Strategic directive generation: board issues B1/B2/B3 directives per module.
+\end{enumerate}
+
+\textbf{Outputs}:
+\begin{itemize}
+\item REVIEW\_BOARD.md with program-level synthesis
+\item B1/B2/B3 directives per module
+\item Per-module BOARD-REVISION-PLAN-\{module\}.md files
+\end{itemize}
+
+\textbf{Priority classification at board tier}:
+\begin{itemize}
+\item \textbf{B1}: 3+ board members flag issue OR issue threatens program success
+\item \textbf{B2}: Issue affects 2+ modules
+\item \textbf{B3}: Issue affects 1 module but has program-level implications
+\end{itemize}
+
+\subsection{Bidirectional Flow Protocols}
+
+\subsubsection{Upward Escalation (Issues Bubble Up)}
+
+A paper-tier issue escalates to panel tier when:
+\begin{enumerate}
+\item Same issue appears in 3+ papers (P1 → PP1).
+\item Issue appears in 2+ papers and threatens module goals (P2 → PP1).
+\item Issue reveals systematic methodological weakness (any P-tier → PP1).
+\end{enumerate}
+
+A panel-tier issue escalates to board tier when:
+\begin{enumerate}
+\item Same issue appears in 3+ modules (PP1 → B1).
+\item Issue affects 2+ modules and threatens program vision (PP2 → B1).
+\item Issue reveals architectural inconsistency (any PP-tier → B1).
+\end{enumerate}
+
+\subsubsection{Downward Propagation (Directives Cascade)}
+
+Board-level directives (B1/B2/B3) cascade as follows:
+\begin{enumerate}
+\item Board generates B1 directive (e.g., "Adopt consistent evaluation framework").
+\item For each affected module, board generates BOARD-REVISION-PLAN-\{module\}.md with specific PP1/PP2 tasks.
+\item Panel tier reviews plan, generates per-paper P1/P2 items in PANEL-REVISION-PLAN-\{paper\}.md.
+\item Paper tier implements P1 items via LaTeX edits.
+\end{enumerate}
+
+This cascade ensures strategic decisions propagate to concrete code changes, closing the loop from vision to implementation.
+
+\subsection{Round Management}
+
+Each tier supports multiple review rounds:
+\begin{itemize}
+\item \textbf{Paper tier}: ROUND2-REVIEW-*.md, ROUND3-REVIEW-*.md, etc.
+\item \textbf{Panel tier}: panel-reviews/round-1/, panel-reviews/round-2/, etc.
+\item \textbf{Board tier}: board-reviews/round-1/, board-reviews/round-2/, etc.
+\end{itemize}
+
+Rounds at higher tiers trigger rounds at lower tiers: if board issues a B1 directive in round 2, affected modules enter panel round 2, which triggers paper round 3 for affected papers.
+
+\subsection{Implementation}
+
+The architecture is implemented as a Claude Code plugin with 11 commands:
+\begin{itemize}
+\item \texttt{panel:paper} — Paper-tier lifecycle (8 stages)
+\item \texttt{panel:panel} — Panel-tier cross-portfolio review
+\item \texttt{panel:board} — Board-tier program coordination
+\item \texttt{panel:status} — Cross-tier status dashboard
+\item \texttt{panel:show} — Detailed paper/module/board view
+\end{itemize}
+
+The system uses YAML state files (\_panel.yaml per paper) to track stage, round, reviewers, scores, and priority items across all tiers.

@@ -1,0 +1,41 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\title{From Reviews to Revisions: Closed-Loop Automation\\of Academic Paper Improvement}
+
+\author{
+Gio Della-Libera \\
+\texttt{giodl@microsoft.com}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Traditional AI-assisted peer review systems generate structured feedback but leave the revision process to human authors, creating a gap between review and revision. We present a closed-loop automation system that bridges this gap by parsing review feedback, generating concrete revision plans, and applying edits directly to LaTeX source files. The system operates in three phases: (1) synthesis of reviewer feedback into priority-classified revision items (P1/P2/P3), (2) generation of REVISION-PLAN.md with specific edit locations and instructions, and (3) automated application of edits using structured code transformation tools. Evaluation on 14 research papers (186 reviews, 33 revision cycles) shows the system successfully completes 78\% of P1 items automatically, reducing author revision time by 64\% while maintaining edit quality (94\% author acceptance rate). The system demonstrates that the gap between review generation and code modification is tractable for structured documents like LaTeX papers, with implications for automated code review and documentation maintenance. Key contributions include the first end-to-end closed-loop system for paper revision, empirical analysis of revision completion patterns, and a reusable architecture for structured document transformation.
+\end{abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-methodology}
+\input{sections/04-results}
+\input{sections/05-discussion}
+\input{sections/06-conclusion}
+
+\bibliographystyle{plain}
+\bibliography{../references}
+
+\end{document}

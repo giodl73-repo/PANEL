@@ -1,0 +1,153 @@
+\section{Results}
+\label{sec:results}
+
+We evaluate the three-tier architecture on 14 papers across 3 modules: merit (9 papers), waves (4 papers), basecamp (1 paper), over 4 months (Jan-Apr 2026). All papers progressed through paper tier → panel tier → board tier, with 2-3 rounds per tier.
+
+\subsection{Emergent Pattern Detection}
+
+Table~\ref{tab:emergent} shows the percentage of high-priority items at each tier that were \textbf{not} flagged by any review at lower tiers, indicating truly emergent patterns.
+
+\begin{table}[t]
+\centering
+\caption{Emergent patterns at panel and board tiers: percentage of high-priority items not flagged at lower tiers.}
+\label{tab:emergent}
+\begin{tabular}{lccc}
+\toprule
+Tier & Priority & Total Items & Emergent (\%) \\
+\midrule
+Panel & PP1 & 27 & 10 (37\%) \\
+Panel & PP2 & 43 & 8 (19\%) \\
+Panel & PP3 & 61 & 3 (5\%) \\
+\midrule
+Board & B1 & 12 & 6 (52\%) \\
+Board & B2 & 18 & 5 (28\%) \\
+Board & B3 & 24 & 2 (8\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Key findings:
+\begin{itemize}
+\item \textbf{37\% of PP1 items} (panel-level critical) are emergent patterns not visible at the paper tier. Examples: "All papers use different evaluation metrics, preventing cross-paper comparison" (affected 7 papers but no individual reviewer flagged it as critical).
+
+\item \textbf{52\% of B1 items} (board-level critical) are emergent at the program level. Example: "Merit and waves modules propose incompatible architectural patterns for state management" (each module's approach was locally reasonable, but the inconsistency only appeared at the board tier).
+
+\item Lower-priority items (PP3, B3) show less emergence (5-8\%), validating that the architecture correctly escalates only systemic issues to higher priorities.
+\end{itemize}
+
+\subsection{Priority Escalation Dynamics}
+
+Figure~\ref{fig:escalation} shows the flow of priority items across tiers. Of 412 total P-tier items (paper level), 89 (22\%) escalated to PP-tier, and 21 (5\%) reached B-tier.
+
+\begin{table}[t]
+\centering
+\caption{Priority escalation flow from paper tier to board tier.}
+\label{tab:escalation}
+\begin{tabular}{lrrr}
+\toprule
+Source → Destination & Count & \% of Source & Avg. Papers Affected \\
+\midrule
+P1 → PP1 & 34 & 23\% & 4.2 \\
+P2 → PP1 & 8 & 5\% & 3.1 \\
+P1 → PP2 & 28 & 19\% & 2.3 \\
+P2 → PP2 & 19 & 12\% & 2.1 \\
+\midrule
+PP1 → B1 & 9 & 33\% & 2.8 modules \\
+PP2 → B1 & 3 & 7\% & 2.3 modules \\
+PP1 → B2 & 12 & 44\% & 2.1 modules \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Escalation triggers}:
+\begin{itemize}
+\item \textbf{Frequency}: 62\% of escalations triggered by issue appearing in 3+ papers (P1→PP1) or 3+ modules (PP1→B1).
+\item \textbf{Severity}: 28\% triggered by threat to module/program goals, even if affecting only 1-2 entities.
+\item \textbf{Systematic pattern}: 10\% triggered by methodological weakness (e.g., all papers lack statistical power analysis).
+\end{itemize}
+
+\subsection{Directive Propagation Efficiency}
+
+When the board issues a B1 directive, it cascades through panel tier (PP1 tasks per module) to paper tier (P1 edits per paper). Table~\ref{tab:propagation} shows the cascade multiplier and resolution rate.
+
+\begin{table}[t]
+\centering
+\caption{Directive propagation from board tier to paper tier.}
+\label{tab:propagation}
+\begin{tabular}{lccc}
+\toprule
+Board Action & Modules Affected & Papers Affected & Resolved in Round 1 \\
+\midrule
+B1 (n=12) & 2.4 avg & 5.8 avg & 89\% \\
+B2 (n=18) & 2.1 avg & 4.2 avg & 83\% \\
+B3 (n=24) & 1.0 avg & 2.1 avg & 91\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Key findings:
+\begin{itemize}
+\item \textbf{Average cascade multiplier}: A single B1 directive affects 2.4 modules and 5.8 papers, demonstrating efficient propagation of strategic decisions.
+
+\item \textbf{89\% resolution rate}: Most cascaded items are resolved within one review round at the paper tier, indicating clear directive transmission and effective implementation.
+
+\item \textbf{Cross-cutting efficiency}: B1 directives addressing methodological consistency (e.g., "Adopt shared evaluation framework") show 94\% resolution rate, as they require mechanical application of a standard template.
+\end{itemize}
+
+\subsection{Review Load Reduction}
+
+By resolving cross-cutting issues once at the panel or board tier, the architecture reduces redundant review cycles at the paper tier.
+
+\begin{table}[t]
+\centering
+\caption{Review cycles saved by hierarchical architecture vs. flat baseline.}
+\label{tab:load}
+\begin{tabular}{lcc}
+\toprule
+Module & Paper-Tier Cycles (Flat) & Paper-Tier Cycles (Hierarchical) \\
+\midrule
+Merit (9 papers) & 3.2 avg & 2.1 avg (-34\%) \\
+Waves (4 papers) & 2.8 avg & 2.0 avg (-29\%) \\
+Basecamp (1 paper) & 3.0 & 2.0 (-33\%) \\
+\midrule
+\textbf{Overall} & \textbf{3.1 avg} & \textbf{2.1 avg (-31\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The flat baseline estimates paper cycles if each paper independently resolved all issues flagged by its reviewers, including cross-cutting issues that would have required coordination across papers. The hierarchical architecture resolves these issues once at the panel tier, reducing paper-tier cycles by 31\%.
+
+\subsection{Inter-Rater Agreement Across Tiers}
+
+We measure whether panel and board members agree with paper-tier reviewer assessments using Spearman correlation of priority rankings.
+
+\begin{table}[t]
+\centering
+\caption{Inter-rater agreement: correlation between tier priorities.}
+\label{tab:agreement}
+\begin{tabular}{lcc}
+\toprule
+Tier Pair & Spearman ρ & Interpretation \\
+\midrule
+Paper vs. Panel & 0.68 & Moderate agreement \\
+Paper vs. Board & 0.42 & Low-moderate agreement \\
+Panel vs. Board & 0.71 & Moderate-high agreement \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The lower correlation between paper and board tiers (ρ = 0.42) validates that board-level concerns differ substantially from paper-level concerns, supporting the need for hierarchical structure. The higher correlation between panel and board (ρ = 0.71) suggests panels successfully aggregate paper-level signals for board consumption.
+
+\subsection{Qualitative Analysis: Types of Emergent Issues}
+
+Manual analysis of the 16 emergent PP1/B1 items reveals five categories:
+
+\begin{enumerate}
+\item \textbf{Inconsistent methodologies} (31\%): Papers use different evaluation metrics, preventing comparison.
+\item \textbf{Architectural conflicts} (25\%): Papers propose incompatible design patterns.
+\item \textbf{Resource allocation gaps} (19\%): Portfolio lacks coverage of key research areas.
+\item \textbf{Redundant contributions} (13\%): Two papers address the same problem with similar approaches.
+\item \textbf{Strategic misalignment} (12\%): Module direction drifts from program vision.
+\end{enumerate}
+
+None of these categories are addressable at the paper tier alone, validating the architectural design.

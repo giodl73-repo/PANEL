@@ -1,0 +1,37 @@
+stage: synthesis
+round: 1
+venue: CHI / CSCW / HCOMP
+created: 2026-02-06
+reviewers:
+  - name: Ben Shneiderman
+    affiliation: University of Maryland
+    expertise: Human-Centered AI, Human Agency, Oversight Systems
+    score: 2.0
+  - name: Michael Bernstein
+    affiliation: Stanford University
+    expertise: Crowdsourcing, Human Computation, Collaborative Systems
+    score: 2.0
+  - name: Saleema Amershi
+    affiliation: Microsoft Research
+    expertise: Interactive Machine Learning, Human-in-the-Loop Systems
+    score: 2.0
+  - name: Shreya Shankar
+    affiliation: UC Berkeley
+    expertise: ML Ops, Observability, Pipeline Debugging
+    score: 2.0
+  - name: Noah Shinn
+    affiliation: Princeton University
+    expertise: Reflexion, Self-Improvement, Agent Learning
+    score: 3.0
+reviews_completed:
+  round_1: 5
+history:
+  - stage: draft
+    entered: 2026-02-06
+    notes: Paper generated from waves analysis (Wave 5: Active Revisions)
+  - stage: panel
+    entered: 2026-02-07
+    notes: 5 reviewers assigned and reviews generated
+  - stage: synthesis
+    entered: 2026-02-07
+    notes: Reviews consolidated into SYNTHESIS.md with P1/P2/P3 classification (avg 2.2/4, 4 P1 items)
