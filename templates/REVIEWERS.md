@@ -12,7 +12,7 @@
 
 ## Recommended Reviewers by Paper
 
-*(Reviewers will be selected as papers are added and reviewed via `panel:paper`)*
+*(Reviewers will be selected as papers are added and reviewed via `panel:review`)*
 
 ---
 

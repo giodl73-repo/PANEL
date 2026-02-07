@@ -1,5 +1,7 @@
 # Git Utilities — Auto-Commit on Command Completion
 
+**DEPRECATED**: This file is superseded by `shared/git-helper.md`. New commands should use `gitCommitIfEnabled()` from git-helper.md. This file is maintained for backward compatibility only.
+
 Provides `auto_commit(context)` for panel commands that modify files. Called as a final step after a command writes artifacts, keeping the working tree clean.
 
 ## auto_commit(context)
@@ -45,9 +47,9 @@ Each command provides its own message via the `message` field. Standard patterns
 
 | Command | Template | Example |
 |---------|----------|---------|
-| `panel:paper` | `[panel] {paper}: advance to {stage} (round {round})` | `[panel] panel-review-methodology: advance to synthesis (round 1)` |
-| `panel:panel` | `[panel] {module}: panel review round {round}` | `[panel] panel: panel review round 1` |
-| `panel:panel --member` | `[panel] {module}: update panel member {name}` | `[panel] panel: update panel member Percy Liang` |
+| `panel:review` | `[panel] {paper}: advance to {stage} (round {round})` | `[panel] panel-review-methodology: advance to synthesis (round 1)` |
+| `panel:convene` | `[panel] {module}: panel review round {round}` | `[panel] panel: panel review round 1` |
+| `panel:convene --member` | `[panel] {module}: update panel member {name}` | `[panel] panel: update panel member Percy Liang` |
 | `panel:board` | `[panel] Board review round {round}` | `[panel] Board review round 1` |
 | `panel:board --update` | `[panel] Board: update {section}` | `[panel] Board: update synthesis` |
 | `panel:board --member` | `[panel] Board: update member {name}` | `[panel] Board: update member Yoshua Bengio` |
@@ -62,9 +64,9 @@ Each command stages only the files it touched:
 
 | Command | Paths to stage |
 |---------|---------------|
-| `panel:paper` | `{paper_dir}/` (includes `_panel.yaml`, `reviews/`, `REVISION-PLAN.md`) |
-| `panel:panel --review` | Module directory: `REVIEW_PANEL.md`, `PANEL-REVISION-PLAN.md`, `panel-reviews/` |
-| `panel:panel --member` | Module directory: `REVIEW_PANEL.md` |
+| `panel:review` | `{paper_dir}/` (includes `_panel.yaml`, `reviews/`, `REVISION-PLAN.md`) |
+| `panel:convene --review` | Module directory: `REVIEW_PANEL.md`, `PANEL-REVISION-PLAN.md`, `panel-reviews/` |
+| `panel:convene --member` | Module directory: `REVIEW_PANEL.md` |
 | `panel:board --review` | Repo root: `REVIEW_BOARD.md`, `BOARD-REVISION-PLAN-*.md`, `board-reviews/` |
 | `panel:board --update` | Repo root: `REVIEW_BOARD.md`, `BOARD-REVISION-PLAN-*.md` |
 | `panel:board --member` | Repo root: `REVIEW_BOARD.md` |

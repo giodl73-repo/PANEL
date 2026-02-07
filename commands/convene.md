@@ -1,10 +1,10 @@
 ---
-name: panel:panel
+name: panel:convene
 description: Module-level cross-portfolio panel review with rounds
 user-invocable: true
 ---
 
-# panel:panel — Module-Level Cross-Portfolio Panel Review
+# panel:convene — Module-Level Cross-Portfolio Panel Review
 
 Assembles a 7-member cross-portfolio panel to review all papers within a module, producing `REVIEW_PANEL.md` with consolidated findings, rankings, and per-paper revision items (PP1/PP2/PP3).
 
@@ -12,8 +12,8 @@ Assembles a 7-member cross-portfolio panel to review all papers within a module,
 
 ```
 panel:board   — monorepo level (cross-module)
-panel:panel   — module level (cross-portfolio) ← this command
-panel:paper   — paper level (individual reviews)
+panel:convene   — module level (cross-portfolio) ← this command
+panel:review   — paper level (individual reviews)
 ```
 
 Panel reviews consume paper-level reviews (bubble up) and produce revision items that flow back down to individual papers. Panel findings also bubble up to `panel:board`.
@@ -29,12 +29,12 @@ Panel reviews consume paper-level reviews (bubble up) and produce revision items
 
 ## Prerequisites
 
-Before `panel:panel --review` can run:
+Before `panel:convene --review` can run:
 1. The module must contain 2+ papers (single-paper modules skip panel tier)
 2. At least 2 papers must have reached `recheck` stage or beyond
 3. Those papers must have passing scores (avg >= 2.5/4, min >= 2/4)
 
-Use `panel:panel --status` to check readiness.
+Use `panel:convene --status` to check readiness.
 
 ## Behavior
 
@@ -80,7 +80,7 @@ Use `panel:panel --status` to check readiness.
      - label: "Apply PP1 only (blocking items)"
        description: "Only addresses items blocking submission"
      - label: "No, I'll apply later"
-       description: "Run panel:panel --apply when ready"
+       description: "Run panel:convene --apply when ready"
    ```
 
    If user selects apply: execute the `--apply` behavior (see below) inline.
@@ -160,13 +160,13 @@ Drives the PANEL-REVISION-PLAN.md items across all papers in the module, editing
      ✓ PP2.4  Methodology uniformity           2 papers updated
      ✓ PP2.5  Model sensitivity for P5         panel-shared-generator-framework
 
-   All PP1 items addressed — ready for panel:panel --review (round 2)
+   All PP1 items addressed — ready for panel:convene --review (round 2)
    or panel:board if other modules are also ready.
    ```
 
 7. **Auto-commit**: Commit all changes across all affected papers
 
-**Revision principles** (same as panel:paper):
+**Revision principles** (same as panel:review):
 - Address the specific concern raised — don't rewrite sections unnecessarily
 - Add content rather than remove
 - When a PP item applies to multiple papers, maintain consistent framing across all
@@ -176,19 +176,19 @@ Drives the PANEL-REVISION-PLAN.md items across all papers in the module, editing
 ## Round Cycle
 
 ```
-panel:panel --review (round 1)
+panel:convene --review (round 1)
   → Writes REVIEW_PANEL.md (canonical, module root)
   → Writes PANEL-REVISION-PLAN.md (module root)
   → Archives to panel-reviews/round-1/
   → PP1/PP2/PP3 items created per paper
   → Offers to apply revisions immediately (--apply behavior)
 
-panel:panel --apply (if not applied during --review)
+panel:convene --apply (if not applied during --review)
   → Reads PANEL-REVISION-PLAN.md
   → Edits sections/*.tex across all affected papers
   → Marks PP1/PP2 items as addressed
 
-panel:panel --review (round 2)
+panel:convene --review (round 2)
   → Checks PP1 items addressed
   → Re-evaluates papers with fresh round
   → Updates REVIEW_PANEL.md
@@ -239,7 +239,7 @@ The panel review is complete when:
 3. No individual paper scores below 5.0/10
 4. Panel consensus is at least Moderate
 
-When complete, individual papers can advance past `ready` stage in `panel:paper`.
+When complete, individual papers can advance past `ready` stage in `panel:review`.
 
 ## Auto-Commit
 

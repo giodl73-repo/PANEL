@@ -12,11 +12,11 @@ Assembles a 7-member board to review all modules across the monorepo, producing 
 
 ```
 panel:board   — monorepo level (cross-module) ← this command
-panel:panel   — module level (cross-portfolio)
-panel:paper   — paper level (individual reviews)
+panel:convene   — module level (cross-portfolio)
+panel:review   — paper level (individual reviews)
 ```
 
-Board reviews consume module-level panel reviews (bubble up) and produce per-module revision plans that flow back down through `panel:panel` to individual papers.
+Board reviews consume module-level panel reviews (bubble up) and produce per-module revision plans that flow back down through `panel:convene` to individual papers.
 
 ## Arguments
 
@@ -41,7 +41,7 @@ The board operates at the monorepo level. Path resolution (via shared/board-util
 ## Prerequisites
 
 Before `panel:board --review` can run:
-1. At least 2 modules must have completed `REVIEW_PANEL.md` (via `panel:panel`)
+1. At least 2 modules must have completed `REVIEW_PANEL.md` (via `panel:convene`)
 2. Panel reviews must be substantive (not placeholders)
 3. **Synced modules must be up-to-date**: Modules authored in external repos (e.g., boost at `C:\src\boost\research/`, waves at `C:\src\waves\research/`) must be synced to the monorepo before the board can see their latest state. The board reads from the monorepo — it does not reach into source repos.
 
@@ -96,7 +96,7 @@ Some modules are authored in external source repos, with their `research/` subdi
    - B1/B2/B3 items specific to each module
    - Derived from cross-module themes and board findings
    - These are also written as `{module}/REVISION-PLAN.md` (or appended as a board-directives section)
-     so `panel:paper` can discover and work on them
+     so `panel:review` can discover and work on them
 7. **Snapshot round**: Archive to `board-reviews/round-{N}/` via shared/board-utils.snapshot_round():
    - `REVIEW_BOARD.md` (board snapshot)
    - `BOARD-REVISION-PLAN-*.md` (per-module revision plans)
@@ -148,7 +148,7 @@ panel:board --review (round 1)
   → Archives to board-reviews/round-1/
   → B1/B2/B3 items created per module
 
-Modules revise via panel:panel → panel:paper (addresses B1 items)
+Modules revise via panel:convene → panel:review (addresses B1 items)
 
 panel:board --review (round 2)
   → Checks B1 items addressed

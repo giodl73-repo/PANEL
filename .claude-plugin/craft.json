@@ -1,0 +1,19 @@
+{
+  "craftFeatures": [
+    "message-utils",
+    "plugin-config",
+    "plugin-root",
+    "shared-git-helper",
+    "auto-commit",
+    "msg-suppress",
+    "error-handling",
+    "uninstall-command",
+    "plugin-docs",
+    "yaml-parser",
+    "sync-script",
+    "data-categories",
+    "setup-command",
+    "help-command",
+    "status-command"
+  ]
+}

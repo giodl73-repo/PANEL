@@ -90,7 +90,7 @@ Output: {
 
 Reads PP items from the latest `PANEL-REVISION-PLAN.md` in the paper directory. Items are marked addressed when:
 - The paper's content has been updated to reflect the change
-- A subsequent `panel:paper` round confirms the fix
+- A subsequent `panel:review` round confirms the fix
 - Checked off in the revision plan (checkbox `[x]`)
 
 ## Bubble-Up Logic

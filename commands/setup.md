@@ -422,7 +422,7 @@ Research Monorepo:
 **Next steps** (updated):
 ```
 Next steps:
-  1. Start reviews:  panel:paper --paper <name>
+  1. Start reviews:  panel:review --paper <name>
   2. Check status:   panel:status
   3. Ship it:        commit + push + sync to plugin and research repos
 ```
@@ -441,7 +441,7 @@ If name doesn't start with `panel-`, prepend it.
 
 ### Step 2: Check for duplicates
 
-If `research/<paper-name>/` already exists, warn and abort (use `panel:paper` to advance existing papers).
+If `research/<paper-name>/` already exists, warn and abort (use `panel:review` to advance existing papers).
 
 ### Step 3: Prompt for venue
 
@@ -466,7 +466,7 @@ research/<paper-name>/
 │   ├── 04-evaluation.tex
 │   ├── 05-discussion.tex
 │   └── 06-conclusion.tex
-├── reviews/              # Empty, ready for panel:paper
+├── reviews/              # Empty, ready for panel:review
 ├── Makefile              # Paper-level build (pdf target)
 ├── REVISION-PLAN.md      # Empty revision plan (from template)
 └── _panel.yaml           # Initialized state
@@ -517,7 +517,7 @@ Created paper #6:
 Next steps:
   1. Write your paper:    Edit main.tex and sections/*.tex
   2. Set the title:       Edit _panel.yaml → title field
-  3. Start reviews:       panel:paper --paper panel-cross-venue-analysis
+  3. Start reviews:       panel:review --paper panel-cross-venue-analysis
 ```
 
 ---
@@ -567,7 +567,7 @@ Papers:
   ✓ panel-static-analysis       _panel.yaml ✓  venue: PLDI 2026     stage: draft
   ✓ panel-command-dsl            _panel.yaml ✓  venue: OOPSLA 2026   stage: draft
 
-All 2 papers ready. Run panel:paper --paper <name> to begin reviews.
+All 2 papers ready. Run panel:review --paper <name> to begin reviews.
 ```
 
 ## Connect Mode

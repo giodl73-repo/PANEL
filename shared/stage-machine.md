@@ -32,7 +32,7 @@ Output: { passed: bool, reason: string, details: object }
 | synthesis | `reviews/SYNTHESIS.md` exists AND contains P1/P2/P3 sections |
 | revision | `REVISION-PLAN.md` exists AND (all items in `_panel.yaml.p1_items` have `addressed: true` OR `revision_declined: true` flag set) |
 | recheck | Average score >= 2.5/4 AND minimum score >= 2/4 |
-| ready | `REVIEW_PANEL.md` completed by `panel:panel` AND all PP1 items addressed |
+| ready | `REVIEW_PANEL.md` completed by `panel:convene` AND all PP1 items addressed |
 | submit | User confirmation flag in `_panel.yaml` |
 | accepted | User confirmation flag in `_panel.yaml` |
 
@@ -63,7 +63,7 @@ Each stage handler performs the work needed at that stage:
 - **synthesis_handler**: Consolidate reviews (shared/synthesis-engine.md)
 - **revision_handler**: MUST complete both phases before gate check: (1) Create or update REVISION-PLAN.md from synthesis P1/P2/P3 items, track P1 items in _panel.yaml; (2) Immediately use AskUserQuestion to offer revision application — if user accepts, edit sections/*.tex to address P1/P2 items and mark complete; if user declines, set revision_declined flag. The handler does NOT exit until user makes a choice.
 - **recheck_handler**: Generate round N reviews, calculate scores
-- **ready_handler**: Check REVIEW_PANEL.md from panel:panel, verify PP1 items addressed
+- **ready_handler**: Check REVIEW_PANEL.md from panel:convene, verify PP1 items addressed
 - **submit_handler**: Prompt for submission confirmation
 - **accepted_handler**: Prompt for acceptance confirmation
 
@@ -73,4 +73,4 @@ The stage machine is fully re-entrant:
 - Reads current state from `_panel.yaml` on every invocation
 - Never assumes previous state — always checks artifacts on disk
 - Safe to interrupt and resume at any point
-- Multiple invocations of `panel:paper` will pick up where the last one stopped
+- Multiple invocations of `panel:review` will pick up where the last one stopped

@@ -12,13 +12,13 @@ A Claude Code plugin that drives research papers through a complete AI-simulated
                         ↕ findings bubble up
                         ↕ revisions flow down
                     ┌───────────────┐
-                    │ panel:panel   │  Module level
+                    │panel:convene  │  Module level
                     │ REVIEW_PANEL  │  Cross-portfolio panel (7 reviewers)
                     └───────┬───────┘
                         ↕ findings bubble up
                         ↕ revisions flow down
               ┌─────────────────────────┐
-              │      panel:paper        │  Individual paper level
+              │     panel:review        │  Individual paper level
               │  REVIEW-*.md, SYNTHESIS │  Per-paper review rounds
               └─────────────────────────┘
 ```
@@ -40,10 +40,13 @@ A Claude Code plugin that drives research papers through a complete AI-simulated
 ```
 panel/
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin manifest (11 commands)
+│   ├── plugin.json              # Plugin manifest (12 commands)
+│   └── craft.json               # Craft feature tracking
+├── .claude/
+│   └── panel.json               # Plugin configuration (gitStrategy, suppressMessages)
 ├── commands/
-│   ├── paper.md                 # Per-paper review lifecycle (8 stages)
-│   ├── panel.md                 # Module-level cross-portfolio panel
+│   ├── review.md                # Per-paper review lifecycle (8 stages)
+│   ├── convene.md               # Module-level cross-portfolio panel
 │   ├── board.md                 # Monorepo-level board review
 │   ├── status.md                # Overview of all papers
 │   ├── show.md                  # Detailed paper view
@@ -52,7 +55,8 @@ panel/
 │   ├── import.md                # Discover + generate papers, or import artifacts
 │   ├── report.md                # Generate reports
 │   ├── help.md                  # Interactive help
-│   └── venue.md                 # Venue recommendation
+│   ├── venue.md                 # Venue recommendation
+│   └── uninstall.md             # Clean plugin removal
 ├── shared/
 │   ├── stage-machine.md         # Stage progression logic + gates
 │   ├── state-loader.md          # Read/write _panel.yaml
@@ -63,7 +67,11 @@ panel/
 │   ├── topic-discovery.md       # Scan sources → propose paper topics
 │   ├── paper-generator.md       # Paper content generation logic
 │   ├── panel-utils.md           # Module-level panel utilities (PP1/PP2/PP3, rounds)
-│   └── board-utils.md           # Board-level utilities (module discovery, B1/B2/B3)
+│   ├── board-utils.md           # Board-level utilities (module discovery, B1/B2/B3)
+│   ├── message-utils.md         # Standardized output formatting
+│   ├── error-handler.md         # Error codes and recovery suggestions
+│   ├── git-helper.md            # Auto-commit with git strategy
+│   └── git-utils.md             # (deprecated, use git-helper.md)
 ├── templates/
 │   ├── help/                    # Help topic files
 │   ├── review-template.md       # Individual review structure
@@ -98,17 +106,17 @@ Stage        Description                                    Gate to advance
 3. synthesis Reviews consolidated → SYNTHESIS.md            P1/P2/P3 tiering complete
 4. revision  Author revising based on synthesis             All P1 items addressed
 5. recheck   Round N reviews (N≥2), may loop → synthesis    Avg score ≥ 2.5/4, none < 2/4
-6. ready     Panel review complete (panel:panel)             REVIEW_PANEL.md + PP1 addressed
+6. ready     Panel review complete (panel:convene)           REVIEW_PANEL.md + PP1 addressed
 7. submit    Paper submitted to target venue                Submission confirmed
 8. accepted  Paper accepted at venue                        Acceptance confirmed
 ```
 
-## Commands (11)
+## Commands (12)
 
 | Command | Tier | Purpose |
 |---------|------|---------|
-| `panel:paper` | Paper | Per-paper review lifecycle — moves paper through all 8 stages |
-| `panel:panel` | Module | Cross-portfolio panel review with rounds (7 reviewers, PP1/PP2/PP3) |
+| `panel:review` | Paper | Per-paper review lifecycle — moves paper through all 8 stages |
+| `panel:convene` | Module | Cross-portfolio panel review with rounds (7 reviewers, PP1/PP2/PP3) |
 | `panel:board` | Monorepo | Cross-module board review with rounds (7 members, B1/B2/B3) |
 | `panel:status` | — | Overview of all papers: stage, round, score, next action |
 | `panel:show` | — | Detailed view of one paper |
@@ -118,6 +126,7 @@ Stage        Description                                    Gate to advance
 | `panel:report` | — | Generate review reports |
 | `panel:help` | — | Interactive help system |
 | `panel:venue` | — | Venue recommendation + submission strategy |
+| `panel:uninstall` | — | Remove plugin data and configuration — clean uninstall |
 
 ## Per-Paper State (`_panel.yaml`)
 
@@ -200,6 +209,64 @@ git push
 All four steps run in order. If any step fails, stop and report.
 
 Sync scripts support: `--push` (push to remote), `--dry-run` (preview), `--message "msg"` (custom commit message).
+
+## Plugin Configuration
+
+Panel uses `.claude/panel.json` for plugin settings:
+
+```json
+{
+  "default": "panel",
+  "gitStrategy": "auto-commit",
+  "suppressMessages": []
+}
+```
+
+### Settings
+
+| Setting | Values | Description |
+|---------|--------|-------------|
+| `gitStrategy` | `"auto-commit"` or `"manual"` | Controls whether commands auto-commit changes |
+| `suppressMessages` | Array of message types | Suppress specific output types: `["item", "subitem", "separator"]` |
+| `default` | String | Default project name (for multi-project support) |
+
+### Git Strategy
+
+- **auto-commit**: Commands commit changes automatically when they finish using scoped `git add` (only files the command touched)
+- **manual**: Changes are left uncommitted for user review
+
+Commands respect this setting through `shared/git-helper.md` which provides:
+- `gitCommitIfEnabled(message, paths)` — Simple auto-commit
+- `auto_commit(context)` — Scoped commit with detailed control
+
+### Message Utilities
+
+All commands use standardized output formatting via `shared/message-utils.md`:
+
+| Type | Symbol | Use |
+|------|--------|-----|
+| `header` | `═══` | Section headers |
+| `stage` | `▶` | Stage transitions |
+| `success` | `✓` | Confirmations |
+| `error` | `✗` | Errors |
+| `warning` | `⚠` | Warnings |
+| `item` | `•` | List items |
+| `complete` | `+` | Completed actions |
+
+Use `suppressMessages` in config to reduce verbosity for specific workflows.
+
+### Error Handling
+
+Standardized error codes via `shared/error-handler.md`:
+
+- **E100-E199**: File & state errors
+- **E200-E299**: Stage & workflow errors
+- **E300-E399**: Review errors
+- **E400-E499**: Module & board errors
+- **E500-E599**: Git & sync errors
+- **E600-E699**: Configuration errors
+
+Each error includes recovery suggestions and relevant command references.
 
 ## Conventions
 

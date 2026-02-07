@@ -1,10 +1,10 @@
 ---
-name: panel:paper
+name: panel:review
 description: Per-paper review lifecycle — moves a paper through all 8 stages
 user-invocable: true
 ---
 
-# panel:paper — Per-Paper Review Lifecycle
+# panel:review — Per-Paper Review Lifecycle
 
 Moves a single paper through all 8 lifecycle stages, reading `_panel.yaml` for re-entrancy. This is the paper-level tier of the three-tier review architecture.
 
@@ -12,11 +12,11 @@ Moves a single paper through all 8 lifecycle stages, reading `_panel.yaml` for r
 
 ```
 panel:board   — monorepo level (cross-module)
-panel:panel   — module level (cross-portfolio)
-panel:paper   — paper level (individual reviews) ← this command
+panel:convene — module level (cross-portfolio)
+panel:review  — paper level (individual reviews) ← this command
 ```
 
-Paper-level reviews bubble up to `panel:panel`. Panel-level revision items (PP1/PP2/PP3) flow down to individual papers.
+Paper-level reviews bubble up to `panel:convene`. Panel-level revision items (PP1/PP2/PP3) flow down to individual papers.
 
 ## Arguments
 
@@ -33,7 +33,7 @@ Paper-level reviews bubble up to `panel:panel`. Panel-level revision items (PP1/
 3. synthesis  → Reviews consolidated → SYNTHESIS.md with P1/P2/P3 tiering
 4. revision   → Author revises based on synthesis (P1 items addressed)
 5. recheck    → Round N reviews; loops to synthesis if scores insufficient
-6. ready      → REVIEW_PANEL.md completed by panel:panel
+6. ready      → REVIEW_PANEL.md completed by panel:convene
 7. submit     → Paper submitted to target venue
 8. accepted   → Paper accepted at venue
 ```
@@ -87,7 +87,7 @@ options:
   - label: "Apply P1 only (blocking items)"
     description: "Addresses only the blocking items needed to advance to recheck"
   - label: "No, I'll revise manually"
-    description: "Stops here — run panel:paper again after making your own edits"
+    description: "Stops here — run panel:review again after making your own edits"
 ```
 
 **If user selects apply:**
@@ -127,7 +127,7 @@ options:
 - When strengthening claims, add qualifiers and citations rather than removing the claim
 - Preserve existing `\label{}` and `\ref{}` references
 
-**If user declines**: Set `_panel.yaml.revision_declined: true` and stop at revision stage. Report the P1 items that need addressing and the command to resume: `panel:paper --paper {name}`
+**If user declines**: Set `_panel.yaml.revision_declined: true` and stop at revision stage. Report the P1 items that need addressing and the command to resume: `panel:review --paper {name}`
 
 **Gate**: The revision stage gate checks:
 - `REVISION-PLAN.md` exists, AND
@@ -144,9 +144,9 @@ If gate fails (revision plan not created or no decision made), the stage cannot 
 - If gate fails: loop back to `synthesis`, increment round
 
 ### ready → submit
-- Gate: `REVIEW_PANEL.md` exists and is completed (produced by `panel:panel`)
-- `panel:paper` does NOT generate the panel review — it waits for `panel:panel` to produce it
-- If `REVIEW_PANEL.md` is missing or placeholder: report that `panel:panel --review` must be run first
+- Gate: `REVIEW_PANEL.md` exists and is completed (produced by `panel:convene`)
+- `panel:review` does NOT generate the panel review — it waits for `panel:convene` to produce it
+- If `REVIEW_PANEL.md` is missing or placeholder: report that `panel:convene --review` must be run first
 - Also checks for any unaddressed PP1 items from the panel revision plan
 
 ### submit → accepted
@@ -154,7 +154,7 @@ If gate fails (revision plan not created or no decision made), the stage cannot 
 
 ## PP Item Integration
 
-When `panel:panel` generates PP1/PP2/PP3 items for this paper, they appear in `PANEL-REVISION-PLAN.md` in the paper's directory. During the `revision` and `recheck` stages, `panel:paper` checks both:
+When `panel:convene` generates PP1/PP2/PP3 items for this paper, they appear in `PANEL-REVISION-PLAN.md` in the paper's directory. During the `revision` and `recheck` stages, `panel:review` checks both:
 - P1/P2/P3 items from individual reviews (SYNTHESIS.md)
 - PP1/PP2/PP3 items from panel review (PANEL-REVISION-PLAN.md)
 
@@ -181,19 +181,19 @@ After each stage transition that writes files, auto-commit all changes in the pa
 
 ```bash
 # Run full lifecycle on current paper
-panel:paper
+panel:review
 
 # Run until synthesis only
-panel:paper --until synthesis
+panel:review --until synthesis
 
 # Target specific paper
-panel:paper --paper panel-review-methodology
+panel:review --paper panel-review-methodology
 
 # Dry run to see what would happen
-panel:paper --dry-run
+panel:review --dry-run
 
 # Force round 3 recheck
-panel:paper --round 3
+panel:review --round 3
 ```
 
 ## Dependencies
