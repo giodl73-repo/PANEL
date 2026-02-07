@@ -1,0 +1,45 @@
+id: l2-paper-revision-cycle
+name: "panel:paper handles revision to recheck to synthesis loop"
+tier: L2
+plugin: panel
+target: commands/paper.md
+timeout: 60
+
+description: |
+  Verify panel:paper handles the full revision cycle: create revision plan,
+  apply revisions, advance to recheck, generate round-N reviews,
+  re-synthesize. Round number should increment.
+
+steps:
+  - action: prepare-paper
+    fixture: fixtures/sample-panel-state.yaml
+    override:
+      stage: revision
+      round: 1
+
+  - action: invoke-skill
+    skill: "panel:paper --paper panel-review-methodology --until recheck"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: research/panel-review-methodology/REVISION-PLAN.md
+
+  - action: read-file
+    path: research/panel-review-methodology/_panel.yaml
+    store: state
+
+  - action: assert-field-gte
+    input: $state
+    field: round
+    expected: 2
+    description: Round incremented
+
+  - action: glob
+    pattern: research/panel-review-methodology/reviews/ROUND2-REVIEW-*.md
+    store: round2_reviews
+
+  - action: assert-count-gte
+    input: $round2_reviews
+    expected: 5
+    description: Round 2 reviews generated

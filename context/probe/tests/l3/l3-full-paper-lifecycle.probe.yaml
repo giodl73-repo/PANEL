@@ -1,0 +1,60 @@
+id: l3-full-paper-lifecycle
+name: "Complete paper lifecycle: draft to panel to synthesis to revision to recheck to ready"
+tier: L3
+plugin: panel
+target: commands/paper.md
+timeout: 120
+
+description: |
+  End-to-end test: create a paper, advance through all stages from draft
+  to ready using panel:paper --until ready. Verify all artifacts are
+  produced and scores improve across rounds.
+
+steps:
+  - action: invoke-skill
+    skill: "panel:setup lifecycle-test CHI"
+    sandbox: true
+    store: setup_result
+
+  - action: invoke-skill
+    skill: "panel:paper --paper panel-lifecycle-test --until ready"
+    sandbox: true
+    store: lifecycle_result
+
+  - action: read-file
+    path: research/panel-lifecycle-test/_panel.yaml
+    store: final_state
+
+  - action: assert-field-in
+    input: $final_state
+    field: stage
+    values: [ready, recheck]
+    description: Paper reached ready or at least recheck stage
+
+  - action: assert-field-gte
+    input: $final_state
+    field: round
+    expected: 1
+    description: At least 1 review round completed
+
+  - action: glob
+    pattern: research/panel-lifecycle-test/reviews/REVIEW-*.md
+    store: round1_reviews
+
+  - action: assert-count-gte
+    input: $round1_reviews
+    expected: 5
+    description: Round 1 reviews generated
+
+  - action: file-exists
+    path: research/panel-lifecycle-test/reviews/SYNTHESIS.md
+    description: Synthesis produced
+
+  - action: file-exists
+    path: research/panel-lifecycle-test/REVISION-PLAN.md
+    description: Revision plan produced
+
+  - action: assert-score-trend
+    state: $final_state
+    direction: improving
+    description: Scores should improve or hold across rounds

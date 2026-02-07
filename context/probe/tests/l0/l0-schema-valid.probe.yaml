@@ -1,0 +1,29 @@
+id: l0-schema-valid
+name: panel-state.schema.yaml is valid schema
+tier: L0
+plugin: panel
+target: config/schemas/panel-state.schema.yaml
+timeout: 5
+
+steps:
+  - action: file-exists
+    path: config/schemas/panel-state.schema.yaml
+
+  - action: read-file
+    path: config/schemas/panel-state.schema.yaml
+    store: schema
+
+  - action: assert-valid-yaml
+    input: $schema
+
+  - action: assert-contains-key
+    input: $schema
+    key: properties
+
+  - action: assert-contains-key
+    input: $schema
+    key: required
+
+  - action: assert-array-contains
+    input: $schema.required
+    values: [paper, title, venue, stage]

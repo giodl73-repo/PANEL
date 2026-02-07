@@ -1,0 +1,51 @@
+id: l2-panel-review
+name: "panel:panel generates module-level REVIEW_PANEL.md"
+tier: L2
+plugin: panel
+target: commands/panel.md
+timeout: 60
+
+description: |
+  Verify panel:panel reads all paper states in a module, selects 7
+  panel reviewers, generates REVIEW_PANEL.md with cross-portfolio
+  assessment and PP1/PP2/PP3 findings.
+
+steps:
+  - action: prepare-module
+    papers:
+      - name: panel-review-methodology
+        stage: synthesis
+        score: 3.0
+      - name: panel-reviewer-calibration
+        stage: synthesis
+        score: 2.5
+      - name: panel-revision-dynamics
+        stage: synthesis
+        score: 3.5
+
+  - action: invoke-skill
+    skill: "panel:panel --review"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: research/REVIEW_PANEL.md
+
+  - action: read-file
+    path: research/REVIEW_PANEL.md
+    store: panel_review
+
+  - action: assert-contains
+    input: $panel_review
+    pattern: "PP1"
+    description: Contains PP1 findings
+
+  - action: assert-contains
+    input: $panel_review
+    pattern: "PP2"
+    description: Contains PP2 findings
+
+  - action: assert-contains
+    input: $panel_review
+    pattern: "AI Simulation"
+    description: Contains AI disclosure

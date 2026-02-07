@@ -1,0 +1,9 @@
+# Invalid state: missing required fields, bad stage value, score out of range
+paper: 123
+venue: CHI 2026
+stage: unknown_stage
+round: -1
+
+reviewers:
+  - name: Test Reviewer
+    score: 7

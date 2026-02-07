@@ -1,0 +1,36 @@
+id: l1-schema-validates-state
+name: panel-state schema validates well-formed _panel.yaml
+tier: L1
+plugin: panel
+target: config/schemas/panel-state.schema.yaml
+fixture: fixtures/sample-panel-state.yaml
+timeout: 30
+
+description: |
+  Verify the panel-state schema correctly validates a well-formed
+  _panel.yaml and rejects an invalid one.
+
+steps:
+  - action: read-file
+    path: config/schemas/panel-state.schema.yaml
+    store: schema
+
+  - action: read-file
+    path: fixtures/sample-panel-state.yaml
+    store: valid_state
+
+  - action: validate-against-schema
+    schema: $schema
+    data: $valid_state
+    expect: pass
+    description: Valid fixture passes schema
+
+  - action: read-file
+    path: fixtures/sample-panel-state-invalid.yaml
+    store: invalid_state
+
+  - action: validate-against-schema
+    schema: $schema
+    data: $invalid_state
+    expect: fail
+    description: Invalid fixture fails schema (bad stage, missing title, score out of range)

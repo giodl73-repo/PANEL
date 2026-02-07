@@ -1,0 +1,57 @@
+id: l1-synthesis-engine-consolidation
+name: synthesis-engine consolidates reviews into P1/P2/P3 tiers
+tier: L1
+plugin: panel
+target: shared/synthesis-engine.md
+timeout: 30
+
+description: |
+  Verify synthesis-engine reads multiple review files and consolidates
+  findings into P1 (blocking: 3+ reviewers or major), P2 (important:
+  2+ reviewers), P3 (nice-to-have: 1 reviewer) tiers.
+
+steps:
+  - action: mock-reviews
+    count: 5
+    shared_issues:
+      - text: "Missing ablation study"
+        raised_by: 3
+      - text: "Unclear methodology section"
+        raised_by: 2
+      - text: "Minor formatting issues"
+        raised_by: 1
+    store: reviews
+
+  - action: invoke-synthesis
+    input: $reviews
+    store: synthesis
+
+  - action: assert-contains-section
+    input: $synthesis
+    section: P1
+    description: Has P1 blocking items
+
+  - action: assert-contains-section
+    input: $synthesis
+    section: P2
+    description: Has P2 important items
+
+  - action: assert-contains-section
+    input: $synthesis
+    section: P3
+    description: Has P3 nice-to-have items
+
+  - action: assert-p1-contains
+    input: $synthesis
+    pattern: "ablation"
+    description: 3-reviewer issue classified as P1
+
+  - action: assert-p2-contains
+    input: $synthesis
+    pattern: "methodology"
+    description: 2-reviewer issue classified as P2
+
+  - action: assert-p3-contains
+    input: $synthesis
+    pattern: "formatting"
+    description: 1-reviewer issue classified as P3

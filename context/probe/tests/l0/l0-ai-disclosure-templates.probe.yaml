@@ -1,0 +1,43 @@
+id: l0-ai-disclosure-templates
+name: AI simulation disclosure present in review and synthesis templates
+tier: L0
+plugin: panel
+target: templates/review-template.md
+timeout: 5
+
+steps:
+  - action: read-file
+    path: templates/review-template.md
+    store: review_tmpl
+
+  - action: assert-contains
+    input: $review_tmpl
+    pattern: "AI Simulation Disclosure"
+    description: Review template includes AI disclosure
+
+  - action: read-file
+    path: templates/synthesis-template.md
+    store: synthesis_tmpl
+
+  - action: assert-contains
+    input: $synthesis_tmpl
+    pattern: "AI Simulation Disclosure"
+    description: Synthesis template includes AI disclosure
+
+  - action: read-file
+    path: templates/REVIEWER-DATABASE.md
+    store: reviewer_db
+
+  - action: assert-contains
+    input: $reviewer_db
+    pattern: "AI Simulation"
+    description: Reviewer database includes AI disclosure
+
+  - action: read-file
+    path: templates/REVIEWERS.md
+    store: reviewers_tmpl
+
+  - action: assert-contains
+    input: $reviewers_tmpl
+    pattern: "AI"
+    description: Reviewers template includes AI disclosure

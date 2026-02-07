@@ -1,0 +1,45 @@
+id: l1-panel-utils-pp-classification
+name: panel-utils generates PP1/PP2/PP3 findings correctly
+tier: L1
+plugin: panel
+target: shared/panel-utils.md
+timeout: 30
+
+description: |
+  Verify panel-utils classifies cross-paper findings:
+  PP1 = cross-paper pattern or threatens module (blocking)
+  PP2 = 2+ papers affected (important)
+  PP3 = 1 paper only (nice-to-have)
+
+steps:
+  - action: mock-paper-findings
+    papers:
+      paper-1:
+        p1: ["Missing statistical tests"]
+        p2: ["Unclear methodology"]
+      paper-2:
+        p1: ["Missing statistical tests"]
+        p2: ["Weak related work"]
+      paper-3:
+        p1: ["Different issue"]
+        p2: ["Unclear methodology"]
+    store: findings
+
+  - action: invoke-panel-classify
+    input: $findings
+    store: pp_results
+
+  - action: assert-pp1-contains
+    input: $pp_results
+    pattern: "statistical tests"
+    description: Cross-paper P1 pattern → PP1
+
+  - action: assert-pp2-contains
+    input: $pp_results
+    pattern: "methodology"
+    description: 2-paper P2 pattern → PP2
+
+  - action: assert-pp3-contains
+    input: $pp_results
+    pattern: "related work"
+    description: Single-paper issue → PP3

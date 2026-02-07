@@ -1,0 +1,52 @@
+id: l2-paper-synthesis
+name: "panel:paper generates synthesis from reviews"
+tier: L2
+plugin: panel
+target: commands/paper.md
+timeout: 60
+
+description: |
+  Verify panel:paper reads all REVIEW-*.md files, produces SYNTHESIS.md
+  with P1/P2/P3 classification, and updates _panel.yaml state.
+
+steps:
+  - action: prepare-paper
+    fixture: fixtures/sample-panel-state.yaml
+    override:
+      stage: panel
+      round: 1
+
+  - action: mock-review-files
+    paper: panel-review-methodology
+    count: 5
+
+  - action: invoke-skill
+    skill: "panel:paper --paper panel-review-methodology"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: research/panel-review-methodology/reviews/SYNTHESIS.md
+
+  - action: read-file
+    path: research/panel-review-methodology/reviews/SYNTHESIS.md
+    store: synthesis
+
+  - action: assert-contains
+    input: $synthesis
+    pattern: "P1"
+    description: Synthesis contains P1 classification
+
+  - action: assert-contains
+    input: $synthesis
+    pattern: "P2"
+    description: Synthesis contains P2 classification
+
+  - action: read-file
+    path: research/panel-review-methodology/_panel.yaml
+    store: state
+
+  - action: assert-field
+    input: $state
+    field: stage
+    expected: synthesis

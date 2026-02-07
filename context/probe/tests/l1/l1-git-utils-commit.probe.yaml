@@ -1,0 +1,30 @@
+id: l1-git-utils-commit
+name: git-utils auto-commits with [panel] prefix
+tier: L1
+plugin: panel
+target: shared/git-utils.md
+timeout: 30
+
+description: |
+  Verify git-utils creates commits with [panel] prefix and
+  uses scoped file staging (not git add -A).
+
+steps:
+  - action: read-file
+    path: shared/git-utils.md
+    store: git_utils
+
+  - action: assert-contains
+    input: $git_utils
+    pattern: "[panel]"
+    description: Uses [panel] commit prefix
+
+  - action: assert-contains
+    input: $git_utils
+    pattern: "git add"
+    description: Stages files for commit
+
+  - action: assert-not-contains
+    input: $git_utils
+    pattern: "git add -A"
+    description: Does not use git add -A (scoped staging)

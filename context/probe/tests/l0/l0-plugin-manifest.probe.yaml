@@ -1,0 +1,34 @@
+id: l0-plugin-manifest
+name: Plugin manifest is valid JSON with required fields
+tier: L0
+plugin: panel
+target: .claude-plugin/plugin.json
+timeout: 5
+
+steps:
+  - action: file-exists
+    path: .claude-plugin/plugin.json
+
+  - action: read-file
+    path: .claude-plugin/plugin.json
+    store: manifest
+
+  - action: assert-valid-json
+    input: $manifest
+
+  - action: assert-contains-key
+    input: $manifest
+    key: name
+    expected: panel
+
+  - action: assert-contains-key
+    input: $manifest
+    key: version
+
+  - action: assert-contains-key
+    input: $manifest
+    key: commands
+
+  - action: assert-array-length
+    input: $manifest.commands
+    expected: 11

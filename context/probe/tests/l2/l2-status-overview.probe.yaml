@@ -1,0 +1,47 @@
+id: l2-status-overview
+name: "panel:status shows all papers with correct stage/round/score"
+tier: L2
+plugin: panel
+target: commands/status.md
+timeout: 60
+
+description: |
+  Verify panel:status reads all _panel.yaml files and displays a table
+  with paper name, current stage, round, score, and next action.
+
+steps:
+  - action: prepare-module
+    papers:
+      - name: panel-review-methodology
+        stage: synthesis
+        round: 1
+        score: 3.0
+      - name: panel-reviewer-calibration
+        stage: draft
+        round: 0
+        score: null
+
+  - action: invoke-skill
+    skill: "panel:status"
+    sandbox: true
+    store: output
+
+  - action: assert-contains
+    input: $output
+    pattern: "panel-review-methodology"
+    description: Lists first paper
+
+  - action: assert-contains
+    input: $output
+    pattern: "panel-reviewer-calibration"
+    description: Lists second paper
+
+  - action: assert-contains
+    input: $output
+    pattern: "synthesis"
+    description: Shows correct stage
+
+  - action: assert-contains
+    input: $output
+    pattern: "draft"
+    description: Shows correct stage for second paper

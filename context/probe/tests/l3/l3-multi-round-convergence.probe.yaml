@@ -1,0 +1,45 @@
+id: l3-multi-round-convergence
+name: Multiple revision rounds converge toward acceptance threshold
+tier: L3
+plugin: panel
+target: commands/paper.md
+timeout: 120
+
+description: |
+  Verify that across multiple revision rounds, scores improve and
+  P1 items decrease, eventually reaching the acceptance threshold
+  (avg >= 2.5/4, no score < 2/4).
+
+steps:
+  - action: prepare-paper
+    fixture: fixtures/sample-panel-state.yaml
+    override:
+      stage: panel
+      round: 0
+      reviewers: []
+      p1_items: []
+
+  - action: invoke-skill
+    skill: "panel:paper --paper panel-review-methodology --until ready"
+    sandbox: true
+    store: result
+
+  - action: read-file
+    path: research/panel-review-methodology/_panel.yaml
+    store: final_state
+
+  - action: assert-field-gte
+    input: $final_state
+    field: round
+    expected: 1
+
+  - action: assert-score-threshold
+    state: $final_state
+    min_average: 2.5
+    min_individual: 2
+    description: Scores meet or approach acceptance threshold
+
+  - action: assert-p1-trend
+    state: $final_state
+    direction: decreasing
+    description: P1 items decrease across rounds

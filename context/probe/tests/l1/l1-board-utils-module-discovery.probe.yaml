@@ -1,0 +1,39 @@
+id: l1-board-utils-module-discovery
+name: board-utils discovers modules across monorepo
+tier: L1
+plugin: panel
+target: shared/board-utils.md
+timeout: 30
+
+description: |
+  Verify board-utils can discover modules in a monorepo by finding
+  directories with REVIEW_PANEL.md or research/ subdirectories,
+  and reads their panel review findings.
+
+steps:
+  - action: mock-monorepo
+    modules:
+      - name: performance
+        has_review_panel: true
+        paper_count: 3
+      - name: waves
+        has_review_panel: true
+        paper_count: 2
+      - name: basecamp
+        has_review_panel: false
+        paper_count: 0
+    store: repo
+
+  - action: invoke-discover-modules
+    input: $repo
+    store: discovered
+
+  - action: assert-array-length
+    input: $discovered
+    expected: 2
+    description: Only modules with REVIEW_PANEL.md discovered
+
+  - action: assert-array-contains
+    input: $discovered
+    key: name
+    values: [performance, waves]

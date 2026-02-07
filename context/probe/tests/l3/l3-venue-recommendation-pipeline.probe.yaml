@@ -1,0 +1,40 @@
+id: l3-venue-recommendation-pipeline
+name: "Complete flow: paper reviewed to scored to venue recommended to submission strategy"
+tier: L3
+plugin: panel
+target:
+  - commands/paper.md
+  - commands/venue.md
+timeout: 120
+
+description: |
+  End-to-end test: paper goes through review, gets scored, then
+  panel:venue uses those scores to recommend appropriate venues
+  and generate a submission strategy.
+
+steps:
+  - action: prepare-paper
+    fixture: fixtures/sample-panel-state.yaml
+    override:
+      stage: synthesis
+      round: 1
+
+  - action: invoke-skill
+    skill: "panel:venue --paper panel-review-methodology"
+    sandbox: true
+    store: venue_result
+
+  - action: assert-contains
+    input: $venue_result
+    pattern: "CHI"
+    description: Recommends venue matching paper topic
+
+  - action: assert-contains-any
+    input: $venue_result
+    patterns: ["strategy", "submission", "timeline", "recommendation"]
+    description: Includes submission strategy or recommendation
+
+  - action: assert-contains-any
+    input: $venue_result
+    patterns: ["3.0", "score", "Accept"]
+    description: References review scores in recommendation

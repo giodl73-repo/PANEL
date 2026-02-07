@@ -1,0 +1,47 @@
+id: l2-paper-draft-to-panel
+name: "panel:paper advances from draft to panel stage"
+tier: L2
+plugin: panel
+target: commands/paper.md
+timeout: 60
+
+description: |
+  Verify panel:paper checks the draft gate (main.tex + venue),
+  selects 5 reviewers, generates REVIEW-*.md files, and advances
+  state to panel stage.
+
+steps:
+  - action: prepare-paper
+    fixture: fixtures/sample-panel-state.yaml
+    override:
+      stage: draft
+      round: 0
+      reviewers: []
+
+  - action: invoke-skill
+    skill: "panel:paper --paper panel-review-methodology"
+    sandbox: true
+    store: result
+
+  - action: read-file
+    path: research/panel-review-methodology/_panel.yaml
+    store: state
+
+  - action: assert-field
+    input: $state
+    field: stage
+    expected: panel
+
+  - action: assert-array-length
+    input: $state.reviewers
+    expected: 5
+    description: 5 reviewers selected
+
+  - action: glob
+    pattern: research/panel-review-methodology/reviews/REVIEW-*.md
+    store: reviews
+
+  - action: assert-count-gte
+    input: $reviews
+    expected: 5
+    description: 5+ review files generated

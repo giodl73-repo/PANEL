@@ -1,0 +1,30 @@
+id: l0-templates-exist
+name: All template files exist (review, synthesis, revision-plan, REVIEWER-DATABASE, REVIEWERS, REVIEW_PANEL, RESEARCH)
+tier: L0
+plugin: panel
+target: templates/
+timeout: 5
+
+steps:
+  - action: file-exists
+    path: templates/review-template.md
+  - action: file-exists
+    path: templates/synthesis-template.md
+  - action: file-exists
+    path: templates/revision-plan-template.md
+  - action: file-exists
+    path: templates/REVIEWER-DATABASE.md
+  - action: file-exists
+    path: templates/REVIEWERS.md
+  - action: file-exists
+    path: templates/REVIEW_PANEL.md
+  - action: file-exists
+    path: templates/RESEARCH.md
+
+  - action: glob
+    pattern: templates/*.md
+    store: template_files
+
+  - action: assert-count-gte
+    input: $template_files
+    expected: 7

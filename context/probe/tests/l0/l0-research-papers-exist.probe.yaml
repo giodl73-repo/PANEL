@@ -1,0 +1,26 @@
+id: l0-research-papers-exist
+name: All 5 research paper directories exist with main.tex
+tier: L0
+plugin: panel
+target: research/panel-*/main.tex
+timeout: 5
+
+steps:
+  - action: glob
+    pattern: research/panel-*/main.tex
+    store: papers
+
+  - action: assert-count
+    input: $papers
+    expected: 5
+
+  - action: file-exists
+    path: research/panel-review-methodology/main.tex
+  - action: file-exists
+    path: research/panel-reviewer-calibration/main.tex
+  - action: file-exists
+    path: research/panel-revision-dynamics/main.tex
+  - action: file-exists
+    path: research/panel-portfolio-assessment/main.tex
+  - action: file-exists
+    path: research/panel-synthesis-methods/main.tex

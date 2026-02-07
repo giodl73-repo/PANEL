@@ -1,0 +1,39 @@
+id: l1-board-utils-b-classification
+name: board-utils generates B1/B2/B3 findings
+tier: L1
+plugin: panel
+target: shared/board-utils.md
+timeout: 30
+
+description: |
+  Verify board-utils classifies cross-module findings:
+  B1 = 3+ board members flag or threatens program (blocking)
+  B2 = 2+ modules affected (important)
+  B3 = 1 module only (nice-to-have)
+
+steps:
+  - action: mock-module-findings
+    modules:
+      performance:
+        pp1: ["Inconsistent evaluation metrics"]
+        pp2: ["Missing reproducibility artifacts"]
+      waves:
+        pp1: ["Inconsistent evaluation metrics"]
+        pp2: ["Weak theoretical framing"]
+      basecamp:
+        pp1: ["Different concern"]
+    store: module_findings
+
+  - action: invoke-board-classify
+    input: $module_findings
+    store: b_results
+
+  - action: assert-b1-contains
+    input: $b_results
+    pattern: "evaluation metrics"
+    description: Cross-module PP1 pattern → B1
+
+  - action: assert-b2-or-b3
+    input: $b_results
+    pattern: "reproducibility"
+    description: Single-module finding → B2 or B3

@@ -1,0 +1,54 @@
+paper: panel-review-methodology
+title: "AI-Simulated Expert Review: A Methodology for Scalable Paper Assessment"
+venue: CHI 2026
+stage: synthesis
+round: 1
+
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford University
+    expertise: NLP evaluation, benchmarking
+    score: 3
+  - name: Arvind Narayanan
+    affiliation: Princeton University
+    expertise: AI accountability, reproducibility
+    score: 2
+  - name: Emily Bender
+    affiliation: University of Washington
+    expertise: Computational linguistics, ethics
+    score: 3
+  - name: Yoav Goldberg
+    affiliation: Bar-Ilan University / AI2
+    expertise: NLP, structured prediction
+    score: 4
+  - name: Anna Rogers
+    affiliation: University of Copenhagen
+    expertise: NLP evaluation, peer review
+    score: 3
+
+reviews:
+  round-1:
+    completed: 5
+    synthesis: true
+    avg_score: 3.0
+    verdict: Accept
+
+p1_items:
+  - item: "Missing ablation study comparing AI-simulated vs human reviews"
+    addressed: false
+    notes: "Raised by 3 of 5 reviewers"
+  - item: "Statistical significance testing absent for inter-rater agreement"
+    addressed: false
+    notes: "Raised by Narayanan and Rogers"
+
+history:
+  - stage: draft
+    date: "2026-01-15"
+    note: "Initial draft complete"
+  - stage: panel
+    date: "2026-01-20"
+    note: "5 reviewers assigned"
+  - stage: synthesis
+    date: "2026-01-25"
+    note: "Round 1 synthesis complete"
+    round: 1

@@ -1,0 +1,47 @@
+id: l2-board-review
+name: "panel:board generates REVIEW_BOARD.md across modules"
+tier: L2
+plugin: panel
+target: commands/board.md
+timeout: 60
+
+description: |
+  Verify panel:board discovers modules in the monorepo, selects 7 board
+  members, generates REVIEW_BOARD.md with B1/B2/B3 cross-module findings.
+
+steps:
+  - action: mock-monorepo
+    modules:
+      - name: panel
+        has_review_panel: true
+        score: 7.5
+      - name: performance
+        has_review_panel: true
+        score: 6.8
+
+  - action: invoke-skill
+    skill: "panel:board --review --repo ."
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: REVIEW_BOARD.md
+
+  - action: read-file
+    path: REVIEW_BOARD.md
+    store: board_review
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "B1"
+    description: Contains B1 findings
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "panel"
+    description: References panel module
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "AI Simulation"
+    description: Contains AI disclosure

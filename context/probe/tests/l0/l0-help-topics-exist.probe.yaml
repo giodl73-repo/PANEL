@@ -1,0 +1,18 @@
+id: l0-help-topics-exist
+name: Help topic files exist in templates/help/
+tier: L0
+plugin: panel
+target: templates/help/*.md
+timeout: 5
+
+steps:
+  - action: glob
+    pattern: templates/help/*.md
+    store: help_files
+
+  - action: assert-count-gte
+    input: $help_files
+    expected: 1
+
+  - action: assert-non-empty
+    paths: $help_files

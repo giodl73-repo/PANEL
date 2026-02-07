@@ -1,0 +1,39 @@
+id: l2-panel-apply-revisions
+name: "panel:panel --apply drives PP1/PP2 revisions down to papers"
+tier: L2
+plugin: panel
+target: commands/panel.md
+timeout: 60
+
+description: |
+  Verify panel:panel --apply generates per-paper revision plans from
+  PP1/PP2 findings and applies edits to paper LaTeX source files.
+
+steps:
+  - action: prepare-module
+    papers:
+      - name: panel-review-methodology
+        stage: ready
+        score: 3.0
+    with_review_panel: true
+    with_pp_findings:
+      PP1: ["Add cross-paper evaluation comparison"]
+      PP2: ["Standardize methodology terminology"]
+
+  - action: invoke-skill
+    skill: "panel:panel --apply"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: research/panel-reviews/round-1/PANEL-REVISION-PLAN.md
+    description: Revision plan generated
+
+  - action: read-file
+    path: research/panel-review-methodology/_panel.yaml
+    store: state
+
+  - action: assert-field
+    input: $state
+    field: stage
+    description: Paper state updated after panel revisions

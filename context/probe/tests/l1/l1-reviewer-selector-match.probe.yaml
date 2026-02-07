@@ -1,0 +1,35 @@
+id: l1-reviewer-selector-match
+name: reviewer-selector matches appropriate reviewers to paper topics
+tier: L1
+plugin: panel
+target: shared/reviewer-selector.md
+timeout: 30
+
+description: |
+  Verify reviewer-selector picks 5 reviewers whose expertise matches
+  the paper topic, returns no duplicates, and draws from the 45+
+  reviewer database.
+
+steps:
+  - action: invoke-selector
+    paper_topic: "NLP evaluation methodology"
+    paper_venue: "EMNLP"
+    count: 5
+    store: selected
+
+  - action: assert-array-length
+    input: $selected
+    expected: 5
+
+  - action: assert-no-duplicates
+    input: $selected
+    key: name
+
+  - action: assert-each-has-field
+    input: $selected
+    fields: [name, affiliation, expertise]
+
+  - action: assert-topic-relevance
+    input: $selected
+    topic: "NLP evaluation methodology"
+    description: Selected reviewers have relevant expertise

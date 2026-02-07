@@ -1,0 +1,70 @@
+id: l3-five-paper-portfolio
+name: "Full portfolio: all 5 research papers through review + panel synthesis"
+tier: L3
+plugin: panel
+target:
+  - commands/paper.md
+  - commands/panel.md
+  - commands/status.md
+timeout: 120
+
+description: |
+  End-to-end portfolio test: advance all 5 research papers through
+  at least the synthesis stage, then run panel:panel to produce
+  a cross-portfolio assessment, and verify panel:status reflects all.
+
+papers:
+  - panel-review-methodology
+  - panel-reviewer-calibration
+  - panel-revision-dynamics
+  - panel-portfolio-assessment
+  - panel-synthesis-methods
+
+steps:
+  - action: prepare-all-papers
+    papers:
+      - name: panel-review-methodology
+        stage: synthesis
+        score: 3.0
+      - name: panel-reviewer-calibration
+        stage: synthesis
+        score: 2.8
+      - name: panel-revision-dynamics
+        stage: synthesis
+        score: 3.2
+      - name: panel-portfolio-assessment
+        stage: synthesis
+        score: 2.5
+      - name: panel-synthesis-methods
+        stage: synthesis
+        score: 3.5
+
+  - action: invoke-skill
+    skill: "panel:panel --review"
+    sandbox: true
+    store: panel_result
+
+  - action: file-exists
+    path: research/REVIEW_PANEL.md
+
+  - action: invoke-skill
+    skill: "panel:status"
+    sandbox: true
+    store: status_output
+
+  - action: assert-contains
+    input: $status_output
+    pattern: "panel-review-methodology"
+  - action: assert-contains
+    input: $status_output
+    pattern: "panel-reviewer-calibration"
+  - action: assert-contains
+    input: $status_output
+    pattern: "panel-revision-dynamics"
+  - action: assert-contains
+    input: $status_output
+    pattern: "panel-portfolio-assessment"
+  - action: assert-contains
+    input: $status_output
+    pattern: "panel-synthesis-methods"
+    description: All 5 papers appear in status

@@ -1,0 +1,37 @@
+id: l0-config-scoring
+name: scoring.yaml is valid YAML with 4-point and 10-point scales
+tier: L0
+plugin: panel
+target: config/scoring.yaml
+timeout: 5
+
+steps:
+  - action: file-exists
+    path: config/scoring.yaml
+
+  - action: read-file
+    path: config/scoring.yaml
+    store: scoring
+
+  - action: assert-valid-yaml
+    input: $scoring
+
+  - action: assert-contains-key
+    input: $scoring
+    key: four_point
+
+  - action: assert-contains-key
+    input: $scoring
+    key: ten_point
+
+  - action: assert-contains-key
+    input: $scoring
+    key: thresholds
+
+  - action: assert-contains-key
+    input: $scoring
+    key: consensus
+
+  - action: assert-contains-key
+    input: $scoring
+    key: verdict_mapping

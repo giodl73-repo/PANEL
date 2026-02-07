@@ -1,0 +1,42 @@
+id: l2-report-generation
+name: "panel:report generates portfolio-level report"
+tier: L2
+plugin: panel
+target: commands/report.md
+timeout: 60
+
+description: |
+  Verify panel:report reads all paper states and generates a
+  portfolio-level markdown report with scores and status.
+
+steps:
+  - action: prepare-module
+    papers:
+      - name: panel-review-methodology
+        stage: synthesis
+        round: 1
+        score: 3.0
+      - name: panel-reviewer-calibration
+        stage: draft
+        round: 0
+        score: null
+
+  - action: invoke-skill
+    skill: "panel:report --portfolio"
+    sandbox: true
+    store: report
+
+  - action: assert-contains
+    input: $report
+    pattern: "panel-review-methodology"
+    description: Report includes first paper
+
+  - action: assert-contains
+    input: $report
+    pattern: "panel-reviewer-calibration"
+    description: Report includes second paper
+
+  - action: assert-contains
+    input: $report
+    pattern: "3.0"
+    description: Report includes scores

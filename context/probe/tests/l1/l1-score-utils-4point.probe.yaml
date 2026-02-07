@@ -1,0 +1,50 @@
+id: l1-score-utils-4point
+name: score-utils computes 4-point scale correctly
+tier: L1
+plugin: panel
+target: shared/score-utils.md
+timeout: 30
+
+description: |
+  Verify score-utils aggregates individual reviewer scores on the
+  4-point scale (1=Reject, 2=Weak Accept, 3=Accept, 4=Strong Accept)
+  and computes average, min, max, and consensus metric.
+
+steps:
+  - action: compute-scores
+    scores: [3, 2, 3, 4, 3]
+    store: result
+
+  - action: assert-field
+    input: $result
+    field: average
+    expected: 3.0
+
+  - action: assert-field
+    input: $result
+    field: min
+    expected: 2
+
+  - action: assert-field
+    input: $result
+    field: max
+    expected: 4
+
+  - action: assert-consensus
+    input: $result
+    scores: [3, 2, 3, 4, 3]
+    description: StdDev ~0.63 → moderate consensus
+
+  - action: compute-scores
+    scores: [1, 1, 1, 1, 1]
+    store: unanimous
+
+  - action: assert-field
+    input: $unanimous
+    field: average
+    expected: 1.0
+
+  - action: assert-consensus-level
+    input: $unanimous
+    expected: strong
+    description: All identical scores = strong consensus

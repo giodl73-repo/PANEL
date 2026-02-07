@@ -1,0 +1,43 @@
+id: l2-setup-project
+name: "panel:setup creates full project infrastructure"
+tier: L2
+plugin: panel
+target: commands/setup.md
+timeout: 60
+
+description: |
+  Verify panel:setup (project-level) creates the full infrastructure:
+  research/ directory, copies REVIEWER-DATABASE.md, creates RESEARCH.md,
+  creates REVIEWERS.md, copies templates.
+
+steps:
+  - action: invoke-skill
+    skill: panel:setup
+    mock_inputs:
+      project_name: test-project
+    sandbox: true
+    store: setup_result
+
+  - action: file-exists
+    path: research/RESEARCH.md
+
+  - action: file-exists
+    path: research/REVIEWERS.md
+
+  - action: file-exists
+    path: research/REVIEW_PANEL.md
+
+  - action: file-exists
+    path: research/REVIEWER-DATABASE.md
+
+  - action: file-exists
+    path: research/Makefile
+
+  - action: read-file
+    path: research/REVIEWERS.md
+    store: reviewers
+
+  - action: assert-contains
+    input: $reviewers
+    pattern: "AI"
+    description: Reviewers file includes AI disclosure

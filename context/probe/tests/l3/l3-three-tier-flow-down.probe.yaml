@@ -1,0 +1,47 @@
+id: l3-three-tier-flow-down
+name: "Top-down: board B1/B2 to panel PP1/PP2 to paper revisions"
+tier: L3
+plugin: panel
+target:
+  - commands/board.md
+  - commands/panel.md
+  - commands/paper.md
+timeout: 120
+
+description: |
+  End-to-end top-down flow: board generates B1/B2 findings per module,
+  panel translates to PP1/PP2 per paper, papers receive revision plans
+  and apply edits to LaTeX source.
+
+steps:
+  - action: prepare-board-state
+    with_b_findings:
+      B1: ["Standardize evaluation metrics across all modules"]
+      B2: ["Improve cross-referencing between papers"]
+
+  - action: invoke-skill
+    skill: "panel:board --revisions"
+    sandbox: true
+    store: board_revisions
+
+  - action: glob
+    pattern: BOARD-REVISION-PLAN-*.md
+    store: board_plans
+
+  - action: assert-count-gte
+    input: $board_plans
+    expected: 1
+    description: Board generates per-module revision plans
+
+  - action: invoke-skill
+    skill: "panel:panel --apply"
+    sandbox: true
+    store: panel_apply
+
+  - action: read-file
+    path: research/panel-review-methodology/_panel.yaml
+    store: paper_state
+
+  - action: assert-non-empty
+    input: $paper_state
+    description: Paper state updated from top-down revisions

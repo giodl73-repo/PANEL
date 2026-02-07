@@ -1,0 +1,51 @@
+id: l1-display-utils-formatting
+name: display-utils produces formatted terminal output
+tier: L1
+plugin: panel
+target: shared/display-utils.md
+timeout: 30
+
+description: |
+  Verify display-utils generates box-drawing characters, status indicators,
+  and formatted tables for terminal output.
+
+steps:
+  - action: invoke-display
+    function: box
+    input: ["PANEL STATUS", "5 papers reviewed"]
+    store: box_output
+
+  - action: assert-contains
+    input: $box_output
+    pattern: "─"
+    description: Contains box-drawing horizontal line
+
+  - action: assert-contains
+    input: $box_output
+    pattern: "PANEL STATUS"
+    description: Contains header text
+
+  - action: invoke-display
+    function: status-line
+    input:
+      label: "panel-review-methodology"
+      stage: synthesis
+      score: 3.0
+    store: status_output
+
+  - action: assert-non-empty
+    input: $status_output
+
+  - action: invoke-display
+    function: table
+    input:
+      headers: [Paper, Stage, Score]
+      rows:
+        - [panel-review-methodology, synthesis, "3.0"]
+        - [panel-reviewer-calibration, draft, "-"]
+    store: table_output
+
+  - action: assert-contains
+    input: $table_output
+    pattern: "Paper"
+    description: Table includes headers

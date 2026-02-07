@@ -1,0 +1,22 @@
+id: l0-references-bib
+name: references.bib exists in templates
+tier: L0
+plugin: panel
+target: templates/references.bib
+timeout: 5
+
+steps:
+  - action: file-exists
+    path: templates/references.bib
+
+  - action: read-file
+    path: templates/references.bib
+    store: bib
+
+  - action: assert-non-empty
+    input: $bib
+
+  - action: assert-contains
+    input: $bib
+    pattern: "@"
+    description: Contains at least one BibTeX entry

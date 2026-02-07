@@ -1,0 +1,30 @@
+id: l0-config-stages
+name: stages.yaml defines all 8 stages with gates
+tier: L0
+plugin: panel
+target: config/stages.yaml
+timeout: 5
+
+steps:
+  - action: file-exists
+    path: config/stages.yaml
+
+  - action: read-file
+    path: config/stages.yaml
+    store: stages
+
+  - action: assert-valid-yaml
+    input: $stages
+
+  - action: assert-contains-key
+    input: $stages
+    key: stages
+
+  - action: assert-array-length
+    input: $stages.stages
+    expected: 8
+
+  - action: assert-array-contains
+    input: $stages.stages
+    key: name
+    values: [draft, panel, synthesis, revision, recheck, ready, submit, accepted]

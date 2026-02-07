@@ -1,0 +1,41 @@
+id: l0-commands-exist
+name: All 11 command files exist and are non-empty
+tier: L0
+plugin: panel
+target: commands/*.md
+timeout: 5
+
+steps:
+  - action: glob
+    pattern: commands/*.md
+    store: command_files
+
+  - action: assert-count
+    input: $command_files
+    expected: 11
+
+  - action: file-exists
+    path: commands/paper.md
+  - action: file-exists
+    path: commands/panel.md
+  - action: file-exists
+    path: commands/board.md
+  - action: file-exists
+    path: commands/status.md
+  - action: file-exists
+    path: commands/show.md
+  - action: file-exists
+    path: commands/reviewers.md
+  - action: file-exists
+    path: commands/setup.md
+  - action: file-exists
+    path: commands/import.md
+  - action: file-exists
+    path: commands/report.md
+  - action: file-exists
+    path: commands/help.md
+  - action: file-exists
+    path: commands/venue.md
+
+  - action: assert-non-empty
+    paths: $command_files

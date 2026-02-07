@@ -1,0 +1,41 @@
+id: l1-stage-machine-recheck-loop
+name: stage-machine handles recheck to synthesis loop correctly
+tier: L1
+plugin: panel
+target: shared/stage-machine.md
+timeout: 30
+
+description: |
+  When recheck gate fails (avg < 2.5 or any score < 2), stage-machine
+  should loop back to synthesis for another round. When gate passes,
+  it should advance to ready.
+
+steps:
+  - action: validate-transition
+    from: recheck
+    mock_state:
+      avg_score: 2.0
+      min_score: 1
+    expect_next: synthesis
+    description: Low scores loop back to synthesis
+
+  - action: validate-transition
+    from: recheck
+    mock_state:
+      avg_score: 3.0
+      min_score: 2
+    expect_next: ready
+    description: Good scores advance to ready
+
+  - action: validate-transition
+    from: recheck
+    mock_state:
+      avg_score: 2.6
+      min_score: 1.5
+    expect_next: synthesis
+    description: Min score below 2 forces loop even with good average
+
+  - action: assert-round-increment
+    from_round: 1
+    expect_round: 2
+    description: Round number increments on loop

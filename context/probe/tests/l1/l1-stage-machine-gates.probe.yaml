@@ -1,0 +1,92 @@
+id: l1-stage-machine-gates
+name: stage-machine enforces gate conditions for each stage transition
+tier: L1
+plugin: panel
+target: shared/stage-machine.md
+timeout: 30
+
+description: |
+  Verify that stage-machine checks gate conditions before advancing.
+  Each of the 8 stages has specific artifact/score requirements.
+  Transitions should be blocked when gates are unmet.
+
+steps:
+  - action: validate-gate
+    stage: draft
+    condition: main.tex exists and venue set
+    mock_state:
+      stage: draft
+      venue: "CHI 2026"
+      artifacts: [main.tex]
+    expect: pass
+
+  - action: validate-gate
+    stage: draft
+    condition: main.tex missing
+    mock_state:
+      stage: draft
+      venue: "CHI 2026"
+      artifacts: []
+    expect: fail
+
+  - action: validate-gate
+    stage: panel
+    condition: 5+ review files
+    mock_state:
+      stage: panel
+      review_count: 5
+    expect: pass
+
+  - action: validate-gate
+    stage: panel
+    condition: only 3 review files
+    mock_state:
+      stage: panel
+      review_count: 3
+    expect: fail
+
+  - action: validate-gate
+    stage: synthesis
+    condition: SYNTHESIS.md with P1/P2/P3
+    mock_state:
+      stage: synthesis
+      has_synthesis: true
+      has_tiering: true
+    expect: pass
+
+  - action: validate-gate
+    stage: revision
+    condition: all P1 addressed
+    mock_state:
+      stage: revision
+      p1_all_addressed: true
+    expect: pass
+
+  - action: validate-gate
+    stage: revision
+    condition: P1 not addressed
+    mock_state:
+      stage: revision
+      p1_all_addressed: false
+    expect: fail
+
+  - action: validate-gate
+    stage: recheck
+    condition: avg >= 2.5, none < 2
+    mock_state:
+      stage: recheck
+      avg_score: 3.0
+      min_score: 2
+    expect: pass
+
+  - action: validate-gate
+    stage: recheck
+    condition: avg below threshold
+    mock_state:
+      stage: recheck
+      avg_score: 2.0
+      min_score: 1
+    expect: fail
+
+  - action: assert-stage-sequence
+    expected: [draft, panel, synthesis, revision, recheck, ready, submit, accepted]

@@ -1,0 +1,59 @@
+id: l1-state-loader-read
+name: state-loader reads _panel.yaml and returns structured state
+tier: L1
+plugin: panel
+target: shared/state-loader.md
+fixture: fixtures/sample-panel-state.yaml
+timeout: 30
+
+description: |
+  Verify that the state-loader shared utility correctly parses a _panel.yaml
+  file and returns all expected fields: paper name, title, venue, stage,
+  round, reviewers array, reviews object, p1_items, and history.
+
+steps:
+  - action: read-file
+    path: fixtures/sample-panel-state.yaml
+    store: state
+
+  - action: assert-valid-yaml
+    input: $state
+
+  - action: assert-field
+    input: $state
+    field: paper
+    expected: panel-review-methodology
+
+  - action: assert-field
+    input: $state
+    field: stage
+    expected: synthesis
+
+  - action: assert-field
+    input: $state
+    field: round
+    expected: 1
+
+  - action: assert-field-type
+    input: $state
+    field: reviewers
+    expected: array
+
+  - action: assert-array-length
+    input: $state.reviewers
+    expected: 5
+
+  - action: assert-field-type
+    input: $state
+    field: reviews
+    expected: object
+
+  - action: assert-field-type
+    input: $state
+    field: p1_items
+    expected: array
+
+  - action: assert-field-type
+    input: $state
+    field: history
+    expected: array

@@ -1,0 +1,57 @@
+id: l3-three-tier-flow-up
+name: "Bottom-up: paper reviews surface to panel, panel findings surface to board"
+tier: L3
+plugin: panel
+target:
+  - commands/paper.md
+  - commands/panel.md
+  - commands/board.md
+timeout: 120
+
+description: |
+  End-to-end bottom-up flow: individual paper reviews surface issues
+  to module-level panel, which surfaces patterns to board-level review.
+  Verify priority escalation (P1 → PP1 → B1) when patterns span papers/modules.
+
+steps:
+  - action: prepare-module
+    papers:
+      - name: paper-a
+        stage: synthesis
+        score: 2.5
+        p1: ["Missing statistical tests"]
+      - name: paper-b
+        stage: synthesis
+        score: 2.8
+        p1: ["Missing statistical tests"]
+      - name: paper-c
+        stage: synthesis
+        score: 3.2
+        p1: ["Different issue"]
+
+  - action: invoke-skill
+    skill: "panel:panel --review"
+    sandbox: true
+    store: panel_result
+
+  - action: read-file
+    path: research/REVIEW_PANEL.md
+    store: panel_review
+
+  - action: assert-contains
+    input: $panel_review
+    pattern: "statistical tests"
+    description: Cross-paper P1 pattern surfaces to panel PP1
+
+  - action: invoke-skill
+    skill: "panel:board --review --repo ."
+    sandbox: true
+    store: board_result
+
+  - action: read-file
+    path: REVIEW_BOARD.md
+    store: board_review
+
+  - action: assert-non-empty
+    input: $board_review
+    description: Board review produced from panel findings
