@@ -1,0 +1,3 @@
+# Waves - temporary files
+context/waves/**/*.tmp
+context/waves/**/*.bak
