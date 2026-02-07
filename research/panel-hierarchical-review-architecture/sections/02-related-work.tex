@@ -25,6 +25,14 @@ Aspect-oriented programming~\cite{kiczales1997aspect} identifies cross-cutting c
 
 Mining software repositories research~\cite{hassan2008road} detects patterns in commit history and issue trackers. Our system applies similar techniques to review corpora, identifying repeated phrases and shared concerns across multiple review documents.
 
+\subsection{Meta-Review and Crowdsourcing Aggregation}
+
+Conference program committees employ meta-reviewers who synthesize individual reviews into consolidated assessments~\cite{shah2018challenges}. OpenReview~\cite{soergel2013openreview} provides infrastructure for meta-review generation, but relies on manual synthesis without automated pattern detection. Our panel and board tiers automate meta-review generation while preserving human oversight for high-stakes decisions.
+
+Crowdsourcing research addresses quality control in multi-agent systems~\cite{bernstein2015crowdsourcing}. The Dawid-Skene model~\cite{dawid1979maximum} estimates worker quality via EM algorithms, weighting aggregated judgments by reliability. Expectation-Maximization approaches~\cite{raykar2010learning} infer ground truth from noisy labels. Our confidence-based deferral mechanism (Section~\ref{sec:oversight}) applies similar principles: low-confidence classifications trigger human review, preventing unreliable AI judgments from propagating.
+
+Collective intelligence research~\cite{woolley2010evidence,malone2010handbook} studies when groups outperform individuals. Our emergent pattern detection validates this: 37-52\% of high-priority issues appear only at higher tiers, suggesting hierarchical synthesis produces insights no individual reviewer generates. However, collective intelligence also warns of groupthink and cascade effects~\cite{lorenz2011social}; our confidence scoring and human oversight mitigate these risks.
+
 \subsection{Gaps in Existing Work}
 
 No prior work combines hierarchical structure, automated pattern detection, priority escalation, and bidirectional flow in a single architecture for AI review systems. Existing systems either operate at a single tier or rely on manual coordination between tiers. Our contribution is a formal architecture with explicit protocols for upward issue escalation and downward directive propagation, validated on 14 papers across 3 modules.

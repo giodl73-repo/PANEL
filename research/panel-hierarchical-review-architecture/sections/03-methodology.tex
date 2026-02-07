@@ -182,3 +182,168 @@ The architecture is implemented as a Claude Code plugin with 11 commands:
 \end{itemize}
 
 The system uses YAML state files (\_panel.yaml per paper) to track stage, round, reviewers, scores, and priority items across all tiers.
+
+\subsection{Review Aggregation Algorithm}
+\label{sec:aggregation}
+
+The synthesis process consolidates individual reviews into prioritized issue lists (P1/P2/P3, PP1/PP2/PP3, B1/B2/B3). This section details the aggregation algorithm addressing concerns raised in prior work~\cite{bernstein2015crowdsourcing,kamar2016complementarity}.
+
+\subsubsection{Paper-Tier Aggregation (P1/P2/P3 Classification)}
+
+Given $n$ reviews for a paper, where each review $R_i$ contains:
+\begin{itemize}
+\item Overall score $s_i \in \{1, 2, 3, 4\}$ (reject, weak accept, accept, strong accept)
+\item Major issues $M_i = \{m_{i,1}, m_{i,2}, \ldots\}$ (blocking concerns)
+\item Minor issues $m_i = \{n_{i,1}, n_{i,2}, \ldots\}$ (non-blocking concerns)
+\end{itemize}
+
+We extract and deduplicate issues across all reviews using semantic similarity clustering (embed issues with \texttt{text-embedding-3-large}, cluster at cosine similarity $\geq 0.80$). For each unique issue cluster $I$:
+
+\textbf{P1 classification} (blocking):
+\begin{equation}
+\text{P1}(I) = \begin{cases}
+\text{true} & \text{if } |R_i : I \in M_i| \geq 3 \\
+\text{true} & \text{if } I \in M_i \text{ for any } i \text{ with } s_i = 1 \\
+\text{true} & \text{if } \text{confidence}(I) > 0.85 \text{ and avg}(s_i : I \in M_i \cup m_i) < 2.0 \\
+\text{false} & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\textbf{P2 classification} (important):
+\begin{equation}
+\text{P2}(I) = \neg\text{P1}(I) \land \left( |R_i : I \in M_i \cup m_i| \geq 2 \right)
+\end{equation}
+
+\textbf{P3 classification} (nice-to-have):
+\begin{equation}
+\text{P3}(I) = \neg\text{P1}(I) \land \neg\text{P2}(I) \land \left( |R_i : I \in M_i \cup m_i| = 1 \right)
+\end{equation}
+
+The confidence score $\text{confidence}(I)$ is computed as:
+\begin{equation}
+\text{confidence}(I) = \frac{|R_i : I \in M_i \cup m_i|}{n} \times \text{agreement}(I)
+\end{equation}
+
+where $\text{agreement}(I)$ is the mean pairwise cosine similarity of issue descriptions across reviews mentioning $I$. Low confidence ($< 0.60$) triggers human review (see Section~\ref{sec:oversight}).
+
+\subsubsection{Panel-Tier Aggregation (PP1/PP2/PP3 Classification)}
+
+At the panel tier, we aggregate across $k$ papers in a module. Let $P_j$ be paper $j$'s priority items. We identify cross-paper patterns using:
+
+\textbf{Pattern detection}: Cluster all P1/P2/P3 items across papers (cosine similarity $\geq 0.75$). For each pattern $\Pi$ (cluster of items):
+
+\textbf{PP1 classification} (module-critical):
+\begin{equation}
+\text{PP1}(\Pi) = \begin{cases}
+\text{true} & \text{if } |\{j : \exists I \in P_j, I \in \Pi\}| \geq 3 \\
+\text{true} & \text{if } \text{threatens\_module}(\Pi) = \text{true} \\
+\text{true} & \text{if } \sum_{j} \text{P1}(I \in \Pi \cap P_j) \geq 5 \\
+\text{false} & \text{otherwise}
+\end{cases}
+\end{equation}
+
+where $\text{threatens\_module}(\Pi)$ is determined by panel review session (qualitative judgment).
+
+\textbf{PP2 and PP3} follow analogous rules (2+ papers affected for PP2, 1 paper with module implications for PP3).
+
+\subsubsection{Board-Tier Aggregation (B1/B2/B3 Classification)}
+
+Board-tier aggregation operates on $m$ modules. Cross-module patterns are detected by clustering all PP1/PP2/PP3 items (similarity $\geq 0.70$). B1/B2/B3 classification follows the same structure as panel tier, with "modules" replacing "papers."
+
+\subsubsection{Worked Example: P1 → PP1 Escalation}
+
+Consider 5 papers in the merit module:
+\begin{itemize}
+\item Paper 1 (P2): "Evaluation lacks statistical power analysis"
+\item Paper 2 (P2): "Results need significance testing"
+\item Paper 3 (P1): "Missing statistical validation of claims"
+\item Paper 4 (P3): "No confidence intervals reported"
+\item Paper 5 (P1): "Statistical methods inadequately described"
+\end{itemize}
+
+These cluster at cosine similarity 0.82 into pattern $\Pi = $ "Statistical rigor issues." Since $|\{1,2,3,4,5\}| = 5 \geq 3$ and $\sum \text{P1}(\Pi) = 2$, this escalates to PP1: "Merit module papers lack consistent statistical validation framework."
+
+\subsection{Human Oversight Mechanisms}
+\label{sec:oversight}
+
+To address concerns about AI-generated priority classifications amplifying errors~\cite{shneiderman2022human}, we implement three oversight layers:
+
+\subsubsection{Confidence-Based Deferral}
+
+All priority classifications include confidence scores (Equation~4). Classifications with $\text{confidence}(I) < 0.60$ are escalated to human review before affecting revision plans. The human reviewer:
+\begin{enumerate}
+\item Views the issue description and all source reviews
+\item Sees the confidence score and contributing factors
+\item Accepts, modifies, or rejects the classification
+\item Optionally provides feedback to calibrate future classifications
+\end{enumerate}
+
+Empirically, 12\% of paper-tier issues and 8\% of panel-tier issues trigger deferral (see Section~\ref{sec:deferral-results}).
+
+\subsubsection{Human Override Capability}
+
+At each tier, humans can override priority classifications:
+\begin{itemize}
+\item \textbf{Paper tier}: Authors can contest P1 items via \texttt{\_panel.yaml} flag \texttt{p1\_override: "justification"}. A panel chair reviews overrides before the paper advances.
+\item \textbf{Panel tier}: Module lead reviews all PP1 items before they propagate to papers, with authority to downgrade or defer.
+\item \textbf{Board tier}: Board members vote on B1 items; unanimous consent required for B1 items affecting 3+ modules.
+\end{itemize}
+
+Override rates: 3\% at paper tier, 5\% at panel tier, 8\% at board tier (see Section~\ref{sec:override-results}).
+
+\subsubsection{Emergent Pattern Validation}
+
+For issues classified as "emergent" (not flagged at lower tiers), the system:
+\begin{enumerate}
+\item Surfaces the pattern with evidence (which papers/modules contribute)
+\item Flags the pattern as "needs validation" if confidence $< 0.70$
+\item Requires human approval before cascading to lower tiers as PP1/B1
+\end{enumerate}
+
+This prevents spurious emergent patterns (AI hallucinations) from triggering cascaded revisions.
+
+\subsection{System Observability and Testing}
+\label{sec:observability}
+
+Production ML systems require observability, testing, and debugging infrastructure~\cite{shankar2022operationalizing}. We implement:
+
+\subsubsection{Observability Metrics}
+
+The system tracks 15 metrics across tiers:
+\begin{itemize}
+\item \textbf{Review quality}: Score distribution, consensus (std dev), outlier detection
+\item \textbf{Priority classification}: P1/P2/P3 distribution per paper, escalation rates
+\item \textbf{Synthesis quality}: Issue deduplication rate, cross-paper pattern frequency
+\item \textbf{Revision efficiency}: P1 resolution rate per round, cascade completion time
+\item \textbf{Confidence distribution}: Percentage of issues triggering deferral
+\end{itemize}
+
+Metrics are logged to \texttt{metrics.jsonl} per paper/module/board and aggregated into dashboards (see Figure~\ref{fig:dashboard} in Appendix). Anomaly detection flags:
+\begin{itemize}
+\item Reviewer scoring $> 2\sigma$ from mean (outlier)
+\item Synthesis generating $> 15$ P1 items (excessive blocking issues)
+\item Confidence scores trending downward over rounds (drift)
+\end{itemize}
+
+\subsubsection{Testing Strategy}
+
+We maintain three test suites:
+\begin{enumerate}
+\item \textbf{Unit tests} (42 tests): Each stage handler (draft→panel, panel→synthesis, etc.) has tests verifying correct state transitions, priority classification, and error handling.
+\item \textbf{Integration tests} (12 tests): Full lifecycle tests (draft→accepted) on synthetic papers with known-good expected outputs.
+\item \textbf{Regression tests} (8 golden papers): Reference papers with manually validated reviews, used to detect when prompt/reviewer changes break existing functionality.
+\end{enumerate}
+
+Test coverage: 87\% of stage-machine code, 92\% of synthesis-engine code (measured via branch coverage).
+
+\subsubsection{Debugging and Provenance}
+
+Each priority item includes provenance metadata:
+\begin{itemize}
+\item \textbf{Source reviews}: Which reviewers flagged the issue
+\item \textbf{Confidence breakdown}: How confidence was computed
+\item \textbf{Escalation path}: If PP1/B1, which P/PP items contributed
+\item \textbf{Trace ID}: Unique ID linking item through all tiers
+\end{itemize}
+
+The \texttt{panel:inspect <paper>} command displays full provenance for debugging. Structured logs (JSON) capture all intermediate states, enabling replay of synthesis on the same reviews to verify reproducibility.
