@@ -25,7 +25,17 @@ Track changes in Microsoft Word and Google Docs enable collaborative document ed
 
 Our system generates edits automatically rather than tracking human edits. However, we adopt the revision tracking model: each edit is logged with justification (which review item prompted it), enabling rollback if edits are rejected.
 
-\subsection{Prompt Engineering for Code Editing}
+\subsection{Crowd-Based Revision and Professional Editing}
+
+An alternative to automated revision is human-powered editing through crowdsourcing or professional services. Platforms like Upwork, Fiverr, and Scribbr connect authors with editors who provide proofreading, copyediting, and substantive editing services~\cite{bernstein2010soylent}. Turnaround times range from 24 hours (expedited) to 1 week (standard), with costs from \$50 (basic proofreading) to \$1000+ (substantive editing).
+
+Soylent~\cite{bernstein2010soylent} demonstrated crowd-powered word processing where mechanical tasks (shorten text, proofread) are outsourced to Amazon Mechanical Turk workers. This hybrid model achieves quality comparable to expert editors at lower cost, but with higher latency (minutes to hours per task).
+
+\textbf{Comparison to automated revision}: Crowd-based editing offers human judgment and domain expertise that automation lacks, particularly for subjective tasks (improve flow, strengthen argument). However, crowds cannot match automation's speed (minutes vs. days) or cost (\$0.50 API cost vs. \$500 editor fee). The optimal workflow may be \textit{hybrid}: automate mechanical edits (typos, citations), outsource complex edits to crowds or professionals, and reserve author effort for conceptual refinement.
+
+Collaborative platforms like Overleaf enable co-authors or advisors to directly edit drafts~\cite{overleaf2023}, providing instant feedback at zero marginal cost. This is the fastest and cheapest alternative, but requires availability of knowledgeable collaborators willing to spend time on revisions.
+
+Our system targets a different point in the design space: fully automated revision for mechanical tasks, with 64\% time reduction at minimal cost (\$12 per paper in API fees, see Section~\ref{sec:discussion}). We trade human judgment (crowds/professionals) for speed and cost efficiency, accepting that 22\% of tasks still require author judgment.
 
 Recent work shows LLMs can edit code when prompted with specific instructions~\cite{chen2021codex}. Copilot~\cite{chen2021evaluating} generates code completions, while Cursor and Aider~\cite{aider2023} enable conversational code editing.
 

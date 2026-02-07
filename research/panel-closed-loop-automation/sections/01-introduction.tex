@@ -2,7 +2,7 @@
 
 AI-assisted peer review has made substantial progress in generating structured, expert-level feedback for research papers~\cite{dellalibera2026review,damour2023simulated}. These systems successfully identify weaknesses, suggest improvements, and classify issues by priority. However, they share a critical limitation: \textbf{the revision process remains entirely manual}. After generating reviews, authors must interpret feedback, locate the relevant LaTeX code, and apply edits themselves. This creates a bottleneck: the system can produce 20+ pages of detailed feedback in minutes, but authors spend days or weeks implementing revisions.
 
-This paper addresses the question: \textbf{Can we close the loop from review generation to revision implementation?} Specifically, can an AI system not only generate feedback but also apply the suggested edits directly to LaTeX source files?
+This paper addresses the question: \textbf{Where is the boundary between automatable and human-essential revision tasks?} When can an AI system safely apply edits directly to LaTeX source, and when must authors retain control? Understanding this boundary has implications for human-centered AI design: how do we build systems that augment authorial agency rather than replace it?
 
 We present a \textbf{closed-loop automation system} that bridges the review-revision gap through three phases:
 
@@ -14,7 +14,7 @@ We present a \textbf{closed-loop automation system} that bridges the review-revi
 \item \textbf{Execution}: Parse REVISION-PLAN.md and apply edits to LaTeX files using structured code transformation tools (Claude Code's Edit tool, enabling precise string replacement with diff validation).
 \end{enumerate}
 
-The system operates iteratively: after applying edits, papers are re-reviewed, new feedback is synthesized, and the cycle repeats until convergence (average score ≥ 2.5/4, no score < 2/4).
+The system operates iteratively: after applying edits, papers are re-reviewed, new feedback is synthesized, and the cycle repeats until convergence (average score $\geq$ 2.5/4, no score < 2/4).
 
 \subsection{Key Challenges}
 
@@ -45,11 +45,11 @@ We evaluate the system on 14 papers across 3 research modules (merit, waves, bas
 This work makes three contributions:
 
 \begin{enumerate}
-\item The first end-to-end closed-loop system bridging AI review generation and automated revision implementation for academic papers.
+\item \textbf{Mapping the automation boundary}: Empirical analysis of which revision tasks are safely automatable (78\% of critical items: mechanical corrections, evidence insertion) vs. which require human judgment (22\%: conceptual refinement, structural changes). This taxonomy informs human-centered design of writing assistance tools.
 
-\item Empirical analysis of revision completion patterns across 33 cycles: which items are automatable (78\% of P1), which require human judgment (22\%), and why.
+\item \textbf{The first end-to-end closed-loop system} bridging AI review generation and revision implementation, demonstrating that the gap is tractable for structured documents while revealing where automation threatens authorial agency.
 
-\item A reusable architecture for structured document transformation applicable to any domain with well-defined syntax (code refactoring, legal document editing, technical specification updates).
+\item \textbf{Design principles for human-centered automated revision}: Transparency (show why edits are suggested), selective automation (respect author preferences), and edit provenance (maintain traceable history). These principles extend to any domain where AI systems modify human-authored artifacts.
 \end{enumerate}
 
 The remainder of this paper is organized as follows: Section~\ref{sec:related} surveys related work in automated program repair and document transformation. Section~\ref{sec:method} details the three-phase architecture (synthesis, planning, execution) and edit validation protocols. Section~\ref{sec:results} presents evaluation across 14 papers. Section~\ref{sec:discussion} analyzes trade-offs and design decisions. Section~\ref{sec:conclusion} concludes with future work and generalization to other domains.

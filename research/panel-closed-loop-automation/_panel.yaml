@@ -5,16 +5,20 @@ created: 2026-02-06
 p1_items:
   - id: P1.1
     description: Missing Human-Centered Analysis and Framing
-    addressed: false
+    addressed: true
+    changes: Added Discussion subsection on human agency, reframed intro/contributions, added author experience section to Results
   - id: P1.2
     description: No Comparison to Manual Revision Quality or Alternative Workflows
-    addressed: false
+    addressed: true
+    changes: Added Related Work subsection on crowd-based revision, added cost-benefit analysis to Discussion, noted quality comparison gap in Limitations
   - id: P1.3
     description: Insufficient Treatment of Learning and Adaptation
-    addressed: false
+    addressed: true
+    changes: Added detailed Future Work subsections on learning from feedback and reflection mechanisms with concrete architectures
   - id: P1.4
     description: Underspecified Operational Aspects and Failure Modes
-    addressed: false
+    addressed: true
+    changes: Added Methodology subsections on failure detection, observability, error propagation; expanded Limitations with risks
 reviewers:
   - name: Ben Shneiderman
     affiliation: University of Maryland
