@@ -11,29 +11,35 @@ description: |
   and reads their panel review findings.
 
 steps:
-  - action: mock-monorepo
-    modules:
-      - name: performance
-        has_review_panel: true
-        paper_count: 3
-      - name: waves
-        has_review_panel: true
-        paper_count: 2
-      - name: basecamp
-        has_review_panel: false
-        paper_count: 0
-    store: repo
-
+  # Use the real Sesame Street mock monorepo (3 modules, all have REVIEW_PANEL.md)
   - action: invoke-discover-modules
-    input: $repo
+    repo: tests/fixtures/mock-monorepo
     store: discovered
 
   - action: assert-array-length
     input: $discovered
-    expected: 2
-    description: Only modules with REVIEW_PANEL.md discovered
+    expected: 3
+    description: "All 3 Sesame Street modules discovered"
 
   - action: assert-array-contains
     input: $discovered
     key: name
-    values: [performance, waves]
+    values: [cookie-science, grover-adventures, oscar-trash-lab]
+
+  - action: assert-module-papers
+    input: $discovered
+    module: cookie-science
+    expected_count: 5
+    description: "Cookie Monster's lab has 5 papers"
+
+  - action: assert-module-papers
+    input: $discovered
+    module: grover-adventures
+    expected_count: 5
+    description: "Grover's adventures has 5 papers"
+
+  - action: assert-module-papers
+    input: $discovered
+    module: oscar-trash-lab
+    expected_count: 5
+    description: "Oscar's trash lab has 5 papers"

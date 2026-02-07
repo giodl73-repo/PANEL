@@ -10,16 +10,10 @@ description: |
   with paper name, current stage, round, score, and next action.
 
 steps:
+  # Use cookie-science module — papers at various stages
   - action: prepare-module
-    papers:
-      - name: panel-review-methodology
-        stage: synthesis
-        round: 1
-        score: 3.0
-      - name: panel-reviewer-calibration
-        stage: draft
-        round: 0
-        score: null
+    source: tests/fixtures/mock-monorepo/cookie-science
+    description: "Cookie Science Lab: 5 papers at ready/recheck stages"
 
   - action: invoke-skill
     skill: "panel:status"
@@ -28,20 +22,25 @@ steps:
 
   - action: assert-contains
     input: $output
-    pattern: "panel-review-methodology"
-    description: Lists first paper
+    pattern: "chip-distribution"
+    description: "Lists Cookie Monster's chip distribution paper"
 
   - action: assert-contains
     input: $output
-    pattern: "panel-reviewer-calibration"
-    description: Lists second paper
+    pattern: "crumb-analysis"
+    description: "Lists crumb analysis paper"
 
   - action: assert-contains
     input: $output
-    pattern: "synthesis"
-    description: Shows correct stage
+    pattern: "dunk-methodology"
+    description: "Lists dunk methodology paper"
 
   - action: assert-contains
     input: $output
-    pattern: "draft"
-    description: Shows correct stage for second paper
+    pattern: "ready"
+    description: "Shows 'ready' stage for advanced papers"
+
+  - action: assert-contains
+    input: $output
+    pattern: "recheck"
+    description: "Shows 'recheck' stage for crumb-analysis"

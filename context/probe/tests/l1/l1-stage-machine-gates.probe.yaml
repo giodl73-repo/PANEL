@@ -7,34 +7,32 @@ timeout: 30
 
 description: |
   Verify that stage-machine checks gate conditions before advancing.
-  Each of the 8 stages has specific artifact/score requirements.
-  Transitions should be blocked when gates are unmet.
+  Uses Sesame Street mock papers at various stages for realistic testing.
 
 steps:
+  # DRAFT gate: main.tex + venue set
   - action: validate-gate
     stage: draft
     condition: main.tex exists and venue set
-    mock_state:
-      stage: draft
-      venue: "CHI 2026"
-      artifacts: [main.tex]
+    fixture: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-recycling-optimization
+    description: "Oscar's recycling paper is at draft with main.tex + venue (SIGMOD 2026)"
     expect: pass
 
   - action: validate-gate
     stage: draft
-    condition: main.tex missing
+    condition: main.tex missing (simulated)
     mock_state:
       stage: draft
-      venue: "CHI 2026"
+      venue: null
       artifacts: []
     expect: fail
 
+  # PANEL gate: 5+ review files
   - action: validate-gate
     stage: panel
     condition: 5+ review files
-    mock_state:
-      stage: panel
-      review_count: 5
+    fixture: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-trash-aesthetics
+    description: "Oscar's trash aesthetics paper has 5 reviews (Statler, Waldorf, etc.)"
     expect: pass
 
   - action: validate-gate
@@ -45,21 +43,20 @@ steps:
       review_count: 3
     expect: fail
 
+  # SYNTHESIS gate: SYNTHESIS.md with P1/P2/P3
   - action: validate-gate
     stage: synthesis
     condition: SYNTHESIS.md with P1/P2/P3
-    mock_state:
-      stage: synthesis
-      has_synthesis: true
-      has_tiering: true
+    fixture: tests/fixtures/mock-monorepo/grover-adventures/panel-waiter-dilemma
+    description: "Grover's waiter dilemma has SYNTHESIS.md with tiered findings"
     expect: pass
 
+  # REVISION gate: all P1 addressed
   - action: validate-gate
     stage: revision
     condition: all P1 addressed
-    mock_state:
-      stage: revision
-      p1_all_addressed: true
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution
+    description: "Cookie Monster's chip paper — all P1 items addressed"
     expect: pass
 
   - action: validate-gate
@@ -70,22 +67,22 @@ steps:
       p1_all_addressed: false
     expect: fail
 
+  # RECHECK gate: avg >= 2.5, no score < 2
   - action: validate-gate
     stage: recheck
-    condition: avg >= 2.5, none < 2
-    mock_state:
-      stage: recheck
-      avg_score: 3.0
-      min_score: 2
+    condition: scores meet threshold
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis
+    description: "Crumb analysis has avg 3.0, min 3 — passes recheck"
     expect: pass
 
   - action: validate-gate
     stage: recheck
-    condition: avg below threshold
+    condition: avg below threshold (simulated)
     mock_state:
       stage: recheck
       avg_score: 2.0
       min_score: 1
+    description: "Simulated Statler-and-Waldorf scenario — harsh reviewers"
     expect: fail
 
   - action: assert-stage-sequence

@@ -12,8 +12,9 @@ description: |
 
 steps:
   - action: invoke-selector
-    paper_topic: "NLP evaluation methodology"
-    paper_venue: "EMNLP"
+    paper_topic: "Cookie crumb pattern analysis and classification"
+    paper_venue: "CVPR 2026"
+    reviewer_db: tests/fixtures/mock-monorepo/cookie-science/REVIEWER-DATABASE.md
     count: 5
     store: selected
 
@@ -31,5 +32,17 @@ steps:
 
   - action: assert-topic-relevance
     input: $selected
-    topic: "NLP evaluation methodology"
-    description: Selected reviewers have relevant expertise
+    topic: "cookie crumb pattern analysis"
+    description: "Selected reviewers should include Food Science experts (Cookie Monster, Swedish Chef)"
+
+  - action: invoke-selector
+    paper_topic: "Near-far distance metrics for spatial reasoning"
+    paper_venue: "AAMAS 2026"
+    reviewer_db: tests/fixtures/mock-monorepo/grover-adventures/REVIEWER-DATABASE.md
+    count: 5
+    store: grover_selected
+
+  - action: assert-topic-relevance
+    input: $grover_selected
+    topic: "near-far distance metrics"
+    description: "Should include Navigation experts (Grover, Big Bird)"

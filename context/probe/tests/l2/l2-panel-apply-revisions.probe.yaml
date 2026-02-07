@@ -10,15 +10,10 @@ description: |
   PP1/PP2 findings and applies edits to paper LaTeX source files.
 
 steps:
+  # Use cookie-science module — has REVIEW_PANEL.md with PP1/PP2/PP3 findings
   - action: prepare-module
-    papers:
-      - name: panel-review-methodology
-        stage: ready
-        score: 3.0
-    with_review_panel: true
-    with_pp_findings:
-      PP1: ["Add cross-paper evaluation comparison"]
-      PP2: ["Standardize methodology terminology"]
+    source: tests/fixtures/mock-monorepo/cookie-science
+    description: "Cookie Science Lab with complete REVIEW_PANEL.md containing PP1 (methodology inconsistency)"
 
   - action: invoke-skill
     skill: "panel:panel --apply"
@@ -27,13 +22,13 @@ steps:
 
   - action: file-exists
     path: research/panel-reviews/round-1/PANEL-REVISION-PLAN.md
-    description: Revision plan generated
+    description: "Revision plan generated from PP1/PP2 findings"
 
   - action: read-file
-    path: research/panel-review-methodology/_panel.yaml
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
     store: state
 
   - action: assert-field
     input: $state
     field: stage
-    description: Paper state updated after panel revisions
+    description: "Chip distribution state updated after panel revisions"

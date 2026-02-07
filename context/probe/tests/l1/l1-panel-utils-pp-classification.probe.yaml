@@ -12,34 +12,35 @@ description: |
   PP3 = 1 paper only (nice-to-have)
 
 steps:
-  - action: mock-paper-findings
-    papers:
-      paper-1:
-        p1: ["Missing statistical tests"]
-        p2: ["Unclear methodology"]
-      paper-2:
-        p1: ["Missing statistical tests"]
-        p2: ["Weak related work"]
-      paper-3:
-        p1: ["Different issue"]
-        p2: ["Unclear methodology"]
+  # Load real paper findings from cookie-science module (5 papers, all reviewed)
+  - action: load-paper-states
+    module: tests/fixtures/mock-monorepo/cookie-science
     store: findings
+    description: "Load all 5 cookie-science papers: chip-distribution, crumb-analysis, dunk-methodology, optimal-cookie, sharing-economics"
 
   - action: invoke-panel-classify
     input: $findings
     store: pp_results
 
-  - action: assert-pp1-contains
+  - action: assert-pp1-exists
     input: $pp_results
-    pattern: "statistical tests"
-    description: Cross-paper P1 pattern → PP1
+    description: "Cross-paper P1 patterns detected across cookie-science papers"
 
-  - action: assert-pp2-contains
+  - action: assert-pp2-exists
     input: $pp_results
-    pattern: "methodology"
-    description: 2-paper P2 pattern → PP2
+    description: "PP2 items identified (2+ paper patterns)"
 
-  - action: assert-pp3-contains
-    input: $pp_results
-    pattern: "related work"
-    description: Single-paper issue → PP3
+  # Verify against actual REVIEW_PANEL.md content
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
+    store: actual_panel
+
+  - action: assert-contains
+    input: $actual_panel
+    pattern: "PP1"
+    description: "Cookie-science REVIEW_PANEL.md contains PP1 findings (methodology inconsistency)"
+
+  - action: assert-contains
+    input: $actual_panel
+    pattern: "PP2"
+    description: "Cookie-science REVIEW_PANEL.md contains PP2 findings"

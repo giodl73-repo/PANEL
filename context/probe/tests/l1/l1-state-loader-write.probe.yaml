@@ -11,7 +11,7 @@ description: |
 
 steps:
   - action: prepare-fixture
-    source: fixtures/sample-panel-state.yaml
+    source: tests/fixtures/mock-monorepo/grover-adventures/panel-waiter-dilemma/_panel.yaml
     dest: mock-scenarios/write-test/_panel.yaml
 
   - action: mutate-state
@@ -21,7 +21,7 @@ steps:
       history_append:
         stage: revision
         date: "2026-02-01"
-        note: "Revision started"
+        note: "Grover begins revising the waiter dilemma"
         round: 1
 
   - action: read-file
@@ -39,8 +39,13 @@ steps:
   - action: assert-field
     input: $updated
     field: paper
-    expected: panel-review-methodology
+    expected: panel-waiter-dilemma
     description: Original fields preserved
+
+  - action: assert-reviewer-names
+    input: $updated.reviewers
+    expected: [Grover, Big Bird, Mr. Snuffleupagus, Elmo, Dr. Bunsen Honeydew]
+    description: Reviewer panel preserved
 
   - action: assert-array-length-gte
     input: $updated.history

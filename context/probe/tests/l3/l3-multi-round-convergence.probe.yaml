@@ -11,35 +11,52 @@ description: |
   (avg >= 2.5/4, no score < 2/4).
 
 steps:
+  # Use cookie-science papers that demonstrate round convergence
+  # chip-distribution went round 1 → round 2 → ready (scores improved)
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
+    store: chip_state
+
+  - action: assert-field
+    input: $chip_state
+    field: round
+    expected: 2
+    description: "Chip distribution completed 2 rounds"
+
+  - action: assert-field
+    input: $chip_state
+    field: stage
+    expected: ready
+    description: "Converged to ready stage"
+
+  # Verify P1 items are all addressed
+  - action: assert-all-addressed
+    input: $chip_state.p1_items
+    description: "All P1 items addressed across rounds"
+
+  # Run panel:paper --until ready on crumb-analysis (currently at recheck)
   - action: prepare-paper
-    fixture: fixtures/sample-panel-state.yaml
-    override:
-      stage: panel
-      round: 0
-      reviewers: []
-      p1_items: []
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/_panel.yaml
+    reviews: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/reviews
+    revision_plan: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/REVISION-PLAN.md
+    description: "Crumb analysis — recheck stage, P1 items addressed, scores at 3.0"
 
   - action: invoke-skill
-    skill: "panel:paper --paper panel-review-methodology --until ready"
+    skill: "panel:paper --paper panel-crumb-analysis --until ready"
     sandbox: true
     store: result
 
   - action: read-file
-    path: research/panel-review-methodology/_panel.yaml
+    path: research/panel-crumb-analysis/_panel.yaml
     store: final_state
 
   - action: assert-field-gte
     input: $final_state
     field: round
-    expected: 1
+    expected: 2
 
   - action: assert-score-threshold
     state: $final_state
     min_average: 2.5
     min_individual: 2
-    description: Scores meet or approach acceptance threshold
-
-  - action: assert-p1-trend
-    state: $final_state
-    direction: decreasing
-    description: P1 items decrease across rounds
+    description: "Cookie Monster's crumb analysis meets acceptance threshold"

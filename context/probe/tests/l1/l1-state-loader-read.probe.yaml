@@ -3,17 +3,17 @@ name: state-loader reads _panel.yaml and returns structured state
 tier: L1
 plugin: panel
 target: shared/state-loader.md
-fixture: fixtures/sample-panel-state.yaml
+fixture: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
 timeout: 30
 
 description: |
   Verify that the state-loader shared utility correctly parses a _panel.yaml
-  file and returns all expected fields: paper name, title, venue, stage,
-  round, reviewers array, reviews object, p1_items, and history.
+  file and returns all expected fields. Uses the cookie-science chip-distribution
+  paper which is at 'ready' stage with round 2 data — the most complete fixture.
 
 steps:
   - action: read-file
-    path: fixtures/sample-panel-state.yaml
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
     store: state
 
   - action: assert-valid-yaml
@@ -22,17 +22,17 @@ steps:
   - action: assert-field
     input: $state
     field: paper
-    expected: panel-review-methodology
+    expected: panel-chip-distribution
 
   - action: assert-field
     input: $state
     field: stage
-    expected: synthesis
+    expected: ready
 
   - action: assert-field
     input: $state
     field: round
-    expected: 1
+    expected: 2
 
   - action: assert-field-type
     input: $state
@@ -42,6 +42,10 @@ steps:
   - action: assert-array-length
     input: $state.reviewers
     expected: 5
+
+  - action: assert-reviewer-names
+    input: $state.reviewers
+    expected: [Cookie Monster, Swedish Chef, Count von Count, Prairie Dawn, Bert]
 
   - action: assert-field-type
     input: $state
@@ -57,3 +61,8 @@ steps:
     input: $state
     field: history
     expected: array
+
+  - action: assert-array-length
+    input: $state.history
+    expected: 6
+    description: Full lifecycle history (draft→panel→synthesis→revision→recheck→ready)

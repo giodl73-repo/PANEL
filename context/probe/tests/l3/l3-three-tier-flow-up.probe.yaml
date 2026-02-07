@@ -14,44 +14,49 @@ description: |
   Verify priority escalation (P1 → PP1 → B1) when patterns span papers/modules.
 
 steps:
-  - action: prepare-module
-    papers:
-      - name: paper-a
-        stage: synthesis
-        score: 2.5
-        p1: ["Missing statistical tests"]
-      - name: paper-b
-        stage: synthesis
-        score: 2.8
-        p1: ["Missing statistical tests"]
-      - name: paper-c
-        stage: synthesis
-        score: 3.2
-        p1: ["Different issue"]
+  # Bottom-up flow using all 3 Sesame Street modules
+  - action: prepare-monorepo
+    source: tests/fixtures/mock-monorepo
+    description: "Full Sesame Street monorepo: cookie-science (ready), grover-adventures (synthesis), oscar-trash-lab (mixed)"
 
+  # Tier 1: Paper-level reviews already exist in fixtures
+  - action: verify-reviews-exist
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/reviews
+    expected_count: 10
+    description: "Chip distribution has 5 round-1 + 5 round-2 reviews"
+
+  # Tier 2: Panel review synthesizes paper findings
   - action: invoke-skill
     skill: "panel:panel --review"
     sandbox: true
+    cwd: tests/fixtures/mock-monorepo/cookie-science
     store: panel_result
 
   - action: read-file
-    path: research/REVIEW_PANEL.md
+    path: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
     store: panel_review
 
   - action: assert-contains
     input: $panel_review
-    pattern: "statistical tests"
-    description: Cross-paper P1 pattern surfaces to panel PP1
+    pattern: "PP1"
+    description: "Paper P1 patterns surface to panel PP1 (methodology inconsistency across cookie papers)"
 
+  # Tier 3: Board review synthesizes module findings
   - action: invoke-skill
-    skill: "panel:board --review --repo ."
+    skill: "panel:board --review --repo tests/fixtures/mock-monorepo"
     sandbox: true
     store: board_result
 
   - action: read-file
-    path: REVIEW_BOARD.md
+    path: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
     store: board_review
 
-  - action: assert-non-empty
+  - action: assert-contains
     input: $board_review
-    description: Board review produced from panel findings
+    pattern: "cookie-science"
+    description: "Board review incorporates cookie-science findings"
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "grover-adventures"
+    description: "Board review incorporates grover-adventures findings"

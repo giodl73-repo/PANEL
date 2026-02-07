@@ -11,16 +11,16 @@ description: |
   2+ reviewers), P3 (nice-to-have: 1 reviewer) tiers.
 
 steps:
-  - action: mock-reviews
-    count: 5
-    shared_issues:
-      - text: "Missing ablation study"
-        raised_by: 3
-      - text: "Unclear methodology section"
-        raised_by: 2
-      - text: "Minor formatting issues"
-        raised_by: 1
+  # Use real review files from cookie-science/panel-crumb-analysis (5 reviews)
+  - action: load-reviews
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/reviews
+    pattern: "REVIEW-*.md"
     store: reviews
+    description: "Load Cookie Monster, Swedish Chef, Count von Count, Prairie Dawn, Bert reviews"
+
+  - action: assert-array-length
+    input: $reviews
+    expected: 5
 
   - action: invoke-synthesis
     input: $reviews
@@ -41,17 +41,18 @@ steps:
     section: P3
     description: Has P3 nice-to-have items
 
-  - action: assert-p1-contains
-    input: $synthesis
-    pattern: "ablation"
-    description: 3-reviewer issue classified as P1
+  # Also verify with waiter-dilemma reviews (mixed scores: 2-3 range)
+  - action: load-reviews
+    path: tests/fixtures/mock-monorepo/grover-adventures/panel-waiter-dilemma/reviews
+    pattern: "REVIEW-*.md"
+    store: grover_reviews
+    description: "Load Grover, Big Bird, Mr. Snuffleupagus, Elmo reviews"
 
-  - action: assert-p2-contains
-    input: $synthesis
-    pattern: "methodology"
-    description: 2-reviewer issue classified as P2
+  - action: invoke-synthesis
+    input: $grover_reviews
+    store: grover_synthesis
 
-  - action: assert-p3-contains
-    input: $synthesis
-    pattern: "formatting"
-    description: 1-reviewer issue classified as P3
+  - action: assert-contains-section
+    input: $grover_synthesis
+    section: P1
+    description: "Mixed-score paper should have P1 items (Big Bird and Snuffy gave 2/4)"

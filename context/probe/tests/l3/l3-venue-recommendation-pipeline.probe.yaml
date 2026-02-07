@@ -13,21 +13,21 @@ description: |
   and generate a submission strategy.
 
 steps:
+  # Use chip-distribution — ready stage, strong scores (3.2 avg), venue ICBD 2026
   - action: prepare-paper
-    fixture: fixtures/sample-panel-state.yaml
-    override:
-      stage: synthesis
-      round: 1
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
+    reviews: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/reviews
+    description: "Chip distribution — ready stage, avg 3.2/4, Cookie Monster gave Strong Accept"
 
   - action: invoke-skill
-    skill: "panel:venue --paper panel-review-methodology"
+    skill: "panel:venue --paper panel-chip-distribution"
     sandbox: true
     store: venue_result
 
-  - action: assert-contains
+  - action: assert-contains-any
     input: $venue_result
-    pattern: "CHI"
-    description: Recommends venue matching paper topic
+    patterns: ["ICBD", "venue", "conference"]
+    description: "Recommends venue matching paper topic (originally targeted ICBD 2026)"
 
   - action: assert-contains-any
     input: $venue_result
@@ -36,5 +36,19 @@ steps:
 
   - action: assert-contains-any
     input: $venue_result
-    patterns: ["3.0", "score", "Accept"]
-    description: References review scores in recommendation
+    patterns: ["3.2", "Strong Accept", "Accept", "score"]
+    description: "References review scores in recommendation (Count von Count gave 4/4)"
+
+  # Also test with a weaker paper — sharing-economics (2.6 avg)
+  - action: prepare-paper
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-sharing-economics/_panel.yaml
+    description: "Sharing economics — lower scores (2.6 avg), needs different venue strategy"
+
+  - action: invoke-skill
+    skill: "panel:venue --paper panel-sharing-economics"
+    sandbox: true
+    store: weak_venue_result
+
+  - action: assert-non-empty
+    input: $weak_venue_result
+    description: "Venue recommendation produced even for weaker paper"

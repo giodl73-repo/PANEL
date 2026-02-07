@@ -10,36 +10,37 @@ description: |
   members, generates REVIEW_BOARD.md with B1/B2/B3 cross-module findings.
 
 steps:
-  - action: mock-monorepo
-    modules:
-      - name: panel
-        has_review_panel: true
-        score: 7.5
-      - name: performance
-        has_review_panel: true
-        score: 6.8
+  # Use the full Sesame Street mock monorepo (3 modules)
+  - action: prepare-monorepo
+    source: tests/fixtures/mock-monorepo
+    description: "Sesame Street monorepo: cookie-science, grover-adventures, oscar-trash-lab"
 
   - action: invoke-skill
-    skill: "panel:board --review --repo ."
+    skill: "panel:board --review --repo tests/fixtures/mock-monorepo"
     sandbox: true
     store: result
 
   - action: file-exists
-    path: REVIEW_BOARD.md
+    path: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
 
   - action: read-file
-    path: REVIEW_BOARD.md
+    path: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
     store: board_review
 
   - action: assert-contains
     input: $board_review
-    pattern: "B1"
-    description: Contains B1 findings
+    pattern: "cookie-science"
+    description: "References Cookie Monster's science module"
 
   - action: assert-contains
     input: $board_review
-    pattern: "panel"
-    description: References panel module
+    pattern: "grover-adventures"
+    description: "References Grover's adventure module"
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "oscar-trash-lab"
+    description: "References Oscar's trash research module"
 
   - action: assert-contains
     input: $board_review

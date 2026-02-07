@@ -14,34 +14,37 @@ description: |
   and apply edits to LaTeX source.
 
 steps:
-  - action: prepare-board-state
-    with_b_findings:
-      B1: ["Standardize evaluation metrics across all modules"]
-      B2: ["Improve cross-referencing between papers"]
+  # Top-down flow using the Sesame Street monorepo
+  - action: prepare-monorepo
+    source: tests/fixtures/mock-monorepo
+    description: "Full Sesame Street monorepo with 3 modules"
 
+  # Board generates B1/B2 findings and per-module revision plans
   - action: invoke-skill
-    skill: "panel:board --revisions"
+    skill: "panel:board --revisions --repo tests/fixtures/mock-monorepo"
     sandbox: true
     store: board_revisions
 
   - action: glob
-    pattern: BOARD-REVISION-PLAN-*.md
+    pattern: tests/fixtures/mock-monorepo/BOARD-REVISION-PLAN-*.md
     store: board_plans
 
   - action: assert-count-gte
     input: $board_plans
     expected: 1
-    description: Board generates per-module revision plans
+    description: "Board generates per-module revision plans (cookie-science, grover-adventures)"
 
+  # Panel applies board findings down to papers
   - action: invoke-skill
     skill: "panel:panel --apply"
     sandbox: true
+    cwd: tests/fixtures/mock-monorepo/cookie-science
     store: panel_apply
 
   - action: read-file
-    path: research/panel-review-methodology/_panel.yaml
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
     store: paper_state
 
   - action: assert-non-empty
     input: $paper_state
-    description: Paper state updated from top-down revisions
+    description: "Cookie Monster's chip-distribution state updated from top-down revisions"

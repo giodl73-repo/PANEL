@@ -11,20 +11,22 @@ description: |
   state to panel stage.
 
 steps:
+  # Use Oscar's recycling paper — it's at draft stage with no reviews
   - action: prepare-paper
-    fixture: fixtures/sample-panel-state.yaml
+    fixture: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-recycling-optimization/_panel.yaml
     override:
       stage: draft
       round: 0
       reviewers: []
+    description: "Oscar's recycling paper — draft stage, needs reviewers"
 
   - action: invoke-skill
-    skill: "panel:paper --paper panel-review-methodology"
+    skill: "panel:paper --paper panel-recycling-optimization"
     sandbox: true
     store: result
 
   - action: read-file
-    path: research/panel-review-methodology/_panel.yaml
+    path: research/panel-recycling-optimization/_panel.yaml
     store: state
 
   - action: assert-field
@@ -35,10 +37,10 @@ steps:
   - action: assert-array-length
     input: $state.reviewers
     expected: 5
-    description: 5 reviewers selected
+    description: "5 reviewers selected (expect Oscar, Statler, Waldorf, Miss Piggy, Scooter)"
 
   - action: glob
-    pattern: research/panel-review-methodology/reviews/REVIEW-*.md
+    pattern: research/panel-recycling-optimization/reviews/REVIEW-*.md
     store: reviews
 
   - action: assert-count-gte

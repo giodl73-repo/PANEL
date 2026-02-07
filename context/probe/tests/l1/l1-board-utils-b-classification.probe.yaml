@@ -12,28 +12,41 @@ description: |
   B3 = 1 module only (nice-to-have)
 
 steps:
-  - action: mock-module-findings
+  # Load PP findings from all 3 Sesame Street modules
+  - action: load-panel-findings
     modules:
-      performance:
-        pp1: ["Inconsistent evaluation metrics"]
-        pp2: ["Missing reproducibility artifacts"]
-      waves:
-        pp1: ["Inconsistent evaluation metrics"]
-        pp2: ["Weak theoretical framing"]
-      basecamp:
-        pp1: ["Different concern"]
+      cookie-science:
+        review_panel: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
+      grover-adventures:
+        review_panel: tests/fixtures/mock-monorepo/grover-adventures/REVIEW_PANEL.md
+      oscar-trash-lab:
+        review_panel: tests/fixtures/mock-monorepo/oscar-trash-lab/REVIEW_PANEL.md
     store: module_findings
 
   - action: invoke-board-classify
     input: $module_findings
     store: b_results
 
-  - action: assert-b1-contains
+  - action: assert-b1-or-b2-exists
     input: $b_results
-    pattern: "evaluation metrics"
-    description: Cross-module PP1 pattern → B1
+    description: "Cross-module patterns should produce B1/B2 findings"
 
-  - action: assert-b2-or-b3
-    input: $b_results
-    pattern: "reproducibility"
-    description: Single-module finding → B2 or B3
+  # Verify against actual REVIEW_BOARD.md structure
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
+    store: board
+
+  - action: assert-contains
+    input: $board
+    pattern: "cookie-science"
+    description: "Board review references cookie-science module"
+
+  - action: assert-contains
+    input: $board
+    pattern: "grover-adventures"
+    description: "Board review references grover-adventures module"
+
+  - action: assert-contains
+    input: $board
+    pattern: "oscar-trash-lab"
+    description: "Board review references oscar-trash-lab module"

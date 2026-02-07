@@ -14,30 +14,17 @@ description: |
   a cross-portfolio assessment, and verify panel:status reflects all.
 
 papers:
-  - panel-review-methodology
-  - panel-reviewer-calibration
-  - panel-revision-dynamics
-  - panel-portfolio-assessment
-  - panel-synthesis-methods
+  - panel-chip-distribution
+  - panel-crumb-analysis
+  - panel-dunk-methodology
+  - panel-optimal-cookie-consumption
+  - panel-sharing-economics
 
 steps:
-  - action: prepare-all-papers
-    papers:
-      - name: panel-review-methodology
-        stage: synthesis
-        score: 3.0
-      - name: panel-reviewer-calibration
-        stage: synthesis
-        score: 2.8
-      - name: panel-revision-dynamics
-        stage: synthesis
-        score: 3.2
-      - name: panel-portfolio-assessment
-        stage: synthesis
-        score: 2.5
-      - name: panel-synthesis-methods
-        stage: synthesis
-        score: 3.5
+  # Use the complete cookie-science module — 5 papers at various stages
+  - action: prepare-module
+    source: tests/fixtures/mock-monorepo/cookie-science
+    description: "Cookie Science Lab: 5 papers (chip-distribution, crumb-analysis, dunk-methodology, optimal-cookie, sharing-economics)"
 
   - action: invoke-skill
     skill: "panel:panel --review"
@@ -54,17 +41,36 @@ steps:
 
   - action: assert-contains
     input: $status_output
-    pattern: "panel-review-methodology"
+    pattern: "chip-distribution"
+    description: "Cookie Monster's chip distribution paper listed"
   - action: assert-contains
     input: $status_output
-    pattern: "panel-reviewer-calibration"
+    pattern: "crumb-analysis"
+    description: "Crumb analysis paper listed"
   - action: assert-contains
     input: $status_output
-    pattern: "panel-revision-dynamics"
+    pattern: "dunk-methodology"
+    description: "Dunk methodology paper listed"
   - action: assert-contains
     input: $status_output
-    pattern: "panel-portfolio-assessment"
+    pattern: "optimal-cookie"
+    description: "Optimal cookie consumption paper listed"
   - action: assert-contains
     input: $status_output
-    pattern: "panel-synthesis-methods"
-    description: All 5 papers appear in status
+    pattern: "sharing-economics"
+    description: "Cookie sharing economics paper listed"
+
+  # Verify portfolio rankings match actual scores
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
+    store: reference
+
+  - action: assert-contains
+    input: $reference
+    pattern: "3.4/4"
+    description: "Chip distribution ranked highest at 3.4/4"
+
+  - action: assert-contains
+    input: $reference
+    pattern: "2.6/4"
+    description: "Sharing economics ranked lowest at 2.6/4"

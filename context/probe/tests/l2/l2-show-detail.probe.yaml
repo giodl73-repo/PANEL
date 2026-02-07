@@ -10,30 +10,38 @@ description: |
   detailed view including reviews, score history, and stage timeline.
 
 steps:
+  # Use chip-distribution — the most complete paper (round 2, ready, full history)
   - action: prepare-paper
-    fixture: fixtures/sample-panel-state.yaml
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
+    reviews: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/reviews
+    description: "Cookie Monster's chip distribution — ready stage, round 2, 5 reviewers"
 
   - action: invoke-skill
-    skill: "panel:show panel-review-methodology"
+    skill: "panel:show panel-chip-distribution"
     sandbox: true
     store: output
 
   - action: assert-contains
     input: $output
-    pattern: "panel-review-methodology"
+    pattern: "chip-distribution"
     description: Shows paper name
 
   - action: assert-contains
     input: $output
-    pattern: "synthesis"
+    pattern: "ready"
     description: Shows current stage
 
   - action: assert-contains
     input: $output
-    pattern: "Percy Liang"
+    pattern: "Cookie Monster"
     description: Shows reviewer names
 
   - action: assert-contains
     input: $output
-    pattern: "3.0"
-    description: Shows score
+    pattern: "Count von Count"
+    description: Shows Count von Count as reviewer
+
+  - action: assert-contains-any
+    input: $output
+    patterns: ["3.2", "Strong Accept"]
+    description: Shows scores or verdicts

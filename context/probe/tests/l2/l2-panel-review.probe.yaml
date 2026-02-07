@@ -11,17 +11,10 @@ description: |
   assessment and PP1/PP2/PP3 findings.
 
 steps:
+  # Use cookie-science module — 5 papers, all reviewed, various stages
   - action: prepare-module
-    papers:
-      - name: panel-review-methodology
-        stage: synthesis
-        score: 3.0
-      - name: panel-reviewer-calibration
-        stage: synthesis
-        score: 2.5
-      - name: panel-revision-dynamics
-        stage: synthesis
-        score: 3.5
+    source: tests/fixtures/mock-monorepo/cookie-science
+    description: "Cookie Science Lab: chip-distribution, crumb-analysis, dunk-methodology, optimal-cookie, sharing-economics"
 
   - action: invoke-skill
     skill: "panel:panel --review"
@@ -38,7 +31,7 @@ steps:
   - action: assert-contains
     input: $panel_review
     pattern: "PP1"
-    description: Contains PP1 findings
+    description: "Contains PP1 findings (cross-paper methodology inconsistency)"
 
   - action: assert-contains
     input: $panel_review
@@ -49,3 +42,13 @@ steps:
     input: $panel_review
     pattern: "AI Simulation"
     description: Contains AI disclosure
+
+  # Verify against actual cookie-science REVIEW_PANEL.md for structure comparison
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
+    store: reference_panel
+
+  - action: assert-contains
+    input: $reference_panel
+    pattern: "7"
+    description: "Reference panel has 7 members (Cookie Monster, Swedish Chef, Count, Prairie Dawn, Bert, Telly, Ernie)"
