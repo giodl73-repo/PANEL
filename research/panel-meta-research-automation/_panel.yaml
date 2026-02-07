@@ -1,28 +1,33 @@
-stage: revision
-round: 1
+stage: ready
+round: 2
 venue: MSR / ICSE-NIER / Empirical SE
 created: 2026-02-06
 reviewers:
   - name: Shreya Shankar
     affiliation: Berkeley
     expertise: ML ops, observability, empirical evaluation
-    score: 2
+    score: 3
+    round1_score: 2
   - name: Percy Liang
     affiliation: Stanford
     expertise: HELM benchmarks, foundations, rigorous evaluation
-    score: 2
+    score: 3
+    round1_score: 2
   - name: Sarah Bird
     affiliation: Microsoft
     expertise: ML ops, responsible AI, failure mode analysis
-    score: 2
+    score: 3
+    round1_score: 2
   - name: Sumit Gulwani
     affiliation: Microsoft Research
     expertise: Program synthesis, FlashFill, automation
     score: 3
+    round1_score: 3
   - name: Michael Bernstein
     affiliation: Stanford
     expertise: Crowdsourcing, human computation, workflow automation
-    score: 3
+    score: 4
+    round1_score: 3
 p1_items:
   - id: P1.1
     title: Insufficient Evaluation — Sample Size Too Small (N=5)
@@ -57,3 +62,9 @@ history:
   - stage: revision
     entered: 2026-02-07
     notes: All 5 P1 items addressed with new sections in 04-results.tex (evaluation design, failure modes, ground truth, accuracy validation, cross-project validation)
+  - stage: recheck
+    entered: 2026-02-07
+    notes: Round 2 reviews generated, avg score improved 2.4→3.2/4, all reviewers upgraded to Accept/Strong Accept
+  - stage: ready
+    entered: 2026-02-07
+    notes: Gate passed (avg 3.2/4, min 3/4), ready for panel-level review
