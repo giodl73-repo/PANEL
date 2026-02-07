@@ -1,28 +1,33 @@
-stage: revision
-round: 1
+stage: ready
+round: 2
 venue: ICSE / FSE / OOPSLA
 created: 2026-02-06
 reviewers:
   - name: Percy Liang
     affiliation: Stanford
     expertise: HELM, benchmarks, evaluation methodology
-    score: 2
+    score: 3
+    round1_score: 2
   - name: Ben Shneiderman
     affiliation: University of Maryland
     expertise: Human-Centered AI, human agency, oversight
-    score: 3
+    score: 4
+    round1_score: 3
   - name: Ece Kamar
     affiliation: Microsoft Research
     expertise: AI complementarity, human-AI deferral
-    score: 3
+    score: 4
+    round1_score: 3
   - name: Shreya Shankar
     affiliation: UC Berkeley
     expertise: ML ops, observability, production systems
-    score: 2
+    score: 3
+    round1_score: 2
   - name: Michael Bernstein
     affiliation: Stanford
     expertise: Crowdsourcing, human computation
-    score: 3
+    score: 4
+    round1_score: 3
 history:
   - stage: draft
     entered: 2026-02-06
@@ -36,6 +41,12 @@ history:
   - stage: revision
     entered: 2026-02-07
     notes: REVISION-PLAN.md created with 5 P1 items
+  - stage: recheck
+    entered: 2026-02-07
+    notes: Round 2 reviews generated, avg score 3.6/4 (up from 2.6/4), gate passed
+  - stage: ready
+    entered: 2026-02-07
+    notes: Paper-level review complete, ready for panel-level review (panel:panel)
 p1_items:
   - id: P1.1
     description: "Evaluation lacks ground truth and validation"
