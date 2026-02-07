@@ -1,7 +1,20 @@
-stage: synthesis
+stage: revision
 round: 1
 venue: CHI / CSCW / HCOMP
 created: 2026-02-06
+p1_items:
+  - id: P1.1
+    description: Missing Human-Centered Analysis and Framing
+    addressed: false
+  - id: P1.2
+    description: No Comparison to Manual Revision Quality or Alternative Workflows
+    addressed: false
+  - id: P1.3
+    description: Insufficient Treatment of Learning and Adaptation
+    addressed: false
+  - id: P1.4
+    description: Underspecified Operational Aspects and Failure Modes
+    addressed: false
 reviewers:
   - name: Ben Shneiderman
     affiliation: University of Maryland
@@ -35,3 +48,6 @@ history:
   - stage: synthesis
     entered: 2026-02-07
     notes: Reviews consolidated into SYNTHESIS.md with P1/P2/P3 classification (avg 2.2/4, 4 P1 items)
+  - stage: revision
+    entered: 2026-02-07
+    notes: REVISION-PLAN.md generated with detailed actions for 4 P1 items, 4 P2 items, 4 P3 items
