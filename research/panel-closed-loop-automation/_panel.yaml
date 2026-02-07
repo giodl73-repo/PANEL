@@ -1,5 +1,5 @@
-stage: revision
-round: 1
+stage: ready
+round: 2
 venue: CHI / CSCW / HCOMP
 created: 2026-02-06
 p1_items:
@@ -23,25 +23,31 @@ reviewers:
   - name: Ben Shneiderman
     affiliation: University of Maryland
     expertise: Human-Centered AI, Human Agency, Oversight Systems
-    score: 2.0
+    score_r1: 2.0
+    score_r2: 3.0
   - name: Michael Bernstein
     affiliation: Stanford University
     expertise: Crowdsourcing, Human Computation, Collaborative Systems
-    score: 2.0
+    score_r1: 2.0
+    score_r2: 3.0
   - name: Saleema Amershi
     affiliation: Microsoft Research
     expertise: Interactive Machine Learning, Human-in-the-Loop Systems
-    score: 2.0
+    score_r1: 2.0
+    score_r2: 3.0
   - name: Shreya Shankar
     affiliation: UC Berkeley
     expertise: ML Ops, Observability, Pipeline Debugging
-    score: 2.0
+    score_r1: 2.0
+    score_r2: 3.0
   - name: Noah Shinn
     affiliation: Princeton University
     expertise: Reflexion, Self-Improvement, Agent Learning
-    score: 3.0
+    score_r1: 3.0
+    score_r2: 3.5
 reviews_completed:
   round_1: 5
+  round_2: 5
 history:
   - stage: draft
     entered: 2026-02-06
@@ -55,3 +61,9 @@ history:
   - stage: revision
     entered: 2026-02-07
     notes: REVISION-PLAN.md generated with detailed actions for 4 P1 items, 4 P2 items, 4 P3 items
+  - stage: recheck
+    entered: 2026-02-07
+    notes: All P1 items addressed - paper expanded from 15 to 22 pages with human-centered analysis, cost comparison, learning mechanisms, operational details
+  - stage: ready
+    entered: 2026-02-07
+    notes: Convergence achieved - avg 3.1/4 (was 2.2/4), all reviewers improved scores, unanimous Accept/Strong Accept, gate passed
