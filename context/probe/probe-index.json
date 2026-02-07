@@ -2,18 +2,20 @@
   "plugin": "panel",
   "created": "2026-02-06T00:00:00.000Z",
   "lastRun": {
-    "id": "run-1770441119",
+    "id": "run-all-1770441200",
     "date": "2026-02-06T00:00:00.000Z",
-    "duration": "260s",
-    "total": 28,
-    "passed": 28,
+    "duration": "300s",
+    "total": 47,
+    "passed": 47,
     "failed": 0,
     "skipped": 0,
     "tiers": {
       "L0": { "total": 12, "passed": 12, "failed": 0 },
-      "L1": { "total": 16, "passed": 16, "failed": 0 }
+      "L1": { "total": 16, "passed": 16, "failed": 0 },
+      "L2": { "total": 12, "passed": 12, "failed": 0 },
+      "L3": { "total": 7, "passed": 7, "failed": 0 }
     },
-    "tiersRun": ["L0", "L1"]
+    "tiersRun": ["L0", "L1", "L2", "L3"]
   },
   "runs": [
     {
@@ -29,6 +31,22 @@
         "L1": { "total": 16, "passed": 16, "failed": 0 }
       },
       "tiersRun": ["L0", "L1"]
+    },
+    {
+      "id": "run-all-1770441200",
+      "date": "2026-02-06T00:00:00.000Z",
+      "duration": "300s",
+      "total": 47,
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0,
+      "tiers": {
+        "L0": { "total": 12, "passed": 12, "failed": 0 },
+        "L1": { "total": 16, "passed": 16, "failed": 0 },
+        "L2": { "total": 12, "passed": 12, "failed": 0 },
+        "L3": { "total": 7, "passed": 7, "failed": 0 }
+      },
+      "tiersRun": ["L0", "L1", "L2", "L3"]
     }
   ],
   "testPlan": "context/probe/test-plan.json"
