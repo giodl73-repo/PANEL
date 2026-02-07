@@ -42,8 +42,8 @@ Paper-level reviews bubble up to `panel:panel`. Panel-level revision items (PP1/
 
 1. **Read state**: Load `_panel.yaml` from the paper directory. If missing, start at `draft`.
 2. **Determine current stage**: Read `stage` field.
-3. **Execute stage logic**: Run the appropriate stage handler (see shared/stage-machine.md).
-4. **Check gate**: Verify the stage's gate condition is met (see config/stages.yaml).
+3. **Execute stage logic**: Run the appropriate stage handler (see shared/stage-machine.md). **The handler MUST complete all its work, including any interactive prompts, before returning.**
+4. **Check gate**: Verify the stage's gate condition is met (see config/stages.yaml). Gate checks happen AFTER the handler completes.
 5. **Advance**: If gate passes, update `_panel.yaml` stage + history, move to next stage.
 6. **Loop detection**: If at `recheck` and gate fails (avg < 2.5/4 or any < 2/4), loop back to `synthesis`.
 7. **Stop conditions**: Reached `--until` stage, or `accepted`, or gate requires user input (submit/accepted).
@@ -67,14 +67,16 @@ Paper-level reviews bubble up to `panel:panel`. Panel-level revision items (PP1/
 
 ### revision → recheck
 
+**This stage handler includes both planning AND interactive revision application.** The gate only checks if planning is complete and user has either applied revisions or declined.
+
 **Phase 1: Create revision plan**
 - Create `REVISION-PLAN.md` in the paper root directory from synthesis P1/P2/P3 items using `${CLAUDE_PLUGIN_ROOT}/templates/revision-plan-template.md`
 - **MUST always produce this file** — if it already exists (from setup), update it with current P1/P2/P3 items
 - Track P1 item completion in `_panel.yaml.p1_items`
 
-**Phase 2: Apply revisions to paper**
+**Phase 2: Interactive revision application (MUST happen in this handler, before gate check)**
 
-After creating the revision plan, offer to apply the revisions. Use AskUserQuestion:
+Immediately after creating the revision plan, offer to apply the revisions. Use AskUserQuestion:
 
 ```
 question: "Revision plan created with {N} P1 items, {M} P2 items. Apply revisions now?"
@@ -125,9 +127,14 @@ options:
 - When strengthening claims, add qualifiers and citations rather than removing the claim
 - Preserve existing `\label{}` and `\ref{}` references
 
-**If user declines**: stop at revision stage. Report the P1 items that need addressing and the command to resume: `panel:paper --paper {name}`
+**If user declines**: Set `_panel.yaml.revision_declined: true` and stop at revision stage. Report the P1 items that need addressing and the command to resume: `panel:paper --paper {name}`
 
-- Gate: `REVISION-PLAN.md` exists AND all P1 items marked `addressed: true`
+**Gate**: The revision stage gate checks:
+- `REVISION-PLAN.md` exists, AND
+- Either: all P1 items marked `addressed: true` in `_panel.yaml`
+- Or: user explicitly declined (`revision_declined: true` flag set)
+
+If gate fails (revision plan not created or no decision made), the stage cannot advance. The handler MUST complete both Phase 1 and Phase 2 before the gate is checked.
 
 ### recheck → ready (or → synthesis)
 - Generate Round N reviews: `reviews/ROUND{N}-REVIEW-{NAME}.md`

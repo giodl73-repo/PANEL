@@ -8,6 +8,19 @@ user-invocable: true
 
 Two-level setup: project-level scaffolding or per-paper initialization.
 
+## Variable Conventions
+
+**CRITICAL — Path Variables:**
+
+```bash
+targetDir = project root directory (e.g., "C:\src\panel")
+           All research files go in ${targetDir}/research/
+
+           WRONG: targetDir = "C:\src\panel\research"
+           RIGHT: targetDir = "C:\src\panel"
+                  Then use: ${targetDir}/research/RESEARCH.md
+```
+
 ## Plugin Path Resolution
 
 All template files are bundled in the plugin's `templates/` directory. Resolve via:
@@ -24,21 +37,17 @@ ${CLAUDE_PLUGIN_ROOT}/templates/
 └── revision-plan-template.md    # Revision plan structure
 ```
 
-**CRITICAL**: Use `CLAUDE_PLUGIN_ROOT` environment variable to locate plugin files. Never hardcode paths or search for the plugin directory.
-
-```javascript
-const pluginDir = process.env.CLAUDE_PLUGIN_ROOT;
-const templatesDir = `${pluginDir}/templates`;
-```
+**Use `CLAUDE_PLUGIN_ROOT` environment variable to locate plugin files.** Never hardcode paths or search for the plugin directory.
 
 ## Target Directory Resolution
 
-Setup targets `{cwd}/research/` by default — NOT cwd itself. Every module keeps papers in a `research/` subdirectory.
+**CRITICAL**: `targetDir` = project root directory (e.g., `C:\src\panel`). All research files go in `${targetDir}/research/`, NOT `${targetDir}` directly.
 
 Resolution order:
-1. `--project <path>/research/` if `--project` specified
-2. `{cwd}/research/` (default)
-3. If `research/` doesn't exist: create it, plus `research/docs/` for PDFs
+1. `--project <path>` if specified → `targetDir = <path>`
+2. Default → `targetDir = {cwd}`
+
+All infrastructure files are placed in `${targetDir}/research/`, which is created if missing.
 
 ## Invocation Modes
 
@@ -84,6 +93,8 @@ panel:setup --connect <path>
 
 Runs when invoked with no positional arguments.
 
+**Variable convention**: `targetDir` = project root (e.g., `C:\src\panel`). Research files go in `${targetDir}/research/`.
+
 ### Step 1: Interactive Topic Discovery
 
 Before creating anything, understand the research context. Use AskUserQuestion:
@@ -118,33 +129,34 @@ If no waves exist, skip scanning and proceed with manual setup.
 ### Step 2: Create research directory
 
 ```bash
-mkdir -p "${targetDir}"
-mkdir -p "${targetDir}/docs"
+mkdir -p "${targetDir}/research"
+mkdir -p "${targetDir}/research/docs"
 ```
 
 ### Step 3: Copy infrastructure files from plugin
 
-**CRITICAL**: All infrastructure files go inside `research/` (i.e., `${targetDir}`), NOT the project root. These files live alongside the paper directories inside `research/`.
+**CRITICAL**: All infrastructure files go inside `${targetDir}/research/`, NOT `${targetDir}` directly. Explicitly append `/research/` to every path.
 
 ```bash
-# Copy from plugin templates INTO research/ directory — NOT project root
-cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWER-DATABASE.md" "${targetDir}/REVIEWER-DATABASE.md"
-cp "${CLAUDE_PLUGIN_ROOT}/templates/RESEARCH.md" "${targetDir}/RESEARCH.md"
-cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWERS.md" "${targetDir}/REVIEWERS.md"
-cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEW_PANEL.md" "${targetDir}/REVIEW_PANEL.md"
-cp "${CLAUDE_PLUGIN_ROOT}/templates/references.bib" "${targetDir}/references.bib"
+# Copy from plugin templates INTO research/ subdirectory
+cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWER-DATABASE.md" "${targetDir}/research/REVIEWER-DATABASE.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/RESEARCH.md" "${targetDir}/research/RESEARCH.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWERS.md" "${targetDir}/research/REVIEWERS.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEW_PANEL.md" "${targetDir}/research/REVIEW_PANEL.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/references.bib" "${targetDir}/research/references.bib"
 ```
 
-Resulting layout (all inside `research/`):
+Resulting layout (showing `${targetDir}/research/`):
 ```
-research/
-├── REVIEWER-DATABASE.md
-├── RESEARCH.md
-├── REVIEWERS.md
-├── REVIEW_PANEL.md
-├── references.bib        ← global bibliography for papers to draw from
-├── docs/
-└── panel-*/              ← paper directories go here too
+${targetDir}/
+└── research/
+    ├── REVIEWER-DATABASE.md
+    ├── RESEARCH.md
+    ├── REVIEWERS.md
+    ├── REVIEW_PANEL.md
+    ├── references.bib        ← global bibliography for papers to draw from
+    ├── docs/
+    └── panel-*/              ← paper directories go here too
 ```
 
 After copying, fill in template placeholders:
@@ -157,7 +169,7 @@ Skip files that already exist (don't overwrite).
 
 ### Step 4: Create Makefile
 
-If `research/Makefile` doesn't exist, create it inside `research/` (same directory as the infrastructure files):
+If `${targetDir}/research/Makefile` doesn't exist, create it at `${targetDir}/research/Makefile`:
 
 ```makefile
 PAPERS = $(wildcard panel-*/)
@@ -350,20 +362,21 @@ Panel Setup — boost
 ═══════════════════════════════════════════════════════════════════════
 
 Research area: AI Systems & Infrastructure
-Target directory: C:\src\boost\research\
+Project root: C:\src\boost\
+Research directory: C:\src\boost\research\
 
 Discovered from waves:
   - Static analysis for command files (3 waves)
   - Command DSL compilation (2 waves)
   → Suggested reviewer categories: Compilers & PL Theory, Software Engineering
 
-Infrastructure (all inside research/):
-  ✓ research/REVIEWER-DATABASE.md  (copied from plugin — 45+ reviewers, 10 categories)
-  ✓ research/RESEARCH.md           (paper inventory template)
-  ✓ research/REVIEWERS.md          (module reviewer subset)
-  ✓ research/REVIEW_PANEL.md       (placeholder)
-  ✓ research/references.bib        (global bibliography — 1200+ entries)
-  ✓ research/Makefile              (master build)
+Infrastructure (${targetDir}/research/):
+  ✓ REVIEWER-DATABASE.md  (copied from plugin — 45+ reviewers, 10 categories)
+  ✓ RESEARCH.md           (paper inventory template)
+  ✓ REVIEWERS.md          (module reviewer subset)
+  ✓ REVIEW_PANEL.md       (placeholder)
+  ✓ references.bib        (global bibliography — 1200+ entries)
+  ✓ Makefile              (master build)
 
 Papers: 3 detected (1 existing + 2 imported from waves)
 ```
@@ -526,23 +539,23 @@ Validates existing setup without creating anything:
 ### Check Output
 
 ```
-Panel Setup Check — C:\src\boost\research
+Panel Setup Check — C:\src\boost
 ═══════════════════════════════════════════════════════════════════════
 
 Plugin: ${CLAUDE_PLUGIN_ROOT} ✓
 
-Infrastructure (research/):
-  ✓ research/REVIEWER-DATABASE.md  (45 reviewers, 10 categories)
-  ✓ research/RESEARCH.md           (2 papers listed)
-  ✓ research/REVIEWERS.md          present
-  ✓ research/REVIEW_PANEL.md       present
-  ✓ research/references.bib        present (1200+ entries)
-  ✓ research/Makefile              present
+Infrastructure (${targetDir}/research/):
+  ✓ REVIEWER-DATABASE.md  (45 reviewers, 10 categories)
+  ✓ RESEARCH.md           (2 papers listed)
+  ✓ REVIEWERS.md          present
+  ✓ REVIEW_PANEL.md       present
+  ✓ references.bib        present (1200+ entries)
+  ✓ Makefile              present
 
 Reviewer Panel:
-  ✓ research/REVIEWERS.md           populated (12 reviewers, 7 panel members)
+  ✓ REVIEWERS.md          populated (12 reviewers, 7 panel members)
   — or —
-  ⚠ research/REVIEWERS.md           template only (run panel:setup to populate)
+  ⚠ REVIEWERS.md          template only (run panel:setup to populate)
 
 Research Monorepo:
   ✓ scripts/sync-to-research.sh  present

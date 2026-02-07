@@ -30,7 +30,7 @@ Output: { passed: bool, reason: string, details: object }
 | draft | `main.tex` exists AND `_panel.yaml.venue` is non-empty |
 | panel | Count `reviews/REVIEW-*.md` files >= 5 |
 | synthesis | `reviews/SYNTHESIS.md` exists AND contains P1/P2/P3 sections |
-| revision | `REVISION-PLAN.md` exists AND all items in `_panel.yaml.p1_items` have `addressed: true` |
+| revision | `REVISION-PLAN.md` exists AND (all items in `_panel.yaml.p1_items` have `addressed: true` OR `revision_declined: true` flag set) |
 | recheck | Average score >= 2.5/4 AND minimum score >= 2/4 |
 | ready | `REVIEW_PANEL.md` completed by `panel:panel` AND all PP1 items addressed |
 | submit | User confirmation flag in `_panel.yaml` |
@@ -61,7 +61,7 @@ Each stage handler performs the work needed at that stage:
 - **draft_handler**: Verify paper structure, prompt for venue if missing
 - **panel_handler**: Select reviewers (shared/reviewer-selector.md), generate reviews
 - **synthesis_handler**: Consolidate reviews (shared/synthesis-engine.md)
-- **revision_handler**: Create or update REVISION-PLAN.md from synthesis P1/P2/P3 items (MUST always produce this file), track P1 items in _panel.yaml, then offer to apply revisions to sections/*.tex (editing LaTeX source to address each P1/P2 item, marking items complete in both REVISION-PLAN.md and _panel.yaml)
+- **revision_handler**: MUST complete both phases before gate check: (1) Create or update REVISION-PLAN.md from synthesis P1/P2/P3 items, track P1 items in _panel.yaml; (2) Immediately use AskUserQuestion to offer revision application — if user accepts, edit sections/*.tex to address P1/P2 items and mark complete; if user declines, set revision_declined flag. The handler does NOT exit until user makes a choice.
 - **recheck_handler**: Generate round N reviews, calculate scores
 - **ready_handler**: Check REVIEW_PANEL.md from panel:panel, verify PP1 items addressed
 - **submit_handler**: Prompt for submission confirmation
