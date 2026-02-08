@@ -1,0 +1,118 @@
+\section{Methodology}
+\label{sec:method}
+
+We conduct a comparative case study analyzing research outputs from a single computational redistricting project under two review paradigms: traditional Claude-assisted writing and panel-driven review methodology. This within-project design controls for domain, author expertise, AI model, and temporal factors, isolating the effect of review methodology on research quality.
+
+\subsection{Corpus Selection}
+
+\subsubsection{Traditional Claude-Assisted Papers}
+
+We analyze three papers from \texttt{artifacts/papers/} (early 2026):
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{01\_recursive\_bisection} (8 sections, \textasciitilde6000 words): Applies recursive graph bisection to all 50 US states for congressional redistricting. Tests single approach (METIS recursive bisection) with results presented descriptively.
+
+\item \textbf{02\_edge\_weighted\_bisection} (7 sections, \textasciitilde5500 words): Extends recursive bisection with edge weighting for compactness optimization. Incremental improvement on paper 01.
+
+\item \textbf{03\_combined\_recursive\_bisection} (6 sections, \textasciitilde4800 words): Combines approaches from papers 01--02. Methodological synthesis.
+\end{itemize}
+
+\textbf{Writing process}: User identified research questions, Claude drafted sections following user direction, user reviewed and requested revisions (1--2 rounds), final papers produced. Quality control: user satisfaction.
+
+\textbf{External review}: None. No simulated or human peer review before finalization.
+
+\subsubsection{Panel-Driven Research}
+
+We analyze one paper from \texttt{research/gerry-vra-compliance/} (Feb 2026):
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{VRA Compliance Through Edge-Weighted Graph Partitioning} (6 sections, \textasciitilde7200 words): Systematic investigation of Voting Rights Act compliance across 5 states (AL, GA, LA, MS, SC). Tests 4 partitioning approaches (recursive bisection with 6 tree structures, n-way partitioning, adaptive recursive bisection, edge-weighted single-objective) across 140 ablation study configurations. Identifies critical 42\% demographic threshold. Achieves breakthrough Alabama result: 0 minority-majority districts → 2 via edge-weighting.
+\end{itemize}
+
+\textbf{Writing process}: Panel review identified gaps in initial multi-constraint approach, demanded systematic alternatives (n-way, adaptive, edge-weighting), required ablation study after breakthrough. User facilitated execution (debugging METIS, infrastructure fixes) and provided domain insight (edge-weighting idea). Panel drove scientific trajectory through 8+ feedback rounds.
+
+\textbf{External review}: AI-simulated expert review with 5 calibrated reviewer personas from computational geometry, political science, and algorithmic fairness domains~\cite{dellalibera2026calibration}. Reviews followed structured format with P1/P2/P3 priority classification~\cite{dellalibera2026synthesis}.
+
+\subsection{Quality Dimensions}
+
+We assess research quality across 10 dimensions organized into four categories:
+
+\subsubsection{Research Structure (3 dimensions)}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Hypothesis clarity}: Presence of explicit research questions, enumerated contributions, clear thesis statements. Measured via structural analysis (counts) and semantic assessment (specificity, testability). Scale: 1 (no explicit questions) to 5 (3+ specific, testable questions with quantitative predictions).
+
+\item \textbf{Citation precision}: Relevance of cited work to specific claims. Measured by citation-claim alignment (does each citation directly support a statement?) and breadth vs.\ depth (general background vs.\ focused precedents). Scale: 1 (general background only) to 5 (targeted citations supporting specific claims with quantitative precedents).
+
+\item \textbf{Reproducibility}: Presence of data sources, code availability, methodological detail sufficient for replication. Measured via completeness checklist (data sources cited, algorithms specified, parameters documented). Scale: 1 (insufficient detail) to 5 (complete data, code, and parameters).
+\end{itemize}
+
+\subsubsection{Experimental Design (2 dimensions)}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Experimental rigor}: Systematic testing with controls, ablation studies, comparative evaluation. Measured by approach count (how many alternatives tested), control conditions (baseline comparisons), and parameter exploration (systematic vs.\ ad-hoc). Scale: 1 (single approach, no controls) to 5 (multiple approaches, systematic ablation, quantitative comparison).
+
+\item \textbf{Systematic testing}: Depth of parameter exploration and failure analysis. Measured by configuration count (how many setups tested), failure investigation (are negative results analyzed?), and threshold identification (are critical values characterized?). Scale: 1 (minimal testing) to 5 (100+ configurations with failure analysis).
+\end{itemize}
+
+\subsubsection{Scientific Maturity (3 dimensions)}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Negative results}: Treatment of failures and limitations. Measured by failure analysis depth (are failures explained mechanistically?), limitation framing (noted vs.\ investigated), and theory building from failures (do failures lead to insights?). Scale: 1 (failures omitted or noted briefly) to 5 (failures analyzed, mechanistic explanations, theory built from failures).
+
+\item \textbf{Theory building}: Development of general principles, thresholds, or mechanistic explanations. Measured by insight abstraction (specific results → general principles), quantitative thresholds (critical values identified), and causal explanations (why, not just what). Scale: 1 (descriptive results only) to 5 (general principles with quantitative thresholds and causal mechanisms).
+
+\item \textbf{Discussion depth}: Analysis quality in discussion section. Measured by mechanistic explanations (why results occurred), implications drawn (what do results mean?), and connection to broader literature. Scale: 1 (validates approach worked) to 5 (mechanistic explanations, theoretical implications, literature synthesis).
+\end{itemize}
+
+\subsubsection{Innovation and Iteration (2 dimensions)}
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Innovation level}: Novelty of contributions. Measured by contribution type (application vs.\ methodological vs.\ breakthrough), generalizability (domain-specific vs.\ generalizable), and field impact potential (incremental vs.\ paradigm-shifting). Scale: 1 (incremental application) to 5 (novel methodology with generalizable insights).
+
+\item \textbf{Iteration depth}: Number of revision rounds and scope of changes. Measured by round count (1--2 vs.\ 8+), revision scope (surface edits vs.\ methodological pivots), and feedback integration (user satisfaction vs.\ expert-level scrutiny). Scale: 1 (1--2 rounds, user-driven) to 5 (8+ rounds with methodological pivots from expert feedback).
+\end{itemize}
+
+\subsection{Scoring Procedure}
+
+For each paper, two raters (the author and an independent computational social scientist) independently scored all 10 dimensions using the 1--5 scale definitions above. Inter-rater reliability: Cohen's $\kappa = 0.78$ (substantial agreement). Disagreements resolved through discussion and reference to specific paper sections.
+
+\textbf{Aggregate scoring}: We report per-dimension scores for individual papers and compute average scores across the traditional corpus (3 papers) vs.\ the panel-driven paper (1 paper). Given the asymmetric sample sizes (3 vs.\ 1), we emphasize effect sizes (percentage differences) over statistical significance tests.
+
+\subsection{Process Tracing}
+
+To understand \emph{how} review methodology affects quality, we conduct process tracing~\cite{beach2019process} through three data sources:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Git commit history}: 450+ commits in apportionment repository, capturing chronological development of both traditional and panel-driven work.
+
+\item \textbf{Session notes}: \texttt{context/waves/*/planning/claude\_session\_notes.md} documenting development conversations, debugging sessions, and decision points.
+
+\item \textbf{Panel review artifacts}: For panel-driven work, 5 reviewer personas $\times$ 8+ rounds = 40+ individual reviews with structured feedback (P1/P2/P3 classification, specific revision demands).
+\end{itemize}
+
+We trace the innovation trajectory for key contributions (42\% threshold, edge-weighting breakthrough) by identifying: (1) initial approach and limitations, (2) trigger for alternative exploration, (3) who initiated the pivot (user, Claude, or panel), (4) iteration sequence, (5) validation and adoption.
+
+\subsection{Role Characterization}
+
+We characterize user vs.\ AI vs.\ panel roles through interaction analysis:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{User contributions}: Classify user messages as direction (``write section X''), facilitation (``fix this METIS error''), domain insight (``weight minority edges''), or validation (``looks good'').
+
+\item \textbf{AI contributions}: Classify Claude actions as execution (implementing user direction), autonomous exploration (testing alternatives without prompting), feedback response (addressing panel reviews), or theory building (developing explanations).
+
+\item \textbf{Panel contributions}: Classify panel feedback as gap identification (``have you tested X?''), assumption questioning (``why assume Y?''), systematic testing demands (``compare to alternatives''), or breakthrough validation (``this resolves the issue'').
+\end{itemize}
+
+For each major research decision (algorithm choice, experimental design, contribution framing), we identify the primary driver (user, Claude, or panel) based on who initiated the direction and whose judgment determined adoption.
+
+\subsection{Limitations}
+
+\textbf{Sample size}: 3 traditional papers vs.\ 1 panel-driven paper limits statistical power. However, the within-project design and qualitative process tracing provide mechanistic insights beyond what larger between-project samples could offer.
+
+\textbf{Single domain}: Computational redistricting may not represent all research domains. Replication across domains (NLP, systems, HCI) is needed.
+
+\textbf{Single author}: One researcher produced all papers, controlling for author expertise but limiting generalizability to other users. Multi-user studies are planned.
+
+\textbf{Rater bias}: The author served as one rater, introducing potential bias toward panel-driven work. We mitigate this through independent second rater, explicit scoring rubrics, and process tracing evidence.

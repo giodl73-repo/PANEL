@@ -1,7 +1,7 @@
 # Panel Research Papers
 
 **Module**: Panel (AI-Simulated Expert Review Methodology)
-**Papers**: 8
+**Papers**: 9
 **Author**: Gio Della-Libera
 
 ---
@@ -18,6 +18,7 @@
 | 6 | [panel-hierarchical-review-architecture](panel-hierarchical-review-architecture/) | Hierarchical Review Architecture: Scaling Expert Feedback Through Three-Tier Synthesis | [PDF](docs/panel-hierarchical-review-architecture.pdf) | ICSE / FSE / OOPSLA | — | — |
 | 7 | [panel-closed-loop-automation](panel-closed-loop-automation/) | From Reviews to Revisions: Closed-Loop Automation of Academic Paper Improvement | [PDF](docs/panel-closed-loop-automation.pdf) | CHI / CSCW / HCOMP | — | — |
 | 8 | [panel-meta-research-automation](panel-meta-research-automation/) | Meta-Research Automation: Generating Research Papers from Development Artifacts | [PDF](docs/panel-meta-research-automation.pdf) | MSR / ICSE-NIER / Empirical SE | — | — |
+| 9 | [panel-research-quality-impact](panel-research-quality-impact/) | Panel-Driven Research Quality Impact: Comparing Traditional and AI-Simulated Expert Review | [PDF](docs/panel-research-quality-impact.pdf) | CSCW / CHI | — | — |
 
 ---
 
@@ -31,6 +32,8 @@
      +──→ [3] Revision Dynamics
      |         |
      |         +──→ [7] Closed-Loop Automation
+     |         |
+     |         +──→ [9] Research Quality Impact
      |         |
      |         v
      +──→ [4] Portfolio Assessment
@@ -50,12 +53,13 @@
 |-------|-----------|----------------|
 | #1 Review Methodology | — (foundational) | #2, #3, #4, #5, #6 |
 | #2 Reviewer Calibration | #1 | — |
-| #3 Revision Dynamics | #1 | #4, #7 |
+| #3 Revision Dynamics | #1 | #4, #7, #9 |
 | #4 Portfolio Assessment | #1, #3 | #6 |
 | #5 Synthesis Methods | #1 | #8 |
 | #6 Hierarchical Review Architecture | #1, #4 | — |
 | #7 Closed-Loop Automation | #1, #3 | — |
 | #8 Meta-Research Automation | #5 | — (self-referential) |
+| #9 Research Quality Impact | #1, #3 | — |
 
 ---
 
@@ -109,6 +113,12 @@
 
 **Key evidence**: 90% topic discovery precision, 100% LaTeX compilation success, 6000+ words per generated paper, 8.2/10 readability, self-referential validation (this paper documents the system that generated it).
 
+### Paper 9: Research Quality Impact
+
+**Core contribution**: Empirical comparison of traditional Claude-assisted research (user-directed) vs. panel-driven methodology using papers from the apportionment project. Shows +127% quality improvement across 10 dimensions through four mechanisms: systematic questioning, embracing negative results, standards elevation, and iteration forcing.
+
+**Key evidence**: Within-project natural experiment (3 traditional papers vs. 1 panel-driven paper), comparative analysis across 10 quality dimensions, process tracing through git history and session notes, role dynamics characterization (user as director vs. facilitator), breakthrough innovation trajectory analysis (edge-weighting and 42% threshold emerged through panel-driven failure exploration).
+
 ---
 
 ## Cross-Module Context
@@ -136,6 +146,7 @@ The panel module documents the review methodology used across the research monor
 | #6 Hierarchical Review Architecture | draft | 0 | — | — | — |
 | #7 Closed-Loop Automation | draft | 0 | — | — | — |
 | #8 Meta-Research Automation | draft | 0 | — | — | — |
+| #9 Research Quality Impact | draft | 0 | — | — | — |
 
 ---
 
@@ -153,5 +164,5 @@ make -C panel-review-methodology pdf
 ---
 
 *Panel research module — established February 2026*
-*Papers: 8 (all in draft stage)*
-*Last updated: February 6, 2026 — added 3 papers generated from waves analysis*
+*Papers: 9 (all in draft stage)*
+*Last updated: February 7, 2026 — added paper #9 (Research Quality Impact)*

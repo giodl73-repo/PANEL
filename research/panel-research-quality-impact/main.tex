@@ -1,0 +1,50 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[table]{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,arrows}
+\usepackage{amsmath}
+
+\definecolor{primaryblue}{RGB}{0,120,212}
+\definecolor{textgray}{RGB}{50,50,50}
+\definecolor{codebg}{RGB}{248,248,248}
+
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{codebg},breaklines=true,frame=single,framerule=0pt}
+\hypersetup{colorlinks=true,linkcolor=primaryblue,urlcolor=primaryblue,citecolor=primaryblue}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Panel-Driven Research Quality Impact:\\[0.3em]Comparing Traditional and AI-Simulated Expert Review\par}
+\vspace{0.8cm}
+{\large Gio Della-Libera, VP Engineering\par}
+{\normalsize Business \& Industry Copilots Agents 365\par}
+\vspace{0.3cm}
+{\normalsize February 2026\par}
+\vspace{0.8cm}
+\end{center}
+
+\begin{abstract}
+\noindent
+Does structured peer review simulation improve AI-assisted research quality, or merely add process overhead? We present a comparative analysis of research outputs from the same computational redistricting project under two conditions: traditional Claude-assisted writing (user-directed, no formal review) and panel-driven methodology (AI-simulated expert review with iterative refinement). Analyzing papers from the apportionment project, we find panel-driven research demonstrates significantly higher rigor across 10 quality dimensions: hypothesis clarity (+150\%), experimental rigor (+150\%), systematic testing (+400\%), theory building (+150\%), and innovation level (+150\%), yielding an overall quality improvement of +127\%. Critically, we identify the mechanisms driving this improvement---systematic questioning, embracing negative results, standards elevation, and iteration forcing---and show that the panel acts as the primary scientific driver, not merely a quality checker. The user's role shifts from director to facilitator, while breakthrough innovations (42\% demographic threshold, edge-weighting methodology) emerge only through panel-driven systematic exploration of failures. We present evidence that panel-driven research elevates AI-assisted work from ``working methodology'' to ``publishable science,'' with implications for autonomous AI research agents and human-AI research collaboration.
+\end{abstract}
+
+\vspace{0.5cm}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-methodology}
+\input{sections/04-results}
+\input{sections/05-discussion}
+\input{sections/06-conclusion}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

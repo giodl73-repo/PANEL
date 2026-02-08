@@ -1,0 +1,70 @@
+\section{Related Work}
+\label{sec:related}
+
+Our work sits at the intersection of three research areas: AI-assisted research, automated peer review, and research quality assessment.
+
+\subsection{AI-Assisted Research}
+
+Large language models increasingly assist with research tasks---literature search~\cite{liang2024can}, hypothesis generation~\cite{wang2023scientific}, experimental design~\cite{boiko2023autonomous}, and manuscript writing~\cite{zhou2024large}. However, most work treats AI as an assistant executing researcher-directed tasks, not as an autonomous agent responding to structured feedback.
+
+\textbf{User-directed AI research}: Systems like Elicit~\cite{elicit2023} and Consensus~\cite{consensus2023} help researchers find papers, extract claims, and synthesize evidence, but the researcher directs the investigation. Co-Scientist~\cite{lu2024ai} generates hypotheses and experimental designs, but requires researcher approval at each step. These systems optimize for user control, not autonomous research capability.
+
+\textbf{Autonomous AI research agents}: Recent work explores fully autonomous agents conducting research with minimal human oversight~\cite{bran2024chemcrow, wang2024chemreasoner}. However, these systems lack structured quality control---they optimize for task completion, not research rigor. Our work provides the missing piece: \textbf{structured peer review as a mechanism for autonomous research quality assurance}.
+
+\textbf{Our contribution}: We compare user-directed and review-driven paradigms empirically, showing review-driven work achieves +127\% quality improvement by shifting the role of external pressure from user satisfaction to expert review standards.
+
+\subsection{Automated Peer Review}
+
+Automated peer review systems generate review feedback using NLP and ML techniques.
+
+\textbf{Single-round review generation}: Early systems~\cite{wang2020reviewing, chen2019neural} generate aspect-based reviews (clarity, originality, soundness) for conference submissions. These systems simulate \emph{review generation} but not \emph{iterative revision}, limiting their impact on research quality.
+
+\textbf{Review quality assessment}: Recent work~\cite{dycke2023automated, gao2023apo} assesses human review quality by comparing to expert consensus. However, these systems evaluate \emph{reviews}, not \emph{papers}---they identify good reviews but do not use reviews to improve papers.
+
+\textbf{Iterative review systems}: Our prior work~\cite{dellalibera2026review, dellalibera2026synthesis, dellalibera2026revision} established the 8-stage review lifecycle, P1/P2/P3 priority classification, and revision dynamics. This paper extends that work by comparing review-driven research to traditional user-directed research, demonstrating quality impact.
+
+\textbf{Our contribution}: First empirical evidence that iterative AI review improves research quality beyond user-directed work, with mechanistic analysis of how review processes (systematic questioning, embracing negative results, standards elevation, iteration forcing) drive improvements.
+
+\subsection{Research Quality Metrics}
+
+Assessing research quality is challenging due to subjectivity and domain variability~\cite{aksnes2019citations}.
+
+\textbf{Citation-based metrics}: Traditional metrics (citation count, h-index, impact factor) measure post-publication impact, not pre-submission quality~\cite{waltman2016review}. These metrics are retrospective, making them unsuitable for assessing work-in-progress.
+
+\textbf{Structural quality metrics}: Recent work develops rubrics for research structure---hypothesis clarity~\cite{glass2021hypothesis}, experimental rigor~\cite{riley2019cochrane}, reproducibility~\cite{stodden2016enhancing}. However, these metrics assess individual dimensions, not overall research maturity.
+
+\textbf{Peer review as ground truth}: Some studies~\cite{squazzoni2020peer, bornmann2011scientific} use peer review scores as ground truth for quality, but human peer review is noisy, biased, and low inter-rater reliability~\cite{lee2013bias, tomkins2017reviewer}. Our work uses AI-simulated peer review as a consistent, structured alternative.
+
+\textbf{Multi-dimensional assessment}: Our 10-dimension framework (Section~\ref{sec:method}) extends prior work by combining structural metrics (hypothesis clarity, reproducibility), process metrics (experimental rigor, systematic testing), and maturity metrics (theory building, negative results), providing holistic quality assessment.
+
+\textbf{Our contribution}: First application of multi-dimensional quality assessment to compare research paradigms (traditional vs.\ review-driven), demonstrating effect sizes across dimensions.
+
+\subsection{Human-AI Collaboration in Research}
+
+Studies of human-AI collaboration~\cite{wang2024can, zhang2023coauthor} show mixed results---AI can accelerate drafting but may reduce critical thinking~\cite{dell2023navigating} if users over-rely on generated content. Our work suggests a resolution: \textbf{shift AI from executor (traditional) to autonomous researcher responding to structured review (panel-driven)}, preserving user agency through facilitation and domain expertise while maintaining research rigor through review standards.
+
+\textbf{Comparison to prior frameworks}:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Co-writing systems}~\cite{lee2022coauthor}: User directs, AI drafts sections, user revises. Similar to our traditional paradigm.
+
+\item \textbf{Idea generation systems}~\cite{gero2024social}: AI generates hypotheses, user selects and refines. User remains director.
+
+\item \textbf{Autonomous agents}~\cite{wang2024chemreasoner}: AI conducts full investigation with minimal oversight. High autonomy but limited quality control.
+
+\item \textbf{Panel-driven (ours)}: AI conducts investigation responding to structured expert review. High autonomy with high quality control through review feedback loops.
+\end{itemize}
+
+Our work introduces a fourth collaboration model distinct from prior paradigms, balancing autonomy and quality through structured review.
+
+\subsection{Positioning Summary}
+
+Our work makes three contributions to these literature streams:
+
+\begin{enumerate}[leftmargin=*]
+\item \textbf{To AI-assisted research}: First empirical comparison of user-directed vs.\ review-driven paradigms, showing +127\% quality improvement with review-driven approach.
+
+\item \textbf{To automated peer review}: First demonstration that iterative AI review improves research quality beyond single-round feedback generation, with mechanistic analysis of improvement drivers.
+
+\item \textbf{To research quality metrics}: Multi-dimensional quality framework applied to paradigm comparison, extending prior structural metrics with process and maturity dimensions.
+\end{enumerate}
