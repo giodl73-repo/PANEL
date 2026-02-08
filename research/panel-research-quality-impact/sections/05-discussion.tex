@@ -89,9 +89,9 @@ Draft $\to$ user feedback $\to$ revise $\to$ done. Typically 1--2 rounds. Iterat
 
 \textbf{Impact}: Iteration forcing prevents premature convergence. Many breakthrough contributions require multiple failed approaches to expose fundamental limitations and motivate paradigm shifts. User-directed work rarely iterates deeply enough to reach these insights.
 
-\subsection{Role Dynamics: Director vs.\ Facilitator vs.\ Driver}
+\subsection{Role Dynamics and Human Agency}
 
-Our analysis reveals distinct role patterns between traditional and panel-driven research.
+Our analysis reveals distinct role patterns between traditional and panel-driven research. However, the observed shift from user-as-director to user-as-facilitator raises fundamental questions about human agency and meaningful control in AI-assisted research~\cite{shneiderman2022human}.
 
 \subsubsection{Traditional Research Roles}
 
@@ -159,7 +159,53 @@ The user's edge-weighting idea (``weight edges to avoid cutting minority communi
 
 \textbf{Enabling factor}: Panel-driven systematic exploration created the context for this insight. Without 8+ rounds exposing multi-constraint limitations, the need for paradigm shift would not have been apparent.
 
-\textbf{Verdict}: Panel was the \textbf{primary driver} of scientific investigation, creating conditions for breakthrough. User provided \textbf{critical domain insight} at the right moment. This collaboration model---panel driving exploration, user providing domain expertise, Claude executing---may be optimal for AI-assisted research.
+\textbf{Verdict}: The breakthrough required \textbf{essential collaboration} between all three parties. Panel-driven systematic exploration created conditions for insight, user provided critical domain knowledge, and Claude executed experiments. Rather than panel primacy with user facilitation, this represents genuine complementarity where each party contributes unique capabilities.
+
+\subsubsection{Human Agency in Panel-Driven Research}
+
+The observed role shift from user-as-director to user-as-facilitator raises fundamental questions about meaningful human control~\cite{shneiderman2022human}. We analyze panel-driven research through the four principles of Human-Centered AI (HCAI):
+
+\textbf{1. Comprehension}: \textit{Can users understand what the system is doing and why?}
+
+In panel-driven research, the user must comprehend: (1) what questions the panel is asking, (2) why Claude explores specific alternatives, and (3) how findings relate to research goals. The VRA case study suggests comprehension is maintained---the user recognized when Claude exhausted algorithmic alternatives (round 4) and when domain insight was needed (round 5). However, this comprehension may require substantial expertise. The author (who created the panel system and has software engineering background) could follow the investigation trajectory. Whether users without research methodology training or technical backgrounds can maintain comprehension remains an open question requiring multi-user validation.
+
+\textbf{2. Appropriate Trust}: \textit{Do users know when to trust vs.\ question system decisions?}
+
+Panel-driven research demands calibrated trust. Users must trust the panel to identify methodological gaps while questioning panel suggestions that conflict with domain constraints. The edge-weighting example demonstrates appropriate trust: the user trusted panel-driven exploration through rounds 1-4 (trying n-way, adaptive, tree variations) but recognized when a fundamentally different approach was needed (round 5). This calibration may be fragile---over-trust could lead users to follow panel suggestions into dead ends, while under-trust could cause premature termination of productive exploration. The study's single-user design prevents assessing whether trust calibration generalizes.
+
+\textbf{3. Self-Efficacy}: \textit{Do users feel capable of influencing outcomes?}
+
+The role shift from director to facilitator may reduce self-efficacy for some users. In traditional workflows, users directly control research direction, experiencing clear cause-effect relationships between their decisions and outcomes. In panel-driven workflows, users influence outcomes indirectly through domain insights and facilitation. The VRA breakthrough shows users can maintain efficacy---the edge-weighting insight directly enabled the Alabama breakthrough. However, users may experience reduced efficacy during extended panel-driven exploration periods (rounds 1-4) where their role is primarily monitoring and technical support. Whether this efficacy reduction is acceptable depends on users' intrinsic motivation (do they value breakthrough outcomes over process control?) and requires empirical study.
+
+\textbf{4. Agency}: \textit{Do users retain meaningful control over the research process?}
+
+This is the most critical concern. Agency requires not just the \textit{ability} to influence outcomes, but \textit{meaningful control} over key decisions. In panel-driven research, the panel controls:
+\begin{itemize}[leftmargin=*]
+\item What methodological gaps are prioritized
+\item Which alternative approaches are explored
+\item When exploration is sufficient vs.\ requires more iteration
+\item What constitutes acceptable evidence for claims
+\end{itemize}
+
+Users control:
+\begin{itemize}[leftmargin=*]
+\item Domain knowledge and problem framing
+\item When to override panel suggestions based on domain constraints
+\item Whether to continue panel-driven investigation or terminate
+\item What insights to contribute at critical junctures
+\end{itemize}
+
+The question is whether user-controlled elements constitute \textit{meaningful} control. We argue they do, but with important caveats:
+
+\textbf{For expert users} (domain knowledge + research methodology + technical skills): Panel-driven research preserves agency through complementarity. Users contribute what the panel cannot (domain insights, constraint recognition, intervention timing), while the panel contributes what users may lack (systematic exploration, methodological rigor, exhaustive alternative testing). The VRA case demonstrates this complementarity---neither party could have achieved the breakthrough alone.
+
+\textbf{For domain-expert-only users} (domain knowledge but limited methodology/technical skills): Agency may be preserved but fragile. Domain insights remain valuable (edge-weighting idea), but users may struggle to recognize when panel exploration has stalled or when intervention is needed. The ability to override panel suggestions requires understanding why suggestions were made, which requires some methodological literacy.
+
+\textbf{For novice users} (limited domain + methodology + technical skills): Agency is likely compromised. Without domain knowledge to contribute or methodology expertise to evaluate panel suggestions, users become passive observers. The panel makes scientific decisions, Claude executes, and users lack the expertise to meaningfully influence either. This contradicts the paper's claim that panel-driven workflows ``lower expertise thresholds''---they may actually require \textit{different} expertise (domain + facilitation) rather than less expertise overall.
+
+\textbf{Expert-user confound}: Critically, our evidence comes from the author---who created the panel system, has software engineering expertise, and successfully recognized intervention moments. This represents a best-case scenario for maintaining agency. Multi-user validation with varying expertise levels is essential to assess whether agency is preserved for typical users.
+
+\textbf{Recommendation}: Panel-driven research should be framed as \textit{shifting expertise requirements} rather than \textit{lowering expertise thresholds}. Users need strong domain knowledge and sufficient technical literacy to facilitate execution, but may need less research methodology expertise than traditional workflows require. Whether this tradeoff increases or decreases accessibility depends on the user population.
 
 \subsection{Implications for AI-Assisted Research}
 
@@ -173,11 +219,13 @@ The user's edge-weighting idea (``weight edges to avoid cutting minority communi
 
 \subsubsection{For Users}
 
-\textbf{Reduced burden}: Panel reduces user need to direct every step, identify gaps, and demand systematic testing. Users without deep research backgrounds can produce rigorous work.
+\textbf{Shifted burden, not reduced burden}: Panel reduces user need to direct every research step, identify methodological gaps, and demand systematic testing. However, it introduces new demands: monitoring extended exploration periods, recognizing intervention moments, and providing domain insights at critical junctures. Whether total burden decreases depends on user expertise and task characteristics.
 
-\textbf{Shifted value}: User value moves from research direction to domain expertise and facilitation. The VRA breakthrough required both panel-driven systematic exploration (rounds 1--4) and user domain insight (edge-weighting, round 5).
+\textbf{Shifted value}: User value moves from research direction to domain expertise and facilitation. The VRA breakthrough required both panel-driven systematic exploration (rounds 1--4) and user domain insight (edge-weighting, round 5). This complementarity works when users possess strong domain knowledge but may lack research methodology training.
 
-\textbf{Expertise threshold}: Panel-driven workflows may lower the expertise threshold for producing publication-quality research. However, domain knowledge remains critical at key junctures.
+\textbf{Expertise requirements, not thresholds}: Panel-driven workflows \textit{shift} expertise requirements rather than simply lowering thresholds. Users need: (1) domain knowledge to contribute insights, (2) technical skills to facilitate execution (debugging, infrastructure), and (3) sufficient methodology literacy to recognize when to intervene. Whether this bundle is more or less accessible than traditional research direction expertise requires multi-user validation. Our evidence comes from an expert user (the author), representing a best-case scenario.
+
+\textbf{Expert-user confound}: The study's single-user design introduces a critical limitation. The author created the panel system, has software engineering expertise, and successfully identified intervention moments. Multi-user studies with varying expertise levels (novice, domain-only, methodology-only, both) are essential to assess whether panel-driven workflows truly enable broader participation or merely redistribute expertise demands.
 
 \subsubsection{For Research Quality}
 

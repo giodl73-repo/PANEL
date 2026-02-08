@@ -1,7 +1,9 @@
 \section{Methodology}
 \label{sec:method}
 
-We conduct a comparative case study analyzing research outputs from a single computational redistricting project under two review paradigms: traditional Claude-assisted writing and panel-driven review methodology. This within-project design controls for domain, author expertise, AI model, and temporal factors, isolating the effect of review methodology on research quality.
+We conduct a comparative case study analyzing research outputs from a single computational redistricting project under two review paradigms: traditional Claude-assisted writing and panel-driven review methodology. This within-project design controls for domain, author expertise, AI model, and temporal factors, enabling mechanistic analysis of how review processes may affect research quality.
+
+\textbf{Case study framing}: This is a hypothesis-generating case study, not an experimental evaluation. The sample consists of 1 panel-driven paper and 3 traditional papers (N=4 total, N=1 in treatment condition). \textbf{Statistical inference is not possible given this sample size}, and quantitative comparisons should be interpreted as descriptive observations rather than causal estimates. Our goal is to identify mechanisms and generate hypotheses for future experimental validation, not to establish definitive causal relationships.
 
 \subsection{Corpus Selection}
 
@@ -109,10 +111,12 @@ For each major research decision (algorithm choice, experimental design, contrib
 
 \subsection{Limitations}
 
-\textbf{Sample size}: 3 traditional papers vs.\ 1 panel-driven paper limits statistical power. However, the within-project design and qualitative process tracing provide mechanistic insights beyond what larger between-project samples could offer.
+\textbf{Sample size prevents statistical inference}: N=1 panel-driven paper vs.\ N=3 traditional papers prevents hypothesis testing, confidence interval estimation, or causal inference. All quantitative comparisons are descriptive observations, not statistical estimates. This study generates hypotheses requiring experimental validation.
 
-\textbf{Single domain}: Computational redistricting may not represent all research domains. Replication across domains (NLP, systems, HCI) is needed.
+\textbf{Selection bias}: The VRA compliance paper (panel-driven) addresses a more complex problem (achieving specific demographic targets) than traditional papers (general redistricting). Problem complexity differences may explain quality differences independent of review methodology. We cannot rule out this confound with the current design.
 
-\textbf{Single author}: One researcher produced all papers, controlling for author expertise but limiting generalizability to other users. Multi-user studies are planned.
+\textbf{Single domain}: Computational redistricting may not represent all research domains. Replication across domains (NLP, systems, HCI) is needed to assess generalizability.
 
-\textbf{Rater bias}: The author served as one rater, introducing potential bias toward panel-driven work. We mitigate this through independent second rater, explicit scoring rubrics, and process tracing evidence.
+\textbf{Single author}: One researcher produced all papers, controlling for author expertise but limiting generalizability to other users. Multi-user studies with varying expertise levels are essential for validation.
+
+\textbf{Rater bias}: The author served as one rater and created the panel system, introducing potential bias toward panel-driven work. We mitigate this through independent second rater, explicit scoring rubrics, and process tracing evidence, but bias cannot be eliminated.

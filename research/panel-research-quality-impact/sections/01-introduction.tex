@@ -1,6 +1,6 @@
 \section{Introduction}
 
-AI-assisted research is proliferating rapidly---large language models now help draft papers, generate code, design experiments, and analyze results~\cite{zhou2024large}. Yet a fundamental question remains unanswered: \textbf{Does structured peer review simulation improve AI-assisted research quality, or merely add process overhead?}
+AI-assisted research is proliferating rapidly---large language models now help draft papers, generate code, design experiments, and analyze results~\cite{zhou2024large}. Yet a fundamental question remains under-explored: \textbf{Does structured peer review simulation improve AI-assisted research quality, or merely add process overhead?}
 
 Two paradigms dominate current practice:
 
@@ -10,7 +10,7 @@ Two paradigms dominate current practice:
 
 The distinction is not merely procedural. In traditional workflows, users must possess sufficient domain expertise to direct the research, identify gaps, and demand systematic testing. Panel-driven workflows shift this burden to the review process itself, raising a provocative hypothesis: \textbf{The panel may elevate research quality beyond what user direction alone achieves.}
 
-We test this hypothesis through a natural experiment within a single computational redistricting project. The apportionment repository contains both traditional Claude-assisted papers (written in early 2026 with user direction) and panel-driven research (VRA compliance investigation conducted under systematic review). This within-project comparison controls for domain, author, AI model, and timeframe, isolating the effect of review methodology.
+We explore this question through a case study within a single computational redistricting project. The apportionment repository contains both traditional Claude-assisted papers (written in early 2026 with user direction) and panel-driven research (VRA compliance investigation conducted under systematic review). This within-project comparison controls for domain, author, AI model, and timeframe, isolating the effect of review methodology.
 
 \subsection{Research Questions}
 
@@ -46,43 +46,45 @@ These papers were written with Claude assistance under user direction---the user
 
 This paper emerged from panel review feedback demanding systematic alternatives when initial approaches failed. The user's role shifted from director to facilitator (debugging METIS errors, providing domain insights), while the panel drove the scientific trajectory.
 
-\subsection{Key Findings Preview}
+\subsection{Key Observations}
 
-Our analysis reveals:
+Our case study reveals several noteworthy patterns:
 
 \begin{itemize}[leftmargin=*]
-\item \textbf{+127\% overall quality improvement}: Panel-driven research scores 5.0/5.0 vs.\ 2.2/5.0 for traditional work across 10 quality dimensions (hypothesis clarity, experimental rigor, systematic testing, negative results, theory building, innovation, iteration depth, citation precision, discussion depth, reproducibility).
+\item \textbf{Substantial quality differences observed}: Panel-driven research scores 5.0/5.0 vs.\ 2.2/5.0 for traditional work across 10 quality dimensions (hypothesis clarity, experimental rigor, systematic testing, negative results, theory building, innovation, iteration depth, citation precision, discussion depth, reproducibility), representing a +127\% difference.
 
-\item \textbf{Panel acts as primary scientific driver}: The review process identifies gaps, demands systematic testing, questions assumptions, and validates breakthroughs---functions typically performed by expert collaborators or advisors.
+\item \textbf{Four mechanisms identified}: The review process exhibits systematic questioning, embracing negative results, standards elevation, and iteration forcing---mechanisms that may explain observed quality differences.
 
-\item \textbf{Breakthrough innovations require systematic failure exploration}: Edge-weighting emerged only after exhaustive panel-driven testing revealed multi-constraint limitations. Traditional research would document this as a limitation; panel-driven research treats it as a puzzle demanding new approaches.
+\item \textbf{Innovation trajectory differs}: Edge-weighting emerged after exhaustive panel-driven testing revealed multi-constraint limitations. Traditional research documented similar limitations without further investigation.
 
-\item \textbf{User role shifts from director to facilitator}: In panel-driven work, users provide infrastructure support (debugging, environment fixes) and domain insights, but the panel guides scientific direction.
+\item \textbf{Role dynamics shift observed}: In panel-driven work, the user provided infrastructure support and domain insights, while the panel guided scientific exploration through iterative feedback.
 
-\item \textbf{Publication venue projection shifts}: Traditional papers target regional conferences (60--70\% acceptance likelihood); panel-driven work targets top-tier computational science journals (Science Advances, Nature Computational Science) with 80--90\% acceptance likelihood after revision.
+\item \textbf{Scope limitations}: Given the small sample (N=1 panel-driven paper vs.\ N=3 traditional), these observations generate hypotheses rather than establish causal relationships. Statistical inference is not possible, and findings should be treated as hypothesis-generating.
 \end{itemize}
 
 \subsection{Contributions}
 
-This work makes four contributions:
+This case study makes four contributions:
 
 \begin{enumerate}[leftmargin=*]
-\item \textbf{First empirical comparison of traditional vs.\ panel-driven AI-assisted research}, using a natural experiment within a single project to control for confounds.
+\item \textbf{First within-project comparison of traditional vs.\ panel-driven AI-assisted research}, using a case study design within a single project to control for confounds while acknowledging sample size limitations.
 
-\item \textbf{Quantitative quality metrics across 10 dimensions}, demonstrating +127\% overall improvement with panel-driven methodology.
+\item \textbf{Multi-dimensional quality assessment framework}, comparing traditional and panel-driven research across 10 dimensions and observing substantial differences (+127\%) that warrant further investigation.
 
-\item \textbf{Mechanistic analysis of review processes driving quality}, identifying systematic questioning, embracing negative results, standards elevation, and iteration forcing as key mechanisms.
+\item \textbf{Mechanistic hypotheses for quality differences}, identifying systematic questioning, embracing negative results, standards elevation, and iteration forcing as candidate mechanisms that may explain observed patterns.
 
-\item \textbf{Role dynamics characterization}, showing how panel-driven workflows enable users without deep research backgrounds to produce rigorous work through facilitation rather than direction.
+\item \textbf{Role dynamics characterization with process tracing}, documenting how user contributions shift from research direction to domain expertise and facilitation in panel-driven workflows, and proposing rigorous experimental designs for future validation.
 \end{enumerate}
 
 \subsection{Scope and Limitations}
 
-We emphasize three scope boundaries:
+We emphasize four scope boundaries:
 
-\textbf{Single-project analysis}: Evidence comes from one computational redistricting project, limiting generalizability. However, the within-project design controls for domain, author, and timeframe, isolating review methodology effects.
+\textbf{Case study design, not experimental}: This study compares 1 panel-driven paper to 3 traditional papers within a single project. Statistical inference is not possible with N=1, and findings should be treated as hypothesis-generating rather than conclusive. Problem complexity differences (VRA compliance vs.\ general redistricting) may confound results.
 
-\textbf{Quality dimensions}: We measure structural qualities (hypothesis clarity, experimental rigor) and scientific maturity (theory building, embracing negative results), not external validation (citation impact, reproducibility by others), which requires longitudinal study.
+\textbf{Single-project analysis}: Evidence comes from one computational redistricting project, limiting generalizability. However, the within-project design controls for domain, author, and timeframe, providing a strong foundation for mechanistic hypotheses.
+
+\textbf{Quality dimensions}: We measure structural qualities (hypothesis clarity, experimental rigor) and scientific maturity (theory building, embracing negative results), not external validation (citation impact, reproducibility by others), which requires longitudinal study. Dimension selection may favor panel-driven work.
 
 \textbf{AI model consistency}: All work used Claude Sonnet 4.5 (Jan--Feb 2026), controlling for model capability differences. Results may not transfer to other models without similar capabilities.
 
