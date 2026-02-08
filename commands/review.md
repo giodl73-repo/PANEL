@@ -6,6 +6,10 @@ user-invocable: true
 
 # panel:review — Per-Paper Review Lifecycle
 
+**Purpose**: AI-simulated feedback for quality improvement. This generates synthetic assessments to help strengthen your work before actual submission.
+
+**Important**: This is NOT peer review. Use suggestions to improve your work, not as "reviewer responses." These are AI-generated insights based on domain expert personas, not actual human judgments.
+
 Moves a single paper through all 8 lifecycle stages, reading `_panel.yaml` for re-entrancy. This is the paper-level tier of the three-tier review architecture.
 
 ## Three-Tier Context
@@ -42,11 +46,98 @@ Paper-level reviews bubble up to `panel:convene`. Panel-level revision items (PP
 
 1. **Read state**: Load `_panel.yaml` from the paper directory. If missing, start at `draft`.
 2. **Determine current stage**: Read `stage` field.
-3. **Execute stage logic**: Run the appropriate stage handler (see shared/stage-machine.md). **The handler MUST complete all its work, including any interactive prompts, before returning.**
-4. **Check gate**: Verify the stage's gate condition is met (see config/stages.yaml). Gate checks happen AFTER the handler completes.
-5. **Advance**: If gate passes, update `_panel.yaml` stage + history, move to next stage.
-6. **Loop detection**: If at `recheck` and gate fails (avg < 2.5/4 or any < 2/4), loop back to `synthesis`.
-7. **Stop conditions**: Reached `--until` stage, or `accepted`, or gate requires user input (submit/accepted).
+3. **Content mode detection** (first time only): If `content_mode` is not set in `_panel.yaml`:
+   - Run content analysis using `shared/content-analyzer.md`
+   - Show analysis results (word count, section files, inferred mode)
+   - Ask user to confirm or override the inferred mode
+   - Save confirmed mode to `_panel.yaml` with `content_mode_confirmed: true`
+   - Include mode in reviewer context for all subsequent reviews
+4. **Execute stage logic**: Run the appropriate stage handler (see shared/stage-machine.md). **The handler MUST complete all its work, including any interactive prompts, before returning.**
+5. **Check gate**: Verify the stage's gate condition is met (see config/stages.yaml). Gate checks happen AFTER the handler completes. **Gates are mode-aware** (see Mode-Aware Gates section).
+6. **Advance**: If gate passes, update `_panel.yaml` stage + history, move to next stage.
+7. **Loop detection**: If at `recheck` and gate fails (avg < 2.5/4 or any < 2/4), loop back to `synthesis`.
+8. **Stop conditions**: Reached `--until` stage, or `accepted`, or gate requires user input (submit/accepted), or reached terminal stage for content mode.
+
+## Content Modes
+
+Papers are reviewed at three content maturity levels:
+
+| Mode | Content Level | Word Count | Review Focus | Max Stage |
+|------|--------------|------------|--------------|-----------|
+| `abstract` | Abstract/outline only | <500 words | Concept viability, novelty, scope | `synthesis` |
+| `draft` | Incomplete paper | 500-3000 words | Structure, feasibility, approach | `revision` |
+| `full` | Complete paper | 3000+ words | Publication readiness, rigor | `accepted` |
+
+### Content Analysis
+
+On first run, if `content_mode` is not set in `_panel.yaml`, the command:
+
+1. **Analyzes** paper directory:
+   - Checks `main.tex` for abstract
+   - Counts section files and estimates word count
+   - Looks for bibliography, figures
+   - Infers mode based on total content
+
+2. **Shows analysis**:
+   ```
+   📄 Content Analysis
+      main.tex: ✓ 65 lines
+      Abstract: ✓ ~250 words
+      Sections: 0 files (empty directory)
+      Bibliography: ✗ not found
+      Total: ~250 words
+
+   ⚙️ Inferred Content Mode: abstract (high confidence)
+
+   Expected review behavior:
+   • Focus on concept viability and novelty
+   • Evaluate research question significance
+   • Assess feasibility of proposed approach
+   • No critique of missing implementation details
+   • Terminal stage: synthesis (won't advance to submission)
+   ```
+
+3. **Asks for confirmation**:
+   ```
+   Does this match your expectations?
+   [a] Abstract mode (concept review)
+   [d] Draft mode (structure + feasibility)
+   [f] Full mode (publication ready)
+   [Enter] Accept inferred mode
+   ```
+
+4. **Saves confirmed mode** to `_panel.yaml`
+
+### Mode-Aware Gates
+
+Content mode affects stage advancement:
+
+**Abstract mode**:
+- Terminal stage: `synthesis`
+- Cannot advance to `revision`, `recheck`, `ready`, `submit`, or `accepted`
+- Synthesis verdict: "Concept Approved" or "Concept Rejected"
+- Intended for early-stage idea validation
+
+**Draft mode**:
+- Terminal stage: `revision`
+- Cannot advance to `recheck`, `ready`, `submit`, or `accepted`
+- After addressing P1 items, verdict: "Ready for Full Review" (upgrade to full mode)
+- Intended for structural feedback on incomplete papers
+
+**Full mode**:
+- No terminal stage restrictions
+- Full lifecycle through `accepted`
+- Standard review criteria and gates
+
+### Mode Transitions
+
+Users can upgrade content mode by editing `_panel.yaml`:
+```yaml
+content_mode: full  # changed from abstract
+content_mode_confirmed: true
+```
+
+After upgrading, run `panel:review` again to continue lifecycle with new expectations.
 
 ## Stage Handlers
 
@@ -74,55 +165,55 @@ Paper-level reviews bubble up to `panel:convene`. Panel-level revision items (PP
 - **MUST always produce this file** — if it already exists (from setup), update it with current P1/P2/P3 items
 - Track P1 item completion in `_panel.yaml.p1_items`
 
-**Phase 2: Interactive revision application (MUST happen in this handler, before gate check)**
+**Phase 2: Interactive improvement application (MUST happen in this handler, before gate check)**
 
-Immediately after creating the revision plan, offer to apply the revisions. Use AskUserQuestion:
+Immediately after creating the improvement plan, offer to apply the suggestions. Use AskUserQuestion:
 
 ```
-question: "Revision plan created with {N} P1 items, {M} P2 items. Apply revisions now?"
-header: "Revisions"
+question: "Quality improvement plan created with {N} high-impact items, {M} medium-impact items. Apply improvements now?"
+header: "Improvements"
 options:
-  - label: "Yes, apply all revisions (Recommended)"
-    description: "Edits sections/*.tex to address P1 and P2 items, then marks them complete"
-  - label: "Apply P1 only (blocking items)"
-    description: "Addresses only the blocking items needed to advance to recheck"
-  - label: "No, I'll revise manually"
+  - label: "Yes, apply suggested improvements (Recommended)"
+    description: "Enhances sections/*.tex based on P1 and P2 suggestions, strengthening the work"
+  - label: "Apply P1 only (high-impact items)"
+    description: "Applies only the highest-impact improvements"
+  - label: "No, I'll improve manually"
     description: "Stops here — run panel:review again after making your own edits"
 ```
 
 **If user selects apply:**
 
-1. Read REVISION-PLAN.md to get the full list of P1 (and optionally P2) items with target sections
+1. Read IMPROVEMENT-PLAN.md (or REVISION-PLAN.md for backward compatibility) to get P1 (and optionally P2) items with target sections
 2. For each item, in priority order (P1 first, then P2):
    a. Read the target `sections/*.tex` file
-   b. Read the relevant reviewer feedback from SYNTHESIS.md for context
-   c. Apply the revision: edit the LaTeX source to address the issue
+   b. Read the relevant simulated feedback from quality assessment for context
+   c. Apply the improvement: edit the LaTeX source to strengthen that aspect
    d. Preserve the paper's existing voice, structure, and formatting
-   e. Mark the item as addressed: check off the `- [ ]` boxes in REVISION-PLAN.md
+   e. Mark the item as addressed: check off the `- [ ]` boxes in plan file
    f. Update `_panel.yaml.p1_items` with `addressed: true` for P1 items
-3. After all revisions applied, show a summary:
+3. After all improvements applied, show a summary:
 
    ```
-   Revisions Applied — panel-transactional-feature-upgrade
+   Improvements Applied — panel-transactional-feature-upgrade
    ═══════════════════════════════════════════════════════════════════════
 
-   P1 items (blocking):
+   P1 items (high impact):
      ✓ P1.1  Formalize transaction properties     sections/03-methodology.tex
      ✓ P1.2  Scope claims to craft ecosystem      sections/01-introduction.tex, 05-discussion.tex
      ✓ P1.3  Add wall-clock performance data       sections/04-evaluation.tex
 
-   P2 items (important):
+   P2 items (medium impact):
      ✓ P2.1  Expand related work comparison        sections/02-related-work.tex
      ✓ P2.2  Add failure mode discussion            sections/05-discussion.tex
 
-   All P1 items addressed — ready to advance to recheck.
+   High-impact improvements applied — ready for next quality check.
    ```
 
-4. Auto-commit the revisions
+4. Auto-commit the improvements
 
-**Revision principles:**
-- Address the specific concern raised by reviewers — don't rewrite sections unnecessarily
-- Add content rather than remove (reviewers want more depth, not less)
+**Improvement principles:**
+- Strengthen the specific aspect identified in simulated feedback — don't rewrite unnecessarily
+- Add content and depth rather than remove
 - When adding empirical data (performance numbers, comparisons), use realistic placeholder values marked with `% TODO: verify` LaTeX comments if actual data isn't available
 - When strengthening claims, add qualifiers and citations rather than removing the claim
 - Preserve existing `\label{}` and `\ref{}` references

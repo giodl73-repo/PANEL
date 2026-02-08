@@ -2,6 +2,29 @@
 
 A Claude Code plugin that drives research papers through a complete AI-simulated expert review lifecycle via a three-tier review architecture: paper-level reviews, module-level panels, and monorepo-level board reviews.
 
+## ⚠️ Critical Framing
+
+**This is a quality improvement simulation, NOT peer review.**
+
+### What This Means:
+- **All feedback is AI-generated** based on domain expert personas (e.g., "Percy Liang," "Michael Bernstein")
+- **Named researchers are NOT participants** — they did not write, review, or endorse any output
+- **Purpose: strengthen your work** before real submission, not "respond to reviewers"
+- **P1/P2/P3 = improvement suggestions**, not reviewer mandates
+- **Use what helps, ignore what doesn't** align with your research goals
+
+### Template Policy:
+- **NEVER use conference templates** (acmart, neurips, etc.) unless user **explicitly submitting** to that conference
+- **Default to generic `article` class** to emphasize this is quality work, not submission-ready formatting
+- **Only use conference formatting** when user has real reviewer feedback or is actually submitting
+
+### Language to Use:
+- ✅ "simulated feedback," "AI-generated assessment," "quality improvement suggestions"
+- ✅ "AI persona based on [Name]," "simulated reviewer perspective"
+- ✅ "strengthen this aspect," "enhance the work," "improvement opportunities"
+- ❌ "reviewer said," "address reviewer concerns," "respond to feedback"
+- ❌ "must fix," "blocking issue," "required for acceptance"
+
 ## Three-Tier Review Architecture
 
 ```
@@ -27,11 +50,11 @@ A Claude Code plugin that drives research papers through a complete AI-simulated
 - **Up**: Paper reviews surface issues → panel sees patterns across papers → board sees patterns across modules
 - **Down**: Board generates B1/B2/B3 per module → panel generates PP1/PP2/PP3 per paper → papers revise
 
-**Priority classification at each tier:**
+**Impact classification at each tier:**
 
-| Tier | Prefix | Blocking | Important | Nice-to-have |
+| Tier | Prefix | High Impact (P1) | Medium Impact (P2) | Low Impact (P3) |
 |------|--------|----------|-----------|--------------|
-| Paper | P1/P2/P3 | 3+ reviewers or major issue | 2+ reviewers | 1 reviewer |
+| Paper | P1/P2/P3 | 3+ personas or critical gap | 2+ personas | 1 persona |
 | Panel | PP1/PP2/PP3 | Cross-paper pattern or threatens module | 2+ papers affected | 1 paper |
 | Board | B1/B2/B3 | 3+ board members or threatens program | 2+ modules affected | 1 module |
 

@@ -86,6 +86,7 @@ panel:setup --connect <path>
 ### Per-paper
 - `<paper-name>` — Paper directory name (auto-prefixed with `panel-` if missing)
 - `[venue]` — Target venue (e.g., "CHI 2026", "NeurIPS D&B"); prompts via AskUserQuestion if omitted
+- `--mode <abstract|draft|full>` — Content mode (default: auto-detect during first review)
 
 ---
 
@@ -482,6 +483,8 @@ title: ""                  # Author fills in
 venue: "<venue>"
 stage: draft
 round: 0
+content_mode: <mode>       # If --mode specified; omit otherwise (auto-detected on first review)
+content_mode_confirmed: true  # If --mode explicitly provided
 reviewers: []
 reviews: {}
 p1_items: []
@@ -490,6 +493,11 @@ history:
     date: <today>
     note: "Paper initialized via panel:setup"
 ```
+
+**Content mode handling**:
+- If `--mode abstract|draft|full` provided, set `content_mode` and `content_mode_confirmed: true`
+- If `--mode` omitted, skip `content_mode` field entirely — will be auto-detected during first `panel:review`
+- Mode affects review expectations and maximum stage advancement (see commands/review.md)
 
 ### Step 6: Update RESEARCH.md
 

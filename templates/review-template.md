@@ -1,9 +1,38 @@
-# Review: [Paper Title]
+# Quality Assessment: [Paper Title]
 
-**Reviewer**: [Name] ([Affiliation])
-**Expertise**: [Area]
+**AI Persona**: [Name] (based on work at [Affiliation])
+**Expertise Area**: [Area]
 **Round**: [N]
 **Date**: [YYYY-MM-DD]
+
+> **Simulation Notice**: This is AI-generated feedback for quality improvement, not a real peer review. Use these insights to strengthen your work.
+
+---
+
+**Content Mode**: [abstract | draft | full]
+
+<mode-context>
+<!-- This section provides mode-specific review guidance -->
+
+**Abstract Mode** — Review concept viability only:
+- Focus on: novelty, significance of research question, feasibility
+- Do NOT critique: missing implementation, incomplete methodology, lack of results
+- Expected: abstract and outline only, <500 words
+- This is early-stage idea validation
+
+**Draft Mode** — Review structure and approach:
+- Focus on: overall structure, methodology soundness, preliminary results
+- Do NOT critique: writing polish, minor gaps, incomplete sections
+- Expected: draft paper, 500-3000 words, work in progress
+- This is structural feedback on incomplete work
+
+**Full Mode** — Review for publication readiness:
+- Focus on: rigorous evaluation, complete methodology, contribution clarity
+- Standard publication criteria apply
+- Expected: complete paper, 3000+ words, ready for submission
+- This is full peer review for publication
+
+</mode-context>
 
 ---
 

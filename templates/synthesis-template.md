@@ -1,67 +1,69 @@
-# Review Synthesis — [Paper Title]
+# Quality Assessment — [Paper Title]
 
 **Paper**: [directory name]
 **Round**: [N]
 **Date**: [YYYY-MM-DD]
-**Reviewers**: [N]
+**Simulated Reviewers**: [N]
+
+> **Purpose**: This is a quality improvement simulation using AI-generated feedback. Use these insights to strengthen your work, not as "responses to reviewers." This is NOT a substitute for actual peer review.
 
 ---
 
-## Overview
+## Assessment Summary
 
 | Metric | Value |
 |--------|-------|
 | Average Score | [X.X]/4 |
 | Score Range | [min]-[max]/4 |
 | Consensus | [Strong/Moderate/Weak] (σ = [X.XX]) |
-| Overall Verdict | [Accept/Revise/Major Revisions] |
+| Quality Level | [Strong/Acceptable/Needs Improvement] |
 
-## Score Distribution
+## Simulated Feedback Distribution
 
-| Reviewer | Affiliation | Score | Verdict |
+| AI Persona | Based On | Score | Assessment |
 |----------|-------------|-------|---------|
-| [Name 1] | [Affiliation] | [X]/4 | [Verdict] |
-| [Name 2] | [Affiliation] | [X]/4 | [Verdict] |
+| [Name 1] | [Affiliation] | [X]/4 | [Assessment] |
+| [Name 2] | [Affiliation] | [X]/4 | [Assessment] |
 | ... | | | |
 
 ---
 
-## Priority 1: Blocking Issues
+## Priority 1: Critical Improvements
 
-Issues that must be addressed before resubmission. Raised by 3+ reviewers or flagged as major by any reviewer.
+Areas where strengthening the work would significantly improve its quality and contribution. Multiple simulated reviewers identified these gaps.
 
 ### P1.1: [Issue Title]
-**Raised by**: [Reviewer A], [Reviewer B], [Reviewer C]
-**Description**: [Consolidated description of the issue]
-**Impact**: [Why this matters for the paper's contribution]
-**Recommended action**: [Specific steps to address]
+**Identified by**: [Persona A], [Persona B], [Persona C]
+**Description**: [What could be improved and why]
+**Impact**: [How this improvement would strengthen the contribution]
+**Suggestion**: [Specific ways to enhance this aspect]
 
 ### P1.2: [Issue Title]
 [...]
 
 ---
 
-## Priority 2: Important Improvements
+## Priority 2: Substantial Enhancements
 
-Issues that would significantly strengthen the paper. Raised by 2+ reviewers.
+Areas where improvements would meaningfully strengthen the work. Multiple personas identified these opportunities.
 
 ### P2.1: [Issue Title]
-**Raised by**: [Reviewer A], [Reviewer B]
-**Description**: [Consolidated description]
-**Recommended action**: [Steps to address]
+**Identified by**: [Persona A], [Persona B]
+**Description**: [What could be improved]
+**Suggestion**: [How to enhance this aspect]
 
 ### P2.2: [Issue Title]
 [...]
 
 ---
 
-## Priority 3: Minor Suggestions
+## Priority 3: Refinements
 
-Suggestions from individual reviewers. Address if time permits.
+Individual suggestions for polish and refinement. Consider these as optional enhancements.
 
 ### P3.1: [Issue Title]
-**Raised by**: [Reviewer A]
-**Suggestion**: [Description]
+**Identified by**: [Persona A]
+**Suggestion**: [Refinement idea]
 
 ### P3.2: [Issue Title]
 [...]
@@ -70,27 +72,29 @@ Suggestions from individual reviewers. Address if time permits.
 
 ## Areas of Strength
 
-Aspects that reviewers agreed were done well:
+Aspects that simulated feedback identified as strong:
 
-1. [Strength 1 — cited by N reviewers]
-2. [Strength 2 — cited by N reviewers]
-3. [Strength 3 — cited by N reviewers]
+1. [Strength 1 — noted by N personas]
+2. [Strength 2 — noted by N personas]
+3. [Strength 3 — noted by N personas]
 
-## Areas of Disagreement
+## Areas of Divergent Feedback
 
-Points where reviewers diverged:
+Points where simulated perspectives differed (consider which direction aligns with your goals):
 
-1. [Topic] — [Reviewer A] says [X], [Reviewer B] says [Y]
+1. [Topic] — [Persona A] suggests [X], [Persona B] suggests [Y]
 
 ---
 
-## Recommended Next Steps
+## Suggested Improvement Path
 
-1. **[Action 1]** — Addresses P1.1, P1.2 — Estimated effort: [X days]
-2. **[Action 2]** — Addresses P2.1 — Estimated effort: [X days]
-3. **[Action 3]** — Addresses P2.2, P3.1 — Estimated effort: [X days]
+Use these as starting points for strengthening your work:
 
-**Total estimated revision time**: [X weeks]
+1. **[Enhancement 1]** — Addresses P1.1, P1.2 — Estimated effort: [X days]
+2. **[Enhancement 2]** — Addresses P2.1 — Estimated effort: [X days]
+3. **[Enhancement 3]** — Addresses P2.2, P3.1 — Estimated effort: [X days]
+
+**Note**: These are suggestions for quality improvement, not requirements. Adapt based on your research goals and constraints.
 
 ---
 

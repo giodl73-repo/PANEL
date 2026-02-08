@@ -31,6 +31,7 @@ Panel — panel-review-methodology
 Title:  AI-Simulated Expert Review: A Methodology for Pre-Submission Paper Assessment
 Venue:  CHI 2026
 Stage:  synthesis (round 1)
+Mode:   full (3,245 words) — complete paper, publication-ready review
 
 Reviewers (5):
   Percy Liang          Stanford (HELM)           Score: 3/4  Accept

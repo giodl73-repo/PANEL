@@ -24,18 +24,23 @@ Shows a summary table of all papers in the current project with their review lif
 
 ```
 Panel Status — [Project Name]
-═══════════════════════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════════════════════════
 
- #  Paper                        Stage      Round  Score   Venue        Next Action
- ── ──────────────────────────── ────────── ───── ─────── ──────────── ──────────────────
- 1  panel-review-methodology     synthesis  1     2.2/4   CHI 2026     Generate SYNTHESIS.md
- 2  panel-reviewer-calibration   draft      0     —       EMNLP 2026   Set venue, select reviewers
- 3  panel-revision-dynamics      recheck    2     2.6/4   NeurIPS D&B  Reviews pass threshold ✓
- 4  panel-portfolio-assessment   ready      2     3.1/4   JCDL 2026    Cross-portfolio panel
- 5  panel-synthesis-methods      panel      1     —       AAAI 2026    3/5 reviews complete
+ #  Paper                        Mode     Stage      Round  Score   Venue        Next Action
+ ── ──────────────────────────── ──────── ────────── ───── ─────── ──────────── ──────────────────
+ 1  panel-review-methodology     full     synthesis  1     2.2/4   CHI 2026     Generate SYNTHESIS.md
+ 2  panel-reviewer-calibration   abstract draft      0     —       EMNLP 2026   Concept review only
+ 3  panel-revision-dynamics      full     recheck    2     2.6/4   NeurIPS D&B  Reviews pass threshold ✓
+ 4  panel-portfolio-assessment   full     ready      2     3.1/4   JCDL 2026    Cross-portfolio panel
+ 5  panel-synthesis-methods      draft    panel      1     —       AAAI 2026    3/5 reviews complete
 
-Summary: 5 papers | 1 ready | 2 in review | 1 revising | 1 drafting
+Summary: 5 papers | 3 full | 1 draft | 1 abstract | 1 ready | 2 in review
 ```
+
+**Content mode indicators**:
+- `abstract` — concept review only, terminal at synthesis
+- `draft` — structural review, terminal at revision
+- `full` — complete lifecycle (default, not shown if space limited)
 
 ## Next Action Logic
 

@@ -37,6 +37,47 @@ properties:
     default: 0
     description: Current review round number
 
+  content_mode:
+    type: string
+    enum: [abstract, draft, full]
+    description: Content maturity level (affects review expectations and max stage)
+
+  content_mode_confirmed:
+    type: boolean
+    description: Whether content mode was explicitly confirmed by user
+
+  content_analysis:
+    type: object
+    description: Automated content analysis results
+    properties:
+      main_tex_exists:
+        type: boolean
+      main_tex_lines:
+        type: integer
+      abstract_found:
+        type: boolean
+      abstract_words:
+        type: integer
+      section_count:
+        type: integer
+      section_words:
+        type: integer
+      bibliography_exists:
+        type: boolean
+      figures_dir_exists:
+        type: boolean
+      total_word_count:
+        type: integer
+      inferred_mode:
+        type: string
+        enum: [abstract, draft, full]
+      confidence:
+        type: string
+        enum: [high, medium, low]
+      analyzed_at:
+        type: string
+        format: date
+
   reviewers:
     type: array
     description: Assigned reviewer panel

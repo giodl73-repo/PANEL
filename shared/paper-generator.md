@@ -2,6 +2,14 @@
 
 Shared utility for generating complete paper directories with LaTeX content. Creates the same structure as `panel:setup` per-paper mode but with substantive content instead of empty templates.
 
+## CRITICAL: Template Policy
+
+**NEVER use conference-specific templates or document classes** (e.g., `acmart`, `neurips_2024`, `aaai`, `acl`) unless:
+1. User **explicitly states** they are submitting to a specific conference
+2. User has received **actual feedback from real reviewers** and is preparing resubmission
+
+**Default**: Use generic `article` class with clean, professional formatting. This emphasizes that papers are for quality improvement, not conference submission.
+
 ## Function
 
 ### generate_paper(proposal, options)

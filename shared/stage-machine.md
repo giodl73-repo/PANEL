@@ -36,6 +36,49 @@ Output: { passed: bool, reason: string, details: object }
 | submit | User confirmation flag in `_panel.yaml` |
 | accepted | User confirmation flag in `_panel.yaml` |
 
+### Mode-Aware Gates
+
+Content mode restricts maximum stage advancement:
+
+| Content Mode | Terminal Stage | Blocked Stages |
+|-------------|----------------|----------------|
+| `abstract` | `synthesis` | Cannot advance past synthesis |
+| `draft` | `revision` | Cannot advance past revision |
+| `full` | `accepted` | No restrictions |
+
+**Gate modification logic**:
+
+```
+function check_gate_with_mode(paper_dir, stage):
+    mode = state['content_mode'] or 'full'
+
+    # Check mode-based terminal stage
+    if mode == 'abstract' and stage == 'synthesis':
+        return {
+            passed: false,
+            reason: "Terminal stage for abstract mode",
+            terminal: true,
+            action: "Upgrade to draft/full mode to continue"
+        }
+
+    if mode == 'draft' and stage == 'revision':
+        return {
+            passed: false,
+            reason: "Terminal stage for draft mode",
+            terminal: true,
+            action: "Upgrade to full mode to continue"
+        }
+
+    # Otherwise, run standard gate check
+    return check_gate(paper_dir, stage)
+```
+
+**Terminal stage handling**:
+- When reaching terminal stage for a mode, show upgrade instructions
+- Synthesis verdict for abstract mode: "Concept Approved/Rejected"
+- Revision verdict for draft mode: "Ready for Full Review"
+- User can upgrade by editing `_panel.yaml.content_mode` and re-running
+
 ## Stage Advancement
 
 ### advance(paper_dir, current_stage, options)

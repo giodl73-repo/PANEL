@@ -1,79 +1,81 @@
-# Revision Plan: [Paper Title]
+# Improvement Plan: [Paper Title]
 
 **Paper**: [directory name]
 **Round**: [N] → [N+1]
 **Date**: [YYYY-MM-DD]
-**Source**: [reviews/SYNTHESIS.md or reviews/ROUND{N}-SYNTHESIS.md]
+**Source**: [Quality assessment from synthesis]
+
+> **Purpose**: This plan is based on AI-generated quality assessment feedback. Use it to strengthen your work, not as "reviewer responses." These are suggestions for improvement, not requirements.
 
 ---
 
 ## Summary
 
-[1-2 sentences on what the synthesis found and the overall revision strategy.]
+[1-2 sentences on what the quality assessment found and the overall improvement strategy.]
 
-## Expert Reviewers
+## Simulated Feedback Panel
 
-| # | Reviewer | Affiliation | Score | Verdict |
+| # | AI Persona | Based On | Score | Assessment |
 |---|---------|-------------|-------|---------|
-| 1 | [Name] | [Affiliation] | [X]/4 | [Verdict] |
+| 1 | [Name] | [Affiliation] | [X]/4 | [Assessment] |
 | ... | | | | |
 
 ---
 
-## P1: Must Complete (Blocking)
+## P1: Critical Enhancements (High Impact)
 
-### P1.1: [Issue from synthesis]
-**Source**: P1.1 in SYNTHESIS.md
-**Raised by**: [Reviewer names]
-**Action**:
-- [ ] [Specific revision task]
-- [ ] [Specific revision task]
+### P1.1: [Improvement area from synthesis]
+**Source**: P1.1 in quality assessment
+**Identified by**: [Persona names]
+**Enhancement**:
+- [ ] [Specific improvement task]
+- [ ] [Specific improvement task]
 **Target section**: sections/[XX]-[name].tex
 
-### P1.2: [Issue from synthesis]
+### P1.2: [Improvement area from synthesis]
 [...]
 
 ---
 
-## P2: Should Complete (Important)
+## P2: Substantial Improvements (Medium Impact)
 
-### P2.1: [Issue from synthesis]
-**Source**: P2.1 in SYNTHESIS.md
-**Raised by**: [Reviewer names]
-**Action**:
-- [ ] [Specific revision task]
+### P2.1: [Improvement area from synthesis]
+**Source**: P2.1 in quality assessment
+**Identified by**: [Persona names]
+**Enhancement**:
+- [ ] [Specific improvement task]
 **Target section**: sections/[XX]-[name].tex
 
-### P2.2: [Issue from synthesis]
+### P2.2: [Improvement area from synthesis]
 [...]
 
 ---
 
-## P3: Nice to Have
+## P3: Refinements (Optional Polish)
 
 ### P3.1: [Suggestion from synthesis]
 - [ ] [Task]
 
 ---
 
-## Revision Timeline
+## Improvement Timeline
 
 | Day | Focus | Deliverable |
 |-----|-------|-------------|
-| 1-2 | P1.1 — [description] | Updated section [X] |
-| 3-4 | P1.2 — [description] | Updated section [Y] |
+| 1-2 | P1.1 — [description] | Enhanced section [X] |
+| 3-4 | P1.2 — [description] | Enhanced section [Y] |
 | 5-7 | P2 items | Strengthened sections |
-| 8-9 | P3 + polish | Final cleanup |
-| 10 | Rebuild + self-review | Ready for round [N+1] |
+| 8-9 | P3 + polish | Final refinements |
+| 10 | Rebuild + self-review | Ready for next round |
 
-## Quality Gates
+## Quality Checkpoints
 
-- [ ] All P1 items addressed
-- [ ] Paper rebuilds without errors
+- [ ] P1 items addressed (if you agree they strengthen the work)
+- [ ] Paper builds without errors
 - [ ] Claims supported by evidence
-- [ ] Within page limit
-- [ ] All reviewer questions answered in text
+- [ ] Consistent with your research goals
+- [ ] Ready for another simulation round (optional)
 
 ---
 
-*Begin revision work. Address P1 items first, then P2.*
+*Use this plan as a guide for strengthening your work. Adapt based on your research goals and constraints.*
