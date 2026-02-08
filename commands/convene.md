@@ -38,6 +38,14 @@ Use `panel:convene --status` to check readiness.
 
 ## Behavior
 
+**Execution flow**:
+
+1. **Parse arguments**: Determine which flag was provided
+2. **Dispatch to handler**: Execute the appropriate behavior based on the flag
+3. **Default**: If no flag provided, run `--status`
+
+**Available handlers**:
+
 ### --status
 
 1. Discover all papers in the module via shared/state-loader.md

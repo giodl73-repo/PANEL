@@ -90,6 +90,18 @@ panel:setup --connect <path>
 
 ---
 
+## Execution Flow
+
+1. **Determine setup level**:
+   - If `--connect` flag → Run research monorepo connection (Level 3)
+   - If `--check` flag → Run validation only
+   - If `<paper-name>` positional argument → Per-paper setup (Level 2)
+   - If no positional arguments → Project-level setup (Level 1)
+
+2. **Execute the appropriate setup level**
+
+---
+
 ## Level 1 — Project Setup Behavior
 
 Runs when invoked with no positional arguments.
