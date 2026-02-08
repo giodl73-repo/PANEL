@@ -3,8 +3,8 @@ name: "Bottom-up: paper reviews surface to panel, panel findings surface to boar
 tier: L3
 plugin: panel
 target:
-  - commands/paper.md
-  - commands/panel.md
+  - commands/review.md
+  - commands/convene.md
   - commands/board.md
 timeout: 120
 
@@ -27,7 +27,7 @@ steps:
 
   # Tier 2: Panel review synthesizes paper findings
   - action: invoke-skill
-    skill: "panel:panel --review"
+    skill: "panel:convene --review"
     sandbox: true
     cwd: tests/fixtures/mock-monorepo/cookie-science
     store: panel_result

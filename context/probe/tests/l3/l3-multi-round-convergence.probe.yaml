@@ -2,7 +2,7 @@ id: l3-multi-round-convergence
 name: Multiple revision rounds converge toward acceptance threshold
 tier: L3
 plugin: panel
-target: commands/paper.md
+target: commands/review.md
 timeout: 120
 
 description: |
@@ -34,7 +34,7 @@ steps:
     input: $chip_state.p1_items
     description: "All P1 items addressed across rounds"
 
-  # Run panel:paper --until ready on crumb-analysis (currently at recheck)
+  # Run panel:review --until ready on crumb-analysis (currently at recheck)
   - action: prepare-paper
     fixture: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/_panel.yaml
     reviews: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/reviews
@@ -42,7 +42,7 @@ steps:
     description: "Crumb analysis — recheck stage, P1 items addressed, scores at 3.0"
 
   - action: invoke-skill
-    skill: "panel:paper --paper panel-crumb-analysis --until ready"
+    skill: "panel:review --paper panel-crumb-analysis --until ready"
     sandbox: true
     store: result
 

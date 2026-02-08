@@ -15,9 +15,9 @@ steps:
     expected: 11
 
   - action: file-exists
-    path: commands/paper.md
+    path: commands/review.md
   - action: file-exists
-    path: commands/panel.md
+    path: commands/convene.md
   - action: file-exists
     path: commands/board.md
   - action: file-exists

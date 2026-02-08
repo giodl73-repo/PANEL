@@ -3,7 +3,7 @@ name: "Complete flow: paper reviewed to scored to venue recommended to submissio
 tier: L3
 plugin: panel
 target:
-  - commands/paper.md
+  - commands/review.md
   - commands/venue.md
 timeout: 120
 

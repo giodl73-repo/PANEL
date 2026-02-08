@@ -1,12 +1,12 @@
 id: l2-paper-synthesis
-name: "panel:paper generates synthesis from reviews"
+name: "panel:review generates synthesis from reviews"
 tier: L2
 plugin: panel
-target: commands/paper.md
+target: commands/review.md
 timeout: 60
 
 description: |
-  Verify panel:paper reads all REVIEW-*.md files, produces SYNTHESIS.md
+  Verify panel:review reads all REVIEW-*.md files, produces SYNTHESIS.md
   with P1/P2/P3 classification, and updates _panel.yaml state.
 
 steps:
@@ -17,7 +17,7 @@ steps:
     description: "Oscar's trash aesthetics — 5 reviews from Miss Piggy, Oscar, Scooter, Statler, Waldorf"
 
   - action: invoke-skill
-    skill: "panel:paper --paper panel-trash-aesthetics"
+    skill: "panel:review --paper panel-trash-aesthetics"
     sandbox: true
     store: result
 

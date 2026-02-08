@@ -195,10 +195,10 @@ The system attempts all simple edits automatically. Complex edits are flagged in
 The system is implemented as part of the panel plugin for Claude Code:
 
 \begin{itemize}
-\item \textbf{Synthesis}: \texttt{panel:paper} command, synthesis stage
-\item \textbf{Planning}: \texttt{panel:paper} command, revision stage (plan generation)
-\item \textbf{Execution}: \texttt{panel:paper} command, revision stage (edit application)
-\item \textbf{Validation}: \texttt{panel:paper} command, recheck stage
+\item \textbf{Synthesis}: \texttt{panel:review} command, synthesis stage
+\item \textbf{Planning}: \texttt{panel:review} command, revision stage (plan generation)
+\item \textbf{Execution}: \texttt{panel:review} command, revision stage (edit application)
+\item \textbf{Validation}: \texttt{panel:review} command, recheck stage
 \end{itemize}
 
 Edits use Claude Code's Edit tool, which performs exact string matching and diff validation, ensuring edits are applied precisely as specified or fail with clear error messages.
@@ -237,7 +237,7 @@ To rollback edit P1-3: read old\_text and new\_text, apply reverse transformatio
 \textbf{Debugging tools provided to authors}:
 \begin{itemize}
 \item \textbf{Diff view}: Generate unified diff of all applied edits: \texttt{git diff HEAD sections/}. This shows exactly what changed.
-\item \textbf{Selective rollback}: Authors can rollback individual edits by ID: \texttt{panel:paper --rollback P1-3}.
+\item \textbf{Selective rollback}: Authors can rollback individual edits by ID: \texttt{panel:review --rollback P1-3}.
 \item \textbf{Edit provenance}: For any line in the paper, trace back to which reviewer suggested the change and why: \texttt{panel:show --edit-history sections/03-methodology.tex:127}.
 \item \textbf{Validation report}: After edits, generate report listing: successful edits (green), rolled-back edits (red), skipped edits (yellow), with reasons.
 \end{itemize}

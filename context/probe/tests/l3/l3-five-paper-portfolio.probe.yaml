@@ -3,14 +3,14 @@ name: "Full portfolio: all 5 research papers through review + panel synthesis"
 tier: L3
 plugin: panel
 target:
-  - commands/paper.md
-  - commands/panel.md
+  - commands/review.md
+  - commands/convene.md
   - commands/status.md
 timeout: 120
 
 description: |
   End-to-end portfolio test: advance all 5 research papers through
-  at least the synthesis stage, then run panel:panel to produce
+  at least the synthesis stage, then run panel:convene to produce
   a cross-portfolio assessment, and verify panel:status reflects all.
 
 papers:
@@ -27,7 +27,7 @@ steps:
     description: "Cookie Science Lab: 5 papers (chip-distribution, crumb-analysis, dunk-methodology, optimal-cookie, sharing-economics)"
 
   - action: invoke-skill
-    skill: "panel:panel --review"
+    skill: "panel:convene --review"
     sandbox: true
     store: panel_result
 

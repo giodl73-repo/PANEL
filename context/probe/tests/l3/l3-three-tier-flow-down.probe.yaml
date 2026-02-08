@@ -4,8 +4,8 @@ tier: L3
 plugin: panel
 target:
   - commands/board.md
-  - commands/panel.md
-  - commands/paper.md
+  - commands/convene.md
+  - commands/review.md
 timeout: 120
 
 description: |
@@ -36,7 +36,7 @@ steps:
 
   # Panel applies board findings down to papers
   - action: invoke-skill
-    skill: "panel:panel --apply"
+    skill: "panel:convene --apply"
     sandbox: true
     cwd: tests/fixtures/mock-monorepo/cookie-science
     store: panel_apply

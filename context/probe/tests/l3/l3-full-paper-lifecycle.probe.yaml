@@ -2,12 +2,12 @@ id: l3-full-paper-lifecycle
 name: "Complete paper lifecycle: draft to panel to synthesis to revision to recheck to ready"
 tier: L3
 plugin: panel
-target: commands/paper.md
+target: commands/review.md
 timeout: 120
 
 description: |
   End-to-end test: create a paper, advance through all stages from draft
-  to ready using panel:paper --until ready. Verify all artifacts are
+  to ready using panel:review --until ready. Verify all artifacts are
   produced and scores improve across rounds.
 
 steps:
@@ -19,7 +19,7 @@ steps:
     description: "Oscar's trash can architecture — draft stage, venue target set, ready for full lifecycle"
 
   - action: invoke-skill
-    skill: "panel:paper --paper panel-trash-can-architecture --until ready"
+    skill: "panel:review --paper panel-trash-can-architecture --until ready"
     sandbox: true
     store: lifecycle_result
 

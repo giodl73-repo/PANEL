@@ -29,7 +29,9 @@
       "Bash(SCRIPT=\"/c/Users/giodl/AppData/Local/Temp/claude/C--src-panel/bf0b05be-0023-4769-b7ac-db7de8ad634c/scratchpad/add-disclosure.sh\")",
       "Bash(grep:*)",
       "Bash(find:*)",
-      "Bash(make:*)"
+      "Bash(make:*)",
+      "Bash(for file in l2/l2-panel-apply-revisions.probe.yaml l2/l2-panel-review.probe.yaml l2/l2-paper-draft-to-panel.probe.yaml l2/l2-paper-revision-cycle.probe.yaml l2/l2-paper-synthesis.probe.yaml l3/l3-five-paper-portfolio.probe.yaml l3/l3-full-paper-lifecycle.probe.yaml l3/l3-multi-round-convergence.probe.yaml l3/l3-three-tier-flow-down.probe.yaml l3/l3-three-tier-flow-up.probe.yaml)",
+      "Bash(do sed -i 's/panel:paper/panel:review/g; s/panel:panel/panel:convene/g' \"$file\")"
     ]
   }
 }

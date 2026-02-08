@@ -1,12 +1,12 @@
 id: l2-paper-draft-to-panel
-name: "panel:paper advances from draft to panel stage"
+name: "panel:review advances from draft to panel stage"
 tier: L2
 plugin: panel
-target: commands/paper.md
+target: commands/review.md
 timeout: 60
 
 description: |
-  Verify panel:paper checks the draft gate (main.tex + venue),
+  Verify panel:review checks the draft gate (main.tex + venue),
   selects 5 reviewers, generates REVIEW-*.md files, and advances
   state to panel stage.
 
@@ -21,7 +21,7 @@ steps:
     description: "Oscar's recycling paper — draft stage, needs reviewers"
 
   - action: invoke-skill
-    skill: "panel:paper --paper panel-recycling-optimization"
+    skill: "panel:review --paper panel-recycling-optimization"
     sandbox: true
     store: result
 

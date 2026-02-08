@@ -1,12 +1,12 @@
 id: l2-paper-revision-cycle
-name: "panel:paper handles revision to recheck to synthesis loop"
+name: "panel:review handles revision to recheck to synthesis loop"
 tier: L2
 plugin: panel
-target: commands/paper.md
+target: commands/review.md
 timeout: 60
 
 description: |
-  Verify panel:paper handles the full revision cycle: create revision plan,
+  Verify panel:review handles the full revision cycle: create revision plan,
   apply revisions, advance to recheck, generate round-N reviews,
   re-synthesize. Round number should increment.
 
@@ -19,7 +19,7 @@ steps:
     description: "Crumb analysis — round 1 complete, P1 items addressed, needs round 2"
 
   - action: invoke-skill
-    skill: "panel:paper --paper panel-crumb-analysis --until recheck"
+    skill: "panel:review --paper panel-crumb-analysis --until recheck"
     sandbox: true
     store: result
 

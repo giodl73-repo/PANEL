@@ -209,32 +209,32 @@
         },
         {
           "id": "l2-paper-draft-to-panel",
-          "name": "panel:paper advances from draft to panel stage",
-          "target": "commands/paper.md",
+          "name": "panel:review advances from draft to panel stage",
+          "target": "commands/review.md",
           "assertions": ["checks-gate", "selects-reviewers", "updates-state", "generates-reviews"]
         },
         {
           "id": "l2-paper-synthesis",
-          "name": "panel:paper generates synthesis from reviews",
-          "target": "commands/paper.md",
+          "name": "panel:review generates synthesis from reviews",
+          "target": "commands/review.md",
           "assertions": ["reads-all-reviews", "produces-synthesis-md", "classifies-p1-p2-p3", "updates-state"]
         },
         {
           "id": "l2-paper-revision-cycle",
-          "name": "panel:paper handles revision→recheck→synthesis loop",
-          "target": "commands/paper.md",
+          "name": "panel:review handles revision→recheck→synthesis loop",
+          "target": "commands/review.md",
           "assertions": ["increments-round", "generates-round-reviews", "re-synthesizes"]
         },
         {
           "id": "l2-panel-review",
-          "name": "panel:panel generates module-level REVIEW_PANEL.md",
-          "target": "commands/panel.md",
+          "name": "panel:convene generates module-level REVIEW_PANEL.md",
+          "target": "commands/convene.md",
           "assertions": ["reads-paper-states", "selects-7-reviewers", "produces-review-panel", "generates-pp1-pp2-pp3"]
         },
         {
           "id": "l2-panel-apply-revisions",
-          "name": "panel:panel --apply drives PP1/PP2 revisions down to papers",
-          "target": "commands/panel.md",
+          "name": "panel:convene --apply drives PP1/PP2 revisions down to papers",
+          "target": "commands/convene.md",
           "assertions": ["generates-revision-plans", "applies-to-paper-latex"]
         },
         {
@@ -275,31 +275,31 @@
         {
           "id": "l3-full-paper-lifecycle",
           "name": "Complete paper lifecycle: draft→panel→synthesis→revision→recheck→ready",
-          "target": "commands/paper.md",
+          "target": "commands/review.md",
           "assertions": ["traverses-6-stages", "produces-all-artifacts", "scores-improve-across-rounds"]
         },
         {
           "id": "l3-three-tier-flow-up",
           "name": "Bottom-up: paper reviews surface to panel, panel findings surface to board",
-          "target": ["commands/paper.md", "commands/panel.md", "commands/board.md"],
+          "target": ["commands/review.md", "commands/convene.md", "commands/board.md"],
           "assertions": ["paper-findings-in-panel", "panel-findings-in-board", "priority-escalation"]
         },
         {
           "id": "l3-three-tier-flow-down",
           "name": "Top-down: board B1/B2 → panel PP1/PP2 → paper revisions",
-          "target": ["commands/board.md", "commands/panel.md", "commands/paper.md"],
+          "target": ["commands/board.md", "commands/convene.md", "commands/review.md"],
           "assertions": ["board-generates-revision-plans", "panel-applies-revisions", "papers-updated"]
         },
         {
           "id": "l3-multi-round-convergence",
           "name": "Multiple revision rounds converge toward acceptance threshold",
-          "target": "commands/paper.md",
+          "target": "commands/review.md",
           "assertions": ["scores-increase", "p1-items-decrease", "reaches-ready-stage"]
         },
         {
           "id": "l3-five-paper-portfolio",
           "name": "Full portfolio: all 5 research papers through review + panel synthesis",
-          "target": ["commands/paper.md", "commands/panel.md", "commands/status.md"],
+          "target": ["commands/review.md", "commands/convene.md", "commands/status.md"],
           "assertions": ["all-5-papers-reviewed", "panel-synthesizes-all", "status-reflects-all"]
         },
         {
@@ -311,7 +311,7 @@
         {
           "id": "l3-venue-recommendation-pipeline",
           "name": "Complete flow: paper reviewed → scored → venue recommended → submission strategy",
-          "target": ["commands/paper.md", "commands/venue.md"],
+          "target": ["commands/review.md", "commands/venue.md"],
           "assertions": ["uses-review-scores", "matches-venue-tier", "produces-strategy"]
         }
       ]
