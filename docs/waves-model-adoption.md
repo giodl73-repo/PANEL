@@ -554,6 +554,363 @@ panel:generate-research-md
 
 ---
 
+## Setup Auto-Upgrade
+
+`panel:setup` should detect existing installations and offer upgrades.
+
+### Version Detection
+
+```javascript
+/**
+ * Detect the current panel model version in a project.
+ *
+ * @param {string} projectDir - Project root directory
+ * @returns {string} Version identifier or null if not set up
+ */
+function detectPanelVersion(projectDir) {
+    const researchDir = `${projectDir}/research`;
+
+    // Check if panel is set up at all
+    if (!fs.existsSync(researchDir)) {
+        return null; // Not set up
+    }
+
+    // Check for paper-index.yaml (v1.3+)
+    const paperIndexPath = `${researchDir}/_config/paper-index.yaml`;
+    if (fs.existsSync(paperIndexPath)) {
+        const paperIndex = readYAML(paperIndexPath);
+
+        // Check directory format
+        const firstPaper = paperIndex.papers[0];
+        if (firstPaper.directory.match(/^\d{2}\+/)) {
+            return 'v2.0'; // Numbered directories
+        } else {
+            return 'v1.3'; // Has paper-index but old directory format
+        }
+    }
+
+    // Check for UUIDs in _panel.yaml (v1.2)
+    const papers = findPaperDirectories(researchDir);
+    if (papers.length > 0) {
+        const firstPanelYaml = readYAML(`${papers[0]}/_panel.yaml`);
+        if (firstPanelYaml.uuid) {
+            return 'v1.2'; // Has UUIDs but no paper-index
+        }
+    }
+
+    // Legacy format (v1.0/v1.1)
+    return 'v1.0';
+}
+```
+
+### Upgrade Paths
+
+```javascript
+/**
+ * Get available upgrade paths from current version.
+ *
+ * @param {string} currentVersion - Current version (e.g., 'v1.0')
+ * @returns {Array} Available upgrade paths
+ */
+function getUpgradePaths(currentVersion) {
+    const paths = {
+        'v1.0': ['v1.2', 'v1.3', 'v2.0'],
+        'v1.2': ['v1.3', 'v2.0'],
+        'v1.3': ['v2.0'],
+        'v2.0': [] // Already latest
+    };
+
+    return paths[currentVersion] || [];
+}
+```
+
+### Setup Behavior with Upgrade Detection
+
+```markdown
+## panel:setup Upgrade Flow
+
+When `panel:setup` is run in an existing project:
+
+1. **Detect current version**:
+   ```
+   Detected panel v1.0 (legacy format)
+   Latest: v2.0 (numbered directories with UUIDs)
+   ```
+
+2. **Show available upgrades**:
+   ```
+   Available upgrades:
+     1. v1.2 — Add UUIDs + slugs (backward compatible)
+     2. v1.3 — Add paper-index.yaml (transitional)
+     3. v2.0 — Renumber directories (BREAKING)
+   ```
+
+3. **Ask user via AskUserQuestion**:
+   ```javascript
+   question: "Upgrade panel to latest version (v2.0)?"
+   header: "Panel Upgrade"
+   options: [
+     {
+       label: "Yes, upgrade to v2.0 (Recommended)",
+       description: "Full upgrade: UUIDs + paper-index + renumbered directories"
+     },
+     {
+       label: "Partial upgrade to v1.3",
+       description: "Add UUIDs and paper-index, keep directory names"
+     },
+     {
+       label: "Minimal upgrade to v1.2",
+       description: "Only add UUIDs and slugs to _panel.yaml"
+     },
+     {
+       label: "Skip upgrade",
+       description: "Continue with current version"
+     }
+   ]
+   ```
+
+4. **Execute upgrade**:
+   - Run appropriate migration steps
+   - Commit changes with `[panel] Upgrade to v{X.Y}`
+   - Show summary of what changed
+
+5. **Handle already-latest**:
+   ```
+   ✓ Panel is already at v2.0 (latest)
+
+   Run panel:setup <paper-name> to add a new paper.
+   ```
+```
+
+### Migration Commands
+
+Create dedicated migration commands:
+
+```bash
+# Detect current version
+panel:migrate --detect
+
+# Upgrade to specific version
+panel:migrate --to v1.2
+panel:migrate --to v1.3
+panel:migrate --to v2.0
+
+# Upgrade to latest (auto-detect path)
+panel:migrate --latest
+
+# Dry run (show what would change)
+panel:migrate --to v2.0 --dry-run
+```
+
+### Migration Steps by Version
+
+#### v1.0 → v1.2: Add UUIDs
+
+```javascript
+async function migrateV10ToV12(researchDir) {
+    const papers = findPaperDirectories(researchDir);
+
+    for (const paperDir of papers) {
+        const panelYaml = readYAML(`${paperDir}/_panel.yaml`);
+
+        // Add UUID
+        panelYaml.uuid = generatePaperUUID();
+
+        // Add slug (derive from directory name)
+        const dirName = path.basename(paperDir);
+        panelYaml.slug = dirName.replace(/^panel-/, '');
+
+        // Write back
+        writeYAML(`${paperDir}/_panel.yaml`, panelYaml);
+    }
+
+    return {
+        version: 'v1.2',
+        changes: [
+            `Added UUIDs to ${papers.length} papers`,
+            `Added slugs to ${papers.length} papers`
+        ]
+    };
+}
+```
+
+#### v1.2 → v1.3: Create paper-index.yaml
+
+```javascript
+async function migrateV12ToV13(researchDir) {
+    // Create _config directory
+    const configDir = `${researchDir}/_config`;
+    fs.mkdirSync(configDir, { recursive: true });
+
+    // Scan all papers
+    const papers = findPaperDirectories(researchDir);
+    const paperIndex = {
+        format_version: '4.0',
+        module: path.basename(path.dirname(researchDir)),
+        last_updated: new Date().toISOString(),
+        active: null,
+        papers: []
+    };
+
+    // Build index from _panel.yaml files
+    for (let i = 0; i < papers.length; i++) {
+        const paperDir = papers[i];
+        const panelYaml = readYAML(`${paperDir}/_panel.yaml`);
+
+        paperIndex.papers.push({
+            uuid: panelYaml.uuid,
+            slug: panelYaml.slug,
+            title: panelYaml.title || 'Untitled',
+            order: i + 1, // Assign sequential order
+            directory: path.basename(paperDir),
+            venue: panelYaml.venue || 'TBD',
+            stage: panelYaml.stage || 'draft',
+            status: panelYaml.writing_completed ? 'completed' : 'in-progress',
+            created: panelYaml.created || new Date().toISOString().split('T')[0]
+        });
+    }
+
+    // Write paper-index.yaml
+    writeYAML(`${configDir}/paper-index.yaml`, paperIndex);
+
+    return {
+        version: 'v1.3',
+        changes: [
+            'Created _config/paper-index.yaml',
+            `Indexed ${papers.length} papers`,
+            'Papers assigned sequential order (1, 2, 3...)'
+        ]
+    };
+}
+```
+
+#### v1.3 → v2.0: Renumber Directories
+
+```javascript
+async function migrateV13ToV20(researchDir) {
+    const paperIndexPath = `${researchDir}/_config/paper-index.yaml`;
+    const paperIndex = readYAML(paperIndexPath);
+
+    const renames = [];
+
+    for (const paper of paperIndex.papers) {
+        const oldDir = `${researchDir}/${paper.directory}`;
+        const newDir = `${researchDir}/${String(paper.order).padStart(2, '0')}+${paper.slug}`;
+
+        if (oldDir !== newDir) {
+            // Rename directory
+            fs.renameSync(oldDir, newDir);
+
+            // Update paper-index
+            paper.directory = path.basename(newDir);
+
+            renames.push({
+                from: path.basename(oldDir),
+                to: path.basename(newDir)
+            });
+        }
+    }
+
+    // Write updated paper-index
+    writeYAML(paperIndexPath, paperIndex);
+
+    return {
+        version: 'v2.0',
+        changes: [
+            `Renamed ${renames.length} directories to numbered format`,
+            'Updated paper-index.yaml with new directory names'
+        ],
+        renames
+    };
+}
+```
+
+### Setup Integration
+
+Update `commands/setup.md` to include version detection:
+
+```markdown
+## Execution Flow
+
+1. **Detect existing setup**:
+   - Check if research/ exists
+   - If yes: detect version via detectPanelVersion()
+   - If no: proceed with fresh setup
+
+2. **If version detected**:
+   - Show current version and latest version
+   - Offer upgrade via AskUserQuestion
+   - If accepted: run migration steps
+   - If declined: proceed with current version
+
+3. **If fresh setup**:
+   - Use latest model (v2.0) by default
+   - Create research/ with _config/paper-index.yaml
+   - Initialize with v2.0 structure
+```
+
+### Example Upgrade Session
+
+```bash
+$ panel:setup
+
+📄 Panel Setup
+═══════════════════════════════════════
+
+✓ Detected existing panel installation
+  Current: v1.0 (legacy format)
+  Latest:  v2.0 (numbered directories with UUIDs)
+
+Available upgrades:
+  • v1.2 — Add UUIDs + slugs (backward compatible)
+  • v1.3 — Add paper-index.yaml (transitional)
+  • v2.0 — Renumber directories (BREAKING)
+
+Upgrade panel to latest version (v2.0)?
+  [1] Yes, upgrade to v2.0 (Recommended)
+  [2] Partial upgrade to v1.3
+  [3] Minimal upgrade to v1.2
+  [4] Skip upgrade
+
+> 1
+
+═══════════════════════════════════════
+Upgrading panel: v1.0 → v2.0
+═══════════════════════════════════════
+
+Phase 1: v1.0 → v1.2
+  ✓ Added UUIDs to 5 papers
+  ✓ Added slugs to 5 papers
+
+Phase 2: v1.2 → v1.3
+  ✓ Created _config/paper-index.yaml
+  ✓ Indexed 5 papers
+  ✓ Assigned sequential order
+
+Phase 3: v1.3 → v2.0
+  ✓ Renamed 5 directories:
+    • panel-review-methodology → 01+review-methodology
+    • panel-reviewer-calibration → 02+reviewer-calibration
+    • panel-revision-dynamics → 03+revision-dynamics
+    • panel-synthesis-methods → 04+synthesis-methods
+    • panel-portfolio-assessment → 05+portfolio-assessment
+  ✓ Updated paper-index.yaml
+
+═══════════════════════════════════════
+✓ Upgrade complete: panel v2.0
+═══════════════════════════════════════
+
+Changes committed:
+  [panel] Upgrade to v2.0
+
+Next steps:
+  • Test: panel:status (verify all papers recognized)
+  • Update: any scripts/docs referencing old names
+  • Ship: git push to sync changes
+```
+
+---
+
 ## See Also
 
 - Waves reference-resolver.md: C:\src\waves\shared\reference-resolver.md
