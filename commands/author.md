@@ -18,6 +18,9 @@ This is the **pre-review phase** — getting from idea → draft ready for `pane
 - `--status` — Show current progress on the writing plan
 - `--check` — Validate plan.md structure without starting work
 - `--dry-run` — Preview the task breakdown without creating tasks
+- `--all` — Batch mode: author all eligible papers (parallel)
+- `--batch <refs>` — Batch mode: author specific papers (e.g., "1 2 3" or "auth ml")
+- `--sequential` — Run batch in sequential mode (one at a time)
 
 ## Prerequisites
 
