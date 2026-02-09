@@ -75,7 +75,7 @@ panel/
 │   ├── show.md                  # Detailed paper view
 │   ├── reviewers.md             # Reviewer database browser
 │   ├── setup.md                 # Project initialization
-│   ├── new.md                   # Paper writing orchestration (pre-review)
+│   ├── author.md                   # Paper writing orchestration (pre-review)
 │   ├── import.md                # Discover + generate papers, or import artifacts
 │   ├── report.md                # Generate reports
 │   ├── help.md                  # Interactive help
@@ -148,7 +148,7 @@ Stage        Description                                    Gate to advance
 | `panel:show` | — | Detailed view of one paper |
 | `panel:reviewers` | — | Browse/filter reviewer database |
 | `panel:setup` | — | Initialize project or add a new paper |
-| `panel:new` | — | Paper writing orchestration from plan.md to review-ready draft (pre-review) |
+| `panel:author` | — | Paper writing orchestration from plan.md to review-ready draft (pre-review) |
 | `panel:import` | — | Discover papers from roadmap/waves/commits, or import existing artifacts |
 | `panel:report` | — | Generate review reports |
 | `panel:help` | — | Interactive help system |

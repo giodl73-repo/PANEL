@@ -1,10 +1,10 @@
 ---
-name: panel:new
+name: panel:author
 description: Orchestrate paper writing from plan.md to review-ready draft
 user-invocable: true
 ---
 
-# panel:new — Paper Writing Orchestration
+# panel:author — Paper Writing Orchestration
 
 **Purpose**: Takes a paper from plan.md through completion, providing interactive guidance, running experiments, and integrating local scripts until the paper reaches the quality level expected for its target venue.
 
@@ -290,7 +290,7 @@ Orchestrates the complete paper writing process:
 
    g. **Handle pause**: If user says "pause":
    - Save current state (tasks persist automatically)
-   - Show resume command: "panel:new --resume"
+   - Show resume command: "panel:author --resume"
    - Exit
 
 6. **Quality gate - final check**:
@@ -408,12 +408,12 @@ When running local scripts:
 
 ## Integration with Panel Lifecycle
 
-**Before panel:new**:
+**Before panel:author**:
 - User runs `panel:setup <paper-name> [venue]`
 - User creates `plan.md` in paper directory
 - Paper is at stage: draft, content_mode: unknown
 
-**After panel:new**:
+**After panel:author**:
 - Paper has all sections written
 - content_mode: full
 - stage: draft
@@ -469,7 +469,7 @@ Common issues:
 
 ```bash
 $ cd research/panel-my-paper
-$ panel:new
+$ panel:author
 
 📄 Panel: Paper Writing Orchestration
 ═══════════════════════════════════════
@@ -491,7 +491,7 @@ Ready to begin writing? [Y/n]
 ### Resume after interruption
 
 ```bash
-$ panel:new --resume
+$ panel:author --resume
 
 📄 Panel: Resuming Paper Writing
 ═══════════════════════════════════════
@@ -507,7 +507,7 @@ Continue? [Y/n]
 ### Check status
 
 ```bash
-$ panel:new --status
+$ panel:author --status
 
 Progress: 9/13 tasks (69%)
 Current: Write results section (in_progress)
@@ -584,7 +584,7 @@ async function main(args) {
             paperDir = cwd.trim();
         } else {
             msg('No paper specified and not in paper directory', 'error');
-            msg('Usage: panel:new --paper <name>', 'fix');
+            msg('Usage: panel:author --paper <name>', 'fix');
             return;
         }
     }
@@ -741,11 +741,11 @@ async function handleCheck(paperDir, plan) {
     // Final recommendation
     if (validation.errors.length > 0 || scriptErrors > 0) {
         msgSep();
-        msg('Fix errors before running panel:new', 'warning');
+        msg('Fix errors before running panel:author', 'warning');
     } else {
         msgSep();
         msg('Plan is ready to use', 'success');
-        msg('Run: panel:new --paper ' + paperDir.split('/').pop(), 'fix');
+        msg('Run: panel:author --paper ' + paperDir.split('/').pop(), 'fix');
     }
 }
 
@@ -763,7 +763,7 @@ async function handleResume(paperDir, paperName, plan, state, dryRun, pluginConf
 
     if (paperTasks.length === 0) {
         msg('No existing tasks found', 'error');
-        msg('Run panel:new (without --resume) to start fresh', 'fix');
+        msg('Run panel:author (without --resume) to start fresh', 'fix');
         return;
     }
 
@@ -818,7 +818,7 @@ async function handleRun(paperDir, paperName, plan, state, dryRun, pluginConfig)
         for (const err of validation.errors) {
             msg(err, 'error');
         }
-        msg('Fix plan.md and run panel:new --check', 'fix');
+        msg('Fix plan.md and run panel:author --check', 'fix');
         return;
     }
 
@@ -901,7 +901,7 @@ async function handleRun(paperDir, paperName, plan, state, dryRun, pluginConfig)
     });
 
     if (answer === 'Not now') {
-        msg('Tasks created. Run panel:new --resume to continue', 'info');
+        msg('Tasks created. Run panel:author --resume to continue', 'info');
         return;
     }
 
@@ -1023,7 +1023,7 @@ async function executeOrchestrationLoop(paperDir, paperName, plan, state, tasks,
 
                 if (answer === 'Pause' || answer === 'No') {
                     msg('Session paused', 'info');
-                    msg('Run panel:new --resume to continue', 'fix');
+                    msg('Run panel:author --resume to continue', 'fix');
                     continueLoop = false;
                 }
             }
@@ -1162,7 +1162,7 @@ async function handleCompletion(paperDir, paperName, plan, state, dryRun, plugin
 
         if (!results.passed) {
             msg('Quality checks failed', 'error');
-            msg('Fix issues and run panel:new --check', 'fix');
+            msg('Fix issues and run panel:author --check', 'fix');
             return;
         }
     }
