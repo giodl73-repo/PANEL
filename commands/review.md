@@ -28,6 +28,9 @@ Paper-level reviews bubble up to `panel:convene`. Panel-level revision items (PP
 - `--until <stage>` — Stop at this stage (default: run through all stages)
 - `--round N` — Force a specific review round number
 - `--dry-run` — Show what would happen without making changes
+- `--all` — Batch mode: review all eligible papers (parallel)
+- `--batch <refs>` — Batch mode: review specific papers (e.g., "1 2 3" or "auth ml")
+- `--sequential` — Run batch in sequential mode (one at a time)
 
 ## Stages
 
@@ -286,6 +289,162 @@ panel:review --dry-run
 # Force round 3 recheck
 panel:review --round 3
 ```
+
+## Batch Mode (--all / --batch)
+
+When `--all` or `--batch` flag is provided, enters batch review mode.
+
+### Discovery
+
+```javascript
+// @import ../shared/batch-utils.md
+
+const researchDir = 'research';
+const eligible = discoverEligibleForReview(researchDir);
+
+// Filter if --batch with specific refs
+if (batchRefs) {
+    const refs = batchRefs.split(/\s+/);
+    eligible = eligible.filter(p =>
+        refs.includes(String(p.order)) ||
+        refs.includes(p.slug)
+    );
+}
+```
+
+### Show Plan
+
+```javascript
+msg('Batch Reviewing', 'header');
+msg(`Eligible papers: ${eligible.length}`, 'info');
+
+for (const paper of eligible) {
+    const ref = paper.order ? `${String(paper.order).padStart(2, '0')} — ` : '  • ';
+    msg(`${ref}${paper.slug}`, 'item');
+    msg(`  Stage: ${paper.stage}`, 'subitem');
+    if (paper.panelYaml.wordCount) {
+        msg(`  Words: ${paper.panelYaml.wordCount}`, 'subitem');
+    }
+}
+```
+
+### Ask User
+
+```javascript
+AskUserQuestion({
+    question: `Start batch review for ${eligible.length} paper${eligible.length === 1 ? '' : 's'}?`,
+    header: 'Parallel Review',
+    options: [
+        {
+            label: 'Yes, parallel (Recommended)',
+            description: 'All papers at once (faster)'
+        },
+        {
+            label: 'Yes, sequential',
+            description: 'One at a time (safer)'
+        },
+        {
+            label: 'Select papers',
+            description: 'Choose which to review'
+        },
+        {
+            label: 'Skip',
+            description: 'Cancel'
+        }
+    ]
+});
+```
+
+### Execute Batch
+
+**Parallel mode** (default):
+
+```javascript
+const agents = [];
+
+for (const paper of eligible) {
+    const ref = paper.order || paper.slug;
+
+    const agent = await Task({
+        subagent_type: 'general-purpose',
+        description: `Review ${paper.slug}`,
+        prompt: `
+            Run panel:review for paper ${ref} (${paper.slug}).
+
+            Context:
+            - Paper directory: research/${paper.directory}
+            - Current stage: ${paper.stage}
+            - Target venue: ${paper.venue}
+            - Title: ${paper.title}
+
+            Execute the full review cycle:
+            1. Detect content mode (if not set)
+            2. Assemble reviewer panel (5+ reviewers)
+            3. Generate individual reviews
+            4. Create synthesis with P1/P2/P3 items
+            5. Move paper to appropriate stage
+            6. Generate REVISION-PLAN.md
+
+            Work autonomously until the review cycle is complete.
+            Report average score, P1/P2/P3 counts, and next stage.
+        `,
+        run_in_background: true
+    });
+
+    agents.push({ paper, agentId: agent.id });
+}
+
+// Monitor progress
+msg(`Spawned ${agents.length} parallel agents`, 'success');
+msg('Monitoring progress...', 'info');
+
+// Wait for completion
+const results = await Promise.all(
+    agents.map(a => TaskOutput({ task_id: a.agentId, block: true }))
+);
+```
+
+**Sequential mode**:
+
+```javascript
+for (const paper of eligible) {
+    msg(`Reviewing: ${paper.slug}`, 'stage');
+
+    // Execute directly (reuse single-paper logic from Behavior section)
+    const state = load_state(paper.fullPath);
+    await executeReviewCycle(paper.fullPath, state);
+
+    msg(`✓ Complete: ${paper.slug}`, 'success');
+}
+```
+
+### Report Results
+
+```javascript
+msg('Batch Review Complete', 'success');
+msg(`Completed: ${results.filter(r => r.success).length}/${eligible.length}`, 'info');
+
+msgSep();
+msg('Review summaries:', 'info');
+
+for (const result of results) {
+    const paper = result.paper;
+    const status = result.success ? '✓' : '✗';
+
+    msg(`${status} ${paper.order} — ${paper.slug}`, 'item');
+
+    if (result.success && result.data) {
+        msg(`  Avg score: ${result.data.avgScore}/4`, 'subitem');
+        msg(`  P1: ${result.data.p1Count} | P2: ${result.data.p2Count} | P3: ${result.data.p3Count}`, 'subitem');
+        msg(`  Stage: ${result.data.newStage}`, 'subitem');
+    }
+}
+
+msgSep();
+msg('Next step: Address P1 items in each paper', 'info');
+```
+
+---
 
 ## Dependencies
 
