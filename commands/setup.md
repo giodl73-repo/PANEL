@@ -435,9 +435,11 @@ Research Monorepo:
 **Next steps** (updated):
 ```
 Next steps:
-  1. Start reviews:  panel:review --paper <name>
-  2. Check status:   panel:status
-  3. Ship it:        commit + push + sync to plugin and research repos
+  1. Create plan.md:    Add plan.md to your paper directory (see panel:author --help)
+  2. Write paper:       panel:author --paper <name> (orchestrate writing from plan)
+  3. Start reviews:     panel:review --paper <name> (after writing complete)
+  4. Check status:      panel:status
+  5. Ship it:           commit + push + sync to plugin and research repos
 ```
 
 ---
@@ -535,9 +537,11 @@ Created paper #6:
   ✓ RESEARCH.md updated (paper #6 added)
 
 Next steps:
-  1. Write your paper:    Edit main.tex and sections/*.tex
-  2. Set the title:       Edit _panel.yaml → title field
-  3. Start reviews:       panel:review --paper panel-cross-venue-analysis
+  1. Create plan.md:      Add plan.md to paper directory with research plan
+  2. Write your paper:    panel:author --paper panel-cross-venue-analysis
+     OR manually edit:    main.tex and sections/*.tex
+  3. Set the title:       Edit _panel.yaml → title field
+  4. Start reviews:       panel:review --paper panel-cross-venue-analysis
 ```
 
 ---
@@ -587,7 +591,7 @@ Papers:
   ✓ panel-static-analysis       _panel.yaml ✓  venue: PLDI 2026     stage: draft
   ✓ panel-command-dsl            _panel.yaml ✓  venue: OOPSLA 2026   stage: draft
 
-All 2 papers ready. Run panel:review --paper <name> to begin reviews.
+All 2 papers ready. Next: Create plan.md in each paper, then panel:author to write, or panel:review to start reviews.
 ```
 
 ## Connect Mode
