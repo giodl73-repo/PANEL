@@ -10,6 +10,7 @@
     "./commands/show.md",
     "./commands/reviewers.md",
     "./commands/setup.md",
+    "./commands/new.md",
     "./commands/import.md",
     "./commands/report.md",
     "./commands/help.md",

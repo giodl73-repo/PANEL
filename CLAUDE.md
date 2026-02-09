@@ -63,7 +63,7 @@ A Claude Code plugin that drives research papers through a complete AI-simulated
 ```
 panel/
 ├── .claude-plugin/
-│   ├── plugin.json              # Plugin manifest (12 commands)
+│   ├── plugin.json              # Plugin manifest (13 commands)
 │   └── craft.json               # Craft feature tracking
 ├── .claude/
 │   └── panel.json               # Plugin configuration (gitStrategy, suppressMessages)
@@ -75,6 +75,7 @@ panel/
 │   ├── show.md                  # Detailed paper view
 │   ├── reviewers.md             # Reviewer database browser
 │   ├── setup.md                 # Project initialization
+│   ├── new.md                   # Paper writing orchestration (pre-review)
 │   ├── import.md                # Discover + generate papers, or import artifacts
 │   ├── report.md                # Generate reports
 │   ├── help.md                  # Interactive help
@@ -89,6 +90,8 @@ panel/
 │   ├── display-utils.md         # Terminal formatting
 │   ├── topic-discovery.md       # Scan sources → propose paper topics
 │   ├── paper-generator.md       # Paper content generation logic
+│   ├── plan-parser.md           # Parse plan.md into task objects
+│   ├── quality-checker.md       # Quality gate validation
 │   ├── panel-utils.md           # Module-level panel utilities (PP1/PP2/PP3, rounds)
 │   ├── board-utils.md           # Board-level utilities (module discovery, B1/B2/B3)
 │   ├── message-utils.md         # Standardized output formatting
@@ -134,7 +137,7 @@ Stage        Description                                    Gate to advance
 8. accepted  Paper accepted at venue                        Acceptance confirmed
 ```
 
-## Commands (12)
+## Commands (13)
 
 | Command | Tier | Purpose |
 |---------|------|---------|
@@ -145,6 +148,7 @@ Stage        Description                                    Gate to advance
 | `panel:show` | — | Detailed view of one paper |
 | `panel:reviewers` | — | Browse/filter reviewer database |
 | `panel:setup` | — | Initialize project or add a new paper |
+| `panel:new` | — | Paper writing orchestration from plan.md to review-ready draft (pre-review) |
 | `panel:import` | — | Discover papers from roadmap/waves/commits, or import existing artifacts |
 | `panel:report` | — | Generate review reports |
 | `panel:help` | — | Interactive help system |
