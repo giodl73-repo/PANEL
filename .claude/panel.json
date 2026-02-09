@@ -1,5 +1,24 @@
 {
   "default": "panel",
   "gitStrategy": "auto-commit",
-  "suppressMessages": []
+  "suppressMessages": [],
+  "clientSlug": "panel-dev",
+  "projectName": "panel",
+  "hubs": {
+    "waves": {
+      "local": "./.waves-hub",
+      "remotes": ["C:/src/waves-hub"],
+      "syncMode": "auto"
+    },
+    "panel": {
+      "local": "./.panel-hub",
+      "remotes": ["C:/src/panel-hub"],
+      "syncMode": "auto"
+    },
+    "probe": {
+      "local": "./.probe-hub",
+      "remotes": ["C:/src/probe-hub"],
+      "syncMode": "auto"
+    }
+  }
 }
