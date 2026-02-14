@@ -8,6 +8,19 @@ user-invocable: true
 
 Shows comprehensive information about a single paper's review lifecycle.
 
+## Paper Resolution
+
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+
+// Resolve paper directory
+const paperName = args[0] || detectPaperFromCwd();
+const paperPath = path.join(researchDir, paperName);
+```
+
 ## Arguments
 
 - `<paper>` — Paper directory name (required, or auto-detect from cwd)
@@ -17,8 +30,8 @@ Shows comprehensive information about a single paper's review lifecycle.
 
 ## Behavior
 
-1. **Load state**: Read `_panel.yaml` from the paper directory.
-2. **Gather artifacts**: Scan for review files, synthesis, revision plan.
+1. **Load state**: Read `_panel.yaml` from `paperPath`.
+2. **Gather artifacts**: Scan for review files, synthesis, revision plan in `paperPath`.
 3. **Compute metrics**: Score trends, reviewer consensus, P1 completion rate.
 4. **Display**: Render detailed view using shared/display-utils.md.
 

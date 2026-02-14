@@ -13,13 +13,26 @@ Two-level setup: project-level scaffolding or per-paper initialization.
 **CRITICAL — Path Variables:**
 
 ```bash
-targetDir = project root directory (e.g., "C:\src\panel")
-           All research files go in ${targetDir}/research/
+// @import ../shared/project-config.md
 
-           WRONG: targetDir = "C:\src\panel\research"
-           RIGHT: targetDir = "C:\src\panel"
-                  Then use: ${targetDir}/research/RESEARCH.md
+// Load project configuration
+const projectConfig = loadProjectConfig();
+const researchPath = projectConfig.researchPath;
+
+targetDir = project root directory (e.g., "C:\src\panel" or "C:\src\craftworks")
+           All research files go in ${targetDir}/${researchPath}/
+
+           Examples:
+           - Standalone: targetDir = "C:\src\panel"
+                        researchPath = "research"
+                        Full path: "C:\src\panel/research/RESEARCH.md"
+
+           - Monorepo:   targetDir = "C:\src\craftworks"
+                        researchPath = "research/craft"
+                        Full path: "C:\src\craftworks/research/craft/RESEARCH.md"
 ```
+
+**Multi-Project Support**: The `researchPath` is loaded from `.claude/panel.json` based on the active project. Use `panel:project` to switch between projects in a monorepo.
 
 ## Plugin Path Resolution
 
@@ -41,13 +54,28 @@ ${CLAUDE_PLUGIN_ROOT}/templates/
 
 ## Target Directory Resolution
 
-**CRITICAL**: `targetDir` = project root directory (e.g., `C:\src\panel`). All research files go in `${targetDir}/research/`, NOT `${targetDir}` directly.
+```javascript
+// @import ../shared/project-config.md
 
-Resolution order:
+// Load project configuration to get researchPath
+const projectConfig = loadProjectConfig();
+const researchPath = projectConfig.researchPath;
+
+// Resolve target directory
+const targetDir = args['--project'] || process.cwd();
+const researchDir = path.join(targetDir, researchPath);
+```
+
+**Resolution order**:
 1. `--project <path>` if specified → `targetDir = <path>`
 2. Default → `targetDir = {cwd}`
+3. Research path → `researchDir = ${targetDir}/${projectConfig.researchPath}`
 
-All infrastructure files are placed in `${targetDir}/research/`, which is created if missing.
+All infrastructure files are placed in `researchDir`, which is created if missing.
+
+**Multi-Project Examples**:
+- Standalone mode: `researchPath = "research"` → `C:\src\panel/research/`
+- Monorepo mode: `researchPath = "research/craft"` → `C:\src\craftworks/research/craft/`
 
 ## Invocation Modes
 
@@ -76,7 +104,7 @@ panel:setup --connect <path>
 ## Arguments
 
 ### Project-level
-- `--project <path>` — Target project directory (default: cwd; research/ is auto-appended)
+- `--project <path>` — Target project directory (default: cwd; researchPath from config is auto-appended)
 - `--check` — Validate existing setup without creating anything
 - `--scan` — Auto-discover papers with plan.md and setup (batch mode)
 - `--discover` — Alias for --scan
@@ -102,7 +130,8 @@ panel:setup --connect <path>
    - If no positional arguments → Project-level setup or upgrade (Level 1)
 
 2. **For Level 1 (project setup)**:
-   - Check if `${targetDir}/research/` exists
+   - Load project config and determine researchDir
+   - Check if `researchDir` exists
    - If yes: **Auto-upgrade flow**
      - Detect current version via `shared/version-detector.md`
      - If v2.0: Already latest, show status
@@ -122,9 +151,11 @@ Runs when `--scan` or `--discover` flag is provided. Auto-discovers papers with 
 ### Step 1: Discover Papers
 
 ```javascript
+// @import ../shared/project-config.md
 // @import ../shared/batch-utils.md
 
-const researchDir = `${targetDir}/research`;
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 const needSetup = discoverPapersNeedingSetup(researchDir);
 ```
 
@@ -232,15 +263,17 @@ await gitCommitIfEnabled(
 
 ## Level 0 — Auto-Upgrade Flow (Existing Installation)
 
-Runs when `${targetDir}/research/` exists. Uses **auto-awesome** detection and upgrade.
+Runs when `researchDir` exists. Uses **auto-awesome** detection and upgrade.
 
 ### Step 1: Detect Version
 
 ```javascript
+// @import ../shared/project-config.md
 // @import ../shared/version-detector.md
 // @import ../shared/migrator.md
 
-const researchDir = `${targetDir}/research`;
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 const currentVersion = detectPanelVersion(researchDir);
 ```
 
@@ -353,9 +386,18 @@ Next steps:
 
 ## Level 1 — Project Setup Behavior (Fresh Installation)
 
-Runs when invoked with no positional arguments and `${targetDir}/research/` does not exist.
+Runs when invoked with no positional arguments and `researchDir` does not exist.
 
-**Variable convention**: `targetDir` = project root (e.g., `C:\src\panel`). Research files go in `${targetDir}/research/`.
+**Variable convention**:
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const targetDir = process.cwd();
+const researchDir = path.join(targetDir, projectConfig.researchPath);
+```
+
+Research files go in `researchDir` (e.g., `C:\src\panel/research/` or `C:\src\craftworks/research/craft/`).
 
 ### Step 1: Interactive Topic Discovery
 
@@ -391,34 +433,33 @@ If no waves exist, skip scanning and proceed with manual setup.
 ### Step 2: Create research directory
 
 ```bash
-mkdir -p "${targetDir}/research"
-mkdir -p "${targetDir}/research/docs"
+mkdir -p "${researchDir}"
+mkdir -p "${researchDir}/docs"
 ```
 
 ### Step 3: Copy infrastructure files from plugin
 
-**CRITICAL**: All infrastructure files go inside `${targetDir}/research/`, NOT `${targetDir}` directly. Explicitly append `/research/` to every path.
+**CRITICAL**: All infrastructure files go inside `researchDir`, NOT `targetDir` directly. Use the `researchDir` variable throughout.
 
 ```bash
-# Copy from plugin templates INTO research/ subdirectory
-cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWER-DATABASE.md" "${targetDir}/research/REVIEWER-DATABASE.md"
-cp "${CLAUDE_PLUGIN_ROOT}/templates/RESEARCH.md" "${targetDir}/research/RESEARCH.md"
-cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWERS.md" "${targetDir}/research/REVIEWERS.md"
-cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEW_PANEL.md" "${targetDir}/research/REVIEW_PANEL.md"
-cp "${CLAUDE_PLUGIN_ROOT}/templates/references.bib" "${targetDir}/research/references.bib"
+# Copy from plugin templates INTO researchDir
+cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWER-DATABASE.md" "${researchDir}/REVIEWER-DATABASE.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/RESEARCH.md" "${researchDir}/RESEARCH.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEWERS.md" "${researchDir}/REVIEWERS.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/REVIEW_PANEL.md" "${researchDir}/REVIEW_PANEL.md"
+cp "${CLAUDE_PLUGIN_ROOT}/templates/references.bib" "${researchDir}/references.bib"
 ```
 
-Resulting layout (showing `${targetDir}/research/`):
+Resulting layout (showing `researchDir`):
 ```
-${targetDir}/
-└── research/
-    ├── REVIEWER-DATABASE.md
-    ├── RESEARCH.md
-    ├── REVIEWERS.md
-    ├── REVIEW_PANEL.md
-    ├── references.bib        ← global bibliography for papers to draw from
-    ├── docs/
-    └── panel-*/              ← paper directories go here too
+${researchDir}/
+├── REVIEWER-DATABASE.md
+├── RESEARCH.md
+├── REVIEWERS.md
+├── REVIEW_PANEL.md
+├── references.bib        ← global bibliography for papers to draw from
+├── docs/
+└── panel-*/              ← paper directories go here too
 ```
 
 After copying, fill in template placeholders:
@@ -431,7 +472,7 @@ Skip files that already exist (don't overwrite).
 
 ### Step 4: Create Makefile
 
-If `${targetDir}/research/Makefile` doesn't exist, create it at `${targetDir}/research/Makefile`:
+If `${researchDir}/Makefile` doesn't exist, create it at `${researchDir}/Makefile`:
 
 ```makefile
 PAPERS = $(wildcard panel-*/)
@@ -697,6 +738,13 @@ Next steps:
 
 Runs when a `<paper-name>` positional argument is provided.
 
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+```
+
 ### Step 1: Normalize name
 
 If name doesn't start with `panel-`, prepend it.
@@ -705,7 +753,7 @@ If name doesn't start with `panel-`, prepend it.
 
 ### Step 2: Check for duplicates
 
-If `research/<paper-name>/` already exists, warn and abort (use `panel:review` to advance existing papers).
+If `${researchDir}/<paper-name>/` already exists, warn and abort (use `panel:review` to advance existing papers).
 
 ### Step 3: Prompt for venue
 
@@ -721,7 +769,7 @@ If venue not provided, use AskUserQuestion with common venue options:
 ### Step 4: Create paper directory structure
 
 ```
-research/<paper-name>/
+${researchDir}/<paper-name>/
 ├── main.tex              # Starter template (title, author, venue header)
 ├── sections/
 │   ├── 01-introduction.tex
@@ -802,8 +850,16 @@ panel:setup --check
 ```
 
 Validates existing setup without creating anything:
+
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+```
+
 - Plugin accessible via `CLAUDE_PLUGIN_ROOT`
-- `research/` directory exists
+- `researchDir` directory exists
 - REVIEWER-DATABASE.md present
 - All papers have `_panel.yaml`
 - All papers have `REVISION-PLAN.md`
@@ -816,8 +872,10 @@ Panel Setup Check — C:\src\boost
 ═══════════════════════════════════════════════════════════════════════
 
 Plugin: ${CLAUDE_PLUGIN_ROOT} ✓
+Project: ${projectConfig.projectName}
+Research Path: ${researchDir}
 
-Infrastructure (${targetDir}/research/):
+Infrastructure (${researchDir}):
   ✓ REVIEWER-DATABASE.md  (45 reviewers, 10 categories)
   ✓ RESEARCH.md           (2 papers listed)
   ✓ REVIEWERS.md          present
@@ -854,9 +912,16 @@ Standalone mode — connects an existing research directory to a research monore
 
 ### Behavior
 
-1. **Verify prerequisites**: Check `research/` exists in cwd. If not, abort with:
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+```
+
+1. **Verify prerequisites**: Check `researchDir` exists in cwd. If not, abort with:
    ```
-   Error: research/ directory not found. Run panel:setup first to create it.
+   Error: Research directory not found. Run panel:setup first to create it.
    ```
 
 2. **Resolve monorepo path**:

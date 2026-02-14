@@ -8,6 +8,26 @@ user-invocable: true
 
 Assembles a 7-member board to review all modules across the monorepo, producing `REVIEW_BOARD.md` with cross-module synthesis, rankings, and per-module revision plans (B1/B2/B3).
 
+## Module Discovery
+
+```javascript
+// @import ../shared/project-config.md
+// @import ../shared/board-utils.md
+
+// Get all configured projects (each is a module)
+const allProjects = getAllProjects();
+
+// Discover modules with completed panels
+const modules = allProjects.map(project => ({
+  name: project.projectName,
+  researchPath: path.join(process.cwd(), project.researchPath),
+  panelFile: path.join(process.cwd(), project.researchPath, 'REVIEW_PANEL.md'),
+  ready: fs.existsSync(panelFile)
+}));
+```
+
+In multi-project mode, each project configured in `.claude/panel.json` is treated as a module. The board aggregates across all modules.
+
 ## Three-Tier Context
 
 ```
@@ -30,13 +50,14 @@ Board reviews consume module-level panel reviews (bubble up) and produce per-mod
 
 ## Repo Path Resolution
 
-The board operates at the monorepo level. Path resolution (via shared/board-utils.resolve_repo):
+The board operates at the monorepo level. In multi-project setups, path resolution:
 
 1. `--repo <path>` explicit flag (highest priority)
-2. Walk up from cwd looking for `REVIEW_BOARD.md`
-3. Walk up from cwd looking for directory with 2+ `RESEARCH.md` subdirectories
-4. Check sibling directories of current plugin
-5. Fail with guidance message
+2. Use `process.cwd()` (assumes run from monorepo root)
+3. Walk up from cwd looking for `.claude/panel.json` with multiple projects
+4. Walk up from cwd looking for `REVIEW_BOARD.md`
+5. Walk up from cwd looking for directory with 2+ research paths from config
+6. Fail with guidance message
 
 ## Prerequisites
 
@@ -47,20 +68,22 @@ Before `panel:board --review` can run:
 
 Use `panel:board --status` to check readiness.
 
-## Module Source Repos
+## Multi-Project Module Structure
 
-Some modules are authored in external source repos, with their `research/` subdirectory synced to the monorepo:
+In monorepo mode, each project is a module with its research papers in a dedicated path:
 
-| Module | Source Repo | Research Path | Sync Target |
-|--------|-------------|---------------|-------------|
-| merit | `C:\src\research\merit` | (in-repo) | — |
-| waves | `C:\src\waves` | `C:\src\waves\research\` | `{repo}/waves/` |
-| panel | `C:\src\research\panel` | (in-repo) | — |
-| boost | `C:\src\boost` | `C:\src\boost\research\` | `{repo}/boost/` |
+**Example: Craftworks Monorepo**
+| Module | Research Path | Papers Location |
+|--------|---------------|-----------------|
+| craft | `research/craft/` | `research/craft/panel-*/` |
+| waves | `research/waves/` | `research/waves/panel-*/` |
+| probe | `research/probe/` | `research/probe/panel-*/` |
+| boost | `research/boost/` | `research/boost/panel-*/` |
+| panel | `research/panel/` | `research/panel/panel-*/` |
 
-**Sync workflow**: Module-level files (RESEARCH.md, REVIEW_PANEL.md, REVIEWERS.md, paper directories) are authored in the source repo's `research/` directory. The sync mechanism copies them to the monorepo. The canonical authoring location is the source repo — never edit synced files directly in the monorepo.
+Each module's `REVIEW_PANEL.md` is located at `{researchPath}/REVIEW_PANEL.md`.
 
-**Before `--review`**: Ensure all external modules have been synced. Use `waves:sync` or manual git operations (commit format: `[module] Sync from {module} repo`).
+**Board operation**: The board reads from all configured projects in `.claude/panel.json` and aggregates their panel reviews into a monorepo-level `REVIEW_BOARD.md` at the repository root.
 
 ## Behavior
 

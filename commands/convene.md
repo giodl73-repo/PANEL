@@ -8,6 +8,18 @@ user-invocable: true
 
 Assembles a 7-member cross-portfolio panel to review all papers within a module, producing `REVIEW_PANEL.md` with consolidated findings, rankings, and per-paper revision items (PP1/PP2/PP3).
 
+## Module Resolution
+
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+const moduleName = projectConfig.projectName;
+```
+
+The "module" is the current project's research directory. All papers within `researchDir` are part of this module's cross-portfolio panel.
+
 ## Three-Tier Context
 
 ```
@@ -48,9 +60,10 @@ Use `panel:convene --status` to check readiness.
 
 ### --status
 
-1. Discover all papers in the module via shared/state-loader.md
+1. Discover all papers in `researchDir` via shared/state-loader.md
 2. Assess readiness of each paper via shared/panel-utils.md
 3. Display:
+   - Module name (`moduleName`) and research path
    - Paper readiness table (name, stage, round, score, ready?)
    - Current panel composition (if panel exists)
    - Current round number and date

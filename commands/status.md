@@ -8,6 +8,17 @@ user-invocable: true
 
 Shows a summary table of all papers in the current project with their review lifecycle status.
 
+## Project Resolution
+
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+```
+
+All paper discovery happens within `researchDir` based on the active project.
+
 ## Arguments
 
 - `--module <name>` — Filter to a specific module (default: all)
@@ -15,16 +26,17 @@ Shows a summary table of all papers in the current project with their review lif
 
 ## Behavior
 
-1. **Discover papers**: Find all directories containing `_panel.yaml` in the current project.
+1. **Discover papers**: Find all directories containing `_panel.yaml` in `researchDir`.
 2. **Load state**: Read each `_panel.yaml` using shared/state-loader.md.
 3. **Compute metrics**: For each paper, calculate current score, round, and next action.
-4. **Display table**: Render a formatted status table using shared/display-utils.md.
+4. **Display table**: Render a formatted status table using shared/display-utils.md with project name from `projectConfig.projectName`.
 
 ## Output Format
 
 ```
-Panel Status — [Project Name]
+Panel Status — ${projectConfig.projectName}
 ═════════════════════════════════════════════════════════════════════════════════
+Research Path: ${researchDir}
 
  #  Paper                        Mode     Stage      Round  Score   Venue        Next Action
  ── ──────────────────────────── ──────── ────────── ───── ─────── ──────────── ──────────────────

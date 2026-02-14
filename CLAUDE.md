@@ -63,7 +63,8 @@ A Claude Code plugin that drives research papers through a complete AI-simulated
 ```
 panel/
 ├── .claude-plugin/
-│   ├── plugin.json              # Plugin manifest (13 commands)
+│   ├── plugin.json              # Plugin manifest (14 commands)
+│   ├── marketplace.json         # Standalone marketplace (panel only)
 │   └── craft.json               # Craft feature tracking
 ├── .claude/
 │   └── panel.json               # Plugin configuration (gitStrategy, suppressMessages)
@@ -82,6 +83,7 @@ panel/
 │   ├── venue.md                 # Venue recommendation
 │   └── uninstall.md             # Clean plugin removal
 ├── shared/
+│   ├── project-config.md        # Multi-project configuration loader (v1.2.0+)
 │   ├── stage-machine.md         # Stage progression logic + gates
 │   ├── state-loader.md          # Read/write _panel.yaml
 │   ├── reviewer-selector.md     # Match reviewers to papers
@@ -100,6 +102,7 @@ panel/
 │   └── git-utils.md             # (deprecated, use git-helper.md)
 ├── templates/
 │   ├── help/                    # Help topic files
+│   ├── plan-template.md         # Paper plan structure for panel:author
 │   ├── review-template.md       # Individual review structure
 │   ├── synthesis-template.md    # Synthesis document structure
 │   └── revision-plan-template.md
@@ -137,7 +140,126 @@ Stage        Description                                    Gate to advance
 8. accepted  Paper accepted at venue                        Acceptance confirmed
 ```
 
-## Commands (13)
+## Multi-Project Support (v1.2.0+)
+
+Panel supports both **standalone mode** and **monorepo mode** with multiple research projects.
+
+### Configuration
+
+Projects are defined in `.claude/panel.json`:
+
+```json
+{
+  "default": "craft-research",
+  "projects": {
+    "craft-research": {
+      "panelPath": "context/panel/craft-research",
+      "researchPath": "research/craft",
+      "clientSlug": "craft-research",
+      "projectName": "craft",
+      "targetPlugin": "plugins/craft",
+      "description": "Craft plugin research papers"
+    },
+    "waves-research": {
+      "panelPath": "context/panel/waves-research",
+      "researchPath": "research/waves",
+      "clientSlug": "waves-research",
+      "projectName": "waves",
+      "targetPlugin": "plugins/waves",
+      "description": "Waves plugin research papers"
+    }
+  }
+}
+```
+
+### Project Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `panelPath` | Yes | Context data storage path (e.g., `context/panel/craft-research`) |
+| `researchPath` | Yes | Research papers directory (e.g., `research/craft`) |
+| `clientSlug` | Yes | Hub client identifier (e.g., `craft-research`) |
+| `projectName` | Yes | Human-readable name (e.g., `craft`) |
+| `targetPlugin` | No | Plugin directory reference (e.g., `plugins/craft`) |
+| `description` | No | Project description |
+
+### Modes
+
+**Standalone Mode** (default):
+- Single project: `"researchPath": "research"`
+- Papers in `C:\src\panel/research/`
+- Traditional panel workflow
+
+**Monorepo Mode** (new):
+- Multiple projects: each with its own `researchPath`
+- Example: `"researchPath": "research/craft"` → `C:\src\craftworks/research/craft/`
+- Switch between projects using `panel:project`
+- Each project has independent research papers and context
+
+### Usage
+
+```bash
+# List all projects
+panel:project
+
+# Switch to craft research
+panel:project craft-research
+
+# Work on craft papers
+panel:setup panel-new-paper "CHI 2026"
+panel:review panel-new-paper
+
+# Switch to waves research
+panel:project waves-research
+
+# Work on waves papers
+panel:status
+```
+
+### Directory Structure (Monorepo)
+
+```
+craftworks/                          # Monorepo root
+├── .claude/
+│   └── panel.json                   # Multi-project config
+├── plugins/
+│   ├── craft/                       # Plugin implementations
+│   ├── waves/
+│   └── probe/
+├── research/                        # Research papers by plugin
+│   ├── craft/                       # Craft research (module)
+│   │   ├── panel-paper-1/
+│   │   ├── panel-paper-2/
+│   │   ├── RESEARCH.md
+│   │   └── REVIEW_PANEL.md
+│   ├── waves/                       # Waves research (module)
+│   │   ├── panel-paper-1/
+│   │   ├── RESEARCH.md
+│   │   └── REVIEW_PANEL.md
+│   └── probe/                       # Probe research (module)
+│       └── RESEARCH.md
+├── context/
+│   └── panel/
+│       ├── craft-research/          # Panel context per project
+│       ├── waves-research/
+│       └── probe-research/
+└── REVIEW_BOARD.md                  # Board-level cross-module review
+```
+
+### Backward Compatibility
+
+Existing standalone installations continue to work without changes:
+- Old config without `projects` object → uses legacy defaults
+- `researchPath` defaults to `"research"`
+- Single-project behavior maintained
+
+### See Also
+
+- `MULTI-PROJECT-SETUP.md` — Complete setup guide
+- `MONOREPO-READY.md` — Implementation status and next steps
+- `shared/project-config.md` — Configuration loader utility
+
+## Commands (14)
 
 | Command | Tier | Purpose |
 |---------|------|---------|
@@ -148,6 +270,7 @@ Stage        Description                                    Gate to advance
 | `panel:show` | — | Detailed view of one paper |
 | `panel:reviewers` | — | Browse/filter reviewer database |
 | `panel:setup` | — | Initialize project or add a new paper |
+| `panel:project` | — | Switch between projects or list all projects (multi-project mode) |
 | `panel:author` | — | Paper writing orchestration from plan.md to review-ready draft (pre-review) |
 | `panel:import` | — | Discover papers from roadmap/waves/commits, or import existing artifacts |
 | `panel:report` | — | Generate review reports |

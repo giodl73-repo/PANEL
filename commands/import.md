@@ -8,6 +8,17 @@ user-invocable: true
 
 Four modes: discover papers from external sources (roadmap, waves, commits) or import existing review artifacts.
 
+## Project Resolution
+
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+```
+
+All discovered or imported papers are created/imported into `researchDir` based on the active project.
+
 ## Arguments
 
 ### Discovery Modes (new papers)
@@ -37,7 +48,7 @@ panel:import --from roadmap --roadmap C:\src\research\ROADMAP.md
    - Default path: `C:\src\research\ROADMAP.md`
    - Parses Priority sections for "Not started" papers with target venues
    - Extracts titles, venues, abstract sketches, evidence (unchecked action items)
-   - Cross-checks against existing papers in `research/` to skip duplicates
+   - Cross-checks against existing papers in `researchDir` to skip duplicates
 
 2. **Propose**: Display discovered papers in a table:
 
@@ -64,7 +75,7 @@ panel:import --from roadmap --roadmap C:\src\research\ROADMAP.md
    - Options: each discovered paper + "None — cancel import"
 
 4. **Generate**: For each approved paper, call `generate_paper(proposal, options)` from shared/paper-generator.md:
-   - Create paper directory: `research/{slug}/`
+   - Create paper directory: `${researchDir}/{slug}/`
    - Generate `main.tex` with full preamble, real title, abstract, and section includes
    - Generate 6 section files with substantive content drawing on evidence
    - Create `reviews/` directory

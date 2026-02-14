@@ -2,8 +2,15 @@
   "default": "panel",
   "gitStrategy": "auto-commit",
   "suppressMessages": [],
-  "clientSlug": "panel-dev",
-  "projectName": "panel",
+  "projects": {
+    "panel": {
+      "panelPath": "context/panel/panel-dev",
+      "researchPath": "research",
+      "clientSlug": "panel-dev",
+      "projectName": "panel",
+      "description": "Panel standalone research paper management"
+    }
+  },
   "hubs": {
     "waves": {
       "local": "./.waves-hub",

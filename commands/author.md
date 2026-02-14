@@ -10,6 +10,19 @@ user-invocable: true
 
 This is the **pre-review phase** — getting from idea → draft ready for `panel:review`.
 
+## Paper Resolution
+
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+
+// Resolve paper directory
+const paperName = args['--paper'] || detectPaperFromCwd();
+const paperPath = path.join(researchDir, paperName);
+```
+
 ## Arguments
 
 - `--paper <name>` — Target paper directory (default: auto-detect from cwd)
@@ -29,6 +42,8 @@ This is the **pre-review phase** — getting from idea → draft ready for `pane
 3. `_panel.yaml` exists (initialized via `panel:setup`)
 
 ## Plan Structure
+
+**Template**: Use `${CLAUDE_PLUGIN_ROOT}/templates/plan-template.md` as a starting point. Copy it to your paper directory and customize.
 
 The `plan.md` should include these sections:
 

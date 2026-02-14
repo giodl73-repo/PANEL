@@ -22,6 +22,21 @@ panel:review  — paper level (individual reviews) ← this command
 
 Paper-level reviews bubble up to `panel:convene`. Panel-level revision items (PP1/PP2/PP3) flow down to individual papers.
 
+## Paper Path Resolution
+
+```javascript
+// @import ../shared/project-config.md
+
+const projectConfig = loadProjectConfig();
+const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+
+// Resolve paper directory
+const paperName = args['--paper'] || detectPaperFromCwd();
+const paperPath = path.join(researchDir, paperName);
+```
+
+All paper operations use `paperPath` which respects the multi-project `researchPath` configuration.
+
 ## Arguments
 
 - `--paper <name>` — Target paper directory (default: auto-detect from cwd)
@@ -47,7 +62,7 @@ Paper-level reviews bubble up to `panel:convene`. Panel-level revision items (PP
 
 ## Behavior
 
-1. **Read state**: Load `_panel.yaml` from the paper directory. If missing, start at `draft`.
+1. **Read state**: Load `_panel.yaml` from `paperPath`. If missing, start at `draft`.
 2. **Determine current stage**: Read `stage` field.
 3. **Content mode detection** (first time only): If `content_mode` is not set in `_panel.yaml`:
    - Run content analysis using `shared/content-analyzer.md`
