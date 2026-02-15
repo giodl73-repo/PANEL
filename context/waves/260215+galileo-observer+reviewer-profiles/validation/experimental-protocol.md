@@ -215,7 +215,9 @@ fs.appendFileSync(`logs/${condition}-${paperName}-round${round}.json`, JSON.stri
 
 ## References
 
-- Research paper: `research/panel-reviewer-profiles/main.tex`
+- Research paper: `C:\src\craftworks-zeus\research\panel\panel-reviewer-profiles\main.tex`
 - Profile loader: `shared/reviewer-profile-loader.md`
 - Test fixtures: `test/fixtures/profiles/`
 - Master registry: `context/panel/reviewers/_index.yaml`
+- Merit papers: `C:\src\craftworks-zeus\research\merit\` (10 papers)
+- Board review: `C:\src\craftworks-zeus\REVIEW_BOARD.md`
