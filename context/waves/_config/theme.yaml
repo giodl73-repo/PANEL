@@ -23,27 +23,27 @@ themes:
       # Era 1: Computing Pioneers (used)
       - deity: lovelace
         epithet: programmer
-        wave: "01+initial-plugin-development"
+        wave: "260115+lovelace-programmer+initial-plugin-development"
         used: true
       - deity: feynman
         epithet: explainer
-        wave: "02+review-lifecycle-implementation"
+        wave: "260121+feynman-explainer+review-lifecycle-implementation"
         used: true
       - deity: einstein
         epithet: theorist
-        wave: "03+three-tier-architecture"
+        wave: "260126+einstein-theorist+three-tier-architecture"
         used: true
       - deity: hopper
         epithet: compiler
-        wave: "04+enhanced-setup-autocommit"
+        wave: "260129+hopper-compiler+enhanced-setup-autocommit"
         used: true
       - deity: curie
         epithet: pioneer
-        wave: "05+ai-disclosure-revisions"
+        wave: "260201+curie-pioneer+ai-disclosure-revisions"
         used: true
       - deity: sagan
         epithet: explorer
-        wave: "06+probe-integration"
+        wave: "260204+sagan-explorer+probe-integration"
         used: true
 
       # Era 2: Classical Scientists (available)
