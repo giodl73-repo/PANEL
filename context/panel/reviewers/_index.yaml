@@ -1,0 +1,397 @@
+# Reviewer Profile Registry
+#
+# Master index of all reviewer profiles with category mappings and keywords.
+# Used by reviewer-selector.md for filtering and panel:reviewers for browsing.
+
+version: "1.0"
+total_reviewers: 45
+categories: 10
+updated: "2026-02-15"
+
+# Category Definitions
+categories:
+  systems:
+    name: Systems & Infrastructure
+    count: 5
+    keywords: [distributed, scalable, performance, reliability, infrastructure]
+    venues: [OSDI, SOSP, NSDI, ATC, EuroSys]
+
+  compilers:
+    name: Compilers & PL Theory
+    count: 4
+    keywords: [static-analysis, optimization, verification, type-systems]
+    venues: [PLDI, POPL, OOPSLA, ICFP]
+
+  agents:
+    name: AI Agents & Orchestration
+    count: 6
+    keywords: [reasoning, planning, orchestration, agents, workflows]
+    venues: [AAAI, IJCAI, AAMAS, NeurIPS]
+
+  prompting:
+    name: Prompting & LLM Capabilities
+    count: 5
+    keywords: [prompting, few-shot, in-context, capabilities, evaluation]
+    venues: [ACL, EMNLP, NeurIPS, ICML]
+
+  hci:
+    name: Human-AI Interaction
+    count: 7
+    keywords: [interaction, users, design, crowdsourcing, collaborative]
+    venues: [CHI, CSCW, UIST, IUI]
+
+  ml-systems:
+    name: ML Systems & Efficiency
+    count: 5
+    keywords: [efficiency, optimization, hardware, systems, inference]
+    venues: [MLSys, NeurIPS, ICML]
+
+  ml-research:
+    name: ML Research / Learning
+    count: 4
+    keywords: [learning, representation, optimization, theory]
+    venues: [NeurIPS, ICML, ICLR, AAAI]
+
+  software-eng:
+    name: Software Engineering & DevOps
+    count: 3
+    keywords: [testing, debugging, devops, tools, automation]
+    venues: [ICSE, FSE, ASE]
+
+  nlp:
+    name: NLP & Information Retrieval
+    count: 4
+    keywords: [language, semantics, retrieval, generation, understanding]
+    venues: [ACL, EMNLP, NAACL, COLING]
+
+  security:
+    name: Security & Safety
+    count: 2
+    keywords: [security, safety, robustness, adversarial, privacy]
+    venues: [IEEE S&P, USENIX Security, CCS]
+
+# Reviewer Index (alphabetical by last name)
+
+reviewers:
+  - name: Saleema Amershi
+    slug: saleema-amershi
+    category: hci
+    keywords: [interaction, machine-learning, fairness, user-centered]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Yejin Choi
+    slug: yejin-choi
+    category: nlp
+    keywords: [commonsense, reasoning, language-models, knowledge]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Tianqi Chen
+    slug: tianqi-chen
+    category: ml-systems
+    keywords: [compilation, optimization, deep-learning, systems]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Jacob Devlin
+    slug: jacob-devlin
+    category: nlp
+    keywords: [bert, pretraining, transfer-learning, transformers]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Chris Lattner
+    slug: chris-lattner
+    category: compilers
+    keywords: [llvm, swift, compilers, infrastructure]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Percy Liang
+    slug: percy-liang
+    category: ml-research
+    keywords: [evaluation, benchmarks, holistic, transparency]
+    profile_version: "1.0"
+    profile_exists: true
+
+  - name: Song Han
+    slug: song-han
+    category: ml-systems
+    keywords: [efficiency, compression, pruning, quantization]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Shyam Sankar
+    slug: shyam-sankar
+    category: agents
+    keywords: [platforms, orchestration, enterprise, scaling]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Shreya Shankar
+    slug: shreya-shankar
+    category: ml-systems
+    keywords: [mlops, data-quality, pipelines, monitoring]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Ben Shneiderman
+    slug: ben-shneiderman
+    category: hci
+    keywords: [visualization, human-ai, guidelines, usability]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Ion Stoica
+    slug: ion-stoica
+    category: systems
+    keywords: [distributed, ray, spark, infrastructure]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Chelsea Finn
+    slug: chelsea-finn
+    category: ml-research
+    keywords: [meta-learning, robotics, few-shot, adaptation]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Dawn Song
+    slug: dawn-song
+    category: security
+    keywords: [security, privacy, adversarial, robustness]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Michael Bernstein
+    slug: michael-bernstein
+    category: hci
+    keywords: [crowdsourcing, social-computing, platforms, communities]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Matei Zaharia
+    slug: matei-zaharia
+    category: systems
+    keywords: [spark, distributed, data-processing, scalable]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Omar Khattab
+    slug: omar-khattab
+    category: prompting
+    keywords: [dspy, retrieval, prompting, optimization]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Jason Wei
+    slug: jason-wei
+    category: prompting
+    keywords: [chain-of-thought, reasoning, prompting, emergent]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Denny Zhou
+    slug: denny-zhou
+    category: prompting
+    keywords: [reasoning, self-consistency, prompting, techniques]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Andrej Karpathy
+    slug: andrej-karpathy
+    category: ml-research
+    keywords: [vision, deep-learning, teaching, interpretability]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Ilya Sutskever
+    slug: ilya-sutskever
+    category: ml-research
+    keywords: [deep-learning, scaling, optimization, research]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Jeff Dean
+    slug: jeff-dean
+    category: ml-systems
+    keywords: [infrastructure, scale, systems, performance]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Pieter Abbeel
+    slug: pieter-abbeel
+    category: agents
+    keywords: [robotics, reinforcement-learning, planning, control]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Andrew Ng
+    slug: andrew-ng
+    category: ml-research
+    keywords: [education, deep-learning, applications, accessibility]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Yoshua Bengio
+    slug: yoshua-bengio
+    category: ml-research
+    keywords: [deep-learning, representation, causality, foundations]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Yann LeCun
+    slug: yann-lecun
+    category: ml-research
+    keywords: [vision, self-supervised, architecture, foundations]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Fei-Fei Li
+    slug: fei-fei-li
+    category: ml-research
+    keywords: [vision, imagenet, datasets, human-centered]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Anima Anandkumar
+    slug: anima-anandkumar
+    category: ml-research
+    keywords: [tensor-methods, theory, optimization, applications]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Sebastian Thrun
+    slug: sebastian-thrun
+    category: agents
+    keywords: [robotics, autonomous, probabilistic, planning]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Stuart Russell
+    slug: stuart-russell
+    category: agents
+    keywords: [ai-safety, alignment, rationality, values]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Peter Norvig
+    slug: peter-norvig
+    category: agents
+    keywords: [search, planning, inference, ai-education]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Diyi Yang
+    slug: diyi-yang
+    category: hci
+    keywords: [social-nlp, computational-social, interaction, communities]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Dan Jurafsky
+    slug: dan-jurafsky
+    category: nlp
+    keywords: [speech, dialogue, social, pragmatics]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Chris Manning
+    slug: chris-manning
+    category: nlp
+    keywords: [parsing, semantics, understanding, linguistics]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Emily Bender
+    slug: emily-bender
+    category: nlp
+    keywords: [linguistics, ethics, evaluation, language]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Kathleen McKeown
+    slug: kathleen-mckeown
+    category: nlp
+    keywords: [generation, summarization, applications, journalism]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Aapo Hyvärinen
+    slug: aapo-hyvarinen
+    category: ml-research
+    keywords: [ica, unsupervised, causality, theory]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Martin Rinard
+    slug: martin-rinard
+    category: compilers
+    keywords: [program-analysis, verification, synthesis, reliability]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: George Necula
+    slug: george-necula
+    category: compilers
+    keywords: [verification, proof-carrying, type-systems, safety]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Barbara Liskov
+    slug: barbara-liskov
+    category: systems
+    keywords: [distributed, transactions, reliability, abstraction]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Eric Brewer
+    slug: eric-brewer
+    category: systems
+    keywords: [cap-theorem, distributed, consistency, scalability]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Robert Morris
+    slug: robert-morris
+    category: systems
+    keywords: [networking, distributed, systems, performance]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Adrian Sampson
+    slug: adrian-sampson
+    category: compilers
+    keywords: [approximate, hardware, energy, optimization]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Shriram Krishnamurthi
+    slug: shriram-krishnamurthi
+    category: software-eng
+    keywords: [programming-languages, education, testing, verification]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Andreas Zeller
+    slug: andreas-zeller
+    category: software-eng
+    keywords: [debugging, testing, delta-debugging, fault-localization]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Margo Seltzer
+    slug: margo-seltzer
+    category: software-eng
+    keywords: [systems, provenance, tracing, reproducibility]
+    profile_version: "1.0"
+    profile_exists: false
+
+  - name: Percy Liang
+    slug: percy-liang
+    category: prompting
+    keywords: [evaluation, benchmarks, semantic-parsing, compositionality]
+    profile_version: "1.0"
+    profile_exists: true
+    note: "Listed in both ml-research and prompting - primary is ml-research"
