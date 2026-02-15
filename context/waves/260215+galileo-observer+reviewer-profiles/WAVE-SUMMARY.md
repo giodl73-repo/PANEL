@@ -46,16 +46,18 @@ This wave implements a token-efficient reviewer profile system for the Panel plu
 
 **D2: Profile Loader Utility**
 - Utility: `shared/reviewer-profile-loader.md`
-- Four-tier resolution: cache → exact → slug → database fallback
-- Session-level caching with hit/miss statistics
+- Five-tier resolution: cache → R-N → name → slug → database fallback
+- Session-level caching with hit/miss statistics (profiles + index)
 - Complete API: `loadReviewerProfile()`, `clearProfileCache()`, `getProfileCacheStats()`
 - Performance: <1ms cache hits, 12ms file loads, 87ms database fallback
 - Graceful degradation to database for missing profiles
+- R-N scheme: Anonymous identifiers (R-1.md, R-2.md) for git-friendly paths
 
 **D3: Master Registry**
 - Registry: `context/panel/reviewers/_index.yaml`
-- 45 reviewers indexed by slug, category, keywords
+- 45 reviewers indexed by R-N ID, name, slug, category, keywords
 - 10 category definitions with metadata
+- R-N mapping: R-1 → Percy Liang, R-2 → Michael Bernstein, etc.
 - Profile existence tracking for migration status
 - Version tracking for updates
 
@@ -102,6 +104,15 @@ This wave implements a token-efficient reviewer profile system for the Panel plu
 - Added `--detailed` flag to list mode: show profile summaries
 - Profile metadata display: version, last updated, word count, assignments
 - Integration with shared/reviewer-profile-loader.md
+
+**E7: R-N Architecture Update**
+- Redesigned profile filenames: R-1.md through R-45.md (anonymous identifiers)
+- Git-friendly paths: Less PII-looking in diffs and history
+- Updated profile loader with five-tier resolution (added R-N and name tiers)
+- Created `templates/_index.yaml` with R-N → name mapping structure
+- Updated `templates/reviewer-profile-template.md` with `id` field in frontmatter
+- Multi-project support: Shared reviewers/ directory across all projects in monorepo
+- Deployed to craftworks-zeus: `context/panel/reviewers/` (shared by craft/waves/probe/boost)
 
 ### Validation Stage ✓ (partial)
 
@@ -206,10 +217,12 @@ This wave implements a token-efficient reviewer profile system for the Panel plu
 - **Resolution time**: <1ms cache, 12ms file, 87ms fallback
 
 ### Architecture
-- **Four-tier resolution**: cache → exact → slug → database
-- **Session-level caching**: 50% hit rate on round 2, 100% for module panels
+- **Five-tier resolution**: cache → R-N → name → slug → database
+- **R-N scheme**: Anonymous identifiers (R-1.md through R-45.md) for git-friendly paths
+- **Session-level caching**: 50% hit rate on round 2, 100% for module panels (profiles + index)
 - **Graceful degradation**: database fallback for missing profiles
 - **Three-tier integration**: paper, module, board levels
+- **Multi-project support**: Shared reviewers/ directory across all monorepo projects
 
 ### Quality Assurance
 - **5 quality criteria**: structure, content, coverage, consistency, ethics
@@ -261,7 +274,8 @@ These require runtime operation of the panel plugin with real papers and reviews
 - **Research-first approach**: Writing the paper before implementation validated the design
 - **Craft discipline pattern**: Proved to be an excellent architectural blueprint
 - **A/B experimental design**: Rigorous validation methodology provides confidence
-- **Four-tier resolution**: Elegant handling of cache, file, and database sources
+- **Five-tier resolution**: Elegant handling of cache, R-N, name, slug, and database sources
+- **R-N scheme**: Anonymous identifiers solve PII concerns and make git happier
 - **Schema consolidation**: Shorter names (revisions.md) cleaner across three tiers
 
 ### What We Learned
@@ -270,6 +284,7 @@ These require runtime operation of the panel plugin with real papers and reviews
 - **Quality validation needs automation**: Manual checks don't scale to 45 profiles
 - **Experimental data is essential**: Can't finalize paper without actual measurements
 - **Graceful degradation matters**: Database fallback ensures system always works
+- **PII-looking paths matter**: Real names in filenames look concerning even with disclaimers
 
 ### Impact
 - **Cost savings**: At 5,921 reviews, token savings pay for development cost
