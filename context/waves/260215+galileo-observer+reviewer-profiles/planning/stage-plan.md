@@ -226,7 +226,7 @@
   - P1/P2/P3 items show reviewer expertise in attribution (e.g., "[ML Research]")
   - Added context notes explaining reviewer evaluation lens for issues
 
-### E6: Enhance panel:reviewers (Phase 4.1)
+### E6: Enhance panel:reviewers (Phase 4.1) ✓
 **Role**: backend
 **Description**: Add operations to panel:reviewers command: `show <name>`, `edit <name>`, `list --detailed`. Integrate with profile browser.
 
@@ -235,7 +235,16 @@
 - Profile browser integration
 - Edit workflow for profile customization
 
-**Status**: pending
+**Status**: completed
+
+**Standup**:
+- Enhanced commands/reviewers.md with three operation modes: List, Show, Edit
+- Added --detailed flag to list mode: shows profile summaries (background, publications)
+- Added show <name> operation: display full reviewer profile (all 7 sections)
+- Added edit <name> operation: open profile in editor, validate on save
+- Profile metadata display: version, last updated, word count, paper assignments
+- Updated dependencies: added shared/reviewer-profile-loader.md, context/panel/reviewers/_index.yaml
+- Profile integration: browser now supports both database-only and profile-enhanced reviewers
 
 ---
 

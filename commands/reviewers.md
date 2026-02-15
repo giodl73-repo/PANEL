@@ -10,18 +10,55 @@ Browse, search, and filter the expert reviewer database.
 
 ## Arguments
 
+### Filtering (default list mode)
 - `--category <cat>` — Filter by category (systems, compilers, agents, prompting, human-ai, ml-systems, ml-research, se-devops, nlp-ir, security)
 - `--venue <venue>` — Filter by recommended venue (MLSys, NeurIPS, CHI, PLDI, OSDI, etc.)
 - `--tag <tag>` — Filter by expertise tag (distributed-systems, agents, prompting, etc.)
 - `--search <query>` — Free-text search across names, affiliations, expertise
 - `--available` — Show only reviewers not assigned to current paper
+- `--detailed` — Show detailed list with profile summaries (research background, key publications)
+
+### Profile operations
+- `show <name>` — Display full reviewer profile (all sections from context/panel/reviewers/profiles/<slug>.md)
+- `edit <name>` — Open reviewer profile for customization
+- `list <name>` — Alias for `show <name>`
 
 ## Behavior
+
+### List Mode (default)
 
 1. **Load database**: Read REVIEWER-DATABASE.md from the project root or plugin config.
 2. **Apply filters**: Category, venue, tag, search query.
 3. **Cross-reference**: Check `_panel.yaml` files to show assignment status.
 4. **Display**: Render filtered reviewer list using shared/display-utils.md.
+
+If `--detailed` flag provided:
+- Load profiles via shared/reviewer-profile-loader.md for each filtered reviewer
+- Show 2-3 sentence research background summary
+- Include 2-3 key publications
+- Note profile existence status (✓ profile | ✗ database only)
+
+### Show Mode (`show <name>`)
+
+1. **Resolve name**: Convert to slug (e.g., "Percy Liang" → "percy-liang")
+2. **Load profile**: Use loadReviewerProfile() from shared/reviewer-profile-loader.md
+3. **Display full profile**:
+   - Research background (2-3 paragraphs)
+   - Key publications (3-5 papers)
+   - Evaluation lens (characteristic questions, focus areas)
+   - Review criteria (checklist items)
+   - Characteristic concerns (common issues they raise)
+   - Voice & tone (writing style descriptors)
+   - AI Simulation Disclosure footer
+4. **Show metadata**: Profile version, last updated, word count
+5. **Cross-reference**: Papers where this reviewer is assigned
+
+### Edit Mode (`edit <name>`)
+
+1. **Resolve profile path**: Find profile file in context/panel/reviewers/profiles/
+2. **Open in editor**: Use $EDITOR or fall back to system default
+3. **Validate on save**: Check required sections present, size within 1.8-2.2KB target
+4. **Suggest regeneration**: If major changes, offer to update profile cache via clearProfileCache()
 
 ## Output Format
 
@@ -53,4 +90,6 @@ Shows recommended reviewers for CHI submissions with rationale.
 ## Dependencies
 
 - shared/reviewer-selector.md — Database loading and filtering
+- shared/reviewer-profile-loader.md — Load reviewer profiles, cache management
 - shared/display-utils.md — Terminal formatting
+- context/panel/reviewers/_index.yaml — Master reviewer registry
