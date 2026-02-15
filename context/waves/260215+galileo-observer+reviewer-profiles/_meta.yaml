@@ -1,0 +1,74 @@
+# Wave 7: Token-Efficient Reviewer Profiles
+# Scientist: Galileo (observer)
+# Theme: Systematic observation and measurement - reducing token costs through persistent profiles
+
+version: "1.0"
+order: 7
+slug: reviewer-profiles
+uuid: 0db0c43f
+name: Token-Efficient Reviewer Profiles
+status: in-progress
+stage: planning
+created: 2026-02-15T00:00:00Z
+completed: null
+
+description: |
+  Implement persistent reviewer profiles to reduce token costs by 60-75%
+  in AI-simulated expert reviews. Following craft's discipline pattern,
+  create structured markdown profiles stored in context/panel/reviewers/profiles/
+  that are loaded once and reused across review rounds and papers.
+
+plan: |
+  Phase 0: Design & Paper (validate approach via research paper FIRST)
+  Phase 1: Create profile infrastructure (template, loader, registry)
+  Phase 2: Generate initial 45 profiles from REVIEWER-DATABASE.md
+  Phase 3: Integrate with review commands (panel:review, panel:convene)
+  Phase 4: Add profile management commands (panel:reviewers enhancements)
+  Phase 5: Testing & validation (A/B comparison, experimental paper)
+
+scientist:
+  name: Galileo Galilei
+  epithet: observer
+  era: "Classical Scientists"
+  heraldry: "Systematic measurement, empirical observation, mathematical precision"
+  voice: "Document with careful observation and quantitative measurement"
+
+# Stage tracking
+stages:
+  planning:
+    started_at: 2026-02-15T00:00:00Z
+    completed_at: null
+    reviewed_at: null
+    review_decision: null
+  design:
+    started_at: null
+    completed_at: null
+    reviewed_at: null
+    review_decision: null
+  execution:
+    started_at: null
+    completed_at: null
+    reviewed_at: null
+    review_decision: null
+  validation:
+    started_at: null
+    completed_at: null
+    reviewed_at: null
+    review_decision: null
+  documentation:
+    started_at: null
+    completed_at: null
+    reviewed_at: null
+    review_decision: null
+
+# Pulses (work items) - will be populated from stage-plan.md
+pulses: []
+
+# Review checkpoints
+checkpoint_cleared: null
+review_step: null
+
+# Git integration
+branch: null
+branch_created: false
+remote_verified: false
