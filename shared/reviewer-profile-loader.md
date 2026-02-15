@@ -11,10 +11,13 @@ Loads persistent reviewer profiles from `context/panel/reviewers/profiles/` with
 ```
 loadReviewerProfile(name, options)
     ├─ Tier 1: Check session cache
-    ├─ Tier 2: Exact file match (name.md)
-    ├─ Tier 3: Slug match (slugified-name.md)
-    └─ Tier 4: Database fallback (REVIEWER-DATABASE.md)
+    ├─ Tier 2: R-N ID lookup via _index.yaml (R-1.md, R-2.md, etc.)
+    ├─ Tier 3: Name lookup via _index.yaml → R-N file
+    ├─ Tier 4: Slug match (legacy)
+    └─ Tier 5: Database fallback (REVIEWER-DATABASE.md)
 ```
+
+**R-N Scheme**: Profile files use anonymous identifiers (R-1.md, R-2.md, etc.) for git-friendly paths. The _index.yaml maps names to R-N IDs.
 
 **Cache scope**: One paper review cycle (5 reviewers × 2 rounds = 10 loads, but only 5 file reads)
 
@@ -27,7 +30,10 @@ loadReviewerProfile(name, options)
 Load a reviewer profile with resolution chain and caching.
 
 **Parameters**:
-- `name` (string): Reviewer name (e.g., "Percy Liang", "percy-liang", or "percy_liang")
+- `name` (string): Reviewer identifier (e.g., "Percy Liang", "R-1", "percy-liang")
+  - Accepts R-N IDs: "R-1", "R-2", etc.
+  - Accepts full names: "Percy Liang", "Michael Bernstein"
+  - Accepts slugs: "percy-liang" (legacy)
 - `options` (object, optional):
   - `cache` (boolean, default: true): Use session cache
   - `fallback` (boolean, default: true): Fall back to database if profile missing
@@ -78,8 +84,16 @@ Load a reviewer profile with resolution chain and caching.
 
 **Example**:
 ```javascript
-// Load with default options (cache + fallback enabled)
-const profile = await loadReviewerProfile("Percy Liang");
+// Load by full name (index lookup → R-N file)
+const profile1 = await loadReviewerProfile("Percy Liang");
+
+// Load by R-N ID (direct)
+const profile2 = await loadReviewerProfile("R-1");
+
+// Load by slug (legacy)
+const profile3 = await loadReviewerProfile("percy-liang");
+
+// All three resolve to the same profile (cached after first load)
 
 // Load without cache (force fresh read)
 const freshProfile = await loadReviewerProfile("Percy Liang", { cache: false });
@@ -129,9 +143,10 @@ Get cache hit/miss statistics for debugging and optimization.
 // Session-level cache
 const profileCache = new Map();
 const cacheStats = { hits: 0, misses: 0 };
+let reviewerIndex = null; // Cached _index.yaml
 
 /**
- * Load reviewer profile with three-tier resolution
+ * Load reviewer profile with five-tier resolution
  */
 async function loadReviewerProfile(name, options = {}) {
     const { cache = true, fallback = true, project } = options;
@@ -151,18 +166,39 @@ async function loadReviewerProfile(name, options = {}) {
     }
     cacheStats.misses++;
 
-    // Tier 2: Exact match
-    const exactPath = `${panelPath}/reviewers/profiles/${name}.md`;
-    try {
-        const content = await Read(exactPath);
-        const profile = parseProfile(content);
-        if (cache) profileCache.set(cacheKey, profile);
-        return profile;
-    } catch (e) {
-        // Continue to next tier
+    // Load index if not already loaded
+    if (!reviewerIndex) {
+        reviewerIndex = await loadReviewerIndex(panelPath);
     }
 
-    // Tier 3: Slug match
+    // Tier 2: R-N ID lookup (direct R-1, R-2, etc.)
+    if (/^R-\d+$/.test(name)) {
+        const rnPath = `${panelPath}/reviewers/profiles/${name}.md`;
+        try {
+            const content = await Read(rnPath);
+            const profile = parseProfile(content);
+            if (cache) profileCache.set(cacheKey, profile);
+            return profile;
+        } catch (e) {
+            // Continue to next tier
+        }
+    }
+
+    // Tier 3: Name lookup via index → R-N file
+    const rnId = findReviewerIdByName(name, reviewerIndex);
+    if (rnId) {
+        const rnPath = `${panelPath}/reviewers/profiles/${rnId}.md`;
+        try {
+            const content = await Read(rnPath);
+            const profile = parseProfile(content);
+            if (cache) profileCache.set(cacheKey, profile);
+            return profile;
+        } catch (e) {
+            // Continue to next tier
+        }
+    }
+
+    // Tier 4: Slug match (legacy, for backward compatibility)
     const slug = slugify(name);
     const slugPath = `${panelPath}/reviewers/profiles/${slug}.md`;
     try {
@@ -174,18 +210,55 @@ async function loadReviewerProfile(name, options = {}) {
         // Continue to next tier
     }
 
-    // Tier 4: Database fallback
+    // Tier 5: Database fallback
     if (fallback) {
         try {
             const profile = await extractFromDatabase(name, researchPath);
             if (cache) profileCache.set(cacheKey, profile);
             return profile;
         } catch (e) {
-            throw new Error(`Profile not found: ${name} (checked: exact, slug, database)`);
+            throw new Error(`Profile not found: ${name} (checked: R-N, name, slug, database)`);
         }
     }
 
-    throw new Error(`Profile not found: ${name} (checked: exact, slug)`);
+    throw new Error(`Profile not found: ${name} (checked: R-N, name, slug)`);
+}
+
+/**
+ * Load reviewer index (_index.yaml)
+ */
+async function loadReviewerIndex(panelPath) {
+    try {
+        const indexPath = `${panelPath}/reviewers/_index.yaml`;
+        const content = await Read(indexPath);
+        return parseYAML(content);
+    } catch (e) {
+        // Index not found, return empty structure
+        return { reviewers: {} };
+    }
+}
+
+/**
+ * Find R-N ID by reviewer name
+ */
+function findReviewerIdByName(name, index) {
+    const normalizedName = name.toLowerCase().trim();
+
+    for (const [rnId, reviewer] of Object.entries(index.reviewers || {})) {
+        if (!reviewer.name) continue;
+
+        // Match by full name
+        if (reviewer.name.toLowerCase() === normalizedName) {
+            return rnId;
+        }
+
+        // Match by slug
+        if (reviewer.slug && reviewer.slug.toLowerCase() === normalizedName) {
+            return rnId;
+        }
+    }
+
+    return null;
 }
 
 /**
@@ -456,6 +529,7 @@ function parseYAML(text) {
  */
 function clearProfileCache() {
     profileCache.clear();
+    reviewerIndex = null; // Clear index cache
     cacheStats.hits = 0;
     cacheStats.misses = 0;
 }

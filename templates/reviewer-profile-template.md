@@ -1,5 +1,6 @@
 ---
 format_version: "4.0"
+id: {R-N}
 name: {Reviewer Name}
 affiliation: {Institution}
 category: {Category}
@@ -83,6 +84,7 @@ All fields marked with `{placeholders}` must be filled. Do not leave placeholder
 
 **YAML Frontmatter**:
 - `format_version`: Always "4.0"
+- `id`: R-N identifier (e.g., R-1, R-2, ...) matching filename without .md
 - `name`: Full name as commonly published
 - `affiliation`: Primary institution (no department needed)
 - `category`: One of 10 categories (Systems, Compilers, AI Agents, Prompting, HCI, ML Systems, ML Research, Software Engineering, NLP, Security)
