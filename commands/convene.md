@@ -75,12 +75,18 @@ Use `panel:convene --status` to check readiness.
 2. **Select panel**: Choose 7 reviewers via shared/panel-utils.select_cross_portfolio_panel()
    - On round 1: fresh selection
    - On round 2+: retain 5 core members, rotate 2
-3. **Generate assessments**: Each panel member reviews all ready papers:
+3. **Load profiles**: Load all 7 reviewer profiles via shared/reviewer-profile-loader.md
+   - Use loadReviewerProfile() for each panel member
+   - Cache profiles for session-level reuse across all papers
+   - Store profile references in panel state (not full content)
+4. **Generate assessments**: Each panel member reviews all ready papers:
    - Read individual paper reviews and syntheses
+   - Use full profile context for each panel member
+   - Profile context includes: research background, publications, evaluation lens, criteria, concerns, voice
    - Assess each paper on the 10-point scale (config/scoring.yaml)
    - Identify cross-paper themes and patterns
    - Rank papers within the module
-4. **Synthesize**: Consolidate 7 assessments into `REVIEW_PANEL.md`:
+5. **Synthesize**: Consolidate 7 assessments into `REVIEW_PANEL.md`:
    - Module score and tier
    - Paper rankings with consensus
    - Cross-paper themes
@@ -278,6 +284,7 @@ After `--review` or `--member` completes (modes that write files), auto-commit:
 - shared/panel-utils.md — Panel-specific utilities
 - shared/state-loader.md — Paper discovery, state loading
 - shared/reviewer-selector.md — Panel member selection
+- shared/reviewer-profile-loader.md — Load reviewer profiles with caching
 - shared/synthesis-engine.md — Consolidation patterns
 - shared/score-utils.md — Score aggregation, tier mapping
 - shared/display-utils.md — Terminal formatting

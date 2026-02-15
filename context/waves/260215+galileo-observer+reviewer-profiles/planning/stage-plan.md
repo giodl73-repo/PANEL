@@ -186,7 +186,7 @@
 - Added shared/reviewer-profile-loader.md to command dependencies
 - Extended config/schemas/panel-state.schema.yaml with profile_ref field (string | null)
 
-### E4: Integrate panel:convene (Phase 3.2)
+### E4: Integrate panel:convene (Phase 3.2) ✓
 **Role**: backend
 **Description**: Update panel:convene to load 7-reviewer panel profiles at session start and reuse across all papers in module.
 
@@ -195,7 +195,16 @@
 - Session-level profile reuse across papers
 - Profile context in REVIEW_PANEL.md generation
 
-**Status**: pending
+**Status**: completed
+
+**Standup**:
+- Updated commands/convene.md --review behavior with new step 3 (Load profiles)
+- Profile loading via loadReviewerProfile() for all 7 panel members
+- Session-level caching for reuse across all papers in module
+- Store profile references in panel state (not full content)
+- Updated step 4 (Generate assessments) to use full profile context
+- Added shared/reviewer-profile-loader.md to command dependencies
+- Profile context passed to panel member assessments: background, publications, lens, criteria, concerns, voice
 
 ### E5: Update Synthesis Engine (Phase 3.3)
 **Role**: backend
