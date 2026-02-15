@@ -206,7 +206,7 @@
 - Added shared/reviewer-profile-loader.md to command dependencies
 - Profile context passed to panel member assessments: background, publications, lens, criteria, concerns, voice
 
-### E5: Update Synthesis Engine (Phase 3.3)
+### E5: Update Synthesis Engine (Phase 3.3) ✓
 **Role**: backend
 **Description**: Include reviewer profile summaries in synthesis context and reference profiles when attributing P1/P2/P3 items.
 
@@ -214,7 +214,17 @@
 - Modified `shared/synthesis-engine.md` with profile integration
 - Profile attribution in P1/P2/P3 item tracking
 
-**Status**: pending
+**Status**: completed
+
+**Standup**:
+- Updated shared/synthesis-engine.md Input section to include optional reviewer profiles
+- Added step 2 (Load profiles) to consolidate_reviews algorithm
+- Added step 6 (Profile attribution) to include expertise context when attributing issues
+- Updated step 9 (consensus narrative) to note reviewer specialization patterns
+- Enhanced synthesis document structure example:
+  - Score Distribution table now includes Affiliation + Expertise columns
+  - P1/P2/P3 items show reviewer expertise in attribution (e.g., "[ML Research]")
+  - Added context notes explaining reviewer evaluation lens for issues
 
 ### E6: Enhance panel:reviewers (Phase 4.1)
 **Role**: backend
