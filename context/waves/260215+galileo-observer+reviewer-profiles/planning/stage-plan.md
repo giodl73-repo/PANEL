@@ -250,7 +250,7 @@
 
 ## Validation Stage
 
-### V1: Experimental Setup (Phase 5 / Phase A)
+### V1: Experimental Setup (Phase 5 / Phase A) ✓
 **Role**: researcher
 **Description**: Design controlled A/B experiments with 5 test papers. Measure baseline (current system) vs. profile system across varied venues (CHI, NeurIPS, ICML, ACL, PLDI).
 
@@ -260,7 +260,18 @@
 - Instrumentation for API token capture
 - Metrics: total tokens, reviewer context tokens, per-round breakdown
 
-**Status**: pending
+**Status**: completed
+
+**Standup**:
+- Created validation/experimental-protocol.md: Complete A/B testing protocol
+- A/B design: 2 conditions (baseline database vs profiles) × 5 papers × 2 rounds = 20 sessions
+- Test paper selection: 5 papers across varied venues (CHI, NeurIPS, MLSys, ACL, PLDI)
+- Metrics defined: Token reduction (primary), quality preservation, consistency, cache efficiency
+- Statistical plan: Paired t-test, Cohen's d effect size, 95% confidence intervals
+- Expected results: H1 (60-75% token reduction), H2 (quality maintained), H3 (consistency improved)
+- Sample size: n=5 papers, power=0.80, α=0.05, expected effect d=1.5
+- Created validation/test-papers.md: Paper manifest with reviewer assignments
+- Instrumentation design: Token logging, cache tracking, quality annotation rubric
 
 ### V2: Run Experiments (Phase B)
 **Role**: tester
