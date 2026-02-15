@@ -380,7 +380,7 @@
 
 **Status**: pending
 
-### DOC3: Update README
+### DOC3: Update README ✓
 **Role**: technical-writer
 **Description**: Add profile system overview to README.md, highlight token efficiency benefits, include quick start examples.
 
@@ -389,7 +389,19 @@
 - Token savings benchmarks
 - Quick start guide for profile usage
 
-**Status**: pending
+**Status**: completed
+
+**Standup**:
+- Added "Reviewer Profile System (v1.3.0+)" section to README.md with user-facing documentation
+- Why profiles: problem statement (token waste) + solution (persistent profiles with caching)
+- Benefits highlighted: 60-75% token reduction, 15× speedup, consistent personas
+- Quick start: browse profiles, show/edit operations, automatic integration
+- Profile structure: 7 sections, 1.8-2.2KB size, with examples
+- Token savings table: per paper (34.7%), module (37.3%), per reviewer (40%)
+- Master registry: 45 reviewers across 10 categories listed
+- How it works: four-tier resolution chain with performance metrics
+- Integration across three tiers: paper, module, synthesis
+- Updated research papers table to include panel-reviewer-profiles (#6, EMNLP Demo / ACL Systems)
 
 ---
 
