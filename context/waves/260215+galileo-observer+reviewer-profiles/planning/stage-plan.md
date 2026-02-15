@@ -378,7 +378,15 @@
 - Compiled PDF in `research/docs/`
 - Submission-ready abstract and supplementary materials
 
-**Status**: pending
+**Status**: deferred (awaiting V2/V3 experimental data)
+
+**Note**: Paper framework complete with abstract, 6 sections, experimental protocol documented. Awaiting actual token measurements from V2 (Run Experiments) and statistical analysis from V3 to populate Results section and generate figures. Once runtime experiments complete, paper can be finalized with:
+- Figure 1: Token usage comparison (baseline vs profiles)
+- Figure 2: Cache hit rate across rounds
+- Table 1: Statistical significance results (t-test, Cohen's d, 95% CI)
+- Table 2: Quality preservation metrics (P1 alignment, consistency)
+
+Bibliography path fixed. Ready for data integration when available.
 
 ### DOC3: Update README ✓
 **Role**: technical-writer
