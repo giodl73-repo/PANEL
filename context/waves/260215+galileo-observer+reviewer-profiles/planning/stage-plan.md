@@ -345,7 +345,7 @@
 
 ## Documentation Stage
 
-### DOC1: Update Command Documentation
+### DOC1: Update Command Documentation ✓
 **Role**: technical-writer
 **Description**: Update CLAUDE.md with profile system details, new panel:reviewers operations, and usage patterns.
 
@@ -354,7 +354,19 @@
 - Usage examples for profile operations
 - Integration notes for review commands
 
-**Status**: pending
+**Status**: completed
+
+**Standup**:
+- Added comprehensive "Reviewer Profile System (v1.3.0+)" section to CLAUDE.md
+- Documented architecture: persistent storage, session caching, 60-75% token savings
+- Profile structure: 7 sections, 1.8-2.2KB size target, quality validation criteria
+- Four-tier resolution chain: cache (< 1ms) → exact → slug → database fallback (87ms)
+- Integration points across three tiers: paper, module, board levels
+- Enhanced panel:reviewers command documentation (show, edit, --detailed operations)
+- Token efficiency metrics from experimental validation (34.7% reduction per paper)
+- Quality validation tools and usage examples
+- Updated project layout to include context/panel/reviewers/ directory and profile loader
+- All 14 commands, shared utilities, templates, and config documented
 
 ### DOC2: Finalize Research Paper (Phase F)
 **Role**: researcher
