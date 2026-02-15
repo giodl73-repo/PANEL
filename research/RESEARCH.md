@@ -1,7 +1,7 @@
 # Panel Research Papers
 
 **Module**: Panel (AI-Simulated Expert Review Methodology)
-**Papers**: 9
+**Papers**: 10
 **Author**: Gio Della-Libera
 
 ---
@@ -19,6 +19,7 @@
 | 7 | [panel-closed-loop-automation](panel-closed-loop-automation/) | From Reviews to Revisions: Closed-Loop Automation of Academic Paper Improvement | [PDF](docs/panel-closed-loop-automation.pdf) | CHI / CSCW / HCOMP | — | — |
 | 8 | [panel-meta-research-automation](panel-meta-research-automation/) | Meta-Research Automation: Generating Research Papers from Development Artifacts | [PDF](docs/panel-meta-research-automation.pdf) | MSR / ICSE-NIER / Empirical SE | — | — |
 | 9 | [panel-research-quality-impact](panel-research-quality-impact/) | Panel-Driven Research Quality Impact: Comparing Traditional and AI-Simulated Expert Review | [PDF](docs/panel-research-quality-impact.pdf) | CSCW / CHI | — | — |
+| 10 | [panel-reviewer-profiles](panel-reviewer-profiles/) | Token-Efficient Persona Simulation: Persistent Profiles for AI-Simulated Expert Reviews | [PDF](docs/panel-reviewer-profiles.pdf) | EMNLP Demo | — | — |
 
 ---
 
@@ -147,6 +148,7 @@ The panel module documents the review methodology used across the research monor
 | #7 Closed-Loop Automation | draft | 0 | — | — | — |
 | #8 Meta-Research Automation | draft | 0 | — | — | — |
 | #9 Research Quality Impact | draft | 0 | — | — | — |
+| #10 Reviewer Profiles | draft | 0 | — | — | — |
 
 ---
 
@@ -164,5 +166,5 @@ make -C panel-review-methodology pdf
 ---
 
 *Panel research module — established February 2026*
-*Papers: 9 (all in draft stage)*
-*Last updated: February 7, 2026 — added paper #9 (Research Quality Impact)*
+*Papers: 10 (all in draft stage)*
+*Last updated: February 15, 2026 — added paper #10 (Reviewer Profiles)*

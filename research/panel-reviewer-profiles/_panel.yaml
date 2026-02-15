@@ -1,0 +1,24 @@
+# Panel state for panel-reviewer-profiles
+version: "1.2.0"
+uuid: d0b2b0a0
+slug: reviewer-profiles
+title: "Token-Efficient Persona Simulation: Persistent Profiles for AI-Simulated Expert Reviews"
+venue: "EMNLP Demo"
+stage: draft
+round: 0
+content_mode: full
+content_mode_confirmed: false
+
+# Review tracking
+reviewers: []
+reviews: {}
+p1_items: []
+
+# Stage history
+history:
+  - stage: draft
+    date: "2026-02-15"
+    note: "Paper initialized via panel:setup"
+
+# Created timestamp
+created: "2026-02-15"

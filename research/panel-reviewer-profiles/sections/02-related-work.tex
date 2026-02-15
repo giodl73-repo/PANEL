@@ -1,0 +1,13 @@
+\section{Related Work}
+
+\subsection{LLM Caching and Context Reuse}
+
+Recent work on prompt caching \cite{anthropic2024caching} demonstrates significant cost reduction through semantic content addressing, but requires API-level support and may not preserve fine-grained persona consistency across sessions. Our approach operates at the application layer, providing explicit profile management independent of model provider capabilities.
+
+\subsection{Persona Simulation in AI Systems}
+
+Persona-based prompting has been explored for creative writing \cite{dang2023personas}, dialogue systems \cite{zhang2018personas}, and evaluation \cite{park2023generative}. However, these approaches typically embed persona descriptions directly in prompts without systematic reuse strategies. We extend this work by treating personas as persistent, versionable artifacts with structured schemas.
+
+\subsection{Design Patterns for AI Workflows}
+
+Craft plugin's discipline system demonstrates the viability of persistent role profiles for AI-assisted development workflows \cite{internal2025craft}. Our work adapts this pattern to academic review simulation, validating generalizability across domains requiring repeated expert persona invocation.

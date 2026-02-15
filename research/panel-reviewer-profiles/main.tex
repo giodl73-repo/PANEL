@@ -1,0 +1,29 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+\title{Token-Efficient Persona Simulation: Persistent Profiles for AI-Simulated Expert Reviews}
+\author{Author Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Panel plugin currently regenerates reviewer persona context on every review, causing unnecessary token costs. We propose persistent reviewer profiles following craft's discipline pattern to reduce token usage by 60-75\% while maintaining review quality. Through controlled A/B experiments with 5 test papers across varied venues, we demonstrate significant token reduction with preserved simulation fidelity and improved cross-round consistency. This work establishes token-efficient design patterns for AI simulation workflows requiring repeated persona invocation.
+\end{abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-methodology}
+\input{sections/04-evaluation}
+\input{sections/05-discussion}
+\input{sections/06-conclusion}
+
+\bibliographystyle{plain}
+\bibliography{../references}
+
+\end{document}

@@ -1,0 +1,48 @@
+\section{Methodology}
+
+\subsection{Profile Architecture}
+
+Each reviewer profile is a markdown file with YAML frontmatter containing:
+
+\begin{itemize}
+\item \textbf{Metadata}: Name, affiliation, category, keywords
+\item \textbf{Research Background}: 2-3 sentence overview of expertise
+\item \textbf{Key Publications}: 3-5 representative papers with impact
+\item \textbf{Evaluation Lens}: Characteristic questions the reviewer asks
+\item \textbf{Review Criteria}: Structured checklist aligned with research priorities
+\item \textbf{Voice \& Tone}: Style guide for generating reviews in this persona
+\end{itemize}
+
+Profiles average 2KB each, stored in \texttt{context/panel/reviewers/profiles/\{name\}.md}.
+
+\subsection{Resolution Chain}
+
+The profile loader implements a three-tier fallback:
+
+\begin{enumerate}
+\item \textbf{Exact match}: \texttt{profiles/percy-liang.md}
+\item \textbf{Slug match}: Convert "Percy Liang" $\rightarrow$ \texttt{percy-liang.md}
+\item \textbf{Database fallback}: Extract from \texttt{REVIEWER-DATABASE.md} (current behavior)
+\end{enumerate}
+
+Session-level caching prevents repeated file system access within a single review cycle.
+
+\subsection{Experimental Design}
+
+We conduct a controlled A/B comparison with 5 test papers across varied venues (CHI, NeurIPS, ICML, ACL, PLDI). Each paper undergoes:
+
+\begin{itemize}
+\item \textbf{Condition A (Baseline)}: Current system with database parsing
+\item \textbf{Condition B (Profiles)}: Profile loader with caching
+\end{itemize}
+
+Instrumentation captures total tokens, reviewer context tokens, and per-round breakdown. Reviews are generated using identical prompts aside from persona delivery method.
+
+\subsection{Metrics}
+
+\begin{itemize}
+\item \textbf{Token Efficiency}: Reduction percentage in reviewer context tokens
+\item \textbf{Quality Preservation}: Cosine similarity of P1 items between conditions
+\item \textbf{Consistency}: Cross-round correlation of reviewer positions (Round 1 $\leftrightarrow$ Round 2)
+\item \textbf{Diversity}: Inter-reviewer perspective variation (manual annotation)
+\end{itemize}

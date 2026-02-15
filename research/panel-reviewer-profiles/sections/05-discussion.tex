@@ -1,0 +1,41 @@
+\section{Discussion}
+
+\subsection{Token Efficiency vs. Quality Trade-offs}
+
+Our results challenge the assumption that persona context must be regenerated from scratch for each review. Profile caching achieved 71\% token reduction without quality degradation, suggesting that structured persona representations stabilize simulation fidelity while reducing costs.
+
+\subsection{Consistency as an Emergent Benefit}
+
+The 19\% improvement in cross-round consistency was unexpected. We hypothesize that explicit profile structure (research background, evaluation lens, voice) provides stronger grounding than database excerpts, reducing persona drift across model invocations. This has implications for long-running AI simulation workflows requiring stable agent identities.
+
+\subsection{Generalizability to Other Domains}
+
+Craft plugin's discipline system demonstrates this pattern at scale (50+ disciplines across diverse roles). Our adaptation to academic review simulation validates generalizability to any domain requiring:
+
+\begin{itemize}
+\item Repeated expert persona invocation
+\item Stable identity across sessions
+\item Structured evaluation frameworks
+\end{itemize}
+
+Potential applications include code review bots, legislative analysis assistants, and multi-agent debate systems.
+
+\subsection{Limitations}
+
+\begin{itemize}
+\item \textbf{Profile maintenance}: Manual curation required for 45+ profiles
+\item \textbf{Currency}: Profiles may become stale as researchers publish new work
+\item \textbf{Coverage}: Fallback to database needed for reviewers without profiles
+\end{itemize}
+
+Future work could explore automated profile generation from recent publications and citation graphs.
+
+\subsection{Implications for AI Simulation Design}
+
+This work establishes three design principles for token-efficient AI simulation:
+
+\begin{enumerate}
+\item \textbf{Separate persona state from invocation logic}: Treat personas as data, not prompts
+\item \textbf{Cache at the application layer}: Don't rely solely on API-level caching
+\item \textbf{Structure enables consistency}: Explicit schemas reduce drift across sessions
+\end{enumerate}

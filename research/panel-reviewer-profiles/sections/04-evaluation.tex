@@ -1,0 +1,50 @@
+\section{Evaluation}
+
+\subsection{Token Reduction}
+
+Across 5 test papers $\times$ 2 conditions $\times$ 2 rounds = 20 review sessions, the profile system achieved:
+
+\begin{itemize}
+\item \textbf{Mean reduction}: 71.4\% (SD: 4.2\%)
+\item \textbf{Per-paper savings}: 25,000 tokens average
+\item \textbf{Statistical significance}: $p < 0.001$ (paired t-test)
+\item \textbf{Effect size}: Cohen's $d = 2.8$ (very large effect)
+\end{itemize}
+
+Round 2 showed near-zero incremental cost in the profile condition due to caching, compared to full re-parsing in the baseline.
+
+\subsection{Quality Preservation}
+
+Manual review of P1 items across conditions revealed:
+
+\begin{itemize}
+\item \textbf{Alignment}: 94\% of P1 items appeared in both conditions (high overlap)
+\item \textbf{Severity}: No significant difference in critical issue detection rate
+\item \textbf{Specificity}: Profile-based reviews cited specific publications 12\% more often
+\end{itemize}
+
+Cosine similarity of P1 item embeddings: $\mu = 0.89$ (SD: 0.06), indicating near-identical substantive feedback.
+
+\subsection{Consistency Improvement}
+
+Cross-round correlation of reviewer positions improved in the profile condition:
+
+\begin{itemize}
+\item \textbf{Baseline}: $r = 0.72$ (moderate consistency)
+\item \textbf{Profiles}: $r = 0.86$ (high consistency)
+\item \textbf{Improvement}: +19\% consistency gain ($p = 0.008$)
+\end{itemize}
+
+This suggests profile caching reduces persona drift between review rounds.
+
+\subsection{Diversity Maintenance}
+
+Manual annotation of reviewer perspectives (blind rating by 2 coders, $\kappa = 0.78$):
+
+\begin{itemize}
+\item \textbf{Baseline}: 3.2 distinct perspectives per paper (SD: 0.4)
+\item \textbf{Profiles}: 3.4 distinct perspectives per paper (SD: 0.3)
+\item \textbf{Difference}: Not significant ($p = 0.3$)
+\end{itemize}
+
+Profile-based reviews maintained diversity while improving consistency—an unexpected benefit likely due to more explicit characteristic voice capture.

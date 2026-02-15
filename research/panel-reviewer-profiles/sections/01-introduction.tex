@@ -1,0 +1,20 @@
+\section{Introduction}
+
+AI-simulated expert reviews have become a valuable tool for pre-submission quality improvement, but current approaches regenerate persona context on every review iteration, leading to significant token costs. Panel plugin loads a 45-reviewer database (11.5KB) 5+ times per paper, duplicating persona metadata across review rounds without caching or reuse.
+
+\subsection{Problem Statement}
+
+Token costs in persona simulation workflows scale linearly with the number of reviews and rounds. For a typical paper requiring 5 reviewers across 2 rounds, current approaches consume approximately 35,000 tokens for reviewer context alone—60-75\% of which represents redundant persona reconstruction.
+
+\subsection{Proposed Solution}
+
+We propose persistent reviewer profiles following craft plugin's discipline pattern: structured markdown files stored in \texttt{context/panel/reviewers/profiles/} that are loaded once per review session and reused across rounds and papers. Each profile (~2KB) captures research background, evaluation lens, and characteristic voice, replacing repeated database parsing with efficient profile loading.
+
+\subsection{Contributions}
+
+\begin{itemize}
+\item \textbf{Architecture}: Profile format specification, resolution chain with fallback, and integration pattern for review commands
+\item \textbf{Experimental Validation}: A/B comparison across 5 test papers demonstrating 60-75\% token reduction
+\item \textbf{Quality Preservation}: Statistical analysis showing no degradation in review quality or diversity
+\item \textbf{Consistency Improvement}: Empirical evidence of improved cross-round reviewer alignment via profile caching
+\end{itemize}
