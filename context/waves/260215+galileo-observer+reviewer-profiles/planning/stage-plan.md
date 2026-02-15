@@ -246,6 +246,27 @@
 - Updated dependencies: added shared/reviewer-profile-loader.md, context/panel/reviewers/_index.yaml
 - Profile integration: browser now supports both database-only and profile-enhanced reviewers
 
+### E7: R-N Architecture Update ✓
+**Role**: architect
+**Description**: Redesign profile filenames to use anonymous R-N identifiers (R-1.md through R-45.md) instead of real names for git-friendly paths and reduced PII appearance.
+
+**Deliverables**:
+- Updated profile loader with five-tier resolution
+- _index.yaml template with R-N → name mapping
+- Updated profile template with id field
+- Multi-project deployment in craftworks-zeus
+
+**Status**: completed
+
+**Standup**:
+- Updated shared/reviewer-profile-loader.md: Added five-tier resolution (cache → R-N → name → slug → database)
+- Created templates/_index.yaml: Master template for R-N → name/slug/category mapping
+- Updated templates/reviewer-profile-template.md: Added `id` field to frontmatter
+- Deployed to craftworks-zeus: Created context/panel/reviewers/ (shared across all projects)
+- Git-friendly paths: R-1.md instead of percy-liang.md (less PII-looking in diffs)
+- Multi-project support: Per-project state in craft/waves/probe/boost-research directories
+- Backward compatible: Slug matching still works for legacy profiles
+
 ---
 
 ## Validation Stage
