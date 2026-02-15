@@ -162,10 +162,14 @@ After upgrading, run `panel:review` again to continue lifecycle with new expecta
 ### draft → panel
 - Verify `main.tex` exists and `venue` is set in `_panel.yaml`
 - Select 5 reviewers from REVIEWER-DATABASE.md using shared/reviewer-selector.md
-- Write reviewer assignments to `_panel.yaml`
+- Load reviewer profiles via `loadReviewerProfile()` from shared/reviewer-profile-loader.md
+- Store profile references (not full content) in `_panel.yaml.reviewers[].profile_ref`
+- Write reviewer assignments and profile references to `_panel.yaml`
 
 ### panel → synthesis
-- For each reviewer, generate `reviews/REVIEW-{NAME}.md` using templates/review-template.md
+- For each reviewer, load their profile if not already cached
+- Generate `reviews/REVIEW-{NAME}.md` using templates/review-template.md with full profile context
+- Profile context includes: research background, key publications, evaluation lens, review criteria, characteristic concerns, voice/tone
 - Each review includes: overall assessment, score (1-4), major issues, minor issues, recommendations
 - Gate: 5+ review files exist
 
@@ -467,6 +471,7 @@ msg('Next step: Address P1 items in each paper', 'info');
 - shared/stage-machine.md — Stage progression logic
 - shared/state-loader.md — Read/write _panel.yaml
 - shared/reviewer-selector.md — Match reviewers to papers
+- shared/reviewer-profile-loader.md — Load reviewer profiles with caching
 - shared/synthesis-engine.md — Consolidate reviews
 - shared/score-utils.md — Score aggregation
 - shared/panel-utils.md — PP item integration, panel readiness checks

@@ -102,7 +102,7 @@ Output: { new_stage: string, actions_taken: string[], history_entry: object }
 Each stage handler performs the work needed at that stage:
 
 - **draft_handler**: Verify paper structure, prompt for venue if missing
-- **panel_handler**: Select reviewers (shared/reviewer-selector.md), generate reviews
+- **panel_handler**: Select reviewers (shared/reviewer-selector.md), load reviewer profiles (shared/reviewer-profile-loader.md), store profile references in _panel.yaml, generate reviews with full profile context
 - **synthesis_handler**: Consolidate reviews (shared/synthesis-engine.md)
 - **revision_handler**: MUST complete both phases before gate check: (1) Create or update REVISION-PLAN.md from synthesis P1/P2/P3 items, track P1 items in _panel.yaml; (2) Immediately use AskUserQuestion to offer revision application — if user accepts, edit sections/*.tex to address P1/P2 items and mark complete; if user declines, set revision_declined flag. The handler does NOT exit until user makes a choice.
 - **recheck_handler**: Generate round N reviews, calculate scores

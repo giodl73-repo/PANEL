@@ -91,6 +91,9 @@ properties:
           type: string
         expertise:
           type: string
+        profile_ref:
+          type: [string, "null"]
+          description: Profile reference (slug or file path) for loading full reviewer context
         score:
           type: [number, "null"]
           minimum: 1

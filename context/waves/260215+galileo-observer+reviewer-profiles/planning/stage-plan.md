@@ -166,7 +166,7 @@
 - Standardized naming: paper (revisions.md), module (revisions.md), board (revisions/{module}.md)
 - Committed schema cleanup to craftworks-zeus [5ae3e8c]
 
-### E3: Integrate panel:review (Phase 3.1)
+### E3: Integrate panel:review (Phase 3.1) ✓
 **Role**: backend
 **Description**: Update panel:review command to load profiles via `loadReviewerProfile()` and pass full context to review generation. Store profile reference (not full content) in `_panel.yaml`.
 
@@ -175,7 +175,16 @@
 - Profile loading at panel selection time
 - Profile reference storage in state
 
-**Status**: pending
+**Status**: completed
+
+**Standup**:
+- Updated commands/review.md stage handlers (draft → panel, panel → synthesis)
+- Added profile loading via loadReviewerProfile() from shared/reviewer-profile-loader.md
+- Profile context passed to review generation: research background, publications, evaluation lens, criteria, concerns, voice
+- Store profile_ref (not full content) in _panel.yaml.reviewers[].profile_ref
+- Updated shared/stage-machine.md panel_handler description with profile integration
+- Added shared/reviewer-profile-loader.md to command dependencies
+- Extended config/schemas/panel-state.schema.yaml with profile_ref field (string | null)
 
 ### E4: Integrate panel:convene (Phase 3.2)
 **Role**: backend
