@@ -1,407 +1,369 @@
 ---
 name: panel:module
-description: Design a research module with tracks and causal chains before writing any paper. Establishes theme, tracks, quantification contracts, and series arc paragraphs. Use before panel:author.
+description: Module-tier operations — design tracks, run cross-portfolio review, curate toward 9.0+, track status. Runs on one or more modules.
 user-invocable: true
 allowed-tools:
   - Read
   - Write
   - Edit
   - Glob
+  - Bash
   - AskUserQuestion
 ---
 
-# panel:module — Module Architecture Design
+# panel:module — Module Tier
 
-Design a research module architected for 9.0+ panel score from the start.
-Every paper must belong to at least one track. Every track must be a causal chain.
-No paper is written until the tracks, contracts, and arc paragraphs are locked.
-
-Reference: The Downward Signal series (gravity research) scored 9.37/10. Its secret:
-causal chain, no weak links, actionable numbers — all defined *before* writing paper 1.
+All module-level operations. Each subcommand works on the current module
+or a named set of modules.
 
 ## Plugin Root + Config
 
 ```javascript
 // @import ../shared/project-config.md
+// @import ../shared/module-utils.md
+// @import ../shared/state-loader.md
 
 const projectConfig = loadProjectConfig();
 const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 const pluginRoot = projectConfig.pluginRoot;
+const allProjects = getAllProjects();
 ```
-
-## Arguments
-
-- `<module-name>` — Module slug (e.g., "reviewer-simulation")
-- `--status` — Show current MODULE.md track assignments and coverage
-- `--assign <paper> <track>` — Assign an existing paper to a track
-- `--track <name>` — Add a new track to an existing module
-- `--check` — Validate all papers have ≥1 track, all tracks have ≥2 papers
 
 ---
 
-## The Three Properties (from gravity:curate benchmark)
+## Usage
 
-Every module must satisfy all three before any paper is written:
+```
+panel:module <subcommand> [targets] [options]
 
-**Property 1 — CAUSAL CHAIN**
-Papers within a track form a logical sequence where each is unintelligible without
-the prior and constrains the next. Reviewers see a *program*, not a collection.
-Test: "Paper A establishes X → Paper B's question requires X → Paper B reveals Y → Paper C operationalizes Y as Z"
+Subcommands:
+  design   [name]           Design module architecture — tracks, contracts, arc paragraphs
+  review   [modules]        Cross-portfolio panel review (was panel:convene --review)
+  curate   [modules]        Curate module toward 9.0+ — diagnosis + CURATION.md
+  status   [modules]        Track health, paper coverage, PP progress
+  assign   <paper> <track>  Assign a paper to a track
+  track    <name>           Add or inspect a track
+  check    [modules]        Validate track coverage (orphans, chains, contracts)
+  revisions [modules]       Show PP1/PP2/PP3 progress across papers
+  apply    [modules]        Apply PP1/PP2 revision items to paper LaTeX source
+  member   <name>           Regenerate one panel member's assessment
 
-**Property 2 — NO WEAK LINKS**
-Every paper must be designed to score ≥ 8.0. A paper without primary data or a
-quantified finding cannot score ≥ 8.0. If a planned paper can't produce a number,
-redesign it before writing.
-
-**Property 3 — ACTIONABLE NUMBERS**
-Every key finding must have a specific quantified result that changes a decision.
-The number must be specified in the design phase — not discovered during writing.
+Targets:
+  (none)          Current module (from .claude/panel.json default project)
+  <name>          Module by project name
+  alpha beta      Multiple modules by name
+  --all           All configured modules
+```
 
 ---
 
-## Track Model
-
-A module has 1–4 tracks. Each track is an independent causal chain within the module.
-
-```
-Track A: [theme]     paper-1 → paper-3 → paper-5   (3 papers, full chain)
-Track B: [theme]     paper-2 → paper-4              (2 papers, minimum viable chain)
-Track C: [theme]     paper-1 → paper-4 → paper-6   (cross-cutting — paper-1 and paper-4 serve two chains)
-```
-
-**Rules:**
-- Every paper belongs to ≥1 track (orphan papers are a warning)
-- Each track needs ≥2 papers to form a chain
-- Cross-cutting papers earn their place in multiple chains
-- A single-paper "track" is not a track — it's an orphan
-
----
-
-## Execution Flow
-
-### Mode: Design new module (`panel:module <name>`)
-
-#### Step 0 — Load context
+## Target Resolution
 
 ```javascript
-const moduleName = args[0];
-const moduleDir = path.join(researchDir, moduleName);
-const moduleFile = path.join(moduleDir, 'MODULE.md');
-
-// Check if MODULE.md already exists
-if (exists(moduleFile)) {
-    msg(`MODULE.md already exists. Use --status to review or --track to add a track.`, 'info');
-    return showModuleStatus(moduleFile);
+async function resolveModuleTargets(args) {
+    if (args['--all']) return allProjects;
+    if (args.targets.length === 0) return [getDefaultProject(projectConfig)];
+    return args.targets.map(name =>
+        allProjects.find(p => p.projectName === name || p.clientSlug === name)
+    ).filter(Boolean);
 }
 ```
 
-Ask:
-```
-question: "What is the research theme for this module? Give me 2-3 sentences on what
-           research questions it should answer — the problem space, not the paper list."
-header: "Module Theme"
-```
+---
 
-#### Step 1 — Track design
+## Subcommands
 
-Present the track model. Ask the user to propose tracks, or offer to draft them:
+### `design [name]`
 
+Design a new module or inspect/update an existing one. Interactive flow:
+
+1. **New module**: theme → tracks → paper-to-track assignments → quantification
+   contracts → series arc paragraphs → MODULE.md → per-paper plan.md files
+2. **Existing module** (`MODULE.md` found): show current design, offer to add tracks
+   or update contracts
+
+**Three Properties** (from gravity:downward-signal 9.37/10 benchmark):
+- **Causal Chain**: each paper in a track is unintelligible without the prior
+- **No Weak Links**: every paper designed to score ≥ 8.0
+- **Actionable Numbers**: every finding has a specific quantified result
+
+**Modes**:
 ```
-question: "How many research tracks should this module have?"
-header: "Track Count"
-options:
-  - label: "1 track — single focused chain (2-5 papers)"
-    description: "Linear causal chain, simplest to execute, easiest to score high"
-  - label: "2 tracks — parallel chains (4-8 papers)"
-    description: "Two independent causal arguments that reinforce each other"
-  - label: "3 tracks — multi-perspective module (5-10 papers)"
-    description: "Three angles on the same theme — methodology, empirical, theoretical"
-  - label: "Let me draft the tracks first"
-    description: "I'll propose tracks based on the theme you described"
-```
-
-If "draft tracks": propose 2-3 tracks based on the theme using AskUserQuestion to confirm.
-
-For each track, collect:
-```
-- Track name (short slug, e.g., "methodology", "empirical", "theory")
-- Track theme (1 sentence: what causal question does this chain answer?)
-- Planned papers (slugs, can be TBD): paper-1 → paper-2 → paper-3
+panel:module design                 # design current module
+panel:module design my-module       # design named module
+panel:module design --status        # show current design
+panel:module design --assign p t    # assign paper to track
+panel:module design --track name    # add a track
+panel:module design --check         # validate coverage
 ```
 
-**Chain validation** — after all tracks defined, write the chain sentence for each:
-```
-Track A: "We first establish [P1 finding], which reveals [P2 question],
-          showing [P2 finding], which allows us to [P3 action]."
-```
-If any sentence is incoherent, flag it and ask user to redesign that track.
-
-#### Step 2 — Paper-to-track assignment
-
-For each paper in the module (or planned paper), confirm track assignment:
-
-```javascript
-for (const paper of plannedPapers) {
-    AskUserQuestion({
-        question: `Which tracks does "${paper}" belong to?`,
-        options: tracks.map(t => ({ label: t.name, description: t.theme })),
-        multiSelect: true
-    });
-}
-```
-
-Papers with no track selected → warning: "This paper is an orphan. Either assign it
-to a track or explain why it belongs in this module."
-
-#### Step 3 — Quantification contracts
-
-For each paper, specify before writing:
-
-```
-Paper: [slug]
-Tracks: [A, C]
-Primary number: [specific metric — e.g., "43% vs 7% approval rate"]
-Experiment/study: [vignette / user study / benchmark / regression — specific design]
-Decision this number changes: [who decides what differently because of this]
-If null result: [what the null finding means — this must still be publishable]
-```
-
-**Quantification gate**: A paper that cannot specify a primary number is not ready.
-It needs one of:
-- A redesigned experiment that will produce a number
-- A merger with an adjacent paper in the same track
-- Removal from the module
-
-Present contracts to user. Ask: "Does each paper have a number? Any too speculative to commit?"
-
-#### Step 4 — Series arc paragraphs
-
-Write one series arc paragraph per track. This paragraph goes verbatim (adapted per
-paper) into every paper's introduction that belongs to this track.
-
-```latex
-\textbf{This paper is part of the [Module Name] — [Track Name] series.}
-[Paper-1 title] establishes [finding-1 with number].
-[Paper-2 title] shows that [finding-2 with number].
-This paper [Paper-N's specific role in the chain].
-```
-
-This paragraph **cannot be written** until quantification contracts are filled,
-because it must include the specific numbers from each paper.
-
-Also write a **module arc** — one paragraph spanning all tracks:
-```latex
-\textbf{[Module Name] research program.}
-The [Track-A] series establishes [Track-A chain summary].
-The [Track-B] series shows [Track-B chain summary].
-Together, these tracks address [the overarching module theme].
-```
-
-#### Step 5 — Write MODULE.md
-
-Create `${researchDir}/MODULE.md`:
-
-```markdown
-# Module: [Module Name]
-
-**Theme**: [2-3 sentence research question]
-**Created**: [date]
-**Target venues**: [list]
+Full logic in the `design` handler below.
 
 ---
 
-## Tracks
+### `review [modules]`
 
-### Track A: [name]
-**Theme**: [1 sentence causal question]
-**Chain**: paper-slug-1 → paper-slug-2 → paper-slug-3
-**Causal logic**:
-- paper-slug-1 establishes [X]
-- paper-slug-2 builds on [X] to reveal [Y]
-- paper-slug-3 operationalizes [Y] as [Z]
+Cross-portfolio panel review. Assembles 7-member panel, generates REVIEW_PANEL.md
+with track scores, PP1/PP2/PP3 items tagged to tracks, cross-module track map.
 
-**Series arc paragraph** (inject into every Track A paper's introduction):
-> [LaTeX paragraph — includes actual numbers from contracts]
+**Single module**: `panel:module review`
+**Multiple**: `panel:module review alpha beta`
+**All**: `panel:module review --all`
 
----
+**Prerequisites per module:**
+- 2+ papers at `recheck` stage or beyond
+- Passing scores (avg ≥ 2.5/4, min ≥ 2/4)
 
-### Track B: [name]
-[same structure]
+**Flow** (per module):
 
----
+1. **Assess readiness**: check papers via shared/panel-utils.assess_paper_readiness()
+2. **Load module architecture**: read `MODULE.md` via shared/module-utils.md
+   - Extract track definitions, paper-to-track assignments
+   - Identify orphan papers — include but flag
+   - Discover cross-module tracks via `discoverCrossModuleTracks()`
+3. **Select 7-member panel**: shared/panel-utils.select_cross_portfolio_panel()
+   - Round 1: fresh selection
+   - Round 2+: retain 5 core, rotate 2
+4. **Load profiles**: `loadReviewerProfile()` + `buildReviewerContext()` for all 7
+5. **Generate assessments**: each member reviews all ready papers
+   - Inject OLE context string as reviewer persona
+   - Assess paper quality (10-point scale)
+   - Assess each track's causal chain integrity
+   - Rank papers within module
+6. **Synthesize** into `REVIEW_PANEL.md`:
+   - Module score and tier
+   - Track scores (score, chain health, weak links per track)
+   - Cross-module tracks (tracks spanning this module and others)
+   - Paper rankings with consensus
+   - PP1/PP2/PP3 items tagged to tracks
+7. **Write `PANEL-REVISION-PLAN.md`**: PP items with track tags, open checkboxes
+8. **Update MODULE.md**: write track scores back via `updateTrackScore()`
+9. **Archive**: snapshot to `panel-reviews/round-{N}/` (includes MODULE.md)
+10. **Offer to apply**: PP1/PP2 items immediately
 
-## Papers
-
-| Paper | Tracks | Primary Number | Status | Venue |
-|-------|--------|----------------|--------|-------|
-| paper-slug-1 | A, C | [number] | planned | [venue] |
-| paper-slug-2 | A | [number] | planned | [venue] |
-
----
-
-## Quantification Contracts
-
-### paper-slug-1
-- **Primary number**: [specific metric]
-- **Experiment**: [design]
-- **Decision this changes**: [who decides what]
-- **Null fallback**: [what null means]
-
-[repeat per paper]
-
----
-
-## Module Arc
-
-[LaTeX paragraph spanning all tracks — goes in every paper's introduction]
-
----
-
-## Self-Score (Three Properties)
-
-| Property | Status | Notes |
-|----------|--------|-------|
-| Causal Chain | Strong / Partial / Weak | [per track] |
-| No Weak Links | N papers at risk | [which ones] |
-| Actionable Numbers | N/M papers have numbers | [gaps] |
-
-**Estimated panel score**: [N]/10
-
----
-
-## Track Coverage
-
-| Track | Papers | Chain complete? | Numbers? | Est. score |
-|-------|--------|----------------|----------|-----------|
-
----
-
-*Generated by panel:module. Update as papers are written and reviewed.*
-```
-
-#### Step 6 — Create paper plan.md files
-
-For each planned paper, create `${researchDir}/${paper}/plan.md` from the module design:
-
-```markdown
-# Paper Plan: [Title]
-
-## Research Question
-[From quantification contract]
-
-## Module Context
-**Module**: [module name]
-**Tracks**: [Track A, Track C]
-**Role in chain**: [what this paper establishes and what it makes possible]
-**Series arc** (inject into Introduction verbatim):
-> [Track A arc paragraph]
-> [Track C arc paragraph, if different]
-
-## Target Venue
-[From MODULE.md]
-
-## Primary Number to Produce
-[From quantification contract — this is the design target]
-
-## Sections
-[Standard section list for venue type]
-
-## Experiments
-- [ ] [From quantification contract experiment design]
-```
-
-#### Step 7 — Self-score against Three Properties
-
-Before committing, score the module:
-
-**Property 1** — can you write the chain sentence for each track?
-**Property 2** — for each paper, estimate score: primary data (+2), number (+2), mechanism (+2), chain connection (+2), related work (+1), formal model (+1). Papers ≤ 6 need redesign.
-**Property 3** — list all numbers. Every paper must have one.
-
-If any property is Weak or any paper scores ≤ 6: fix before writing.
-
-#### Step 8 — Report
+**Bulk** (multiple modules): runs sequentially, shared progress report at end.
 
 ```
-Module: [name]
-Tracks: [N tracks]
-Papers: [N planned]
+panel:module review --all
+═══════════════════════════════════════════════════════════════════════
 
-Track A: paper-1 → paper-2 → paper-3  [3 papers, chain: Strong]
-Track B: paper-2 → paper-4            [2 papers, chain: Strong]
-Track C: paper-1 → paper-4 → paper-5  [3 papers, chain: Partial — paper-5 needs number]
+Running module review on 3 modules...
 
-Paper coverage:
-  ✓ paper-1: Track A, C  — number: [X]
-  ✓ paper-2: Track A, B  — number: [Y]
-  ✗ paper-5: Track C     — number: TBD (quantification contract incomplete)
+[1/3] module-alpha   Round 1 → REVIEW_PANEL.md ✓  Score: 7.2/10 (B+)
+[2/3] module-beta    Round 1 → REVIEW_PANEL.md ✓  Score: 6.8/10 (B+)
+[3/3] module-gamma   Skipped — only 1 paper at recheck (needs 2+)
 
-Self-score:
-  Property 1 (Causal Chain):      Strong (A), Strong (B), Partial (C)
-  Property 2 (No Weak Links):     1 paper at risk (paper-5)
-  Property 3 (Actionable Numbers): 4/5 papers have numbers
-
-Estimated panel score: 7.2/10
-To reach 9.0+: complete paper-5's quantification contract before writing
-
-Next: panel:author --paper paper-1
+Done. 2/3 modules reviewed.
+Cross-module tracks found: Track A spans module-alpha + module-beta (aligned ✓)
+Next: panel:board review
 ```
 
 ---
 
-### Mode: Status (`panel:module --status`)
+### `curate [modules]`
 
-Read `${researchDir}/MODULE.md` and display:
-- Track definitions and chain completeness
-- Paper-to-track coverage table (highlighting orphans)
-- Quantification contract completion
-- Papers written vs planned per track
-- Estimated score per track
+Diagnose module against three properties and write CURATION.md.
 
-### Mode: Assign paper to track (`panel:module --assign <paper> <track>`)
+**Single**: `panel:module curate`
+**Level override**: `panel:module curate --level B`
+**Specific track**: `panel:module curate --track methodology`
 
-Update `MODULE.md` paper table: add track to paper's track list.
-Validate: is the paper now in the right position in the track chain? Warn if it
-breaks causal order.
+**Curation levels:**
+- **A** — Series arc + PP1 fixes (+0.8 to +1.2)
+- **B** — Weak link surgery (+1.5 to +2.0)
+- **C** — Full curation (+2.0 to +3.0)
+- **D** — Merger/restructure (+2.5 to +4.0)
 
-### Mode: Add track (`panel:module --track <name>`)
+Full diagnosis logic in `commands/curate.md`.
 
-Interactive: collect track theme, chain order, assign existing papers.
-Append track to MODULE.md.
+---
 
-### Mode: Check (`panel:module --check`)
+### `status [modules]`
 
-Validate:
-- Every paper in `researchDir` with `_panel.yaml` has ≥1 track in MODULE.md
+Track health, paper coverage, PP item progress.
+
+```
+panel:module status
+═══════════════════════════════════════════════════════════════════════
+
+Module: reviewer-simulation | Round 1 | Score: 7.2/10 (B+)
+
+Track Health:
+  Track A (methodology)   Score: 7.8  Chain: Strong  Weak links: none    Numbers: 3/3 ✓
+  Track B (empirical)     Score: 6.9  Chain: Partial  Weak link: paper-3  Numbers: 2/3 ⚠
+  Track C (theory)        Score: —    Chain: Broken   (paper-5 missing)   Numbers: 1/2 ✗
+
+Paper Coverage:
+  paper-1  Tracks: A, C   Stage: recheck  Round: 1  Score: 2.8/4
+  paper-2  Tracks: A, B   Stage: revision Round: 1  Score: —
+  paper-3  Track:  B      Stage: draft    Round: 0  Score: — ⚠ weak link
+  paper-4  Tracks: B, C   Stage: recheck  Round: 1  Score: 2.6/4
+  paper-5  Track:  C      Stage: planned  (not yet created)
+
+Orphan papers: none
+
+PP Progress:
+  PP1 items: 2 total — 1 addressed ✓, 1 open
+  PP2 items: 3 total — 0 addressed
+  PP3 items: 2 total
+
+Cross-module tracks:
+  Track A also in: module-beta (aligned ✓)
+```
+
+---
+
+### `assign <paper> <track>`
+
+Assign a paper to a track and update MODULE.md.
+
+```
+panel:module assign panel-profile-caching methodology
+```
+
+Validates chain position, warns if paper breaks causal order.
+
+---
+
+### `track <name>`
+
+Add a new track or inspect an existing one.
+
+```
+panel:module track                    # list all tracks
+panel:module track methodology        # inspect track details
+panel:module track new-track-name    # add new track (interactive)
+```
+
+---
+
+### `check [modules]`
+
+Validate track coverage:
+- Every paper has ≥1 track
 - Every track has ≥2 papers
 - Every paper has a quantification contract
-- No track's chain is broken (papers exist in the stated order)
+- No broken chain links
 
-Output:
 ```
-Module check — [name]
-══════════════════════════════
+panel:module check
+══════════════════
 ✓ Track A: 3 papers, chain complete
-✓ Track B: 2 papers, chain complete
-⚠ Track C: paper-5 has no quantification contract
+⚠ Track B: paper-3 has no quantification contract
+✗ Track C: chain broken (paper-5 not created yet)
 ✗ paper-7: orphan — not assigned to any track
+```
+
+---
+
+### `revisions [modules]`
+
+Show PP1/PP2/PP3 progress tagged by track.
+
+```
+PP1 Progress — Blocking Items
+═══════════════════════════════════════
+ #  Item                          Track  Papers       Status
+ ── ───────────────────────────── ────── ──────────── ──────
+ 1  Missing GPT-4 baseline        A      2 papers     1/2 ✓
+ 2  Formal notation missing        B      paper-3      0/1
+```
+
+---
+
+### `apply [modules]`
+
+Apply PP1/PP2 revision items across all papers in the module(s).
+Edits sections/*.tex per paper in ranking order.
+
+See `--apply` logic from convene (now integrated here).
+
+---
+
+### `member <name>`
+
+Regenerate one panel member's assessment, reload their profile,
+rebuild OLE context, re-run synthesis. No new round.
+
+```
+panel:module member "Percy Liang"
+```
+
+---
+
+## Design Handler (full)
+
+When `panel:module design` runs on a new module:
+
+### Step 1 — Theme
+Ask: "What is the research theme? 2-3 sentences on what questions this module answers."
+
+### Step 2 — Track count
+1 track (focused chain) / 2 tracks (parallel) / 3 tracks (multi-perspective) / draft for me
+
+### Step 3 — Track design
+For each track: name, theme, planned paper chain.
+Write chain sentence: "Paper A establishes X → Paper B requires X → reveals Y → Paper C operationalizes Y as Z"
+If incoherent: redesign.
+
+### Step 4 — Paper-to-track assignment
+For each planned paper: which tracks? (multiSelect)
+Orphan warning if none selected.
+
+### Step 5 — Quantification contracts
+Per paper: primary number, experiment design, decision it changes, null fallback.
+Gate: no paper may skip its contract.
+
+### Step 6 — Series arc paragraphs
+One LaTeX paragraph per track (with actual numbers from contracts).
+Module arc paragraph spanning all tracks.
+Cannot be written until contracts are complete.
+
+### Step 7 — Write MODULE.md + per-paper plan.md files
+
+### Step 8 — Self-score against three properties
+Report estimated panel score. Flag papers scoring ≤ 6 on the rubric.
+
+---
+
+## File Layout
+
+```
+{researchDir}/
+├── MODULE.md                    ← track definitions, paper table, arcs, contracts
+├── REVIEW_PANEL.md              ← latest panel review (from panel:module review)
+├── PANEL-REVISION-PLAN.md       ← PP items with track tags
+├── CURATION.md                  ← curation plan (from panel:module curate)
+├── panel-reviews/
+│   └── round-{N}/
+│       ├── REVIEW_PANEL.md
+│       ├── PANEL-REVISION-PLAN.md
+│       └── MODULE.md            ← snapshot of module state at review time
+└── panel-*/                     ← paper directories
 ```
 
 ---
 
 ## Auto-Commit
 
-After creating or updating MODULE.md:
 ```javascript
 await gitCommitIfEnabled(
-    `[panel] ${moduleName}: module architecture — ${tracks.length} tracks, ${papers.length} papers`,
-    [moduleDir]
+    `[panel] ${moduleName}: module ${subcommand}`,
+    [researchDir]
 );
 ```
 
 ## Dependencies
 
-- shared/project-config.md — researchPath, pluginRoot
-- shared/module-utils.md — MODULE.md parsing, track operations
+- shared/project-config.md — researchPath, pluginRoot, getAllProjects()
+- shared/module-utils.md — MODULE.md parsing, track operations, discoverCrossModuleTracks()
+- shared/panel-utils.md — readiness assessment, panel selection
+- shared/reviewer-profile-loader.md — loadReviewerProfile(), buildReviewerContext()
+- shared/reviewer-selector.md — panel member selection
+- shared/synthesis-engine.md — PP1/PP2/PP3 consolidation
+- shared/score-utils.md — score aggregation, tier mapping
+- shared/state-loader.md — paper state loading
 - shared/git-helper.md — auto-commit
-- templates/module-template.md — MODULE.md template
+- shared/display-utils.md — terminal formatting
+- shared/message-utils.md — standardized output
+- config/scoring.yaml — 10-point scale, tier definitions

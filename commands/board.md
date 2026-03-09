@@ -1,301 +1,288 @@
 ---
 name: panel:board
-description: Monorepo-level cross-module board review with rounds
+description: Board-tier operations — cross-module review, status, revision tracking. Operates across all configured modules in the monorepo.
 user-invocable: true
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Glob
+  - Bash
+  - AskUserQuestion
 ---
 
-# panel:board — Monorepo-Level Board Review
+# panel:board — Board Tier
 
-Assembles a 7-member board to review all modules across the monorepo, producing `REVIEW_BOARD.md` with cross-module synthesis, rankings, and per-module revision plans (B1/B2/B3).
+All board-level operations. The board sees across all modules — it is the
+monorepo-level tier of the three-tier review architecture.
 
-## Module Discovery
+```
+panel:paper    — individual paper lifecycle
+panel:module   — module-level panel review
+panel:board    — cross-module board review  ← this command
+```
+
+## Plugin Root + Config
 
 ```javascript
 // @import ../shared/project-config.md
+// @import ../shared/module-utils.md
 // @import ../shared/board-utils.md
 
-// Get all configured projects (each is a module)
+const projectConfig = loadProjectConfig();
+const pluginRoot = projectConfig.pluginRoot;
 const allProjects = getAllProjects();
-
-// Discover modules with completed panels
-const modules = allProjects.map(project => ({
-  name: project.projectName,
-  researchPath: path.join(process.cwd(), project.researchPath),
-  panelFile: path.join(process.cwd(), project.researchPath, 'REVIEW_PANEL.md'),
-  ready: fs.existsSync(panelFile)
-}));
 ```
 
-In multi-project mode, each project configured in `.claude/panel.json` is treated as a module. The board aggregates across all modules.
+---
 
-## Three-Tier Context
+## Usage
 
 ```
-panel:board   — monorepo level (cross-module) ← this command
-panel:convene   — module level (cross-portfolio)
-panel:review   — paper level (individual reviews)
+panel:board <subcommand> [options]
+
+Subcommands:
+  review              Run cross-module board review
+  status              Board status — module registry, track map, revision progress
+  revisions           Show B1/B2/B3 progress across all modules
+  member <name>       Regenerate one board member's assessment
+  update <section>    Targeted refresh of a REVIEW_BOARD.md section
+
+Options (for review):
+  --repo <path>       Monorepo root (default: auto-detect)
+  --dry-run           Preview without writing files
+  --round <n>         Force a specific round number
 ```
 
-Board reviews consume module-level panel reviews (bubble up) and produce per-module revision plans that flow back down through `panel:convene` to individual papers.
-
-## Arguments
-
-- `--status` — Show board status: module registry, board composition, revision progress
-- `--review` — Run or re-run the board review
-- `--update <section>` — Targeted refresh of a specific section (see Update Sections below)
-- `--member <name>` — Regenerate one board member's assessment (preserves others)
-- `--revisions` — Show B1/B2/B3 progress across all modules
-- `--repo <path>` — Monorepo root path (default: auto-detect via shared/board-utils.resolve_repo)
-- `--dry-run` — Preview what would happen without writing files
+---
 
 ## Repo Path Resolution
 
-The board operates at the monorepo level. In multi-project setups, path resolution:
+1. `--repo <path>` explicit flag
+2. `process.cwd()` (assumes run from monorepo root)
+3. Walk up looking for `.claude/panel.json` with multiple projects
+4. Walk up looking for `REVIEW_BOARD.md`
+5. Walk up looking for directory with 2+ configured research paths
+6. Fail with guidance
 
-1. `--repo <path>` explicit flag (highest priority)
-2. Use `process.cwd()` (assumes run from monorepo root)
-3. Walk up from cwd looking for `.claude/panel.json` with multiple projects
-4. Walk up from cwd looking for `REVIEW_BOARD.md`
-5. Walk up from cwd looking for directory with 2+ research paths from config
-6. Fail with guidance message
+---
 
-## Prerequisites
+## Subcommands
 
-Before `panel:board --review` can run:
-1. At least 2 modules must have completed `REVIEW_PANEL.md` (via `panel:convene`)
-2. Panel reviews must be substantive (not placeholders)
-3. **Synced modules must be up-to-date**: Modules authored in external repos (e.g., boost at `C:\src\boost\research/`, waves at `C:\src\waves\research/`) must be synced to the monorepo before the board can see their latest state. The board reads from the monorepo — it does not reach into source repos.
+### `review`
 
-Use `panel:board --status` to check readiness.
+Cross-module board review. Reads all module `REVIEW_PANEL.md` files and
+`MODULE.md` files, assembles 7-member board, produces `REVIEW_BOARD.md`.
 
-## Multi-Project Module Structure
+**Prerequisites:**
+- 2+ modules with completed `REVIEW_PANEL.md` (from `panel:module review`)
+- Panel reviews must be substantive (not placeholders)
 
-In monorepo mode, each project is a module with its research papers in a dedicated path:
+**Flow:**
 
-**Example: Craftworks Monorepo**
-| Module | Research Path | Papers Location |
-|--------|---------------|-----------------|
-| craft | `research/craft/` | `research/craft/panel-*/` |
-| waves | `research/waves/` | `research/waves/panel-*/` |
-| probe | `research/probe/` | `research/probe/panel-*/` |
-| boost | `research/boost/` | `research/boost/panel-*/` |
-| panel | `research/panel/` | `research/panel/panel-*/` |
-
-Each module's `REVIEW_PANEL.md` is located at `{researchPath}/REVIEW_PANEL.md`.
-
-**Board operation**: The board reads from all configured projects in `.claude/panel.json` and aggregates their panel reviews into a monorepo-level `REVIEW_BOARD.md` at the repository root.
-
-## Behavior
-
-### --status
-
-1. Resolve repo path
-2. Discover modules via shared/board-utils.discover_modules()
-3. Display:
-   - Module registry table (name, papers, panel status, score, tier)
-   - Board composition (if board exists)
-   - Current round and date
-   - B item progress summary
-   - Modules ready vs not ready for board review
-
-### --review
-
-1. **Resolve repo**: Find monorepo root
-2. **Discover modules**: Scan for modules with completed panels
-3. **Load cross-module track map**: Via `discoverCrossModuleTracks()` from shared/module-utils.md
-   - Scan all module `MODULE.md` files for track definitions
-   - Identify tracks spanning multiple modules (cross-module tracks)
+1. **Resolve repo**: find monorepo root
+2. **Discover modules**: scan all configured projects for completed `REVIEW_PANEL.md`
+3. **Load cross-module track map** via `discoverCrossModuleTracks()`:
+   - Scan all `MODULE.md` files for track definitions
+   - Identify tracks spanning multiple modules
    - Assess alignment: `aligned` | `subset` | `parallel` | `divergent` | `unique`
-   - This map is the integration evidence the board uses to assess program coherence
-4. **Select board**: Choose 7 members via shared/board-utils.select_board()
-   - On round 1: fresh selection
-   - On round 2+: retain 5 core members, rotate 2
-5. **Load profiles**: Load all 7 board member profiles via shared/reviewer-profile-loader.md
-   - Use `loadReviewerProfile()` for each board member
-   - Build context string via `buildReviewerContext(profile)` — OLE preamble + structured fields
-   - Cache profiles for session-level reuse across all modules
-6. **Generate assessments**: Each board member reviews all module panels:
+4. **Select 7-member board**: shared/board-utils.select_board()
+   - Round 1: fresh selection
+   - Round 2+: retain 5 core, rotate 2
+5. **Load profiles**: `loadReviewerProfile()` + `buildReviewerContext()` for all 7
+6. **Generate assessments**: each board member reviews all module panels
    - Read each module's `REVIEW_PANEL.md` and `MODULE.md`
-   - Inject member's context string (from Step 5) as reviewer persona
-   - Assess module quality on 10-point scale
-   - Assess cross-module track alignment from Step 3:
-     - `aligned` tracks → program strength, cite explicitly
-     - `divergent` tracks → B1 candidate: conflicting chain logic across modules
-     - `parallel` tracks → B2 candidate: should these papers cite each other?
-     - `subset` tracks → note as depth/specialization (good signal)
+   - Inject OLE context string as reviewer persona
+   - Assess module quality (10-point scale)
+   - Assess cross-module track alignment:
+     - `aligned` → program strength, cite explicitly
+     - `divergent` → B1 candidate: conflicting chain logic
+     - `parallel` → B2 candidate: papers should cite each other
+     - `subset` → depth signal (good)
    - Identify cross-module themes and synergies
    - Rank modules within the program
-7. **Synthesize**: Consolidate 7 assessments into `REVIEW_BOARD.md`:
+7. **Synthesize** into `REVIEW_BOARD.md`:
    - Program score and tier
    - Module rankings with consensus and agreement matrix
-   - **Cross-module track map**: which tracks span modules, alignment status
+   - **Cross-module track map**: alignment status per track
    - Cross-module themes (derived from track alignment + panel findings)
    - Per-module assessments
-8. **Generate revision plans**: Create per-module `BOARD-REVISION-PLAN-{module}.md`
-   with B items **tagged to tracks** where applicable:
-   - `B1 [Track methodology]` — divergent track logic must be reconciled across modules
-   - `B2 [Track empirical, module-alpha + module-beta]` — parallel papers should cite each other
-   - `B3 [module]` — module-level item not specific to a track
-   - B1/B2/B3 items specific to each module
-   - Derived from cross-module themes and board findings
-   - These are also written as `{module}/REVISION-PLAN.md` (or appended as a board-directives section)
-     so `panel:review` can discover and work on them
-7. **Snapshot round**: Archive to `board-reviews/round-{N}/` via shared/board-utils.snapshot_round():
-   - `REVIEW_BOARD.md` (board snapshot)
-   - `BOARD-REVISION-PLAN-*.md` (per-module revision plans)
-   - Per-module `REVIEW_PANEL.md` and `RESEARCH.md` (module state at time of review)
-   - `MANIFEST.md` (index with date, modules, file list, program score)
+8. **Generate per-module revision plans**: `BOARD-REVISION-PLAN-{module}.md`
+   - B1/B2/B3 items **tagged to tracks** where applicable:
+     - `B1 [Track methodology]` — divergent track logic across modules
+     - `B2 [Track empirical, alpha + beta]` — parallel papers should cite each other
+     - `B3 [module]` — module-level item
+9. **Snapshot round** to `board-reviews/round-{N}/` with MANIFEST.md
+10. **Report**:
 
-### --update <section>
+```
+panel:board review
+═══════════════════════════════════════════════════════════════════════
 
-Targeted refresh without full re-review. Sections:
+Board Review — Round 1
+
+Modules reviewed:
+  module-alpha   Score: 7.2/10 (B+)   Tier: Solid
+  module-beta    Score: 7.8/10 (A-)   Tier: Strong
+  module-gamma   Score: 8.1/10 (A-)   Tier: Strong
+
+Program score: 7.7/10 (A-)
+
+Cross-module tracks:
+  Track methodology   alpha + beta    aligned ✓    (program strength)
+  Track empirical     beta + gamma    parallel ⚠   (B2: add cross-citations)
+  Track theory        alpha only      unique        (no cross-module implication)
+
+B1 items (blocking): 1
+  B1.1 [Track empirical] beta + gamma parallel papers need cross-citation framework
+
+B2 items (important): 3
+B3 items (nice-to-have): 2
+
+Revision plans written:
+  BOARD-REVISION-PLAN-module-alpha.md
+  BOARD-REVISION-PLAN-module-beta.md
+  BOARD-REVISION-PLAN-module-gamma.md
+
+Archived: board-reviews/round-1/
+Next: modules address B1 items → panel:module review (round 2) → panel:board review (round 2)
+```
+
+---
+
+### `status`
+
+Board status: module registry, cross-module track map, revision progress.
+
+```
+panel:board status
+═══════════════════════════════════════════════════════════════════════
+
+Program: craftworks research | Board round 1 | Score: 7.7/10 (A-)
+
+Module Registry:
+  module-alpha   5 papers  Panel: ✓ (7.2)  Board: ✓  B1: 0/1 addressed
+  module-beta    4 papers  Panel: ✓ (7.8)  Board: ✓  B1: 1/1 addressed ✓
+  module-gamma   3 papers  Panel: ✓ (8.1)  Board: ✓  B1: 0/0
+  module-delta   2 papers  Panel: ✗         Board: —  (awaiting panel:module review)
+
+Cross-module Track Map:
+  Track methodology   alpha + beta    aligned ✓
+  Track empirical     beta + gamma    parallel ⚠  B2.1 open
+  Track theory        alpha only      unique
+
+Board composition (7 members): [names if board has run]
+
+Ready for round 2: module-beta ✓ (all B1 addressed)
+Waiting: module-alpha (1 B1 open)
+```
+
+---
+
+### `revisions`
+
+Show B1/B2/B3 progress across all modules, tagged by track.
+
+```
+B1 Progress — Blocking Items
+═══════════════════════════════════════
+ #  Item                          Track       Modules           Status
+ ── ───────────────────────────── ─────────── ─────────────     ──────
+ 1  Divergent chain logic         methodology alpha + beta       0/1 ✗
+ 2  Missing baseline comparison   empirical   beta               1/1 ✓
+```
+
+---
+
+### `member <name>`
+
+Regenerate one board member's assessment. Loads their profile,
+builds OLE context, regenerates assessment, re-runs synthesis.
+No new round.
+
+```
+panel:board member "Percy Liang"
+```
+
+---
+
+### `update <section>`
+
+Targeted refresh of a specific REVIEW_BOARD.md section without full re-review.
 
 | Section | What it updates |
 |---------|----------------|
 | `registry` | Re-scan modules, update panel status |
 | `board` | Re-select board members |
-| `synthesis` | Re-run cross-module synthesis from existing assessments |
-| `rankings` | Re-calculate module rankings and tiers |
+| `tracks` | Re-run cross-module track alignment |
+| `synthesis` | Re-run synthesis from existing assessments |
+| `rankings` | Recalculate module rankings |
 | `themes` | Re-extract cross-module themes |
-| `strategy` | Re-generate strategic recommendations |
-| `revisions` | Re-generate per-module revision plans |
-| `all` | Full refresh (equivalent to --review) |
+| `revisions` | Regenerate per-module revision plans |
+| `all` | Full refresh (equivalent to `review`) |
 
-### --member <name>
-
-1. Load existing `REVIEW_BOARD.md`
-2. Load the named member's profile via `loadReviewerProfile(name)` from shared/reviewer-profile-loader.md
-3. Build context string via `buildReviewerContext(profile)` — OLE preamble + structured fields
-4. Regenerate only that member's assessment using the context string
-5. Re-run synthesis with updated assessment
-6. Overwrite `REVIEW_BOARD.md` (no new round — same round, updated)
-
-### --revisions
-
-1. Scan for `BOARD-REVISION-PLAN-*.md` files
-2. Parse checkbox status for B1/B2/B3 items per module
-3. Display progress:
-   ```
-   B1 Progress — Blocking Items
-   ═══════════════════════════════════════
-    #  Item                    Modules    Status
-    ── ─────────────────────── ────────── ──────
-    1  No competitive baselines merit,waves 0/2
-    2  Inconsistent methodology panel      1/1 ✓
-   ```
+---
 
 ## Round Cycle
 
 ```
-panel:board --review (round 1)
-  → Writes REVIEW_BOARD.md (canonical, repo root)
-  → Writes BOARD-REVISION-PLAN-{module}.md per module (repo root)
-  → Archives to board-reviews/round-1/
-  → B1/B2/B3 items created per module
+panel:board review (round 1)
+  → REVIEW_BOARD.md (canonical)
+  → BOARD-REVISION-PLAN-{module}.md per module
+  → board-reviews/round-1/ snapshot
 
-Modules revise via panel:convene → panel:review (addresses B1 items)
+Modules revise via panel:module → panel:paper → addresses B1 items
 
-panel:board --review (round 2)
+panel:board review (round 2)
   → Checks B1 items addressed
-  → Re-evaluates modules with updated panels
-  → Updates REVIEW_BOARD.md
-  → Archives to board-reviews/round-2/
-  → If all B1 addressed + program score >= target → board signs off
+  → Updated REVIEW_BOARD.md
+  → board-reviews/round-2/ snapshot
+  → All B1 addressed + program ≥ 7.0/10 → board signs off
 ```
 
-## Bubble-Up: Module → Program
+## Completion Criteria
 
-Module panel findings aggregate to program-level themes:
-
-| Module-Level Pattern | Program-Level Result |
-|----------------------|----------------------|
-| PP1 theme in 2+ modules | B1 program theme |
-| PP1 theme in 1 module | B2 program theme |
-| PP2 theme in 3+ modules | B2 program theme |
-| Common strength across modules | Program strength |
-| Score pattern across modules | Program theme |
-
-Cross-module synergies are also identified:
-- "Panel module's methodology paper validates the process used across all modules"
-- "Merit and waves share evaluation framework components"
+1. All B1 items addressed across all modules
+2. Program score ≥ 7.0/10 (Tier A- or above)
+3. No module below 6.0/10
+4. Board consensus: avg Spearman's ρ > 0.6
 
 ## File Layout
 
 ```
 {repo}/
-├── REVIEW_BOARD.md                      ← always the latest/canonical
-├── BOARD-REVISION-PLAN-merit.md         ← per-module revision plan (latest)
-├── BOARD-REVISION-PLAN-waves.md
-├── BOARD-REVISION-PLAN-panel.md
-├── BOARD-REVISION-PLAN-boost.md
+├── REVIEW_BOARD.md                      ← canonical board review
+├── BOARD-REVISION-PLAN-{module}.md      ← per-module revision plans
 ├── board-reviews/
-│   ├── round-1/
-│   │   ├── MANIFEST.md                  ← index: date, modules, files, score
-│   │   ├── REVIEW_BOARD.md              ← board snapshot
-│   │   ├── BOARD-REVISION-PLAN-merit.md
-│   │   ├── BOARD-REVISION-PLAN-waves.md
-│   │   ├── merit/                       ← module state snapshot
-│   │   │   ├── REVIEW_PANEL.md
-│   │   │   └── RESEARCH.md
-│   │   └── waves/
-│   │       ├── REVIEW_PANEL.md
-│   │       └── RESEARCH.md
-│   └── round-2/
+│   └── round-{N}/
 │       ├── MANIFEST.md
 │       ├── REVIEW_BOARD.md
 │       ├── BOARD-REVISION-PLAN-*.md
-│       ├── merit/
-│       │   ├── REVIEW_PANEL.md
-│       │   └── RESEARCH.md
-│       ├── waves/
-│       │   ├── REVIEW_PANEL.md
-│       │   └── RESEARCH.md
-│       ├── panel/
-│       │   ├── REVIEW_PANEL.md
-│       │   └── RESEARCH.md
-│       └── boost/
+│       └── {module}/
 │           ├── REVIEW_PANEL.md
+│           ├── MODULE.md
 │           └── RESEARCH.md
-├── merit/
-│   ├── REVIEW_PANEL.md                  ← live/canonical
-│   └── RESEARCH.md
-├── waves/
-│   └── ...
-├── panel/
-│   └── ...
-└── boost/
-    └── ...
 ```
-
-**Archive principle**: Each round snapshot captures the *complete state* needed to understand the board's decision — including the module-level panel reviews and research inventories that informed it. This enables round-over-round comparison and ensures the board can always reconstruct what it saw.
-
-## Completion Criteria
-
-The board review is complete when:
-1. All B1 items are addressed across all modules
-2. Program score >= 7.0/10 (Tier A- or above)
-3. No individual module scores below 6.0/10
-4. Board consensus is at least Moderate (avg Spearman's rho > 0.6)
 
 ## Auto-Commit
 
-After `--review`, `--update`, or `--member` completes, auto-commit:
-
-1. Call `auto_commit()` from shared/git-utils.md
-2. Scope: repo root (REVIEW_BOARD.md, BOARD-REVISION-PLAN-*.md, board-reviews/)
-3. Message: `[panel] Board review round {round}`
-4. For `--update`: `[panel] Board: update {section}`
-5. For `--member`: `[panel] Board: update member {name}`
-6. Skipped for `--status`, `--revisions` (read-only), and `--dry-run`
+```javascript
+await gitCommitIfEnabled(
+    `[panel] Board ${subcommand} round ${round}`,
+    [repoRoot]
+);
+```
 
 ## Dependencies
 
-- shared/git-utils.md — Auto-commit after board reviews
-- shared/board-utils.md — Board-specific utilities
-- shared/panel-utils.md — Panel data parsing
-- shared/reviewer-selector.md — Board member selection
-- shared/module-utils.md — MODULE.md parsing, discoverCrossModuleTracks(), track alignment
-- shared/reviewer-profile-loader.md — Load board member profiles, buildReviewerContext()
-- shared/score-utils.md — Score aggregation, tier mapping, agreement
-- shared/display-utils.md — Terminal formatting
+- shared/project-config.md — getAllProjects(), pluginRoot
+- shared/module-utils.md — MODULE.md parsing, discoverCrossModuleTracks(), alignment
+- shared/board-utils.md — module discovery, board selection, snapshot
+- shared/reviewer-profile-loader.md — loadReviewerProfile(), buildReviewerContext()
+- shared/reviewer-selector.md — board member selection
+- shared/score-utils.md — score aggregation, tier mapping, agreement
+- shared/panel-utils.md — panel data parsing
+- shared/display-utils.md — terminal formatting
+- shared/message-utils.md — standardized output
+- shared/git-helper.md — auto-commit
 - config/scoring.yaml — 10-point scale, tier definitions
