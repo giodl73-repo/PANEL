@@ -1,6 +1,6 @@
 ---
 name: panel:paper
-description: Paper-tier operations — setup, author, review, status, show, venue, import. Runs on one paper, a selection, or all eligible papers.
+description: Quick markdown research papers — setup, author, review, status, show, promote. Fast-cycle lightweight research notes and position papers in papers/ directory.
 user-invocable: true
 allowed-tools:
   - Read
@@ -11,10 +11,13 @@ allowed-tools:
   - AskUserQuestion
 ---
 
-# panel:paper — Paper Tier
+# panel:paper — Quick Research Papers (Markdown)
 
-All paper-level operations. Each subcommand runs on one paper, a selection, or
-all eligible papers in the module.
+Lightweight markdown research papers in `papersPath` (`research/papers/` by default).
+Fast to write, fast to review. Think: working notes, position papers, technical reports,
+pre-publication research snapshots.
+
+**Not for formal LaTeX publications** — use `panel:publication` for those.
 
 ## Plugin Root + Config
 
@@ -24,7 +27,7 @@ all eligible papers in the module.
 // @import ../shared/module-utils.md
 
 const projectConfig = loadProjectConfig();
-const researchDir = path.join(process.cwd(), projectConfig.researchPath);
+const papersDir = path.join(process.cwd(), projectConfig.papersPath);
 const pluginRoot = projectConfig.pluginRoot;
 ```
 
@@ -36,12 +39,12 @@ const pluginRoot = projectConfig.pluginRoot;
 panel:paper <subcommand> [targets] [options]
 
 Subcommands:
-  setup    <name> [venue]   Initialize one or more paper directories
-  author   [targets]        Write papers from plan.md
-  review   [targets]        Run review lifecycle (draft → panel → ... → ready)
+  setup    <name>           Initialize one or more markdown paper directories
+  author   [targets]        Write papers (markdown, fast)
+  review   [targets]        Run lightweight review lifecycle
   status   [targets]        Show stage, round, score for papers
   show     <name>           Detailed view of one paper
-  venue    [targets]        Venue recommendation for papers
+  promote  <name>           Graduate a paper to a formal LaTeX publication
   import   [options]        Discover and import papers from waves/roadmap/commits
 
 Targets (for subcommands that accept them):
@@ -231,6 +234,33 @@ track assignments, reviewer profiles used.
 See `commands/show.md` for display logic.
 
 ---
+
+### `promote <name>`
+
+Graduate a markdown paper to a formal LaTeX publication in `publicationsPath`.
+
+```
+panel:paper promote my-quick-research
+panel:paper promote my-quick-research --venue "CHI 2026"
+```
+
+**What it does:**
+1. Reads the paper's markdown content and `_panel.yaml`
+2. Creates a new publication directory in `publicationsPath/`
+3. Converts markdown content → LaTeX skeleton (main.tex + sections/)
+4. Copies `_panel.yaml` with `type: publication`, `promoted_from: <paper-slug>`
+5. Creates `plan.md` seeded from the paper's existing content
+6. Updates MODULE.md: replaces paper with publication in track assignments
+7. Marks original paper as `promoted` in its `_panel.yaml`
+
+**Result:** The publication starts at `draft` stage, ready for `panel:publication author`
+to fill in the formal LaTeX sections using the markdown paper as source material.
+
+```
+✓ Promoted: my-quick-research → publications/panel-my-quick-research/
+  Track assignments carried over: [A, C]
+  Next: panel:publication author panel-my-quick-research
+```
 
 ### `venue [targets]`
 

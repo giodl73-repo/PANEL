@@ -4,6 +4,7 @@
   "description": "AI-simulated expert review lifecycle for research papers. Three-tier architecture: panel:paper (paper lifecycle), panel:module (module review + tracks), panel:board (cross-module program review).",
   "commands": [
     "./commands/paper.md",
+    "./commands/publication.md",
     "./commands/module.md",
     "./commands/board.md",
     "./commands/setup.md",

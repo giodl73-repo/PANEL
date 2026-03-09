@@ -5,10 +5,22 @@ Multi-project configuration loader for panel. Supports both standalone mode and 
 ## Purpose
 
 Load the active project configuration from `.claude/panel.json` to determine:
-- `researchPath` - Where research papers are stored
+- `researchPath` - Root for all research content (legacy fallback)
+- `papersPath` - Where markdown quick-research papers live (default: `{researchPath}/papers`)
+- `publicationsPath` - Where formal LaTeX publications live (default: `{researchPath}/publications`)
 - `panelPath` - Where panel context data is stored
 - `clientSlug` - Client identifier for hub integration
 - `projectName` - Human-readable project name
+
+### Content Types
+
+| Type | Path | Format | Purpose |
+|------|------|--------|---------|
+| **paper** | `papersPath` | Markdown | Quick research notes, position papers, working documents |
+| **publication** | `publicationsPath` | LaTeX | Formal academic papers with sections, PDF, full review lifecycle |
+
+Papers and publications both participate in module tracks. A paper can be promoted
+to a publication via `panel:paper promote`.
 
 ## Configuration Structure
 
@@ -20,6 +32,8 @@ Load the active project configuration from `.claude/panel.json` to determine:
   "projects": {
     "panel": {
       "researchPath": "research",
+      "papersPath": "research/papers",
+      "publicationsPath": "research/publications",
       "panelPath": "context/panel/panel-dev",
       "clientSlug": "panel-dev",
       "projectName": "panel"
@@ -36,21 +50,31 @@ Load the active project configuration from `.claude/panel.json` to determine:
   "projects": {
     "craft-research": {
       "researchPath": "research/craft",
+      "papersPath": "research/craft/papers",
+      "publicationsPath": "research/craft/publications",
       "panelPath": "context/panel/craft-research",
       "clientSlug": "craft-research",
       "projectName": "craft",
-      "description": "Craft plugin research papers"
+      "description": "Craft plugin research papers and publications"
     },
     "waves-research": {
       "researchPath": "research/waves",
+      "papersPath": "research/waves/papers",
+      "publicationsPath": "research/waves/publications",
       "panelPath": "context/panel/waves-research",
       "clientSlug": "waves-research",
       "projectName": "waves",
-      "description": "Waves plugin research papers"
+      "description": "Waves plugin research"
     }
   }
 }
 ```
+
+### Backward Compatibility
+
+`researchPath` alone (no `papersPath`/`publicationsPath`) is still valid.
+Defaults: `papersPath = researchPath`, `publicationsPath = researchPath`.
+Existing installations continue to work unchanged.
 
 ## Functions
 
@@ -62,7 +86,9 @@ Load the active project configuration.
 ```javascript
 {
   projectName: string,
-  researchPath: string,
+  researchPath: string,        // root fallback (legacy)
+  papersPath: string,          // markdown quick-research papers
+  publicationsPath: string,    // formal LaTeX publications
   panelPath: string,
   pluginReviewersPath: string, // ${pluginRoot}/.craft/roles/panel-reviewer (source of truth)
   localReviewersPath: string,  // .craft/roles/panel-reviewer (user extensions only)
@@ -100,10 +126,13 @@ function loadProjectConfig() {
 
   if (config.projects && config.projects[defaultProject]) {
     const project = config.projects[defaultProject];
+    const researchPath = project.researchPath || 'research';
 
     return {
       projectName: project.projectName || defaultProject,
-      researchPath: project.researchPath || 'research',
+      researchPath,
+      papersPath: project.papersPath || `${researchPath}/papers`,
+      publicationsPath: project.publicationsPath || `${researchPath}/publications`,
       panelPath: project.panelPath || `context/panel/${defaultProject}`,
       pluginReviewersPath,
       localReviewersPath,
@@ -115,9 +144,12 @@ function loadProjectConfig() {
   }
 
   // Legacy mode (no projects object) - use defaults
+  const researchPath = 'research';
   return {
     projectName: config.projectName || 'panel',
-    researchPath: 'research',
+    researchPath,
+    papersPath: config.papersPath || `${researchPath}/papers`,
+    publicationsPath: config.publicationsPath || `${researchPath}/publications`,
     panelPath: `context/panel/${defaultProject}`,
     pluginReviewersPath,
     localReviewersPath,
