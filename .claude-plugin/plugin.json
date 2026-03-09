@@ -1,6 +1,6 @@
 {
   "name": "panel",
-  "version": "2.0.0",
+  "version": "2.2.0",
   "description": "AI-simulated expert review lifecycle for research papers. Three-tier architecture: panel:paper (paper lifecycle), panel:module (module review + tracks), panel:board (cross-module program review).",
   "commands": [
     "./commands/paper.md",
@@ -8,6 +8,7 @@
     "./commands/module.md",
     "./commands/board.md",
     "./commands/setup.md",
+    "./commands/upgrade.md",
     "./commands/reviewers.md",
     "./commands/project.md",
     "./commands/report.md",
