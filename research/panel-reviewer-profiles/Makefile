@@ -1,26 +1,23 @@
-# Makefile for panel-reviewer-profiles
+SLUG     := panel-reviewer-profiles
+OUTPUT   := main.pdf
+DOCS_DIR := ../docs
+DIST_FILE := $(DOCS_DIR)/$(SLUG).pdf
 
-MAIN = main
-SECTIONS = $(wildcard sections/*.tex)
-FIGURES = $(wildcard figures/*)
-BIB = ../references.bib
+.PHONY: all pdf dist clean watch
 
-.PHONY: pdf clean watch
+all: pdf
 
-pdf: $(MAIN).pdf
+pdf: main.tex $(wildcard sections/*.tex) $(wildcard *.bib)
+	latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
-$(MAIN).pdf: $(MAIN).tex $(SECTIONS) $(BIB)
-	pdflatex $(MAIN)
-	bibtex $(MAIN)
-	pdflatex $(MAIN)
-	pdflatex $(MAIN)
-
-watch:
-	while true; do \
-		inotifywait -e modify $(MAIN).tex $(SECTIONS); \
-		$(MAKE) pdf; \
-	done
+dist: pdf
+	@mkdir -p $(DOCS_DIR)
+	cp $(OUTPUT) $(DIST_FILE)
+	@echo "  → $(DIST_FILE)"
 
 clean:
-	rm -f *.aux *.bbl *.blg *.log *.out *.toc *.pdf
-	rm -f sections/*.aux
+	latexmk -C
+	@rm -f *.aux *.log *.out *.toc *.fls *.fdb_latexmk *.synctex.gz *.bbl *.blg
+
+watch:
+	latexmk -pdf -pvc -interaction=nonstopmode main.tex

@@ -1,6 +1,10 @@
-SLUG     := panel-synthesis-methods
+# Per-publication Makefile
+# Placed at: {researchPath}/publications/{slug}/Makefile
+# PDF lands at: {researchPath}/docs/{slug}.pdf
+
+SLUG     := $(notdir $(CURDIR))
 OUTPUT   := main.pdf
-DOCS_DIR := ../docs
+DOCS_DIR := ../../docs
 DIST_FILE := $(DOCS_DIR)/$(SLUG).pdf
 
 .PHONY: all pdf dist clean watch

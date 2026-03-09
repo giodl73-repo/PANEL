@@ -61,27 +61,36 @@ Targets:
 
 ## Directory Structure
 
-Each publication lives in `publicationsDir/<slug>/`:
+Each publication lives in `publicationsDir/<slug>/` (no prefix — module dir provides namespace):
 
 ```
-publications/
-└── panel-token-efficiency/
-    ├── _panel.yaml           ← state (stage, round, reviewers, scores)
-    ├── plan.md               ← research plan (seeded from paper if promoted)
-    ├── main.tex              ← root LaTeX file
-    ├── sections/
-    │   ├── 01-introduction.tex
-    │   ├── 02-related-work.tex
-    │   ├── 03-methodology.tex
-    │   ├── 04-evaluation.tex
-    │   ├── 05-discussion.tex
-    │   └── 06-conclusion.tex
-    ├── figures/              ← diagrams, plots
-    ├── reviews/              ← REVIEW-*.md, SYNTHESIS.md
-    ├── REVISION-PLAN.md
-    ├── Makefile              ← pdf target
-    └── references.bib        ← local bibliography (draws from global)
+{researchPath}/
+├── docs/                     ← all compiled PDFs land here
+├── Makefile                  ← module-level: make dist → docs/
+├── MODULE.md
+└── publications/
+    ├── Makefile              ← publications-level: discovers all subdirs dynamically
+    └── token-efficiency/     ← no panel- prefix
+        ├── _panel.yaml       ← state (stage, round, reviewers, scores)
+        ├── plan.md           ← research plan (seeded from paper if promoted)
+        ├── main.tex          ← root LaTeX file
+        ├── sections/
+        │   ├── 01-introduction.tex
+        │   ├── 02-related-work.tex
+        │   ├── 03-methodology.tex
+        │   ├── 04-evaluation.tex
+        │   ├── 05-discussion.tex
+        │   └── 06-conclusion.tex
+        ├── figures/          ← diagrams, plots
+        ├── reviews/          ← REVIEW-*.md, SYNTHESIS.md
+        ├── REVISION-PLAN.md
+        ├── Makefile          ← dist target puts PDF in ../../docs/
+        └── references.bib
 ```
+
+**Makefile chain:**
+- `make dist` at module level → delegates to `publications/Makefile` → each publication's `Makefile` → PDF in `../../docs/{slug}.pdf`
+- All three Makefile levels are dynamic — no hardcoded publication names
 
 ---
 
@@ -96,8 +105,16 @@ panel:publication setup token-efficiency "EMNLP 2026"
 panel:publication setup token-efficiency    # prompts for venue
 ```
 
-Creates: `main.tex`, `sections/` (6 files), `reviews/`, `Makefile`, `_panel.yaml`,
-`REVISION-PLAN.md` (template).
+Creates:
+- `{publicationsDir}/{slug}/main.tex` — LaTeX skeleton
+- `{publicationsDir}/{slug}/sections/` — 6 section files
+- `{publicationsDir}/{slug}/reviews/`
+- `{publicationsDir}/{slug}/Makefile` — from `templates/makefile-publication.mk` (`dist` → `../../docs/`)
+- `{publicationsDir}/{slug}/_panel.yaml`
+- `{publicationsDir}/{slug}/REVISION-PLAN.md`
+- `{publicationsDir}/Makefile` — from `templates/makefile-publications.mk` (if not present)
+- `{researchDir}/Makefile` — from `templates/makefile-module.mk` (if not present)
+- `{researchDir}/docs/` — created if missing
 
 **From MODULE.md**: if the module has a track assignment for this publication slug,
 seeds `plan.md` with track context and arc paragraphs.
@@ -215,15 +232,20 @@ panel:publication venue --track methodology   # coordinate venue across track
 
 ### `build [targets]`
 
-Compile LaTeX to PDF.
+Compile LaTeX to PDF and deploy to `{researchDir}/docs/`.
 
 ```
-panel:publication build                 # all publications
-panel:publication build token-efficiency
+panel:publication build                   # all publications → docs/
+panel:publication build token-efficiency  # single → docs/token-efficiency.pdf
+panel:publication build --dist            # explicit dist (default behaviour)
+panel:publication build --pdf-only        # compile only, skip dist copy
 ```
 
-Runs `make pdf` in each publication directory. Reports compilation errors.
-Copies `main.pdf` to `docs/` on success.
+Runs `make dist` in each publication directory (or `make pdf` with `--pdf-only`).
+`dist` target copies `main.pdf` → `../../docs/{slug}.pdf`.
+
+On success: `✓ docs/token-efficiency.pdf (342 KB)`
+On error: shows LaTeX error log excerpt, offers to open in editor.
 
 ---
 
