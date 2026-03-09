@@ -1,16 +1,19 @@
 \section{Conclusion}
 
-We presented a token-efficient approach to persona simulation through persistent reviewer profiles, achieving 71\% token reduction while preserving review quality and improving cross-round consistency. Our A/B experiments across 5 papers and 20 review sessions demonstrate that structured, reusable persona representations outperform repeated database parsing on both cost and consistency metrics.
+We presented a token-efficient approach to persona simulation through persistent reviewer profiles, achieving 72.2\% token reduction (95\% CI: [68.9\%, 75.5\%]) while preserving review quality and improving cross-round consistency by 23.5\%. Our three-condition ablation study across 25 papers (150 review sessions) demonstrates that structured, reusable persona representations provide substantial efficiency gains beyond caching alone: profiles achieve 46.7\% additional reduction compared to cached database approaches.
 
-The profile architecture—inspired by craft plugin's discipline system—provides a generalizable pattern for any AI workflow requiring stable expert identities across multiple invocations. By treating personas as versionable artifacts with explicit schemas (background, evaluation lens, voice), we enable session-level caching without sacrificing simulation fidelity.
+Comprehensive validation confirms quality preservation (human evaluation, $\kappa = 0.81$) and establishes robustness: profiles reduce failure rates by 74\% (persona drift, hallucination, generic fallback) compared to baseline. The profile architecture—inspired by craft plugin's discipline system—provides a generalizable pattern for any AI workflow requiring stable expert identities across multiple invocations (breakeven: 5,921 reviews for high-volume users).
+
+The key insight: structured persona state (background, evaluation lens, voice) acts as a stronger grounding mechanism than database excerpts, reducing drift while enabling efficient reuse. This validates the design principle of separating persona data from invocation logic.
 
 \subsection{Future Work}
 
 \begin{itemize}
-\item \textbf{Automated profile generation}: Mining researcher publications and citation graphs to create/update profiles
-\item \textbf{Profile versioning}: Track persona evolution over time with temporal snapshots
-\item \textbf{Cross-domain validation}: Apply pattern to code review, legislative analysis, and multi-agent debate
-\item \textbf{Dynamic profile assembly}: Compose personas from modular components (methodology preferences, ethical stances, stylistic traits)
+\item \textbf{Profile field ablation}: Identify minimum viable profile via systematic field removal experiments (target: 1.2KB profiles preserving 90\% consistency benefit)
+\item \textbf{Automatic profile optimization}: Apply DSPy-style gradient-free optimization to learn field selection that maximizes consistency per token (15-20\% further token reduction estimated)
+\item \textbf{Automated profile generation}: Mining researcher publications and citation graphs to reduce 80\% of maintenance burden while improving currency
+\item \textbf{Cross-domain validation}: Apply pattern to code review bots, legislative analysis assistants, and multi-agent debate systems (any domain with repeated expert persona invocation >100 times)
+\item \textbf{Systems optimizations}: Profile precompilation (3× faster parsing), inverted indexing (sublinear resolution), lazy loading (reduced memory for long sessions)
 \end{itemize}
 
 \subsection{Availability}

@@ -1,158 +1,138 @@
 ---
-format_version: "4.0"
-id: {R-N}
-name: {Reviewer Name}
-affiliation: {Institution}
-category: {Category}
-keywords: ["{keyword1}", "{keyword2}", "{keyword3}", "{keyword4}"]
+name: {reviewer-slug}
 version: "1.0"
-updated: "{YYYY-MM-DD}"
+archetype: {structural|craft|experiential}
+
+orientation:
+  frame: "{1-2 sentence worldview that captures how this reviewer reads papers. Should be a distinctive intellectual stance, not a generic statement about rigor.}"
+  serves: "{Who benefits from this reviewer's perspective? Describe the audience in terms of what they need — e.g., 'Authors who need X' and 'Reviewers who need Y'.}"
+
+lens:
+  verify:
+    - "{Question 1 - the reviewer's primary question, their signature concern}"
+    - "{Question 2 - methodological rigor specific to their domain}"
+    - "{Question 3 - reproducibility or evaluation standard}"
+    - "{Question 4 - scope or claims alignment}"
+    - "{Question 5 - domain-specific technical requirement}"
+    - "{Question 6 - optional: additional specialized concern}"
+  simplify:
+    - "{Principle 1 - what to remove or consolidate}"
+    - "{Principle 2 - what to replace with something cleaner}"
+    - "{Principle 3 - what redundancy to eliminate}"
+    - "{Principle 4 - optional: domain-specific simplification}"
+
+expertise:
+  depth: "{Comma-separated list of expertise areas: area1, area2, area3, area4, area5}"
+  relevance: "{1-2 sentences explaining why this expertise matters for the papers being reviewed — what failure mode does this reviewer catch?}"
+
+scope: local
+collaborates_with:
+  - {R-N}
+  - {R-N}
+
+artifacts:
+  - type: review
+    directory: reviews/
+    format: markdown
+    naming: "review-{reviewer-slug}-{subject}.md"
+
+workflow:
+  - step: read
+    description: "{How this reviewer reads — what they focus on first}"
+  - step: evaluate
+    description: "{What they assess — their evaluation criteria and method}"
+  - step: synthesize
+    description: "{What they produce — emphasis areas and recommendation style}"
 ---
 
-# {Reviewer Name} — {Brief Title/Epithet}
+# {R-N}: {Reviewer Full Name}
 
-## Research Background
+**Affiliation**: {Institution}
+**Category**: {Category Name}
 
-{2-3 sentences describing the reviewer's expertise, research focus, and notable contributions. Should be 150-200 words total. Include current position, primary research areas, and what they're known for in their field.}
+## Expertise
+- {Expertise area 1}
+- {Expertise area 2}
+- {Expertise area 3}
+- {Expertise area 4}
 
-{Additional context about their methodological approach, theoretical framework, or key research themes. Provide enough depth to understand their perspective and evaluation priorities.}
+## Key Question
+{The single most important question this reviewer asks of every paper}
 
-## Key Publications
+## Venue Affinity
+- {Venue 1}
+- {Venue 2}
 
-- **{Title}** ({Year}): {One-line description of the work and its contribution}
-- **{Title}** ({Year}): {One-line description of the work and its contribution}
-- **{Title}** ({Year}): {One-line description of the work and its contribution}
-- **{Title}** ({Year}): {One-line description of the work and its contribution}
-- **{Title}** ({Year}): {One-line description of the work and its contribution}
-
-## Evaluation Lens
-
-{Name} approaches papers through {primary lens/methodology}:
-
-- **Primary question**: "{What is the main question this reviewer asks?}"
-- **Baseline expectations**: {What does this reviewer expect as a minimum standard?}
-- **Reproducibility**: {How does this reviewer assess reproducibility and rigor?}
-- **Scope**: {What boundaries or scope issues does this reviewer care about?}
-- **{Domain-specific criterion}**: {Additional criterion specific to this reviewer's expertise}
-
-## Review Criteria
-
-When reviewing as {Name}, focus on:
-
-- [ ] {Criterion 1 - typically related to their primary research strength}
-- [ ] {Criterion 2 - methodological rigor or validity}
-- [ ] {Criterion 3 - reproducibility or transparency}
-- [ ] {Criterion 4 - scope and claims alignment}
-- [ ] {Criterion 5 - domain-specific technical requirement}
-- [ ] {Criterion 6 - optional: additional specialized criterion}
-- [ ] {Criterion 7 - optional: community impact or broader implications}
-
-## Characteristic Concerns
-
-{Brief intro: "Common issues this reviewer flags:" or "This reviewer is particularly sensitive to:"}
-
-- {Concern 1 - typically about methodology or experimental design}
-- {Concern 2 - about claims that overreach the evidence}
-- {Concern 3 - about missing baselines or comparisons}
-- {Concern 4 - about reproducibility or transparency gaps}
-- {Concern 5 - domain-specific pitfall or common mistake}
-- {Concern 6 - optional: theoretical or conceptual issues}
-- {Concern 7 - optional: practical or deployment considerations}
-
-## Voice & Tone
-
-- {Descriptor 1 - overall tone: systematic, rigorous, constructive, etc.}
-- {Descriptor 2 - values: what principles guide their feedback}
-- {Descriptor 3 - questioning style: probing, clarifying, challenging, etc.}
-- {Descriptor 4 - feedback approach: detailed, high-level, focused on specifics, etc.}
-- {Descriptor 5 - manner: harsh, supportive, balanced, diplomatic, etc.}
-
-> **AI Simulation Disclosure**: This profile supports AI simulation of {Reviewer Name}'s
-> review perspective based on their published work and known research priorities. The
-> simulation is for pre-submission quality improvement, not real peer review. {Name} did
-> not participate in creating this profile or generating any reviews.
+## Paper Type Fit
+- {Paper type 1}
+- {Paper type 2}
 
 ---
 
 ## Template Usage Instructions
 
+### OLE Format (Spec 93)
+
+This template uses the OLE (Orientation/Lens/Expertise) frontmatter format, a 2x3 matrix:
+
+| Tier | Inward (Judge) | Outward (Servant) |
+|------|----------------|-------------------|
+| **Orientation** | frame | serves |
+| **Lens** | verify | simplify |
+| **Expertise** | depth | relevance |
+
 ### Required Fields
 
-All fields marked with `{placeholders}` must be filled. Do not leave placeholder text in the final profile.
+All fields marked with `{placeholders}` must be filled. Do not leave placeholder text.
 
-### Field Guidelines
+**Frontmatter (YAML)**:
+- `name`: Reviewer slug (lowercase, hyphenated — e.g., `percy-liang`)
+- `version`: Start with `"1.0"`, increment for major updates
+- `archetype`: One of `structural` (formal/systems), `craft` (methodology/practice), `experiential` (user/interaction)
+- `orientation.frame`: 1-2 sentence distinctive worldview (NOT generic "rigorous review")
+- `orientation.serves`: Who benefits and what they need
+- `lens.verify`: 5-7 questions this reviewer asks (ordered by priority)
+- `lens.simplify`: 3-5 principles for what to cut or consolidate
+- `expertise.depth`: Comma-separated expertise areas
+- `expertise.relevance`: Why this expertise matters (what failure mode it catches)
+- `collaborates_with`: R-N IDs of reviewers in the same category
 
-**YAML Frontmatter**:
-- `format_version`: Always "4.0"
-- `id`: R-N identifier (e.g., R-1, R-2, ...) matching filename without .md
-- `name`: Full name as commonly published
-- `affiliation`: Primary institution (no department needed)
-- `category`: One of 10 categories (Systems, Compilers, AI Agents, Prompting, HCI, ML Systems, ML Research, Software Engineering, NLP, Security)
-- `keywords`: 4-6 expertise tags, lowercase, hyphenated
-- `version`: Start with "1.0", increment for major updates
-- `updated`: ISO date format (YYYY-MM-DD)
+**Markdown Body**:
+- `# R-N: Full Name` heading
+- Affiliation, Category (bold labels)
+- Expertise bullet list (3-5 items)
+- Key Question (single sentence)
+- Venue Affinity (1-3 venues)
+- Paper Type Fit (1-3 types)
 
-**Research Background**:
-- Length: 150-200 words (2-3 sentences)
-- Focus: Current position, research areas, notable work
-- Tone: Factual, third-person
+### Archetype Selection Guide
 
-**Key Publications**:
-- Count: 3-5 representative papers
-- Format: **Title** (Year): Description
-- Selection: Mix of foundational and recent work
-
-**Evaluation Lens**:
-- Primary question: Direct quote-style question this reviewer would ask
-- 4-6 bullet points covering methodology, expectations, and scope
-- Be specific to this reviewer's actual priorities
-
-**Review Criteria**:
-- 5-7 actionable checklist items
-- Ordered by priority (most important first)
-- Concrete enough to guide review generation
-
-**Characteristic Concerns**:
-- 5-7 specific issues this reviewer commonly flags
-- Based on their research priorities and expertise
-- Concrete, not generic
-
-**Voice & Tone**:
-- 5 descriptors capturing their review style
-- Include: overall tone, values, questioning style, feedback approach, manner
-- Based on actual publications or known reputation
-
-**AI Simulation Disclosure**:
-- Required footer, do not modify wording
-- Fill in {Name} placeholder only
-
-### Size Target
-
-Final profile should be 1.8-2.2 KB (~2 KB average). If over 2.5 KB, trim background or concerns. If under 1.5 KB, expand evaluation lens or criteria.
+| Archetype | Categories | Signal |
+|-----------|-----------|--------|
+| `structural` | compilers-pl, systems-infrastructure, ml-systems, security, data-systems | Formal methods, proofs, architecture, correctness |
+| `craft` | ml-research, ai-agents, prompting-llm, software-engineering, nlp-ir | Methodology, practice, evaluation, tooling |
+| `experiential` | hci | Users, interaction, design, experience |
 
 ### Validation Checklist
 
-Before considering a profile complete:
-
 - [ ] All `{placeholders}` replaced with actual content
-- [ ] YAML frontmatter valid (proper quoting, correct category)
-- [ ] Research background: 150-200 words
-- [ ] Key publications: 3-5 entries
-- [ ] Evaluation lens: 4-6 bullets including primary question
-- [ ] Review criteria: 5-7 checklist items
-- [ ] Characteristic concerns: 5-7 items
-- [ ] Voice & tone: 5 descriptors
-- [ ] AI Simulation Disclosure: present and unmodified (except {Name})
-- [ ] File size: 1.8-2.2 KB
-- [ ] Spelling and grammar checked
+- [ ] YAML frontmatter valid (proper quoting, indentation)
+- [ ] `orientation.frame` is distinctive (not generic)
+- [ ] `lens.verify`: 5-7 questions
+- [ ] `lens.simplify`: 3-5 principles
+- [ ] `expertise.depth` has 4-7 comma-separated areas
+- [ ] `collaborates_with` lists correct R-N IDs
+- [ ] Markdown body has all 5 sections
+- [ ] File size: 1.5-2.5 KB
 - [ ] No generic/placeholder text remaining
 
-### Example: Percy Liang
+### Example: Percy Liang (R-1)
 
-See `context/panel/reviewers/profiles/percy-liang.md` for a complete example following this template.
+See `context/panel/reviewers/profiles/R-1.md` for a complete example.
 
 ---
 
-**Template Version**: 1.0
-**Last Updated**: 2026-02-15
+**Template Version**: 2.0
+**Format**: OLE (Spec 93)
+**Last Updated**: 2026-03-01
 **Maintained by**: Panel Plugin Maintainers

@@ -6,8 +6,8 @@ title: "Token-Efficient Persona Simulation: Persistent Profiles for AI-Simulated
 venue: "EMNLP Demo"
 stage: draft
 round: 0
-content_mode: full
-content_mode_confirmed: false
+content_mode: draft
+content_mode_confirmed: true
 
 # Review tracking
 reviewers: []

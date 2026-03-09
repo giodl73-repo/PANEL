@@ -437,6 +437,25 @@ mkdir -p "${researchDir}"
 mkdir -p "${researchDir}/docs"
 ```
 
+### Step 2b: Cache plugin root
+
+Read `CLAUDE_PLUGIN_ROOT` from the environment and persist it into `.claude/panel.json` so all commands can resolve plugin files after installation without relying on the env var being set.
+
+```javascript
+const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
+if (!pluginRoot) {
+  throw new Error('CLAUDE_PLUGIN_ROOT is not set. Is the panel plugin installed correctly?');
+}
+
+// Load existing config (created by panel:setup or user)
+const configPath = path.join(targetDir, '.claude', 'panel.json');
+const config = JSON.parse(fs.readFileSync(configPath, 'utf8') || '{}');
+
+// Cache pluginRoot — persists across sessions
+config.pluginRoot = pluginRoot;
+fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf8');
+```
+
 ### Step 3: Copy infrastructure files from plugin
 
 **CRITICAL**: All infrastructure files go inside `researchDir`, NOT `targetDir` directly. Use the `researchDir` variable throughout.
@@ -550,6 +569,49 @@ options:
 5. Update RESEARCH.md with new papers (append to Paper Inventory table)
 
 **If no waves detected or user declines**: skip silently. Note in report.
+
+### Step 6b: Install OLE Reviewer Profiles
+
+Two destinations for reviewer data, both sourced from the plugin installation:
+
+**A. Copy reviewer registry + profiles to project context (for runtime use)**
+
+The profile loader reads from `context/panel/reviewers/` at runtime — this must exist in the user's project.
+
+```javascript
+const projectReviewersDir = path.join(targetDir, 'context/panel/reviewers');
+const pluginReviewersDir = path.join(pluginRoot, 'context/panel/reviewers');
+
+// Create destination if missing
+mkdir -p "${projectReviewersDir}";
+
+// Copy registry index and all R-N profiles from plugin → project
+cp "${pluginReviewersDir}/_index.yaml" "${projectReviewersDir}/_index.yaml";
+cp -r "${pluginReviewersDir}/profiles/" "${projectReviewersDir}/profiles/";
+```
+
+**B. Install OLE profiles to `.claude/roles/panel-reviewer/` (for Claude Code role system)**
+
+```javascript
+const rolesDir = path.join(targetDir, '.claude/roles/panel-reviewer');
+
+// Create roles directory if missing
+mkdir -p "${rolesDir}";
+
+// Copy ROLE.md index (from plugin templates)
+cp "${pluginRoot}/templates/panel-reviewer-ROLE.md" "${rolesDir}/ROLE.md";
+
+// Copy all R-N.md OLE profiles from plugin (not from project — source of truth is the plugin)
+cp "${pluginRoot}/context/panel/reviewers/profiles/"R-*.md "${rolesDir}/";
+```
+
+```javascript
+const profileCount = glob(`${rolesDir}/R-*.md`).length;
+msg(`Installed ${profileCount} OLE reviewer profiles to .claude/roles/panel-reviewer/`, 'item');
+msg(`Copied reviewer registry to context/panel/reviewers/`, 'item');
+```
+
+**Skip condition**: If `.claude/roles/panel-reviewer/ROLE.md` already exists and has the same version, skip. If outdated, offer upgrade.
 
 ### Step 7: Assemble Module Reviewer Subset
 
@@ -689,6 +751,13 @@ Papers: 3 detected (1 existing + 2 imported from waves)
 Papers Imported from Waves:
   ✓ panel-wave-architecture-evolution    ICSE / FSE     (12 pulses)
   ✓ panel-discipline-code-generation     MLSys 2026     (8 pulses)
+```
+
+**OLE Reviewer Profiles** (from Step 6b):
+```
+OLE Reviewer Profiles:
+  ✓ .claude/roles/panel-reviewer/ROLE.md installed (index + panel guide)
+  ✓ 51 R-N.md profiles installed (OLE format, Spec 93)
 ```
 
 **Reviewer panel** (if assembled in Step 7):
@@ -863,6 +932,7 @@ const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 - REVIEWER-DATABASE.md present
 - All papers have `_panel.yaml`
 - All papers have `REVISION-PLAN.md`
+- OLE profiles installed (`.claude/roles/panel-reviewer/` exists with R-N.md files)
 - Lists all papers with stage, venue, and readiness status
 
 ### Check Output
@@ -876,12 +946,16 @@ Project: ${projectConfig.projectName}
 Research Path: ${researchDir}
 
 Infrastructure (${researchDir}):
-  ✓ REVIEWER-DATABASE.md  (45 reviewers, 10 categories)
+  ✓ REVIEWER-DATABASE.md  (51 reviewers, 11 categories)
   ✓ RESEARCH.md           (2 papers listed)
   ✓ REVIEWERS.md          present
   ✓ REVIEW_PANEL.md       present
   ✓ references.bib        present (1200+ entries)
   ✓ Makefile              present
+
+OLE Profiles (.claude/roles/panel-reviewer/):
+  ✓ ROLE.md               present (panel-reviewer role index)
+  ✓ R-N.md profiles       51 profiles (OLE format)
 
 Reviewer Panel:
   ✓ REVIEWERS.md          populated (12 reviewers, 7 panel members)

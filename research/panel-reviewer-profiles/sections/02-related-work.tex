@@ -8,6 +8,8 @@ Recent work on prompt caching \cite{anthropic2024caching} demonstrates significa
 
 Persona-based prompting has been explored for creative writing \cite{dang2023personas}, dialogue systems \cite{zhang2018personas}, and evaluation \cite{park2023generative}. However, these approaches typically embed persona descriptions directly in prompts without systematic reuse strategies. We extend this work by treating personas as persistent, versionable artifacts with structured schemas.
 
+\textbf{Comparison to DSPy}: Omar Khattab's DSPy framework \cite{khattab2023dspy} treats prompts as modular, optimizable programs with typed signatures. Our profile system shares this philosophy (modular persona abstractions with formal schemas) but optimizes for token efficiency rather than task performance. DSPy's automatic optimization could complement our approach: learn optimal profile field selection to maximize consistency per token (Section~\ref{sec:future-work}).
+
 \subsection{Design Patterns for AI Workflows}
 
 Craft plugin's discipline system demonstrates the viability of persistent role profiles for AI-assisted development workflows \cite{internal2025craft}. Our work adapts this pattern to academic review simulation, validating generalizability across domains requiring repeated expert persona invocation.

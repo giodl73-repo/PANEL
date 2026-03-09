@@ -46,3 +46,10 @@ waves:
     directory: 260204+sagan-explorer+probe-integration
     created: 2026-02-04
     completed: 2026-02-06
+  - order: 7
+    slug: reviewer-profiles
+    uuid: 0db0c43f
+    status: in-progress
+    directory: 260215+galileo-observer+reviewer-profiles
+    created: 2026-02-15
+    completed: null

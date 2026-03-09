@@ -168,8 +168,10 @@ After upgrading, run `panel:review` again to continue lifecycle with new expecta
 
 ### panel → synthesis
 - For each reviewer, load their profile if not already cached
-- Generate `reviews/REVIEW-{NAME}.md` using templates/review-template.md with full profile context
-- Profile context includes: research background, key publications, evaluation lens, review criteria, characteristic concerns, voice/tone
+- Build context string using `buildReviewerContext(profile)` from shared/reviewer-profile-loader.md
+  - OLE profiles: renders OLE_PREAMBLE + Orientation + Review Lens (Verify/Simplify) + Expertise — the two-face structure is explicit so the model interprets self vs receiver fields correctly
+  - Legacy profiles: uses raw markdown body as-is
+- Generate `reviews/REVIEW-{NAME}.md` using templates/review-template.md with the context string injected as the reviewer persona
 - Each review includes: overall assessment, score (1-4), major issues, minor issues, recommendations
 - Gate: 5+ review files exist
 

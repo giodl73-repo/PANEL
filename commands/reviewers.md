@@ -34,15 +34,26 @@ Browse, search, and filter the expert reviewer database.
 
 If `--detailed` flag provided:
 - Load profiles via shared/reviewer-profile-loader.md for each filtered reviewer
-- Show 2-3 sentence research background summary
-- Include 2-3 key publications
-- Note profile existence status (✓ profile | ✗ database only)
+- Show archetype badge and orientation.frame (for OLE profiles)
+- Show 2-3 sentence research background summary (for legacy profiles)
+- Note profile format (OLE | legacy | database only)
 
 ### Show Mode (`show <name>`)
 
-1. **Resolve name**: Convert to slug (e.g., "Percy Liang" → "percy-liang")
+1. **Resolve name**: Convert to R-N ID or slug (e.g., "Percy Liang" → "R-1", or legacy "percy-liang")
 2. **Load profile**: Use loadReviewerProfile() from shared/reviewer-profile-loader.md
-3. **Display full profile**:
+3. **Display profile** (format-aware):
+
+   **OLE format** (`profile.format === 'ole'`):
+   - Archetype badge (structural / craft / experiential)
+   - Orientation: frame (worldview) and serves (audience)
+   - Lens: verify questions (numbered checklist) and simplify principles
+   - Expertise: depth areas and relevance statement
+   - Collaborates with: linked reviewer R-N IDs
+   - Key Question (from markdown body)
+   - Venue Affinity + Paper Type Fit (from markdown body)
+
+   **Legacy format** (`profile.format === 'legacy'`):
    - Research background (2-3 paragraphs)
    - Key publications (3-5 papers)
    - Evaluation lens (characteristic questions, focus areas)
@@ -50,7 +61,8 @@ If `--detailed` flag provided:
    - Characteristic concerns (common issues they raise)
    - Voice & tone (writing style descriptors)
    - AI Simulation Disclosure footer
-4. **Show metadata**: Profile version, last updated, word count
+
+4. **Show metadata**: Profile format (OLE/legacy), version, word count
 5. **Cross-reference**: Papers where this reviewer is assigned
 
 ### Edit Mode (`edit <name>`)

@@ -1,10 +1,10 @@
 # Reviewer Profile Loader
 
-Utility for loading reviewer profiles with three-tier resolution chain and session-level caching.
+Utility for loading reviewer profiles with five-tier resolution chain and session-level caching. Supports both OLE (Orientation/Lens/Expertise) frontmatter format and legacy 4.0 markdown format.
 
 ## Overview
 
-Loads persistent reviewer profiles from `context/panel/reviewers/profiles/` with fallback to REVIEWER-DATABASE.md. Implements session-level caching to reduce file I/O and support reuse across review rounds.
+Loads persistent reviewer profiles from `context/panel/reviewers/profiles/` with fallback to REVIEWER-DATABASE.md. Supports the OLE frontmatter format (Spec 93) as the primary profile format, with transparent backward compatibility for legacy 4.0 profiles. Implements session-level caching to reduce file I/O and support reuse across review rounds.
 
 ## Architecture
 
@@ -42,43 +42,53 @@ Load a reviewer profile with resolution chain and caching.
 **Returns**: Profile object with structure:
 ```javascript
 {
-    // Metadata
-    format_version: "4.0",
+    // === Metadata ===
+    format: "ole",               // "ole" or "legacy" — indicates source format
     name: "Percy Liang",
-    affiliation: "Stanford University",
-    category: "ML Research",
-    keywords: ["evaluation", "benchmarks", "holistic", "transparency"],
+    affiliation: "Stanford",
+    category: "ML Research / Learning",
     version: "1.0",
-    updated: "2026-02-15",
 
-    // Content sections
-    background: "Professor of Computer Science...",
-    publications: [
-        { title: "HELM", year: 2022, description: "..." },
-        // ... 3-5 more
-    ],
-    evaluation_lens: {
-        primary_question: "How comprehensively was this evaluated?",
-        bullets: [
-            "Baseline expectations: Strong baselines...",
-            // ... 4-6 more
+    // === OLE Fields (primary, present for OLE profiles) ===
+    archetype: "craft",          // structural | craft | experiential
+    orientation: {
+        frame: "Reads every claim through the lens of empirical evaluation...",
+        serves: "Authors who need rigorous evaluation methodology..."
+    },
+    lens: {
+        verify: [
+            "Is the evaluation methodology clearly described and reproducible?",
+            // ... 5-7 questions
+        ],
+        simplify: [
+            "Remove benchmarks that don't directly test the stated contribution",
+            // ... 3-5 principles
         ]
     },
-    criteria: [
-        "Comprehensive evaluation across scenarios",
-        // ... 5-7 more
-    ],
-    concerns: [
-        "Narrow evaluation missing edge cases",
-        // ... 5-7 more
-    ],
-    voice: [
-        "Systematic and methodical",
-        // ... 5 total
-    ],
-    disclosure: "AI Simulation Disclosure: This profile..."
+    expertise: {
+        depth: "HELM benchmarks, holistic evaluation frameworks...",
+        relevance: "Ensures every empirical claim stands on solid methodological ground..."
+    },
+    collaborates_with: ["R-32", "R-33", "R-34", "R-35"],
+
+    // === Derived Fields (computed from OLE for backward compat) ===
+    keywords: ["evaluation", "benchmarks", "holistic", "transparency"],
+    evaluation_lens: {
+        primary_question: "Is the evaluation methodology clearly described and reproducible?",
+        bullets: ["Is the evaluation methodology...", ...]  // from lens.verify
+    },
+    criteria: [...],             // lens.verify items
+    concerns: [...],             // lens.simplify items
+    background: "...",           // from expertise.depth
+    voice: [],                   // empty for OLE (voice is not modeled in OLE)
+    disclosure: "AI Simulation Disclosure: ...",
+
+    // === Raw markdown (for full-context injection) ===
+    markdown: "# R-1: Percy Liang\n..."
 }
 ```
+
+**OLE format detection**: If frontmatter contains `orientation` and `lens` keys, the profile is parsed as OLE. Otherwise falls back to legacy 4.0 parsing.
 
 **Throws**: Error if profile not found and fallback disabled
 
@@ -153,7 +163,7 @@ async function loadReviewerProfile(name, options = {}) {
 
     // Resolve paths based on project config
     const projectConfig = loadProjectConfig();
-    const panelPath = projectConfig.panelPath || 'context/panel';
+    const reviewersPath = projectConfig.reviewersPath || 'context/panel/reviewers';
     const researchPath = projectConfig.researchPath || 'research';
 
     // Normalize name for cache key
@@ -168,12 +178,12 @@ async function loadReviewerProfile(name, options = {}) {
 
     // Load index if not already loaded
     if (!reviewerIndex) {
-        reviewerIndex = await loadReviewerIndex(panelPath);
+        reviewerIndex = await loadReviewerIndex(reviewersPath);
     }
 
     // Tier 2: R-N ID lookup (direct R-1, R-2, etc.)
     if (/^R-\d+$/.test(name)) {
-        const rnPath = `${panelPath}/reviewers/profiles/${name}.md`;
+        const rnPath = `${reviewersPath}/profiles/${name}.md`;
         try {
             const content = await Read(rnPath);
             const profile = parseProfile(content);
@@ -187,7 +197,7 @@ async function loadReviewerProfile(name, options = {}) {
     // Tier 3: Name lookup via index → R-N file
     const rnId = findReviewerIdByName(name, reviewerIndex);
     if (rnId) {
-        const rnPath = `${panelPath}/reviewers/profiles/${rnId}.md`;
+        const rnPath = `${reviewersPath}/profiles/${rnId}.md`;
         try {
             const content = await Read(rnPath);
             const profile = parseProfile(content);
@@ -200,7 +210,7 @@ async function loadReviewerProfile(name, options = {}) {
 
     // Tier 4: Slug match (legacy, for backward compatibility)
     const slug = slugify(name);
-    const slugPath = `${panelPath}/reviewers/profiles/${slug}.md`;
+    const slugPath = `${reviewersPath}/profiles/${slug}.md`;
     try {
         const content = await Read(slugPath);
         const profile = parseProfile(content);
@@ -227,9 +237,9 @@ async function loadReviewerProfile(name, options = {}) {
 /**
  * Load reviewer index (_index.yaml)
  */
-async function loadReviewerIndex(panelPath) {
+async function loadReviewerIndex(reviewersPath) {
     try {
-        const indexPath = `${panelPath}/reviewers/_index.yaml`;
+        const indexPath = `${reviewersPath}/_index.yaml`;
         const content = await Read(indexPath);
         return parseYAML(content);
     } catch (e) {
@@ -262,7 +272,8 @@ function findReviewerIdByName(name, index) {
 }
 
 /**
- * Parse profile markdown into structured object
+ * Parse profile markdown into structured object.
+ * Auto-detects OLE format (orientation/lens/expertise frontmatter) vs legacy 4.0 format.
  */
 function parseProfile(content) {
     // Split frontmatter and markdown
@@ -271,34 +282,140 @@ function parseProfile(content) {
         throw new Error('Invalid profile format: missing frontmatter');
     }
 
-    // Parse YAML frontmatter
-    const frontmatter = parseYAML(parts[1]);
+    // Parse YAML frontmatter (full nested parse)
+    const frontmatter = parseNestedYAML(parts[1]);
 
-    // Parse markdown sections
+    // Parse markdown body
     const markdown = parts.slice(2).join('---\n');
+
+    // Detect format: OLE has orientation + lens keys in frontmatter
+    if (frontmatter.orientation && frontmatter.lens) {
+        return parseOLEProfile(frontmatter, markdown);
+    }
+
+    // Legacy 4.0 format fallback
+    return parseLegacyProfile(frontmatter, markdown);
+}
+
+/**
+ * Parse OLE-format profile (Spec 93 frontmatter)
+ */
+function parseOLEProfile(frontmatter, markdown) {
+    const orientation = frontmatter.orientation || {};
+    const lens = frontmatter.lens || {};
+    const expertise = frontmatter.expertise || {};
+    const verifyItems = lens.verify || [];
+    const simplifyItems = lens.simplify || [];
+
+    // Extract category from markdown body (## line after # heading)
+    const categoryMatch = markdown.match(/\*\*Category\*\*:\s*(.+)/);
+    const category = categoryMatch ? categoryMatch[1].trim() : '';
+
+    // Extract affiliation from markdown body
+    const affiliationMatch = markdown.match(/\*\*Affiliation\*\*:\s*(.+)/);
+    const affiliation = affiliationMatch ? affiliationMatch[1].trim() : '';
+
+    // Extract key question from markdown body
+    const keyQuestionMatch = markdown.match(/## Key Question\n+(.+)/);
+    const keyQuestion = keyQuestionMatch ? keyQuestionMatch[1].trim() : verifyItems[0] || '';
+
+    // Derive keywords from expertise.depth (split comma-separated terms)
+    const keywords = expertise.depth
+        ? expertise.depth.split(',').map(k => k.trim().toLowerCase().replace(/\s+/g, '-')).slice(0, 6)
+        : [];
+
+    return {
+        // Metadata
+        format: 'ole',
+        name: frontmatter.name || '',
+        affiliation: affiliation,
+        category: category,
+        version: frontmatter.version || '1.0',
+
+        // OLE fields (primary)
+        archetype: frontmatter.archetype || 'structural',
+        orientation: {
+            frame: orientation.frame || '',
+            serves: orientation.serves || ''
+        },
+        lens: {
+            verify: verifyItems,
+            simplify: simplifyItems
+        },
+        expertise: {
+            depth: expertise.depth || '',
+            relevance: expertise.relevance || ''
+        },
+        collaborates_with: frontmatter.collaborates_with || [],
+        scope: frontmatter.scope || 'local',
+        artifacts: frontmatter.artifacts || [],
+        workflow: frontmatter.workflow || [],
+
+        // Derived fields (backward compat with legacy consumers)
+        keywords: keywords,
+        evaluation_lens: {
+            primary_question: keyQuestion,
+            bullets: verifyItems
+        },
+        criteria: verifyItems,
+        concerns: simplifyItems,
+        background: expertise.depth || '',
+        publications: [], // Not modeled in OLE
+        voice: [],        // Not modeled in OLE
+        disclosure: `AI Simulation Disclosure: This profile supports AI simulation of this reviewer's perspective based on their published work and known research priorities.`,
+
+        // Raw markdown
+        markdown: markdown
+    };
+}
+
+/**
+ * Parse legacy 4.0 format profile (backward compatibility)
+ */
+function parseLegacyProfile(frontmatter, markdown) {
     const sections = extractSections(markdown);
 
-    // Build profile object
     return {
-        // Metadata from frontmatter
+        // Metadata
+        format: 'legacy',
         format_version: frontmatter.format_version,
-        name: frontmatter.name,
-        affiliation: frontmatter.affiliation,
-        category: frontmatter.category,
-        keywords: frontmatter.keywords,
-        version: frontmatter.version,
+        name: frontmatter.name || '',
+        affiliation: frontmatter.affiliation || '',
+        category: frontmatter.category || '',
+        keywords: frontmatter.keywords || [],
+        version: frontmatter.version || '1.0',
         updated: frontmatter.updated,
 
-        // Content from markdown
-        background: sections.background || '',
-        publications: parsePublications(sections.publications || ''),
-        evaluation_lens: parseEvaluationLens(sections.evaluation_lens || ''),
-        criteria: parseCriteria(sections.criteria || ''),
-        concerns: parseConcerns(sections.concerns || ''),
-        voice: parseVoice(sections.voice || ''),
-        disclosure: sections.disclosure || '',
+        // OLE fields (synthesized from legacy for uniform access)
+        archetype: null,
+        orientation: {
+            frame: '',
+            serves: ''
+        },
+        lens: {
+            // slugify("Review Criteria") -> "review-criteria"
+            verify: parseCriteria(sections['review-criteria'] || ''),
+            // slugify("Characteristic Concerns") -> "characteristic-concerns"
+            simplify: parseConcerns(sections['characteristic-concerns'] || '')
+        },
+        expertise: {
+            // slugify("Research Background") -> "research-background"
+            depth: sections['research-background'] || '',
+            relevance: ''
+        },
+        collaborates_with: [],
 
-        // Store raw markdown for full-context injection
+        // Legacy fields (original parsing)
+        // Keys match slugify() output of "## Heading" -> "heading-slug"
+        background: sections['research-background'] || '',
+        publications: parsePublications(sections['key-publications'] || ''),
+        evaluation_lens: parseEvaluationLens(sections['evaluation-lens'] || ''),
+        criteria: parseCriteria(sections['review-criteria'] || ''),
+        concerns: parseConcerns(sections['characteristic-concerns'] || ''),
+        voice: parseVoice(sections['voice-tone'] || ''),
+        disclosure: sections['ai-simulation-disclosure'] || '',
+
+        // Raw markdown
         markdown: markdown
     };
 }
@@ -482,6 +599,77 @@ function convertDatabaseToProfile(section) {
 }
 
 /**
+ * OLE_PREAMBLE — canonical text explaining the self/receiver two-face structure.
+ * Source: craftworks/craft-cli/src/astro/types/roles.ts (Paper 50 F-07 + F-11).
+ * Must be prepended to every OLE profile rendered for AI consumption so the model
+ * correctly interprets the self-directed vs receiver-directed sub-fields.
+ */
+const OLE_PREAMBLE =
+    'Each tier of your role has two faces. ' +
+    'The first sub-field is self-directed: how YOU see, what YOU check, what YOU know. ' +
+    'The second sub-field is receiver-directed: who you SERVE, what you simplify FOR THEM, ' +
+    'why your knowledge matters TO THEM. Both faces are required — ' +
+    'the self-directed face alone produces an incomplete role identity.';
+
+/**
+ * Build a reviewer context string for injection into a review prompt.
+ * For OLE profiles: renders structured fields with the OLE preamble prepended.
+ * For legacy profiles: returns the raw markdown body.
+ *
+ * @param {object} profile - Parsed profile object from loadReviewerProfile()
+ * @returns {string} Context string ready for prompt injection
+ */
+function buildReviewerContext(profile) {
+    if (profile.format !== 'ole') {
+        // Legacy format — raw markdown is the full context
+        return profile.markdown || '';
+    }
+
+    const lines = [];
+
+    // OLE preamble — explains the self/receiver structure to the model
+    lines.push(OLE_PREAMBLE);
+    lines.push('');
+
+    lines.push(`# ${profile.name}`);
+    lines.push('');
+
+    // Orientation
+    lines.push('## Orientation');
+    lines.push(`**Frame** *(self)*: ${profile.orientation.frame}`);
+    lines.push('');
+    lines.push(`**Serves** *(receiver)*: ${profile.orientation.serves}`);
+    lines.push('');
+
+    // Lens
+    lines.push('## Review Lens');
+    lines.push('');
+    lines.push('### Verify *(self: presence/correctness checks)*');
+    for (let i = 0; i < profile.lens.verify.length; i++) {
+        lines.push(`${i + 1}. ${profile.lens.verify[i]}`);
+    }
+    lines.push('');
+    lines.push('### Simplify *(receiver: necessity/redundancy checks)*');
+    for (let i = 0; i < profile.lens.simplify.length; i++) {
+        lines.push(`${i + 1}. ${profile.lens.simplify[i]}`);
+    }
+    lines.push('');
+
+    // Expertise
+    lines.push('## Expertise');
+    lines.push(`**Depth** *(self)*: ${profile.expertise.depth}`);
+    lines.push('');
+    lines.push(`**Relevance** *(receiver)*: ${profile.expertise.relevance}`);
+    lines.push('');
+
+    // Disclosure footer
+    lines.push('---');
+    lines.push(profile.disclosure);
+
+    return lines.join('\n');
+}
+
+/**
  * Slugify name for file matching
  */
 function slugify(str) {
@@ -492,36 +680,159 @@ function slugify(str) {
 }
 
 /**
- * Parse simple YAML (subset for our use case)
+ * Parse nested YAML frontmatter.
+ * Handles: scalars, quoted strings, inline arrays, block arrays (- items),
+ * nested objects (indented keys), and nested arrays of objects.
  */
-function parseYAML(text) {
-    const result = {};
+function parseNestedYAML(text) {
     const lines = text.split('\n');
+    return parseYAMLBlock(lines, 0, 0).value;
+}
 
-    for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.startsWith('#')) continue;
+function parseYAMLBlock(lines, startIndex, baseIndent) {
+    const result = {};
+    let i = startIndex;
 
+    while (i < lines.length) {
+        const line = lines[i];
+        const trimmed = line.trimStart();
+
+        // Skip blank lines and comments
+        if (!trimmed || trimmed.startsWith('#')) { i++; continue; }
+
+        // Calculate indent
+        const indent = line.length - line.trimStart().length;
+
+        // If dedented past our level, we're done
+        if (indent < baseIndent) break;
+
+        // Array item at this level (- key: value or - "string")
+        if (trimmed.startsWith('- ')) {
+            // This is handled by the parent — break so caller can process
+            break;
+        }
+
+        // Key: value pair
         const colonIndex = trimmed.indexOf(':');
-        if (colonIndex === -1) continue;
+        if (colonIndex === -1) { i++; continue; }
 
         const key = trimmed.substring(0, colonIndex).trim();
-        let value = trimmed.substring(colonIndex + 1).trim();
+        const rawValue = trimmed.substring(colonIndex + 1).trim();
 
-        // Handle quoted strings
-        if (value.startsWith('"') && value.endsWith('"')) {
-            value = value.slice(1, -1);
+        if (rawValue === '' || rawValue === '|' || rawValue === '>') {
+            // Check next line: could be nested object, block array, or block scalar
+            const nextNonEmpty = findNextNonEmpty(lines, i + 1);
+            if (nextNonEmpty !== -1) {
+                const nextTrimmed = lines[nextNonEmpty].trimStart();
+                const nextIndent = lines[nextNonEmpty].length - nextTrimmed.length;
+
+                if (nextIndent > indent && nextTrimmed.startsWith('- ')) {
+                    // Block array
+                    const arr = parseYAMLArray(lines, nextNonEmpty, nextIndent);
+                    result[key] = arr.value;
+                    i = arr.nextIndex;
+                    continue;
+                } else if (nextIndent > indent) {
+                    // Nested object
+                    const nested = parseYAMLBlock(lines, nextNonEmpty, nextIndent);
+                    result[key] = nested.value;
+                    i = nested.nextIndex;
+                    continue;
+                }
+            }
+            result[key] = '';
+            i++;
+        } else {
+            // Inline value
+            result[key] = parseYAMLValue(rawValue);
+            i++;
         }
-
-        // Handle arrays (simplified)
-        if (value.startsWith('[') && value.endsWith(']')) {
-            value = value.slice(1, -1).split(',').map(v => v.trim().replace(/"/g, ''));
-        }
-
-        result[key] = value;
     }
 
-    return result;
+    return { value: result, nextIndex: i };
+}
+
+function parseYAMLArray(lines, startIndex, baseIndent) {
+    const result = [];
+    let i = startIndex;
+
+    while (i < lines.length) {
+        const line = lines[i];
+        const trimmed = line.trimStart();
+        if (!trimmed || trimmed.startsWith('#')) { i++; continue; }
+
+        const indent = line.length - trimmed.length;
+        if (indent < baseIndent) break;
+        if (!trimmed.startsWith('- ')) break;
+
+        const itemContent = trimmed.substring(2).trim();
+
+        // Check if item has a key (object item) or is a plain value
+        const colonIndex = itemContent.indexOf(':');
+        if (colonIndex !== -1 && !itemContent.startsWith('"')) {
+            // Object item — parse as mini-block starting with this key
+            const objKey = itemContent.substring(0, colonIndex).trim();
+            const objVal = itemContent.substring(colonIndex + 1).trim();
+            const obj = {};
+            obj[objKey] = parseYAMLValue(objVal);
+
+            // Check for continuation lines at deeper indent
+            const nextNonEmpty = findNextNonEmpty(lines, i + 1);
+            if (nextNonEmpty !== -1) {
+                const nextIndent = lines[nextNonEmpty].length - lines[nextNonEmpty].trimStart().length;
+                if (nextIndent > indent + 2) {
+                    const nested = parseYAMLBlock(lines, nextNonEmpty, nextIndent);
+                    Object.assign(obj, nested.value);
+                    i = nested.nextIndex;
+                    result.push(obj);
+                    continue;
+                }
+            }
+            result.push(obj);
+        } else {
+            // Plain value
+            result.push(parseYAMLValue(itemContent));
+        }
+        i++;
+    }
+
+    return { value: result, nextIndex: i };
+}
+
+function parseYAMLValue(raw) {
+    if (!raw) return '';
+    // Quoted string
+    if ((raw.startsWith('"') && raw.endsWith('"')) || (raw.startsWith("'") && raw.endsWith("'"))) {
+        return raw.slice(1, -1);
+    }
+    // Inline array [a, b, c]
+    if (raw.startsWith('[') && raw.endsWith(']')) {
+        return raw.slice(1, -1).split(',').map(v => {
+            const t = v.trim();
+            return (t.startsWith('"') && t.endsWith('"')) ? t.slice(1, -1) : t;
+        });
+    }
+    // Boolean
+    if (raw === 'true') return true;
+    if (raw === 'false') return false;
+    // Number
+    if (/^\d+$/.test(raw)) return parseInt(raw);
+    return raw;
+}
+
+function findNextNonEmpty(lines, startIndex) {
+    for (let i = startIndex; i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        if (trimmed && !trimmed.startsWith('#')) return i;
+    }
+    return -1;
+}
+
+/**
+ * Parse simple YAML (flat key-value only, kept for index parsing)
+ */
+function parseYAML(text) {
+    return parseNestedYAML(text);
 }
 
 /**
@@ -774,8 +1085,24 @@ For existing installations using REVIEWER-DATABASE.md:
 3. **Backward compatibility**: Database format supported indefinitely
 4. **Migration path**: Generate profiles incrementally (see E1: Generate Reviewer Profiles)
 
+## Migration from Legacy to OLE
+
+The loader transparently supports both formats:
+
+1. **Auto-detection**: `parseProfile()` checks for `orientation` and `lens` keys in frontmatter
+2. **OLE profiles**: Parsed via `parseOLEProfile()` — OLE fields are primary, legacy fields derived
+3. **Legacy profiles**: Parsed via `parseLegacyProfile()` — legacy fields are primary, OLE fields synthesized
+4. **Uniform access**: Both formats produce the same profile object shape, so consumers don't need to know the source format
+5. **OLE-to-legacy field mapping**:
+   - `orientation.frame` → provides context for `evaluation_lens.primary_question`
+   - `lens.verify` → `criteria` (review checklist items)
+   - `lens.simplify` → `concerns` (characteristic issues)
+   - `expertise.depth` → `background` + `keywords` (derived)
+   - `orientation.serves` → informs `voice` context
+6. **Role installation**: OLE profiles can also be installed to `.claude/roles/panel-reviewer/` for use with Claude Code role system
+
 ---
 
-**Version**: 1.0
-**Last Updated**: 2026-02-15
+**Version**: 2.0
+**Last Updated**: 2026-03-01
 **Dependencies**: project-config.md

@@ -64,9 +64,11 @@ Load the active project configuration.
   projectName: string,
   researchPath: string,
   panelPath: string,
+  reviewersPath: string, // Always context/panel/reviewers (shared across projects)
   clientSlug: string,
   description: string,
-  configPath: string  // Path to .claude/panel.json
+  configPath: string,    // Path to .claude/panel.json
+  pluginRoot: string     // Plugin installation path (CLAUDE_PLUGIN_ROOT)
 }
 ```
 
@@ -87,6 +89,13 @@ function loadProjectConfig() {
   const defaultProject = config.default || 'panel';
 
   // Check if projects object exists (multi-project mode)
+  // Resolve pluginRoot: cached value in config takes priority, then env var
+  const pluginRoot = config.pluginRoot || process.env.CLAUDE_PLUGIN_ROOT || null;
+
+  // reviewersPath is always the shared reviewers directory, not per-project
+  // panelPath might be context/panel/panel-dev but reviewers live at context/panel/reviewers
+  const reviewersPath = config.reviewersPath || 'context/panel/reviewers';
+
   if (config.projects && config.projects[defaultProject]) {
     const project = config.projects[defaultProject];
 
@@ -94,9 +103,11 @@ function loadProjectConfig() {
       projectName: project.projectName || defaultProject,
       researchPath: project.researchPath || 'research',
       panelPath: project.panelPath || `context/panel/${defaultProject}`,
+      reviewersPath,
       clientSlug: project.clientSlug || defaultProject,
       description: project.description || '',
-      configPath
+      configPath,
+      pluginRoot
     };
   }
 
@@ -105,9 +116,11 @@ function loadProjectConfig() {
     projectName: config.projectName || 'panel',
     researchPath: 'research',
     panelPath: `context/panel/${defaultProject}`,
+    reviewersPath,
     clientSlug: config.clientSlug || 'panel-dev',
     description: '',
-    configPath
+    configPath,
+    pluginRoot
   };
 }
 ```

@@ -34,7 +34,12 @@
       "Bash(do sed -i 's/panel:paper/panel:review/g; s/panel:panel/panel:convene/g' \"$file\")",
       "Bash(wc:*)",
       "Bash(git mv:*)",
-      "Skill(waves:theme)"
+      "Skill(waves:theme)",
+      "Bash(\"research/panel-reviewer-profiles/reviews/SYNTHESIS.md\":*)",
+      "Bash(/tmp/research-consolidation.sh:*)",
+      "Bash(/tmp/research-consolidation.sh)",
+      "Bash(/tmp/schema-cleanup.sh:*)",
+      "Bash(/tmp/schema-cleanup.sh)"
     ]
   }
 }

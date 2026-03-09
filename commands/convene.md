@@ -81,8 +81,9 @@ Use `panel:convene --status` to check readiness.
    - Store profile references in panel state (not full content)
 4. **Generate assessments**: Each panel member reviews all ready papers:
    - Read individual paper reviews and syntheses
-   - Use full profile context for each panel member
-   - Profile context includes: research background, publications, evaluation lens, criteria, concerns, voice
+   - Build context string using `buildReviewerContext(profile)` from shared/reviewer-profile-loader.md
+     - OLE profiles: OLE_PREAMBLE + Orientation + Review Lens (Verify/Simplify) + Expertise
+     - Legacy profiles: raw markdown body
    - Assess each paper on the 10-point scale (config/scoring.yaml)
    - Identify cross-paper themes and patterns
    - Rank papers within the module

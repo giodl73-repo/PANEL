@@ -49,8 +49,8 @@ themes:
       # Era 2: Classical Scientists (available)
       - deity: galileo
         epithet: observer
-        wave: null
-        used: false
+        wave: "260215+galileo-observer+reviewer-profiles"
+        used: true
       - deity: newton
         epithet: lawgiver
         wave: null
