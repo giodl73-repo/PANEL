@@ -64,11 +64,12 @@ Load the active project configuration.
   projectName: string,
   researchPath: string,
   panelPath: string,
-  reviewersPath: string, // Always context/panel/reviewers (shared across projects)
+  pluginReviewersPath: string, // ${pluginRoot}/.craft/roles/panel-reviewer (source of truth)
+  localReviewersPath: string,  // .craft/roles/panel-reviewer (user extensions only)
   clientSlug: string,
   description: string,
-  configPath: string,    // Path to .claude/panel.json
-  pluginRoot: string     // Plugin installation path (CLAUDE_PLUGIN_ROOT)
+  configPath: string,          // Path to .claude/panel.json
+  pluginRoot: string           // Plugin installation path (CLAUDE_PLUGIN_ROOT)
 }
 ```
 
@@ -92,9 +93,10 @@ function loadProjectConfig() {
   // Resolve pluginRoot: cached value in config takes priority, then env var
   const pluginRoot = config.pluginRoot || process.env.CLAUDE_PLUGIN_ROOT || null;
 
-  // reviewersPath is always the shared reviewers directory, not per-project
-  // panelPath might be context/panel/panel-dev but reviewers live at context/panel/reviewers
-  const reviewersPath = config.reviewersPath || 'context/panel/reviewers';
+  // Plugin's .craft/roles/panel-reviewer is the authoritative source (read via pluginRoot).
+  // Local .craft/roles/panel-reviewer is optional — only for user extensions.
+  const pluginReviewersPath = pluginRoot ? `${pluginRoot}/.craft/roles/panel-reviewer` : null;
+  const localReviewersPath = '.craft/roles/panel-reviewer';
 
   if (config.projects && config.projects[defaultProject]) {
     const project = config.projects[defaultProject];
@@ -103,7 +105,8 @@ function loadProjectConfig() {
       projectName: project.projectName || defaultProject,
       researchPath: project.researchPath || 'research',
       panelPath: project.panelPath || `context/panel/${defaultProject}`,
-      reviewersPath,
+      pluginReviewersPath,
+      localReviewersPath,
       clientSlug: project.clientSlug || defaultProject,
       description: project.description || '',
       configPath,
@@ -116,7 +119,8 @@ function loadProjectConfig() {
     projectName: config.projectName || 'panel',
     researchPath: 'research',
     panelPath: `context/panel/${defaultProject}`,
-    reviewersPath,
+    pluginReviewersPath,
+    localReviewersPath,
     clientSlug: config.clientSlug || 'panel-dev',
     description: '',
     configPath,

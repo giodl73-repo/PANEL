@@ -570,48 +570,23 @@ options:
 
 **If no waves detected or user declines**: skip silently. Note in report.
 
-### Step 6b: Install OLE Reviewer Profiles
+### Step 6b: Verify reviewer profiles accessible
 
-Two destinations for reviewer data, both sourced from the plugin installation:
-
-**A. Copy reviewer registry + profiles to project context (for runtime use)**
-
-The profile loader reads from `context/panel/reviewers/` at runtime — this must exist in the user's project.
+The profile loader reads directly from `${pluginRoot}/.craft/roles/panel-reviewer/` — no file copying needed. Users who want to add custom reviewer profiles create them in their project's `.craft/roles/panel-reviewer/` directory.
 
 ```javascript
-const projectReviewersDir = path.join(targetDir, 'context/panel/reviewers');
-const pluginReviewersDir = path.join(pluginRoot, 'context/panel/reviewers');
-
-// Create destination if missing
-mkdir -p "${projectReviewersDir}";
-
-// Copy registry index and all R-N profiles from plugin → project
-cp "${pluginReviewersDir}/_index.yaml" "${projectReviewersDir}/_index.yaml";
-cp -r "${pluginReviewersDir}/profiles/" "${projectReviewersDir}/profiles/";
+// Verify plugin reviewer profiles are accessible via pluginRoot
+const pluginRolesPath = `${pluginRoot}/.craft/roles/panel-reviewer`;
+const indexExists = await exists(`${pluginRolesPath}/_index.yaml`);
+if (!indexExists) {
+    msg(`⚠ Reviewer profiles not found at ${pluginRolesPath}`, 'warning');
+    msg(`  Check CLAUDE_PLUGIN_ROOT is set correctly`, 'item');
+} else {
+    const profileCount = glob(`${pluginRolesPath}/R-*.md`).length;
+    msg(`Reviewer profiles: ${profileCount} profiles at ${pluginRolesPath}`, 'item');
+    msg(`Extensions: add custom profiles to .craft/roles/panel-reviewer/`, 'item');
+}
 ```
-
-**B. Install OLE profiles to `.claude/roles/panel-reviewer/` (for Claude Code role system)**
-
-```javascript
-const rolesDir = path.join(targetDir, '.claude/roles/panel-reviewer');
-
-// Create roles directory if missing
-mkdir -p "${rolesDir}";
-
-// Copy ROLE.md index (from plugin templates)
-cp "${pluginRoot}/templates/panel-reviewer-ROLE.md" "${rolesDir}/ROLE.md";
-
-// Copy all R-N.md OLE profiles from plugin (not from project — source of truth is the plugin)
-cp "${pluginRoot}/context/panel/reviewers/profiles/"R-*.md "${rolesDir}/";
-```
-
-```javascript
-const profileCount = glob(`${rolesDir}/R-*.md`).length;
-msg(`Installed ${profileCount} OLE reviewer profiles to .claude/roles/panel-reviewer/`, 'item');
-msg(`Copied reviewer registry to context/panel/reviewers/`, 'item');
-```
-
-**Skip condition**: If `.claude/roles/panel-reviewer/ROLE.md` already exists and has the same version, skip. If outdated, offer upgrade.
 
 ### Step 7: Assemble Module Reviewer Subset
 
@@ -753,11 +728,12 @@ Papers Imported from Waves:
   ✓ panel-discipline-code-generation     MLSys 2026     (8 pulses)
 ```
 
-**OLE Reviewer Profiles** (from Step 6b):
+**Reviewer Profiles** (from Step 6b):
 ```
-OLE Reviewer Profiles:
-  ✓ .claude/roles/panel-reviewer/ROLE.md installed (index + panel guide)
-  ✓ 51 R-N.md profiles installed (OLE format, Spec 93)
+Reviewer Profiles:
+  ✓ ${pluginRoot}/.craft/roles/panel-reviewer/_index.yaml accessible
+  ✓ 51 R-N.md profiles accessible (OLE format, Spec 93)
+  — Extensions: .craft/roles/panel-reviewer/ (local, optional)
 ```
 
 **Reviewer panel** (if assembled in Step 7):
@@ -932,7 +908,7 @@ const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 - REVIEWER-DATABASE.md present
 - All papers have `_panel.yaml`
 - All papers have `REVISION-PLAN.md`
-- OLE profiles installed (`.claude/roles/panel-reviewer/` exists with R-N.md files)
+- Reviewer profiles accessible via `${pluginRoot}/.craft/roles/panel-reviewer/`
 - Lists all papers with stage, venue, and readiness status
 
 ### Check Output
@@ -953,9 +929,10 @@ Infrastructure (${researchDir}):
   ✓ references.bib        present (1200+ entries)
   ✓ Makefile              present
 
-OLE Profiles (.claude/roles/panel-reviewer/):
-  ✓ ROLE.md               present (panel-reviewer role index)
+Reviewer Profiles (${pluginRoot}/.craft/roles/panel-reviewer/):
+  ✓ _index.yaml           accessible (name → R-N registry)
   ✓ R-N.md profiles       51 profiles (OLE format)
+  — .craft/roles/panel-reviewer/   (local extensions, optional)
 
 Reviewer Panel:
   ✓ REVIEWERS.md          populated (12 reviewers, 7 panel members)

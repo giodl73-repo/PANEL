@@ -163,7 +163,9 @@ async function loadReviewerProfile(name, options = {}) {
 
     // Resolve paths based on project config
     const projectConfig = loadProjectConfig();
-    const reviewersPath = projectConfig.reviewersPath || 'context/panel/reviewers';
+    // Plugin is source of truth; local .craft/roles/panel-reviewer is extensions only
+    const pluginReviewersPath = projectConfig.pluginReviewersPath; // ${pluginRoot}/.craft/roles/panel-reviewer
+    const localReviewersPath = projectConfig.localReviewersPath || '.craft/roles/panel-reviewer';
     const researchPath = projectConfig.researchPath || 'research';
 
     // Normalize name for cache key
@@ -176,48 +178,50 @@ async function loadReviewerProfile(name, options = {}) {
     }
     cacheStats.misses++;
 
-    // Load index if not already loaded
+    // Load index if not already loaded (plugin index is authoritative)
     if (!reviewerIndex) {
-        reviewerIndex = await loadReviewerIndex(reviewersPath);
+        reviewerIndex = pluginReviewersPath
+            ? await loadReviewerIndex(pluginReviewersPath)
+            : await loadReviewerIndex(localReviewersPath);
+    }
+
+    // Helper: try reading a profile from plugin path, then local extension path
+    async function tryReadProfile(filename) {
+        if (pluginReviewersPath) {
+            try { return await Read(`${pluginReviewersPath}/${filename}`); } catch (e) {}
+        }
+        try { return await Read(`${localReviewersPath}/${filename}`); } catch (e) {}
+        return null;
     }
 
     // Tier 2: R-N ID lookup (direct R-1, R-2, etc.)
     if (/^R-\d+$/.test(name)) {
-        const rnPath = `${reviewersPath}/profiles/${name}.md`;
-        try {
-            const content = await Read(rnPath);
+        const content = await tryReadProfile(`${name}.md`);
+        if (content) {
             const profile = parseProfile(content);
             if (cache) profileCache.set(cacheKey, profile);
             return profile;
-        } catch (e) {
-            // Continue to next tier
         }
     }
 
     // Tier 3: Name lookup via index → R-N file
     const rnId = findReviewerIdByName(name, reviewerIndex);
     if (rnId) {
-        const rnPath = `${reviewersPath}/profiles/${rnId}.md`;
-        try {
-            const content = await Read(rnPath);
+        const content = await tryReadProfile(`${rnId}.md`);
+        if (content) {
             const profile = parseProfile(content);
             if (cache) profileCache.set(cacheKey, profile);
             return profile;
-        } catch (e) {
-            // Continue to next tier
         }
     }
 
     // Tier 4: Slug match (legacy, for backward compatibility)
     const slug = slugify(name);
-    const slugPath = `${reviewersPath}/profiles/${slug}.md`;
-    try {
-        const content = await Read(slugPath);
+    const content = await tryReadProfile(`${slug}.md`);
+    if (content) {
         const profile = parseProfile(content);
         if (cache) profileCache.set(cacheKey, profile);
         return profile;
-    } catch (e) {
-        // Continue to next tier
     }
 
     // Tier 5: Database fallback
@@ -237,9 +241,9 @@ async function loadReviewerProfile(name, options = {}) {
 /**
  * Load reviewer index (_index.yaml)
  */
-async function loadReviewerIndex(reviewersPath) {
+async function loadReviewerIndex(rolesPath) {
     try {
-        const indexPath = `${reviewersPath}/_index.yaml`;
+        const indexPath = `${rolesPath}/_index.yaml`;
         const content = await Read(indexPath);
         return parseYAML(content);
     } catch (e) {
