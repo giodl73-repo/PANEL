@@ -1,0 +1,109 @@
+id: l2-board-review-uses-profiles
+name: "panel:board --review loads OLE profiles for all 7 board members and injects context"
+tier: L2
+plugin: panel
+target: commands/board.md
+timeout: 90
+
+description: |
+  Regression test for two bugs:
+  1. board --review never loaded reviewer profiles (reviewer-profile-loader.md missing
+     from dependencies entirely). Board members assessed modules with no OLE context.
+  2. board --member same gap as convene --member.
+
+  Fix: board --review now runs loadReviewerProfile() + buildReviewerContext() for all
+  7 members before generating assessments. board --member does the same for one member.
+
+steps:
+  # Seed with a multi-module monorepo (2+ modules with completed panel reviews)
+  - action: prepare-board
+    modules:
+      - source: tests/fixtures/mock-monorepo/cookie-science
+        name: cookie-science
+      - source: tests/fixtures/mock-monorepo/oscar-trash-lab
+        name: oscar-trash-lab
+    description: "Two modules with completed REVIEW_PANEL.md — board prerequisites met"
+
+  - action: file-exists
+    path: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
+    description: "Pre-condition: cookie-science panel complete"
+
+  - action: file-exists
+    path: tests/fixtures/mock-monorepo/oscar-trash-lab/REVIEW_PANEL.md
+    description: "Pre-condition: oscar-trash-lab panel complete"
+
+  # ── Bug 1: board --review uses profiles ─────────────────────────────────
+  - action: invoke-skill
+    skill: "panel:board --review"
+    sandbox: true
+    store: board_result
+
+  - action: file-exists
+    path: REVIEW_BOARD.md
+    description: "REVIEW_BOARD.md produced"
+
+  - action: read-file
+    path: REVIEW_BOARD.md
+    store: board_review
+
+  # OLE preamble present in board review (confirms buildReviewerContext() called)
+  - action: assert-contains
+    input: $board_review
+    expected: "Each tier of your role has two faces"
+    description: "OLE preamble in REVIEW_BOARD.md — confirms profiles loaded for --review"
+
+  - action: assert-contains
+    input: $board_review
+    expected: "B1"
+    description: "B1 revision items generated"
+
+  - action: assert-contains
+    input: $board_review
+    expected: "AI Simulation"
+    description: "AI disclosure present"
+
+  # Round archived correctly
+  - action: file-exists
+    path: board-reviews/round-1/REVIEW_BOARD.md
+    description: "Round 1 snapshot archived"
+
+  - action: file-exists
+    path: board-reviews/round-1/MANIFEST.md
+    description: "Round 1 MANIFEST.md present"
+
+  # Per-module revision plans produced
+  - action: glob
+    pattern: BOARD-REVISION-PLAN-*.md
+    store: revision_plans
+
+  - action: assert-count-gte
+    input: $revision_plans
+    expected: 2
+    description: "One revision plan per module"
+
+  # ── Bug 2: board --member uses profile ──────────────────────────────────
+  - action: invoke-skill
+    skill: "panel:board --member \"Percy Liang\""
+    sandbox: true
+    store: member_result
+
+  - action: read-file
+    path: REVIEW_BOARD.md
+    store: updated_board
+
+  - action: assert-contains
+    input: $updated_board
+    expected: "Each tier of your role has two faces"
+    description: "OLE preamble in regenerated member assessment — confirms buildReviewerContext() called for --member"
+
+  - action: assert-contains
+    input: $updated_board
+    expected: "self-directed"
+    description: "Self-directed face present"
+
+  # --member does not increment round
+  - action: assert-field-equals
+    input: $updated_board
+    field: round
+    expected: 1
+    description: "--member does not create a new round"

@@ -105,8 +105,13 @@ Each module's `REVIEW_PANEL.md` is located at `{researchPath}/REVIEW_PANEL.md`.
 3. **Select board**: Choose 7 members via shared/board-utils.select_board()
    - On round 1: fresh selection
    - On round 2+: retain 5 core members, rotate 2
-4. **Generate assessments**: Each board member reviews all module panels:
+4. **Load profiles**: Load all 7 board member profiles via shared/reviewer-profile-loader.md
+   - Use `loadReviewerProfile()` for each board member
+   - Build context string via `buildReviewerContext(profile)` — OLE preamble + structured fields
+   - Cache profiles for session-level reuse across all modules
+5. **Generate assessments**: Each board member reviews all module panels:
    - Read each module's `REVIEW_PANEL.md`
+   - Inject member's context string (from Step 4) as reviewer persona
    - Assess module quality on 10-point scale
    - Identify cross-module themes and synergies
    - Rank modules within the program
@@ -144,9 +149,11 @@ Targeted refresh without full re-review. Sections:
 ### --member <name>
 
 1. Load existing `REVIEW_BOARD.md`
-2. Regenerate only the named member's assessment
-3. Re-run synthesis with updated assessment
-4. Overwrite `REVIEW_BOARD.md` (no new round — same round, updated)
+2. Load the named member's profile via `loadReviewerProfile(name)` from shared/reviewer-profile-loader.md
+3. Build context string via `buildReviewerContext(profile)` — OLE preamble + structured fields
+4. Regenerate only that member's assessment using the context string
+5. Re-run synthesis with updated assessment
+6. Overwrite `REVIEW_BOARD.md` (no new round — same round, updated)
 
 ### --revisions
 
@@ -272,6 +279,7 @@ After `--review`, `--update`, or `--member` completes, auto-commit:
 - shared/board-utils.md — Board-specific utilities
 - shared/panel-utils.md — Panel data parsing
 - shared/reviewer-selector.md — Board member selection
+- shared/reviewer-profile-loader.md — Load board member profiles, buildReviewerContext()
 - shared/score-utils.md — Score aggregation, tier mapping, agreement
 - shared/display-utils.md — Terminal formatting
 - config/scoring.yaml — 10-point scale, tier definitions

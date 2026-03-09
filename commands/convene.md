@@ -116,9 +116,11 @@ Use `panel:convene --status` to check readiness.
 ### --member <name>
 
 1. Load existing `REVIEW_PANEL.md`
-2. Regenerate only the named member's assessment
-3. Re-run synthesis with updated assessment
-4. Overwrite `REVIEW_PANEL.md` (no new round — same round, updated)
+2. Load the named member's profile via `loadReviewerProfile(name)` from shared/reviewer-profile-loader.md
+3. Build context string via `buildReviewerContext(profile)` — OLE preamble + structured fields
+4. Regenerate only that member's assessment using the context string
+5. Re-run synthesis with updated assessment
+6. Overwrite `REVIEW_PANEL.md` (no new round — same round, updated)
 
 ### --revisions
 
