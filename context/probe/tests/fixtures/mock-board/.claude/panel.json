@@ -1,0 +1,18 @@
+{
+  "default": "module-alpha",
+  "gitStrategy": "manual",
+  "projects": {
+    "module-alpha": {
+      "panelPath": "context/panel/module-alpha",
+      "researchPath": "module-alpha",
+      "clientSlug": "module-alpha",
+      "projectName": "module-alpha"
+    },
+    "module-beta": {
+      "panelPath": "context/panel/module-beta",
+      "researchPath": "module-beta",
+      "clientSlug": "module-beta",
+      "projectName": "module-beta"
+    }
+  }
+}

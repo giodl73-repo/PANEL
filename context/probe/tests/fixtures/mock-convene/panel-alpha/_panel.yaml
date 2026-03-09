@@ -1,0 +1,54 @@
+paper: panel-alpha
+title: "Alpha: Token-Efficient Reviewer Simulation"
+venue: EMNLP 2026
+stage: recheck
+round: 1
+content_mode: full
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford
+    profile_ref: R-1
+    score: 3
+  - name: Jacob Steinhardt
+    affiliation: UC Berkeley
+    profile_ref: R-2
+    score: 3
+  - name: Graham Neubig
+    affiliation: CMU
+    profile_ref: R-3
+    score: 2
+  - name: Yejin Choi
+    affiliation: UW
+    profile_ref: R-4
+    score: 3
+  - name: Noah Smith
+    affiliation: UW / AI2
+    profile_ref: R-5
+    score: 3
+reviews:
+  round-1:
+    completed: 5
+    synthesis: true
+    avg_score: 2.8
+    verdict: "Weak Accept"
+p1_items:
+  - item: "Evaluation benchmarks need held-out test sets"
+    addressed: true
+  - item: "Baseline comparisons missing GPT-4 reference"
+    addressed: false
+history:
+  - stage: draft
+    date: "2026-01-01"
+    note: "Initialized"
+  - stage: panel
+    date: "2026-01-10"
+    note: "Reviewers assigned"
+  - stage: synthesis
+    date: "2026-01-15"
+    note: "Synthesis complete"
+  - stage: revision
+    date: "2026-01-20"
+    note: "P1 items in progress"
+  - stage: recheck
+    date: "2026-02-01"
+    note: "Round 1 complete, ready for panel"

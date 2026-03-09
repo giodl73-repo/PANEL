@@ -1,0 +1,136 @@
+id: l2-board-mock
+name: "panel:board --review: PP items bubble up from panels, B items flow back down to modules"
+tier: L2
+plugin: panel
+target: commands/board.md
+timeout: 90
+
+description: |
+  Lightweight mock test for panel:board using minimal pre-built fixtures
+  (2 modules with completed REVIEW_PANEL.md). Validates the full signal loop:
+
+  BUBBLE UP:  module PP1/PP2 themes → cross-module B1/B2 items in REVIEW_BOARD.md
+  FLOW DOWN:  BOARD-REVISION-PLAN-{module}.md produced per module with B items
+              referencing specific modules and papers
+
+  Also validates: 7 board members selected, OLE profiles loaded, buildReviewerContext()
+  injected (OLE preamble present), round archived with MANIFEST.md.
+
+setup:
+  fixture: tests/fixtures/mock-board
+  sandbox: true
+
+steps:
+  # Pre-conditions: 2 modules with REVIEW_PANEL.md
+  - action: file-exists
+    path: module-alpha/REVIEW_PANEL.md
+
+  - action: file-exists
+    path: module-beta/REVIEW_PANEL.md
+
+  # Run board review
+  - action: invoke-skill
+    skill: "panel:board --review"
+    sandbox: true
+    store: result
+
+  # ── REVIEW_BOARD.md produced ────────────────────────────────────────────
+  - action: file-exists
+    path: REVIEW_BOARD.md
+
+  - action: read-file
+    path: REVIEW_BOARD.md
+    store: board_review
+
+  # OLE preamble confirms buildReviewerContext() was called (bug fix regression)
+  - action: assert-contains
+    input: $board_review
+    expected: "Each tier of your role has two faces"
+    description: "OLE preamble in board assessments — confirms profiles loaded"
+
+  # AI disclosure
+  - action: assert-contains
+    input: $board_review
+    expected: "AI Simulation"
+
+  # Both modules referenced
+  - action: assert-contains
+    input: $board_review
+    expected: "module-alpha"
+
+  - action: assert-contains
+    input: $board_review
+    expected: "module-beta"
+
+  # ── BUBBLE UP: module PP1s surface as B items ───────────────────────────
+  # Both REVIEW_PANEL.md fixtures contain PP1.1 about missing baselines/eval frameworks
+  # These shared PP1 themes should aggregate to B1 at board level
+  - action: assert-contains
+    input: $board_review
+    expected: "B1"
+    description: "B1 items generated — shared PP1 patterns across modules bubble up"
+
+  - action: assert-contains
+    input: $board_review
+    expected: "B2"
+    description: "B2 items generated from module-level patterns"
+
+  # Cross-module synergy detected (both modules work on evaluation frameworks)
+  - action: assert-contains
+    input: $board_review
+    expected: "evaluation"
+    description: "Cross-module evaluation theme surfaces — shared PP signals aggregated"
+
+  # ── FLOW DOWN: per-module revision plans ────────────────────────────────
+  - action: file-exists
+    path: BOARD-REVISION-PLAN-module-alpha.md
+    description: "Revision plan flows down to module-alpha"
+
+  - action: file-exists
+    path: BOARD-REVISION-PLAN-module-beta.md
+    description: "Revision plan flows down to module-beta"
+
+  - action: read-file
+    path: BOARD-REVISION-PLAN-module-alpha.md
+    store: alpha_plan
+
+  - action: assert-contains
+    input: $alpha_plan
+    expected: "B1"
+    description: "B1 items in module-alpha revision plan"
+
+  - action: assert-contains
+    input: $alpha_plan
+    expected: "- [ ]"
+    description: "Actionable open checkboxes for module-alpha to address"
+
+  - action: read-file
+    path: BOARD-REVISION-PLAN-module-beta.md
+    store: beta_plan
+
+  - action: assert-contains
+    input: $beta_plan
+    expected: "B1"
+    description: "B1 items in module-beta revision plan"
+
+  # ── Round archived with MANIFEST ────────────────────────────────────────
+  - action: file-exists
+    path: board-reviews/round-1/REVIEW_BOARD.md
+    description: "Round 1 board snapshot archived"
+
+  - action: file-exists
+    path: board-reviews/round-1/MANIFEST.md
+    description: "MANIFEST.md present in round archive"
+
+  - action: read-file
+    path: board-reviews/round-1/MANIFEST.md
+    store: manifest
+
+  - action: assert-contains
+    input: $manifest
+    expected: "module-alpha"
+    description: "MANIFEST lists all modules at time of review"
+
+  - action: assert-contains
+    input: $manifest
+    expected: "module-beta"
