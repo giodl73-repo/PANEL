@@ -194,6 +194,23 @@ Orchestrates the complete paper writing process:
    - Parse all sections (research question, venue, sections, experiments, etc.)
    - Read _panel.yaml for paper state
    - Determine target venue and quality expectations from plan
+   - **Load module context** (if MODULE.md exists in researchDir):
+     ```javascript
+     const moduleFile = resolveModuleFile(researchDir);
+     if (moduleFile) {
+         const module = parseModule(moduleFile);
+         const paperTracks = getPaperTracks(module, paperName);
+         if (paperTracks.length === 0) {
+             msg(`⚠ "${paperName}" has no track assignment in MODULE.md`, 'warning');
+             msg(`  Run: panel:module --assign ${paperName} <track>`, 'item');
+             msg(`  Writing will proceed but arc paragraphs will be missing.`, 'item');
+         }
+         // Arc paragraphs for each track — injected into Introduction
+         const trackArcs = paperTracks
+             .map(t => ({ track: t, arc: getArcParagraph(module, t, paperName) }))
+             .filter(a => a.arc);
+     }
+     ```
 
 2. **Check for existing session**:
    - If tasks exist: offer to resume
@@ -248,6 +265,14 @@ Orchestrates the complete paper writing process:
      - Target venue style
      - Word count targets from plan
      - Citation integration (search references.bib)
+   - **For Introduction specifically**: if `trackArcs` is non-empty, append each
+     track's series arc paragraph after the contributions list:
+     ```latex
+     % --- Module track context ---
+     % Track [name]: [arc paragraph]
+     ```
+     This tells reviewers which research program this paper belongs to.
+     If the paper belongs to multiple tracks, include all arc paragraphs.
    - Write to sections/{N}-{name}.tex
    - Compile main.tex to verify no errors
 
@@ -537,6 +562,7 @@ ETA: 4 tasks remaining
 
 Uses these shared utilities:
 - `shared/state-loader.md` — Read/write _panel.yaml
+- `shared/module-utils.md` — MODULE.md parsing, track arc injection
 - `shared/git-helper.md` — Auto-commit changes
 - `shared/message-utils.md` — Formatted output
 - `shared/error-handler.md` — Error handling

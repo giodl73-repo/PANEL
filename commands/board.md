@@ -102,25 +102,40 @@ Each module's `REVIEW_PANEL.md` is located at `{researchPath}/REVIEW_PANEL.md`.
 
 1. **Resolve repo**: Find monorepo root
 2. **Discover modules**: Scan for modules with completed panels
-3. **Select board**: Choose 7 members via shared/board-utils.select_board()
+3. **Load cross-module track map**: Via `discoverCrossModuleTracks()` from shared/module-utils.md
+   - Scan all module `MODULE.md` files for track definitions
+   - Identify tracks spanning multiple modules (cross-module tracks)
+   - Assess alignment: `aligned` | `subset` | `parallel` | `divergent` | `unique`
+   - This map is the integration evidence the board uses to assess program coherence
+4. **Select board**: Choose 7 members via shared/board-utils.select_board()
    - On round 1: fresh selection
    - On round 2+: retain 5 core members, rotate 2
-4. **Load profiles**: Load all 7 board member profiles via shared/reviewer-profile-loader.md
+5. **Load profiles**: Load all 7 board member profiles via shared/reviewer-profile-loader.md
    - Use `loadReviewerProfile()` for each board member
    - Build context string via `buildReviewerContext(profile)` — OLE preamble + structured fields
    - Cache profiles for session-level reuse across all modules
-5. **Generate assessments**: Each board member reviews all module panels:
-   - Read each module's `REVIEW_PANEL.md`
-   - Inject member's context string (from Step 4) as reviewer persona
+6. **Generate assessments**: Each board member reviews all module panels:
+   - Read each module's `REVIEW_PANEL.md` and `MODULE.md`
+   - Inject member's context string (from Step 5) as reviewer persona
    - Assess module quality on 10-point scale
+   - Assess cross-module track alignment from Step 3:
+     - `aligned` tracks → program strength, cite explicitly
+     - `divergent` tracks → B1 candidate: conflicting chain logic across modules
+     - `parallel` tracks → B2 candidate: should these papers cite each other?
+     - `subset` tracks → note as depth/specialization (good signal)
    - Identify cross-module themes and synergies
    - Rank modules within the program
-5. **Synthesize**: Consolidate 7 assessments into `REVIEW_BOARD.md`:
+7. **Synthesize**: Consolidate 7 assessments into `REVIEW_BOARD.md`:
    - Program score and tier
    - Module rankings with consensus and agreement matrix
-   - Cross-module themes
+   - **Cross-module track map**: which tracks span modules, alignment status
+   - Cross-module themes (derived from track alignment + panel findings)
    - Per-module assessments
-6. **Generate revision plans**: Create per-module `BOARD-REVISION-PLAN-{module}.md`:
+8. **Generate revision plans**: Create per-module `BOARD-REVISION-PLAN-{module}.md`
+   with B items **tagged to tracks** where applicable:
+   - `B1 [Track methodology]` — divergent track logic must be reconciled across modules
+   - `B2 [Track empirical, module-alpha + module-beta]` — parallel papers should cite each other
+   - `B3 [module]` — module-level item not specific to a track
    - B1/B2/B3 items specific to each module
    - Derived from cross-module themes and board findings
    - These are also written as `{module}/REVISION-PLAN.md` (or appended as a board-directives section)
@@ -279,6 +294,7 @@ After `--review`, `--update`, or `--member` completes, auto-commit:
 - shared/board-utils.md — Board-specific utilities
 - shared/panel-utils.md — Panel data parsing
 - shared/reviewer-selector.md — Board member selection
+- shared/module-utils.md — MODULE.md parsing, discoverCrossModuleTracks(), track alignment
 - shared/reviewer-profile-loader.md — Load board member profiles, buildReviewerContext()
 - shared/score-utils.md — Score aggregation, tier mapping, agreement
 - shared/display-utils.md — Terminal formatting

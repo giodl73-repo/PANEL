@@ -72,31 +72,46 @@ Use `panel:convene --status` to check readiness.
 ### --review
 
 1. **Assess readiness**: Check papers via shared/panel-utils.assess_paper_readiness()
-2. **Select panel**: Choose 7 reviewers via shared/panel-utils.select_cross_portfolio_panel()
+2. **Load module architecture**: Read `MODULE.md` via shared/module-utils.md if present
+   - Extract track definitions, paper-to-track assignments, arc paragraphs
+   - Identify orphan papers (no track) — include in review but flag in output
+   - Identify cross-module tracks via `discoverCrossModuleTracks()` — tracks that
+     extend into other modules show integration; surface in REVIEW_PANEL.md
+3. **Select panel**: Choose 7 reviewers via shared/panel-utils.select_cross_portfolio_panel()
    - On round 1: fresh selection
    - On round 2+: retain 5 core members, rotate 2
-3. **Load profiles**: Load all 7 reviewer profiles via shared/reviewer-profile-loader.md
+4. **Load profiles**: Load all 7 reviewer profiles via shared/reviewer-profile-loader.md
    - Use loadReviewerProfile() for each panel member
    - Cache profiles for session-level reuse across all papers
    - Store profile references in panel state (not full content)
-4. **Generate assessments**: Each panel member reviews all ready papers:
+5. **Generate assessments**: Each panel member reviews all ready papers:
    - Read individual paper reviews and syntheses
    - Build context string using `buildReviewerContext(profile)` from shared/reviewer-profile-loader.md
      - OLE profiles: OLE_PREAMBLE + Orientation + Review Lens (Verify/Simplify) + Expertise
      - Legacy profiles: raw markdown body
    - Assess each paper on the 10-point scale (config/scoring.yaml)
-   - Identify cross-paper themes and patterns
+   - Assess each track's causal chain integrity (if MODULE.md present):
+     - Is the chain sentence coherent across papers in this track?
+     - Are cross-citations present between adjacent chain papers?
+     - Does each paper in the track have an actionable number?
    - Rank papers within the module
-5. **Synthesize**: Consolidate 7 assessments into `REVIEW_PANEL.md`:
+6. **Synthesize**: Consolidate 7 assessments into `REVIEW_PANEL.md`:
    - Module score and tier
+   - **Track scores** (if MODULE.md present): score per track, chain health, weak links
+   - **Cross-module tracks** (if any): tracks spanning this module and others
    - Paper rankings with consensus
    - Cross-paper themes
    - Per-paper assessments
-5. **Generate revision items**: Create PP1/PP2/PP3 items:
+7. **Generate revision items**: Create PP1/PP2/PP3 items **tagged to tracks**:
+   - `PP1 [Track B]` — blocking issue specific to Track B's chain
+   - `PP2 [Track A, C]` — affects papers cross-cutting both tracks
+   - `PP3 [module]` — module-level item not specific to a track
+   - Orphan paper warnings → PP2 item: "paper-X has no track assignment"
    - Module-level `PANEL-REVISION-PLAN.md` in module root
-   - Per-paper PP items noted in each paper's assessment
-6. **Snapshot round**: Archive to `panel-reviews/round-{N}/`
-7. **Update state**: Set round number, update history
+8. **Update MODULE.md track scores**: Write assessed track scores back to MODULE.md
+   via `updateTrackScore()` from shared/module-utils.md
+9. **Snapshot round**: Archive to `panel-reviews/round-{N}/` (includes MODULE.md snapshot)
+10. **Update state**: Set round number, update history
 8. **Offer to apply revisions**: After generating the revision plan, offer to apply PP1/PP2 items immediately (runs the `--apply` behavior inline). Use AskUserQuestion:
 
    ```
@@ -285,9 +300,10 @@ After `--review` or `--member` completes (modes that write files), auto-commit:
 
 - shared/git-utils.md — Auto-commit after panel reviews
 - shared/panel-utils.md — Panel-specific utilities
+- shared/module-utils.md — MODULE.md parsing, track operations, cross-module track discovery
 - shared/state-loader.md — Paper discovery, state loading
 - shared/reviewer-selector.md — Panel member selection
-- shared/reviewer-profile-loader.md — Load reviewer profiles with caching
+- shared/reviewer-profile-loader.md — Load reviewer profiles, buildReviewerContext()
 - shared/synthesis-engine.md — Consolidation patterns
 - shared/score-utils.md — Score aggregation, tier mapping
 - shared/display-utils.md — Terminal formatting
