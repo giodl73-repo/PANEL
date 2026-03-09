@@ -1,0 +1,27 @@
+id: l0-craft-roles-exist
+name: .craft/roles/panel-reviewer contains _index.yaml and 51 R-N profiles
+tier: L0
+plugin: panel
+target: .craft/roles/panel-reviewer/
+timeout: 5
+
+steps:
+  - action: file-exists
+    path: .craft/roles/panel-reviewer/_index.yaml
+
+  - action: glob
+    pattern: .craft/roles/panel-reviewer/R-*.md
+    store: profiles
+
+  - action: assert-count
+    input: $profiles
+    expected: 51
+
+  - action: file-exists
+    path: .craft/roles/panel-reviewer/R-1.md
+
+  - action: file-exists
+    path: .craft/roles/panel-reviewer/R-51.md
+
+  - action: assert-non-empty
+    paths: $profiles
