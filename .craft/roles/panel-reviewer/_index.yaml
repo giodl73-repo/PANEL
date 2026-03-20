@@ -377,6 +377,45 @@ reviewers:
     affiliation: Cambridge
     expertise: [distributed-systems, crdt, operational-transformation, data-sync, conflict-resolution]
 
+  # Theory of Computation & Formal Methods
+  R-52:
+    name: Nancy Lynch
+    slug: nancy-lynch
+    category: tcs-formal-methods
+    affiliation: MIT CSAIL
+    expertise: [distributed-algorithms, flp-impossibility, io-automata, formal-specification, ode-well-posedness, tcs]
+
+  # Statistical Methodology & Social Science
+  R-53:
+    name: Andrew Gelman
+    slug: andrew-gelman
+    category: statistical-methods
+    affiliation: Columbia
+    expertise: [bayesian-modeling, multilevel-regression, causal-inference, pre-registration, garden-of-forking-paths, survey-methods]
+
+  R-54:
+    name: Matthew Gentzkow
+    slug: matthew-gentzkow
+    category: statistical-methods
+    affiliation: Stanford
+    expertise: [political-economy, media-effects, affective-polarization, social-media, identification-strategies, cross-national]
+
+  # Nonlinear Dynamics & Applied Mathematics
+  R-55:
+    name: Steven Strogatz
+    slug: steven-strogatz
+    category: nonlinear-dynamics
+    affiliation: Cornell
+    expertise: [nonlinear-dynamics, bifurcation-theory, synchronization, kuramoto, phase-portraits, mathematical-biology, ode-stability]
+
+  # Complex Systems & Critical Transitions
+  R-56:
+    name: Didier Sornette
+    slug: didier-sornette
+    category: complex-systems
+    affiliation: ETH-Zurich
+    expertise: [log-periodic-power-laws, dragon-kings, critical-transitions, endogenous-crises, bubble-detection, fat-tails, forecasting]
+
 # Categories
 categories:
   - id: systems-infrastructure
@@ -422,3 +461,19 @@ categories:
   - id: data-systems
     description: Distributed data systems, sync protocols, conflict resolution, CRDTs
     members: [R-47]
+
+  - id: tcs-formal-methods
+    description: Theory of computation, distributed algorithms, formal specification, impossibility results
+    members: [R-52]
+
+  - id: statistical-methods
+    description: Statistical methodology, causal inference, social science quantitative methods
+    members: [R-53, R-54]
+
+  - id: nonlinear-dynamics
+    description: ODE analysis, bifurcation theory, synchronization, phase portraits, mathematical biology
+    members: [R-55]
+
+  - id: complex-systems
+    description: Critical transitions, acceleration sequences, Dragon Kings, fat tails, forecasting
+    members: [R-56]
