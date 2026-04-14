@@ -14,4 +14,3 @@ Diagnose module against three properties and write CURATION.md.
 - **C** — Full curation (+2.0 to +3.0)
 - **D** — Merger/restructure (+2.5 to +4.0)
 
-Full diagnosis logic in `commands/curate.md`.

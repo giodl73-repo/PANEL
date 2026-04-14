@@ -106,6 +106,8 @@ Use honest placeholders when data is missing:
 
 Papers with unfilled [NEED] tags score lower on the Evidence dimension of the CEMCK rubric but are preferred over unsupported claims.
 
+Note: [NEED: figure] tags affect the Craft (K) dimension of the CEMCK rubric, not the Evidence (E) dimension.
+
 ## Venue-Specific Adjustments
 
 | Venue Type | Adjustments |

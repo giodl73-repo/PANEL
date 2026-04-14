@@ -21,7 +21,7 @@ for (const paper of papers) {
 }
 ```
 
-**Stage handlers** (from `commands/review.md`):
+**Stage handlers**:
 
 | Current stage | Gate | Action |
 |--------------|------|--------|

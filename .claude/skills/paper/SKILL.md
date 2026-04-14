@@ -64,8 +64,6 @@ Targets (for subcommands that accept them):
 All subcommands use the same target resolution logic:
 
 ```javascript
-// @import ../shared/paper-target-resolver.md
-
 async function resolveTargets(args, researchDir, subcommand) {
     // No targets → all eligible papers for this subcommand
     if (args.targets.length === 0) {

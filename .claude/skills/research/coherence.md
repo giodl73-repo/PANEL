@@ -5,7 +5,7 @@ Cross-finding contradiction checker. Requires 2+ prior research sub-skills to ha
 ## Prerequisites
 
 At least 2 of the following must have produced findings:
-- hypothesis, competitors, causal, websearch, argument, derivation
+- hypothesis, competitors, causal, websearch, argument, derivation, contract, consistency
 
 If fewer than 2 have run, STOP and report: "Coherence requires 2+ prior discovery signals. Run more sub-skills first."
 

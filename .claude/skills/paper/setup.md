@@ -14,4 +14,4 @@ for (const name of targetNames) {
 }
 ```
 
-See `commands/setup.md` Level 2 behavior for the per-paper setup logic.
+See the setup skill's paper.md for the per-paper setup logic.

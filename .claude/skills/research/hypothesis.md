@@ -59,6 +59,8 @@ ALTERNATIVE: [Is there a weaker version of the claim that might survive?]
 
 ### Step 5 — Investigation Sequence
 
+Note: When running as part of `panel:research pre-write`, the orchestrator uses a fixed sequence. These recommendations are for standalone exploration or for customizing the pipeline.
+
 Based on the hypothesis class, recommend which research sub-skills to run next:
 
 | Class | Recommended Sequence |

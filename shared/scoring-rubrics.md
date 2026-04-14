@@ -24,6 +24,8 @@ Used at the **paper level** for individual reviewer assessments.
 | Major Revisions Required | 1.5 |
 | Reject | 1.0 |
 
+Canonical source: `config/scoring.yaml`. This table is a human-readable mirror.
+
 ### Thresholds (Paper Level)
 
 | Metric | Threshold | Meaning |
@@ -70,7 +72,7 @@ Derived from the gravity:downward-signal 9.37/10 benchmark:
 
 | Level | Criteria | Action |
 |-------|----------|--------|
-| **PP1** | Cross-paper pattern OR threatens module integrity | Must address |
+| **PP1** | Cross-paper pattern, threatens module integrity, or affects 3+ papers | Address before next round |
 | **PP2** | 2+ papers affected | Should address |
 | **PP3** | 1 paper, module-level refinement | Nice to have |
 
@@ -91,7 +93,7 @@ Same 10-point scale as module level, applied across all modules at the **board l
 
 | Level | Criteria | Action |
 |-------|----------|--------|
-| **B1** | 3+ board members flag it OR threatens program coherence | Must address |
+| **B1** | 3+ board members flag it, threatens program coherence, or affects 3+ modules | Address before next round |
 | **B2** | 2+ modules affected | Should address |
 | **B3** | 1 module, program-level refinement | Nice to have |
 
@@ -155,4 +157,7 @@ Higher-tier scores aggregate lower-tier results:
 
 - `config/scoring.yaml` — Canonical YAML definitions for 4-point and 10-point scales
 - `shared/score-utils.md` — Score aggregation, consensus metrics
+
+## See Also
+
 - `.claude/skills/research/score.md` — CEMCK self-assessment protocol

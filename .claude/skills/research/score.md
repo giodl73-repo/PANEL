@@ -79,6 +79,7 @@ Count and categorize unfilled [NEED] tags:
   [NEED: compute] — [N] occurrences
   [NEED: source] — [N] occurrences
   [NEED: citation] — [N] occurrences
+  [NEED: figure] — [N] occurrences
   Total: [N]
 
   Impact on score: Filling all [NEED] tags would likely raise score by [N] points

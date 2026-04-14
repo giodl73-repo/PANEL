@@ -28,8 +28,8 @@ stages:
 
   - name: ready
     description: Panel review complete, paper cleared for submission
-    gate: REVIEW_PANEL.md completed by panel:convene AND all PP1 items addressed
-    requires: panel:convene  # paper-level command waits for panel-level output
+    gate: REVIEW_PANEL.md completed by panel:module review AND all PP1 items addressed
+    requires: panel:module review  # paper-level command waits for panel-level output
     artifacts: [REVIEW_PANEL.md, PANEL-REVISION-PLAN.md]
 
   - name: submit

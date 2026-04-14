@@ -54,9 +54,9 @@ A Claude Code plugin that drives research papers through a complete AI-simulated
 
 | Tier | Prefix | High Impact (P1) | Medium Impact (P2) | Low Impact (P3) |
 |------|--------|----------|-----------|--------------|
-| Paper | P1/P2/P3 | 3+ personas or critical gap | 2+ personas | 1 persona |
-| Panel | PP1/PP2/PP3 | Cross-paper pattern or threatens module | 2+ papers affected | 1 paper |
-| Board | B1/B2/B3 | 3+ board members or threatens program | 2+ modules affected | 1 module |
+| Paper | P1/P2/P3 | 3+ personas, any major issue, or critical gap | 2+ personas | 1 persona |
+| Panel | PP1/PP2/PP3 | Cross-paper pattern, threatens module, or 3+ papers affected | 2+ papers affected | 1 paper |
+| Board | B1/B2/B3 | 3+ board members, threatens program, or 3+ modules affected | 2+ modules affected | 1 module |
 
 ## Project Layout
 

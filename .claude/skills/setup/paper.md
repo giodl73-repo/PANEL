@@ -72,7 +72,7 @@ history:
 **Content mode handling**:
 - If `--mode abstract|draft|full` provided, set `content_mode` and `content_mode_confirmed: true`
 - If `--mode` omitted, skip `content_mode` field entirely — will be auto-detected during first `panel:review`
-- Mode affects review expectations and maximum stage advancement (see commands/review.md)
+- Mode affects review expectations and maximum stage advancement (see shared/review-standards.md)
 
 ## Step 6: Update RESEARCH.md
 

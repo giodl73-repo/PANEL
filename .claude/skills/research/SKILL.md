@@ -42,7 +42,6 @@ If no sub-command is given, show the help summary and stop.
 |-------------|-------------|
 | `argument <topic>` | 4-specialist logical trace |
 | `derivation <topic>` | Math derivation verification (STEM) |
-| `contract <topic>` | Methodology vs claims verification |
 
 ### Validate Phase (post-write components)
 
@@ -51,6 +50,7 @@ If no sub-command is given, show the help summary and stop.
 | `consistency <topic>` | Catches numerical contradictions |
 | `dimensional <topic>` | Unit analysis (STEM) |
 | `referee <topic>` | 3 hostile journal-specific referees |
+| `contract <topic>` | Methodology vs claims verification |
 
 ### Specify Phase (output generation)
 
@@ -108,9 +108,10 @@ Follow the protocol in the corresponding `*.md` file for each:
 1. **hypothesis** — `hypothesis.md`
 2. **competitors** — `competitors.md`
 3. **causal** — `causal.md`
-4. **websearch** — `websearch.md`
-5. If MATH-HEAVY: **derivation** — `derivation.md`
-6. **argument** — `argument.md`
+4. **websearch** — `websearch.md` (For HISTORICAL papers, websearch focuses on primary source verification and archival evidence)
+5. If EMPIRICAL: enhanced websearch focused on datasets, benchmarks, and baseline comparisons
+6. If MATH-HEAVY: **derivation** — `derivation.md`
+7. **argument** — `argument.md`
 
 After each skill, summarize the top 1-2 findings before proceeding.
 
@@ -150,7 +151,7 @@ Plan updates made: [N]
 Pre-write score: [N]/25
 
 VERDICT: READY TO WRITE
-Next: panel:publication author {{topic}}
+Next: Write the paper (panel:paper author or panel:publication author)
 
 Top 3 things to get right in the paper:
 1. [most important finding from pipeline]
@@ -206,6 +207,17 @@ CONTRACT: [PASS/FAIL]
 Mismatches: [list any items where claims exceed methodology]
 ```
 
+### Phase 4b — Argument Check (always)
+
+Follow protocol in `argument.md` — run against the written sections (not plan.md).
+
+```
+ARGUMENT: [N] claims on critical path
+  SOUND: [N]
+  WEAK: [N]
+  BROKEN: [N] — must fix before submission
+```
+
 ### Phase 5 — Abstract (always)
 
 Follow protocol in `abstract.md`.
@@ -243,6 +255,7 @@ PRE-SUBMISSION CHECKLIST:
 □ All P1 dimensional errors resolved (if math paper)
 □ Contract: all claims supported by methodology
 □ Abstract within 250 words, 6-part structure
+□ All BROKEN argument claims resolved
 □ Referee P1 blockers addressed
 □ Falsification condition stated with specific observable
 □ Null hypothesis stated and distinguished from main claim

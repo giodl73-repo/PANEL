@@ -38,6 +38,8 @@ Based on the paper's target venue, select 3 referee archetypes:
 - Referee 2: The Related Work Expert — identifies missing citations and positioning gaps
 - Referee 3: The Clarity Advocate — flags unclear writing, missing definitions, logical gaps
 
+If the target venue does not match any category above, use the General/Interdisciplinary archetypes, adjusted for the venue's known review criteria.
+
 ### Step 2 — Generate Referee Reports
 
 Each referee produces a structured report with continuous issue IDs:

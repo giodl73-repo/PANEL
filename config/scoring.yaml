@@ -8,7 +8,7 @@ four_point:
     color: red
   2:
     label: Weak Accept
-    meaning: Acceptable with revisions
+    meaning: Acceptable with revisions, some concerns
     color: yellow
   3:
     label: Accept
@@ -16,7 +16,7 @@ four_point:
     color: green
   4:
     label: Strong Accept
-    meaning: Excellent, must accept
+    meaning: Excellent contribution, clearly above venue threshold
     color: brightgreen
 
 # Submission readiness thresholds

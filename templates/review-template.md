@@ -30,7 +30,7 @@
 - Focus on: rigorous evaluation, complete methodology, contribution clarity
 - Standard publication criteria apply
 - Expected: complete paper, 3000+ words, ready for submission
-- This is full peer review for publication
+- This is full quality assessment for publication readiness
 
 </mode-context>
 

@@ -7,9 +7,9 @@ Used for individual review rounds:
 | Score | Label | Meaning |
 |-------|-------|---------|
 | 1/4 | Reject | Major flaws, not suitable for venue |
-| 2/4 | Weak Accept | Acceptable with revisions |
+| 2/4 | Weak Accept | Acceptable with revisions, some concerns |
 | 3/4 | Accept | Good contribution, minor issues |
-| 4/4 | Strong Accept | Excellent, must accept |
+| 4/4 | Strong Accept | Excellent contribution, clearly above venue threshold |
 
 ## Submission Readiness
 

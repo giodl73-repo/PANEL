@@ -90,7 +90,7 @@ Synthesis consolidates individual reviews into `SYNTHESIS.md` with priority clas
 
 | Level | Criteria | Action |
 |-------|----------|--------|
-| **P1** (Blocking) | 3+ reviewers raise it, OR any reviewer marks as major issue, OR threatens validity | Must address before resubmission |
+| **P1** (Blocking) | 3+ reviewers raise it, OR any reviewer marks as major issue, OR threatens validity | Address before next round |
 | **P2** (Important) | 2+ reviewers raise it, OR substantive improvement | Should address; strengthens paper |
 | **P3** (Nice-to-have) | 1 reviewer, minor suggestion | Address if time permits |
 
@@ -111,8 +111,8 @@ See `shared/synthesis-engine.md` for implementation.
 | Tier | Prefix | High Impact | Medium Impact | Low Impact |
 |------|--------|------------|---------------|-----------|
 | Paper | P1/P2/P3 | 3+ reviewers or critical gap | 2+ reviewers | 1 reviewer |
-| Module | PP1/PP2/PP3 | Cross-paper pattern or threatens module | 2+ papers affected | 1 paper |
-| Board | B1/B2/B3 | 3+ board members or threatens program | 2+ modules affected | 1 module |
+| Module | PP1/PP2/PP3 | Cross-paper pattern, threatens module, or affects 3+ papers | 2+ papers affected | 1 paper |
+| Board | B1/B2/B3 | 3+ board members flag it, threatens program coherence, or affects 3+ modules | 2+ modules affected | 1 module |
 
 ## Round Tracking
 

@@ -11,4 +11,4 @@ panel:paper import --from commits          # scan git commits
 panel:paper import --artifact ./existing/  # import existing review artifacts
 ```
 
-See `commands/import.md` for discovery logic.
+See `setup/scan.md` for batch discovery logic.

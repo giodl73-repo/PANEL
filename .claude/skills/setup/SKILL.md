@@ -150,7 +150,7 @@ panel:setup --connect <path>
 
 After project-level or per-paper setup completes, auto-commit:
 
-1. Call `auto_commit()` from shared/git-utils.md
+1. Call `auto_commit()` from shared/git-helper.md
 2. Scope: the research directory
 3. Message (project): `[panel] Setup: initialize {module} research infrastructure`
 4. Message (paper): `[panel] Setup: add paper {paper-name} ({venue})`
@@ -158,7 +158,7 @@ After project-level or per-paper setup completes, auto-commit:
 
 ## Dependencies
 
-- shared/git-utils.md — Auto-commit after setup
+- shared/git-helper.md — Auto-commit after setup
 - shared/state-loader.md — Create/validate _panel.yaml files
 - shared/display-utils.md — Terminal formatting
 - shared/topic-discovery.md — Waves scanning for topic discovery, `discover_from_waves()` for paper import
