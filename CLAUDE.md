@@ -63,25 +63,39 @@ A Claude Code plugin that drives research papers through a complete AI-simulated
 ```
 panel/
 ├── .claude-plugin/
-│   ├── plugin.json              # Plugin manifest (14 commands)
+│   ├── plugin.json              # Plugin manifest (12 skills)
 │   ├── marketplace.json         # Standalone marketplace (panel only)
 │   └── craft.json               # Craft feature tracking
 ├── .claude/
-│   └── panel.json               # Plugin configuration (gitStrategy, suppressMessages)
-├── commands/
-│   ├── review.md                # Per-paper review lifecycle (8 stages)
-│   ├── convene.md               # Module-level cross-portfolio panel
-│   ├── board.md                 # Monorepo-level board review
-│   ├── status.md                # Overview of all papers
-│   ├── show.md                  # Detailed paper view
-│   ├── reviewers.md             # Reviewer database browser
-│   ├── setup.md                 # Project initialization
-│   ├── author.md                   # Paper writing orchestration (pre-review)
-│   ├── import.md                # Discover + generate papers, or import artifacts
-│   ├── report.md                # Generate reports
-│   ├── help.md                  # Interactive help
-│   ├── venue.md                 # Venue recommendation
-│   └── uninstall.md             # Clean plugin removal
+│   ├── panel.json               # Plugin configuration (gitStrategy, suppressMessages)
+│   └── skills/                  # Skill definitions (.claude/skills/{name}/SKILL.md)
+│       ├── paper/SKILL.md       # Quick markdown research papers
+│       ├── publication/SKILL.md # Formal LaTeX publication lifecycle
+│       ├── module/SKILL.md      # Module-tier operations
+│       ├── board/SKILL.md       # Monorepo-level board review
+│       ├── setup/SKILL.md       # Project initialization
+│       ├── upgrade/SKILL.md     # Migration from v1.x to v2.0
+│       ├── reviewers/SKILL.md   # Reviewer database browser
+│       ├── project/SKILL.md     # Multi-project switching
+│       ├── report/SKILL.md      # Generate review reports
+│       ├── help/SKILL.md        # Interactive help system
+│       ├── uninstall/SKILL.md   # Clean plugin removal
+│       └── research/            # Research pipeline (pre-write, post-write, 14 sub-skills)
+│           ├── SKILL.md         # Dispatcher + orchestrators
+│           ├── hypothesis.md    # Falsifiable claim + test designs
+│           ├── competitors.md   # Competitive landscape, inertia-first
+│           ├── causal.md        # Cause-effect chain tracing
+│           ├── websearch.md     # Evidence grounding via web search
+│           ├── coherence.md     # Cross-finding contradiction detection
+│           ├── synthesize.md    # PROCEED / PAUSE / PIVOT verdict
+│           ├── argument.md      # 4-specialist logical argument trace
+│           ├── derivation.md    # Math derivation verification (STEM)
+│           ├── contract.md      # Methodology vs claims verification
+│           ├── consistency.md   # Quantitative consistency checking
+│           ├── dimensional.md   # Unit analysis (STEM)
+│           ├── referee.md       # Hostile peer review simulation
+│           ├── abstract.md      # Structured 6-part abstract
+│           └── score.md         # CEMCK self-assessment rubric (25-point)
 ├── shared/
 │   ├── project-config.md        # Multi-project configuration loader (v1.2.0+)
 │   ├── stage-machine.md         # Stage progression logic + gates
@@ -103,11 +117,13 @@ panel/
 │   └── git-utils.md             # (deprecated, use git-helper.md)
 ├── templates/
 │   ├── help/                    # Help topic files
-│   ├── plan-template.md         # Paper plan structure for panel:author
+│   ├── plan-template.md         # Paper plan with quantification contract
+│   ├── findings-template.md     # Cumulative discovery artifact (F-NN IDs)
 │   ├── review-template.md       # Individual review structure
 │   ├── synthesis-template.md    # Synthesis document structure
 │   ├── revision-plan-template.md  # Revision plan structure
 │   └── reviewer-profile-template.md  # Reviewer profile structure (v1.3.0+)
+├── commands/                    # Legacy command files (migrated to .claude/skills/)
 ├── config/
 │   ├── stages.yaml              # Stage definitions + gates
 │   ├── scoring.yaml             # Scoring rubrics (1-4 scale, 0-10 scale)
@@ -266,24 +282,132 @@ Existing standalone installations continue to work without changes:
 - `MONOREPO-READY.md` — Implementation status and next steps
 - `shared/project-config.md` — Configuration loader utility
 
-## Commands (14)
+## Skills (12)
 
-| Command | Tier | Purpose |
-|---------|------|---------|
-| `panel:review` | Paper | Per-paper review lifecycle — moves paper through all 8 stages |
-| `panel:convene` | Module | Cross-portfolio panel review with rounds (7 reviewers, PP1/PP2/PP3) |
+All skills are in `.claude/skills/{name}/SKILL.md` format.
+
+| Skill | Tier | Purpose |
+|-------|------|---------|
+| `panel:paper` | Paper | Quick markdown papers — setup, author, review, status, show, promote |
+| `panel:publication` | Paper | Formal LaTeX publication lifecycle — setup, author, review, status, show, venue |
+| `panel:module` | Module | Module-tier operations — design tracks, review, curate, status |
 | `panel:board` | Monorepo | Cross-module board review with rounds (7 members, B1/B2/B3) |
-| `panel:status` | — | Overview of all papers: stage, round, score, next action |
-| `panel:show` | — | Detailed view of one paper |
-| `panel:reviewers` | — | Browse/filter reviewer database |
+| `panel:research` | Research | Research pipeline — pre-write, post-write, 14 sub-skills |
 | `panel:setup` | — | Initialize project or add a new paper |
-| `panel:project` | — | Switch between projects or list all projects (multi-project mode) |
-| `panel:author` | — | Paper writing orchestration from plan.md to review-ready draft (pre-review) |
-| `panel:import` | — | Discover papers from roadmap/waves/commits, or import existing artifacts |
+| `panel:upgrade` | — | Smart migration from v1.x to v2.0 |
+| `panel:reviewers` | — | Browse/filter reviewer database |
+| `panel:project` | — | Switch between projects or list all projects |
 | `panel:report` | — | Generate review reports |
 | `panel:help` | — | Interactive help system |
-| `panel:venue` | — | Venue recommendation + submission strategy |
 | `panel:uninstall` | — | Remove plugin data and configuration — clean uninstall |
+
+## Research Pipeline (v2.3.0+)
+
+`panel:research` provides a complete research pipeline with 16 sub-commands organized into two orchestrators and 14 individual skills. Ported from production use in RMM (900+ papers, 48 perfect scores).
+
+### Orchestrators
+
+| Sub-command | Phase | Description |
+|-------------|-------|-------------|
+| `panel:research pre-write <topic>` | Before writing | 6-phase discovery pipeline → FINDINGS.md + readiness verdict |
+| `panel:research post-write <topic>` | After writing | 7-phase validation pipeline → pre-submission checklist |
+
+### Individual Sub-Skills
+
+**Discover** (pre-write components):
+
+| Sub-command | Description |
+|-------------|-------------|
+| `hypothesis <topic>` | Falsifiable claim + confidence + 2 test designs + null fallback |
+| `competitors <topic>` | Competitive landscape with inertia-first framing |
+| `causal <topic>` | Cause-effect chain tracing, confounder detection |
+| `websearch <topic>` | Ground claims in publicly available evidence |
+| `coherence <topic>` | Cross-finding contradiction detection (BLOCKING / ADVISORY) |
+| `synthesize <topic>` | PROCEED / PAUSE / PIVOT verdict with confidence |
+
+**Simulate** (argument & math verification):
+
+| Sub-command | Description |
+|-------------|-------------|
+| `argument <topic>` | 4-specialist logical trace: Logician → Advocate → Empirical → Chair |
+| `derivation <topic>` | Step-by-step math derivation verification (STEM only) |
+| `contract <topic>` | Does the paper deliver what its methodology promises? |
+
+**Validate** (post-write components):
+
+| Sub-command | Description |
+|-------------|-------------|
+| `consistency <topic>` | Catches numerical contradictions across sections |
+| `dimensional <topic>` | Unit analysis — LHS = RHS for all equations (STEM only) |
+| `referee <topic>` | 3 hostile journal-specific referee simulations |
+
+**Specify** (output generation):
+
+| Sub-command | Description |
+|-------------|-------------|
+| `abstract <topic>` | 6-part structured abstract (Background → Gap → Claim → Method → Result → Implication) |
+| `score <topic>` | CEMCK self-assessment rubric (25-point, 5 dimensions) |
+
+### Pre-Write Pipeline Flow
+
+```
+plan.md
+  ↓
+hypothesis → competitors → causal → websearch → (derivation if math) → argument
+  ↓
+[FINDINGS.md collects all findings with F-NN IDs]
+  ↓
+coherence [BLOCKING / ADVISORY contradictions]
+  ↓
+synthesize [PROCEED / PAUSE / PIVOT]
+  ↓
+[update plan.md if needed]
+  ↓
+score [baseline CEMCK assessment]
+  ↓
+READY TO WRITE → panel:publication author
+```
+
+### Post-Write Pipeline Flow
+
+```
+Written sections + plan.md
+  ↓
+consistency [P1 mismatches → STOP]
+  ↓
+dimensional [math-heavy only → STOP if P1]
+  ↓
+contract [methodology vs claims check]
+  ↓
+abstract [6-part, journal-specific variant]
+  ↓
+referee [3 hostile referees, I-NN issues, likely decision]
+  ↓
+score [final CEMCK assessment]
+  ↓
+PRE-SUBMISSION CHECKLIST → READY TO SUBMIT / FIXES REQUIRED
+```
+
+### CEMCK Score Rubric
+
+5 dimensions, 5 points each, 25 maximum:
+
+| Dim | Name | 5 (Excellent) | 3 (Solid) | 1 (Weak) |
+|-----|------|---------------|-----------|----------|
+| **C** | Claim | Falsifiable, one-sentence, specific | Clear but vague | Unfalsifiable |
+| **E** | Evidence | Named sources, specific numbers | Sources present, some generic | No numbers |
+| **M** | Method | Reproducible, null fallback stated | Method clear but gaps | Unclear |
+| **C** | Contribution | Novel, natural field connection | Present but forced | Redundant |
+| **K** | Craft | Venue-appropriate, clean structure | Readable, rough edges | Poor structure |
+
+**Thresholds**: 22-25 camera-ready | 18-21 needs revision | 14-17 significant work | <14 rewrite
+
+### Key Artifacts
+
+- **FINDINGS.md** — Cumulative discovery artifact with F-NN IDs, appended by each sub-skill
+- **plan.md** — Enhanced with quantification contract (primary number, falsification, null fallback)
+- **_score.md** — CEMCK score card with per-dimension breakdown
+- **[NEED] tags** — Honest placeholders for missing data: `[NEED: data]`, `[NEED: compute]`, `[NEED: source]`
 
 ## Per-Paper State (`_panel.yaml`)
 
