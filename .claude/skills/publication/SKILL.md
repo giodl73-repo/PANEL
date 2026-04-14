@@ -94,171 +94,20 @@ Each publication lives in `publicationsDir/<slug>/` (no prefix — module dir pr
 
 ---
 
-## Subcommands
+## Subcommand Dispatch
 
-### `setup <name> [venue]`
+| Subcommand | File | Description |
+|------------|------|-------------|
+| `setup` | See [setup.md](setup.md) | Initialize LaTeX publication directory |
+| `author` | See [author.md](author.md) | Write LaTeX sections from plan.md |
+| `review` | See [review.md](review.md) | Full review lifecycle (8 stages) |
+| `status` | See [status.md](status.md) | Show stage, round, score |
+| `show` | See [show.md](show.md) | Detailed view of one publication |
+| `venue` | See [venue.md](venue.md) | Venue recommendation and submission strategy |
+| `build` | See [build.md](build.md) | Compile PDF (make pdf) |
+| `submit` | See [submit.md](submit.md) | Mark as submitted to venue |
 
-Initialize a new LaTeX publication directory.
-
-```
-panel:publication setup token-efficiency "EMNLP 2026"
-panel:publication setup token-efficiency    # prompts for venue
-```
-
-Creates:
-- `{publicationsDir}/{slug}/main.tex` — LaTeX skeleton
-- `{publicationsDir}/{slug}/sections/` — 6 section files
-- `{publicationsDir}/{slug}/reviews/`
-- `{publicationsDir}/{slug}/Makefile` — from `templates/makefile-publication.mk` (`dist` → `../../docs/`)
-- `{publicationsDir}/{slug}/_panel.yaml`
-- `{publicationsDir}/{slug}/REVISION-PLAN.md`
-- `{publicationsDir}/Makefile` — from `templates/makefile-publications.mk` (if not present)
-- `{researchDir}/Makefile` — from `templates/makefile-module.mk` (if not present)
-- `{researchDir}/docs/` — created if missing
-
-**From MODULE.md**: if the module has a track assignment for this publication slug,
-seeds `plan.md` with track context and arc paragraphs.
-
-**Batch**: `panel:publication setup alpha beta gamma "CHI 2026"`
-
----
-
-### `author [targets]`
-
-Write LaTeX sections from `plan.md`. Injects track arc paragraphs into Introduction.
-
-```
-panel:publication author                     # all draft publications with plan.md
-panel:publication author token-efficiency    # single
-panel:publication author 1 3                 # by index
-panel:publication author --track methodology # by track
-```
-
-**For each publication:**
-1. Load `plan.md` and `_panel.yaml`
-2. Load track context from `MODULE.md` — arc paragraphs for each track
-3. Warn if no track assignment
-4. Write sections sequentially: introduction → related-work → methodology → evaluation → discussion → conclusion
-5. **Introduction**: inject track arc paragraphs after contributions list
-6. Run experiments/scripts listed in plan.md
-7. Compile PDF (`make pdf`)
-8. Update `_panel.yaml`: `content_mode: full`, `writing_completed: true`
-
-**Track arc injection** (Introduction):
-```latex
-% --- Research program context ---
-% Track methodology: [arc paragraph from MODULE.md]
-% Track empirical: [arc paragraph, if publication belongs to this track too]
-```
-
----
-
-### `review [targets]`
-
-Full review lifecycle. Advances each publication through its current stage gate.
-
-```
-panel:publication review                       # all eligible
-panel:publication review token-efficiency      # single
-panel:publication review --until ready         # run until ready stage
-panel:publication review --track empirical     # all in track
-```
-
-**Stage lifecycle:**
-
-| Stage | Gate | Action |
-|-------|------|--------|
-| `draft` | main.tex + venue set | Select 5 reviewers, load OLE profiles, assign |
-| `panel` | 5+ reviews | Generate `reviews/REVIEW-{NAME}.md` via `buildReviewerContext()` |
-| `synthesis` | SYNTHESIS.md | Consolidate → P1/P2/P3 |
-| `revision` | P1 items addressed | Create REVISION-PLAN.md, offer to apply |
-| `recheck` | avg ≥ 2.5, min ≥ 2 | Round N review cycle |
-| `ready` | module panel complete | Awaiting `panel:module review` |
-| `submit` | venue confirmed | Submitted |
-| `accepted` | acceptance confirmed | Done |
-
-**Reviewers**: loaded from `.craft/roles/panel-reviewer/` via `pluginReviewersPath`.
-All reviews use `buildReviewerContext(profile)` — OLE preamble + structured fields.
-
-**Bulk**: each publication advances independently. Gate failures reported but don't
-block other publications.
-
----
-
-### `status [targets]`
-
-```
-panel:publication status
-═══════════════════════════════════════════════════════════════════════
-
-Module: reviewer-simulation | Publications
-
- #  Publication                    Track(s)  Stage      Rd  Score   Next
- ─  ──────────────────────────────  ──────── ─────────  ──  ──────  ────────────────────
- 1  panel-token-efficiency          A, C     recheck    1   2.8/4   panel:module review
- 2  panel-profile-caching           A, B     revision   1   —       Apply P1 items
- 3  panel-ole-injection             B        synthesis  1   —       Generate SYNTHESIS.md
- 4  panel-cross-venue               C        draft      0   —       panel:publication author
-
-Track coverage (publications only):
-  Track A: panel-token-efficiency → panel-profile-caching ✓
-  Track B: panel-profile-caching → panel-ole-injection ✓
-  Track C: panel-token-efficiency → panel-cross-venue (partial — 1 paper in track C also)
-```
-
----
-
-### `show <name>`
-
-Full detail: history, all reviewer scores, P1/P2/P3 items, track assignments,
-OLE profile refs used, PDF build status.
-
----
-
-### `venue [targets]`
-
-Venue recommendation for formal publication. Factors in:
-- Paper content and contribution type
-- Track position (cross-citing papers may target same venue)
-- Page limits, deadlines, acceptance rates
-- Reviewer profile affinities (which venues their expertise aligns with)
-
-```
-panel:publication venue token-efficiency
-panel:publication venue --track methodology   # coordinate venue across track
-```
-
----
-
-### `build [targets]`
-
-Compile LaTeX to PDF and deploy to `{researchDir}/docs/`.
-
-```
-panel:publication build                   # all publications → docs/
-panel:publication build token-efficiency  # single → docs/token-efficiency.pdf
-panel:publication build --dist            # explicit dist (default behaviour)
-panel:publication build --pdf-only        # compile only, skip dist copy
-```
-
-Runs `make dist` in each publication directory (or `make pdf` with `--pdf-only`).
-`dist` target copies `main.pdf` → `../../docs/{slug}.pdf`.
-
-On success: `✓ docs/token-efficiency.pdf (342 KB)`
-On error: shows LaTeX error log excerpt, offers to open in editor.
-
----
-
-### `submit <name>`
-
-Mark a publication as submitted to its target venue.
-
-```
-panel:publication submit token-efficiency
-panel:publication submit token-efficiency --venue "EMNLP 2026" --date 2026-06-15
-```
-
-Updates `_panel.yaml`: `stage: submit`, records submission date and venue.
+Load the appropriate sub-command file based on the first argument after `panel:publication`.
 
 ---
 
