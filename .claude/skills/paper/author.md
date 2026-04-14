@@ -22,10 +22,12 @@ for (const paper of papers) {
 }
 ```
 
-For each paper, `authorPaper()` follows `commands/author.md` logic:
+For each paper, `authorPaper()` follows the shared authoring protocol:
 - Load plan.md, _panel.yaml
 - Load track arc paragraphs from MODULE.md
 - Warn if paper has no track assignment
 - Run writing tasks sequentially (sections, experiments, figures)
 - Inject track arc into Introduction
-- Compile PDF, update _panel.yaml
+- Update _panel.yaml
+
+See `shared/authoring-standards.md` for the full writing protocol, quality standards, [NEED] tag convention, and venue-specific adjustments.

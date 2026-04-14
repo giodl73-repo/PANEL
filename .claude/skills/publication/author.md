@@ -27,3 +27,5 @@ panel:publication author --track methodology # by track
 % Track methodology: [arc paragraph from MODULE.md]
 % Track empirical: [arc paragraph, if publication belongs to this track too]
 ```
+
+See `shared/authoring-standards.md` for the full writing protocol, quality standards, [NEED] tag convention, and venue-specific adjustments.

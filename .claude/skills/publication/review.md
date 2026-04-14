@@ -29,3 +29,6 @@ All reviews use `buildReviewerContext(profile)` — OLE preamble + structured fi
 
 **Bulk**: each publication advances independently. Gate failures reported but don't
 block other publications.
+
+See `shared/review-standards.md` for the full review protocol, synthesis algorithm, impact classification, and quality framing.
+See `shared/scoring-rubrics.md` for all scoring scales (4-point reviewer, 10-point module, 25-point CEMCK).

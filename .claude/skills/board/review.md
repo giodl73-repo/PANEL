@@ -1,5 +1,8 @@
 # board review — Cross-Module Board Review
 
+See `shared/review-standards.md` for review protocol, impact classification (B1/B2/B3), and quality framing.
+See `shared/scoring-rubrics.md` Section 3 for the 10-point board scale and completion criteria.
+
 Cross-module board review. Reads all module `REVIEW_PANEL.md` files and
 `MODULE.md` files, assembles 7-member board, produces `REVIEW_BOARD.md`.
 

@@ -34,3 +34,6 @@ for (const paper of papers) {
 
 **Bulk behavior**: each paper advances independently. A paper that fails its gate
 is reported but doesn't block other papers.
+
+See `shared/review-standards.md` for the full review protocol, synthesis algorithm, impact classification, and quality framing.
+See `shared/scoring-rubrics.md` for all scoring scales (4-point reviewer, 10-point module, 25-point CEMCK).

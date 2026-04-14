@@ -2,6 +2,8 @@
 
 Author-side quality self-assessment using a 5-dimension rubric (25-point scale). Independent of the panel review process — this is for the author to gauge readiness before or after review.
 
+Canonical rubric definition: `shared/scoring-rubrics.md` (Section 4: CEMCK Self-Assessment).
+
 ## The CEMCK Rubric
 
 5 dimensions, 5 points each, 25 maximum:

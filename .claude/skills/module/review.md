@@ -1,5 +1,8 @@
 # panel:module review
 
+See `shared/review-standards.md` for review protocol, impact classification (PP1/PP2/PP3), and quality framing.
+See `shared/scoring-rubrics.md` Section 2 for the 10-point module scale and three properties.
+
 ## `review [modules]`
 
 Cross-portfolio panel review. Assembles 7-member panel, generates REVIEW_PANEL.md
