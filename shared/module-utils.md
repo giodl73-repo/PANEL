@@ -1,8 +1,7 @@
 # Module Utils
 
 Shared utilities for MODULE.md parsing, track operations, and cross-module track
-resolution. Used by panel:module, panel:curate, panel:convene, panel:board, and
-panel:author.
+resolution. Used by panel:module, panel:curate, panel:board, and panel:author.
 
 ---
 
@@ -231,7 +230,7 @@ Append a new track definition to MODULE.md.
 
 ### `updateTrackScore(moduleFilePath, trackName, score)`
 
-Write track score into MODULE.md Track Coverage table (updated by panel:convene).
+Write track score into MODULE.md Track Coverage table (updated by panel:module review).
 
 ### `updateTrackArc(moduleFilePath, trackName, arc)`
 
@@ -259,7 +258,7 @@ if (moduleFile) {
 }
 ```
 
-### panel:convene
+### panel:module review
 
 ```javascript
 const module = parseModule(resolveModuleFile(researchDir));

@@ -44,7 +44,7 @@
 - Complete technical architecture extracted from validated research design
 - Profile format: 2KB markdown with 7 required sections (background, publications, lens, criteria, concerns, voice, disclosure)
 - Three-tier resolution chain: exact match → slug match → database fallback with session caching
-- Integration specifications for panel:review (25,400 tokens saved/paper) and panel:convene (15,000 tokens saved/module)
+- Integration specifications for panel:review (25,400 tokens saved/paper) and panel:module review (15,000 tokens saved/module)
 - Performance characteristics: 7.25× faster loading, <20KB memory overhead, 72.2% token reduction
 - Five implementation phases with clear success criteria
 - Appendix with JSON Schema for profile validation
@@ -186,9 +186,9 @@
 - Added shared/reviewer-profile-loader.md to command dependencies
 - Extended config/schemas/panel-state.schema.yaml with profile_ref field (string | null)
 
-### E4: Integrate panel:convene (Phase 3.2) ✓
+### E4: Integrate panel:module review (Phase 3.2) ✓
 **Role**: backend
-**Description**: Update panel:convene to load 7-reviewer panel profiles at session start and reuse across all papers in module.
+**Description**: Update panel:module review to load 7-reviewer panel profiles at session start and reuse across all papers in module.
 
 **Deliverables**:
 - Modified `commands/convene.md` with profile loading
@@ -439,7 +439,7 @@ Bibliography path fixed. Ready for data integration when available.
 **MVP Completion**:
 - [ ] 45 reviewer profiles created
 - [ ] Profile loader implemented and tested
-- [ ] panel:review and panel:convene integrated
+- [ ] panel:review and panel:module review integrated
 - [ ] Token usage reduced ≥60% for reviewer context
 - [ ] All profiles have AI Simulation Disclosure
 - [ ] End-to-end test passes

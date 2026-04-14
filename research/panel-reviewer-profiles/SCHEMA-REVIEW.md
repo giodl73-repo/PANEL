@@ -33,7 +33,7 @@ reviews/
 - ✗ No archive/snapshot pattern for rounds
 - ✗ Mixed ALL-CAPS and kebab-case naming
 
-### Tier 2: Module Level (panel:convene)
+### Tier 2: Module Level (panel:module review)
 
 **Location**: `{module}/` (research directory root)
 

@@ -177,7 +177,7 @@ Profiles integrate seamlessly across all three tiers:
 - Cached for round 2+
 - Full profile context passed to review generation
 
-**Module Level** (`panel:convene`):
+**Module Level** (`panel:module`):
 - 7-member panel profiles loaded at session start
 - Reused across all papers in module
 - 100% cache hit rate after first paper

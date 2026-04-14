@@ -30,7 +30,7 @@ This wave implements a token-efficient reviewer profile system for the Panel plu
 **P2: Architecture Specification**
 - Profile format: 2KB markdown with 7 required sections
 - Three-tier resolution chain: exact → slug → database fallback (with session caching)
-- Integration specifications for panel:review and panel:convene
+- Integration specifications for panel:review and panel:module review
 - Performance characteristics: 7.25× faster loading, 72.2% token reduction
 - Five implementation phases with clear success criteria
 
@@ -86,7 +86,7 @@ This wave implements a token-efficient reviewer profile system for the Panel plu
 - Updated `shared/stage-machine.md` with profile integration
 - Extended `config/schemas/panel-state.schema.yaml` with `profile_ref` field
 
-**E4: Integrate panel:convene**
+**E4: Integrate panel:module review**
 - Updated `commands/convene.md` with profile loading step
 - Session-level profile reuse across all papers in module
 - Profile references stored in panel state
@@ -236,7 +236,7 @@ This wave implements a token-efficient reviewer profile system for the Panel plu
 
 ### MVP Completion
 - ✓ Profile loader implemented and tested (D2, E1)
-- ✓ panel:review and panel:convene integrated (E3, E4)
+- ✓ panel:review and panel:module review integrated (E3, E4)
 - ✓ Validation tools ready (V4, V5)
 - ⚠ 45 reviewer profiles created (deferred to operational rollout)
 - ⚠ Token usage validated ≥60% (requires V2 runtime experiments)

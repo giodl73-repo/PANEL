@@ -22,7 +22,7 @@ plan: |
   Phase 0: Design & Paper (validate approach via research paper FIRST)
   Phase 1: Create profile infrastructure (template, loader, registry)
   Phase 2: Generate initial 45 profiles from REVIEWER-DATABASE.md
-  Phase 3: Integrate with review commands (panel:review, panel:convene)
+  Phase 3: Integrate with review commands (panel:review, panel:module review)
   Phase 4: Add profile management commands (panel:reviewers enhancements)
   Phase 5: Testing & validation (A/B comparison, experimental paper)
 

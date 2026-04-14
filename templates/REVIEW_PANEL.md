@@ -26,4 +26,4 @@ See [REVIEWERS.md](REVIEWERS.md) for planned cross-portfolio panel composition.
 
 ---
 
-*Placeholder — run `panel:convene --review` after papers reach recheck stage*
+*Placeholder — run `panel:module review` after papers reach recheck stage*

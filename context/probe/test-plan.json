@@ -227,13 +227,13 @@
         },
         {
           "id": "l2-panel-review",
-          "name": "panel:convene generates module-level REVIEW_PANEL.md",
+          "name": "panel:module review generates module-level REVIEW_PANEL.md",
           "target": "commands/convene.md",
           "assertions": ["reads-paper-states", "selects-7-reviewers", "produces-review-panel", "generates-pp1-pp2-pp3"]
         },
         {
           "id": "l2-panel-apply-revisions",
-          "name": "panel:convene --apply drives PP1/PP2 revisions down to papers",
+          "name": "panel:module apply drives PP1/PP2 revisions down to papers",
           "target": "commands/convene.md",
           "assertions": ["generates-revision-plans", "applies-to-paper-latex"]
         },

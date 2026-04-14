@@ -48,8 +48,8 @@ Each command provides its own message via the `message` field. Standard patterns
 | Command | Template | Example |
 |---------|----------|---------|
 | `panel:review` | `[panel] {paper}: advance to {stage} (round {round})` | `[panel] panel-review-methodology: advance to synthesis (round 1)` |
-| `panel:convene` | `[panel] {module}: panel review round {round}` | `[panel] panel: panel review round 1` |
-| `panel:convene --member` | `[panel] {module}: update panel member {name}` | `[panel] panel: update panel member Percy Liang` |
+| `panel:module review` | `[panel] {module}: panel review round {round}` | `[panel] panel: panel review round 1` |
+| `panel:module member` | `[panel] {module}: update panel member {name}` | `[panel] panel: update panel member Percy Liang` |
 | `panel:board` | `[panel] Board review round {round}` | `[panel] Board review round 1` |
 | `panel:board --update` | `[panel] Board: update {section}` | `[panel] Board: update synthesis` |
 | `panel:board --member` | `[panel] Board: update member {name}` | `[panel] Board: update member Yoshua Bengio` |
@@ -65,8 +65,8 @@ Each command stages only the files it touched:
 | Command | Paths to stage |
 |---------|---------------|
 | `panel:review` | `{paper_dir}/` (includes `_panel.yaml`, `reviews/`, `REVISION-PLAN.md`) |
-| `panel:convene --review` | Module directory: `REVIEW_PANEL.md`, `PANEL-REVISION-PLAN.md`, `panel-reviews/` |
-| `panel:convene --member` | Module directory: `REVIEW_PANEL.md` |
+| `panel:module review` | Module directory: `REVIEW_PANEL.md`, `PANEL-REVISION-PLAN.md`, `panel-reviews/` |
+| `panel:module member` | Module directory: `REVIEW_PANEL.md` |
 | `panel:board --review` | Repo root: `REVIEW_BOARD.md`, `BOARD-REVISION-PLAN-*.md`, `board-reviews/` |
 | `panel:board --update` | Repo root: `REVIEW_BOARD.md`, `BOARD-REVISION-PLAN-*.md` |
 | `panel:board --member` | Repo root: `REVIEW_BOARD.md` |

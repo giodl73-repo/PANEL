@@ -22,7 +22,7 @@ Implement persistent reviewer profiles to reduce token costs by 60-75% in AI-sim
 1. **Research Paper**: `research/panel-reviewer-profiles/` — Empirical validation of token efficiency
 2. **45 Reviewer Profiles**: `context/panel/reviewers/profiles/*.md` — Persistent persona contexts
 3. **Profile Loader**: `shared/reviewer-profile-loader.md` — Resolution chain with caching
-4. **Enhanced Commands**: Updated `panel:review`, `panel:convene`, `panel:reviewers`
+4. **Enhanced Commands**: Updated `panel:review`, `panel:module review`, `panel:reviewers`
 5. **Experimental Results**: A/B comparison demonstrating 60-75% token reduction
 
 ## Galileo's Observation

@@ -251,7 +251,7 @@ paper.reviewers[reviewer.name].profile_version = profiles[reviewer.name].version
 
 **Token savings**: 25,400 tokens per paper (5 reviewers × 2 rounds)
 
-### 2. panel:convene (Module-Level Panel)
+### 2. panel:module review (Module-Level Panel)
 
 **Current**: Loads database for 7-reviewer panel across all papers
 **Modified**: Load 7 profiles once at session start, reuse across papers
@@ -480,7 +480,7 @@ function validateProfile(profile) {
 
 ### Phase 3: Integration (Execution Stage)
 - [ ] Integrate with panel:review (E3)
-- [ ] Integrate with panel:convene (E4)
+- [ ] Integrate with panel:module review (E4)
 - [ ] Update synthesis engine (E5)
 - [ ] Enhance panel:reviewers command (E6)
 
@@ -503,7 +503,7 @@ function validateProfile(profile) {
 ✅ All 45 reviewers have complete profiles
 ✅ Resolution chain handles exact, slug, and fallback cases
 ✅ Session-level caching works correctly
-✅ Integration with panel:review and panel:convene functional
+✅ Integration with panel:review and panel:module review functional
 ✅ AI Simulation Disclosure present in all profiles
 
 ### Performance Requirements

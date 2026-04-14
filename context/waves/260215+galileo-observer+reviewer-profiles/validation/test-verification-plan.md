@@ -81,7 +81,7 @@ As a researcher focused on human-centered AI and meaningful human control...
 
 ---
 
-### Scenario 2: Module-Level Panel (panel:convene)
+### Scenario 2: Module-Level Panel (panel:module review)
 
 **Setup**:
 - Run on module with 3+ papers
@@ -91,7 +91,7 @@ As a researcher focused on human-centered AI and meaningful human control...
 **Verification Steps**:
 
 #### 2.1 Profile Loading at Session Start
-- [ ] Run `panel:convene --review`
+- [ ] Run `panel:module review`
 - [ ] Verify 7 panel profiles loaded at session start (console output)
 - [ ] Check profiles cached for reuse across all papers
 - [ ] Confirm cache hit rate reported after reviewing all papers
@@ -112,7 +112,7 @@ Cache stats: 21 hits, 0 misses (100% hit rate)
 - [ ] Confirm panel member backgrounds summarized in overview section
 
 #### 2.3 Round Tracking
-- [ ] After revisions, run `panel:convene --review` again (round 2)
+- [ ] After revisions, run `panel:module review` again (round 2)
 - [ ] Verify round directory created: `panel-reviews/round-2/`
 - [ ] Check `REVIEW_PANEL.md` updated with round 2 content
 - [ ] Confirm `panel-reviews/round-1/REVIEW_PANEL.md` preserved as snapshot

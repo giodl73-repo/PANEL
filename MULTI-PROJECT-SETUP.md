@@ -201,8 +201,8 @@ panel:review panel-paper-name
 # Show status (shows papers from current project)
 panel:status
 
-# Convene panel review (for current project/module)
-panel:convene
+# Module-level panel review (for current project/module)
+panel:module review
 ```
 
 ## Command Updates Required

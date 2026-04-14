@@ -1,12 +1,12 @@
 id: l2-convene-mock
-name: "panel:convene --review: P1/P2 bubble up from papers, PP items flow back down"
+name: "panel:module review: P1/P2 bubble up from papers, PP items flow back down"
 tier: L2
 plugin: panel
 target: commands/convene.md
 timeout: 90
 
 description: |
-  Lightweight mock test for panel:convene using minimal pre-built fixtures
+  Lightweight mock test for panel:module review using minimal pre-built fixtures
   (2 papers at recheck stage). Validates the full signal loop:
 
   BUBBLE UP:  paper P1/P2 findings → cross-paper PP1/PP2 themes in REVIEW_PANEL.md
@@ -33,7 +33,7 @@ steps:
 
   # Run convene
   - action: invoke-skill
-    skill: "panel:convene --review"
+    skill: "panel:module review"
     sandbox: true
     store: result
 

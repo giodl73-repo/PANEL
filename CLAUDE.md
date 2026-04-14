@@ -35,7 +35,7 @@ A Claude Code plugin that drives research papers through a complete AI-simulated
                         ↕ findings bubble up
                         ↕ revisions flow down
                     ┌───────────────┐
-                    │panel:convene  │  Module level
+                    │panel:module   │  Module level
                     │ REVIEW_PANEL  │  Cross-portfolio panel (7 reviewers)
                     └───────┬───────┘
                         ↕ findings bubble up
@@ -158,7 +158,7 @@ Stage        Description                                    Gate to advance
 3. synthesis Reviews consolidated → SYNTHESIS.md            P1/P2/P3 tiering complete
 4. revision  Author revising based on synthesis             All P1 items addressed
 5. recheck   Round N reviews (N≥2), may loop → synthesis    Avg score ≥ 2.5/4, none < 2/4
-6. ready     Panel review complete (panel:convene)           REVIEW_PANEL.md + PP1 addressed
+6. ready     Panel review complete (panel:module review)      REVIEW_PANEL.md + PP1 addressed
 7. submit    Paper submitted to target venue                Submission confirmed
 8. accepted  Paper accepted at venue                        Acceptance confirmed
 ```
@@ -470,7 +470,7 @@ The profile loader uses a four-tier resolution chain with caching:
 - Full profile context passed to review generation
 - Cache reused in round 2+ (50% hit rate)
 
-**Module Level (`panel:convene`)**:
+**Module Level (`panel:module`)**:
 - 7-member panel profiles loaded at session start
 - Cached for reuse across all papers in module
 - Typical cache hit rate: 100% after first paper

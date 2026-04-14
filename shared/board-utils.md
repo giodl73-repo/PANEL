@@ -143,7 +143,7 @@ Priority classification for board-level items:
 
 | Priority | Label | Criteria |
 |----------|-------|----------|
-| **B1** | Blocking | 3+ board members flag it OR threatens program coherence OR affects 3+ modules |
+| **B1** | High Impact | 3+ board members flag it OR threatens program coherence OR affects 3+ modules |
 | **B2** | Important | 2+ board members flag it OR affects 2+ modules |
 | **B3** | Nice-to-have | 1 board member flags it OR affects 1 module |
 
@@ -297,7 +297,7 @@ Determines current round by scanning `board-reviews/round-*/` directories.
 ```markdown
 # Board Revision Plan — [Module Name] — Round {N}
 
-## B1: Blocking (must address)
+## B1: High Impact (address before next round)
 - [ ] B1.1: [Title] — [description]
 - [ ] B1.2: ...
 

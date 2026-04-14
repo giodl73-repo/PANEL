@@ -1,5 +1,5 @@
 id: l2-convene-member-uses-profile
-name: "panel:convene --member loads OLE profile and injects context into regenerated assessment"
+name: "panel:module member loads OLE profile and injects context into regenerated assessment"
 tier: L2
 plugin: panel
 target: commands/convene.md
@@ -31,7 +31,7 @@ steps:
 
   # Regenerate one member's assessment
   - action: invoke-skill
-    skill: "panel:convene --member \"Percy Liang\""
+    skill: "panel:module member \"Percy Liang\""
     sandbox: true
     store: result
 

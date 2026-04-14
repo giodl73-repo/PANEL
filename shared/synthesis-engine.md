@@ -19,7 +19,7 @@ Shared utility for consolidating individual reviews into a unified synthesis doc
 
 | Priority | Label | Criteria | Action Required |
 |----------|-------|----------|-----------------|
-| **P1** | Blocking | Raised by 3+ reviewers OR any reviewer marks as "major issue" OR threatens validity | Must address before resubmission |
+| **P1** | High Impact | Raised by 3+ reviewers OR any reviewer marks as "major issue" OR threatens validity | Address before next round |
 | **P2** | Important | Raised by 2+ reviewers OR substantive improvement opportunity | Should address; strengthens paper |
 | **P3** | Nice-to-have | Raised by 1 reviewer, minor suggestion | Address if time permits |
 
@@ -60,7 +60,7 @@ Output: synthesis document structure
 | Percy Liang | Stanford | ML Research, Evaluation | 3/4 | Revise |
 | ...
 
-## Priority 1: Blocking Issues
+## Priority 1: High Impact Issues
 ### P1.1: [Issue Title] (raised by: Percy Liang [ML Research], Reviewer B, C)
 *Context*: Percy Liang's evaluation lens focuses on comprehensive benchmarking and reproducibility.
 

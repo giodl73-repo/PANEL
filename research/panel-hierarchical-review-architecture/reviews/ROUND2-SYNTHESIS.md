@@ -212,7 +212,7 @@ The paper has successfully addressed all 5 P1 blocking issues from Round 1 and p
 
 All five reviewers recommend acceptance (3 strong accepts, 2 accepts, 0 weak accepts or rejects). The remaining issues are minor polish for the camera-ready version, not blocking concerns.
 
-**Next Stage**: The paper is ready for module-level panel review (`panel:convene`) to assess cross-portfolio fit and identify any module-level concerns (PP1/PP2/PP3).
+**Next Stage**: The paper is ready for module-level panel review (`panel:module review`) to assess cross-portfolio fit and identify any module-level concerns (PP1/PP2/PP3).
 
 ---
 

@@ -177,7 +177,7 @@ Commands affected:
 - `panel:setup` - Creates papers in new researchPath
 - `panel:review` - Reviews papers from new researchPath
 - `panel:status` - Shows papers from new researchPath
-- `panel:convene` - Convenes panel for new project/module
+- `panel:module` - Module-tier operations for new project/module
 - `panel:board` - Board review across projects (sees all)
 - `panel:author` - Authors papers in new researchPath
 - `panel:import` - Imports papers to new researchPath

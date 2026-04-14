@@ -27,7 +27,7 @@ steps:
 
   # Tier 2: Panel review synthesizes paper findings
   - action: invoke-skill
-    skill: "panel:convene --review"
+    skill: "panel:module review"
     sandbox: true
     cwd: tests/fixtures/mock-monorepo/cookie-science
     store: panel_result

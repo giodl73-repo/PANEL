@@ -46,7 +46,7 @@ history:
     notes: Round 2 reviews generated, avg score 3.6/4 (up from 2.6/4), gate passed
   - stage: ready
     entered: 2026-02-07
-    notes: Paper-level review complete, ready for panel-level review (panel:convene)
+    notes: Paper-level review complete, ready for panel-level review (panel:module review)
 p1_items:
   - id: P1.1
     description: "Evaluation lacks ground truth and validation"

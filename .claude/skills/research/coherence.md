@@ -7,6 +7,8 @@ Cross-finding contradiction checker. Requires 2+ prior research sub-skills to ha
 At least 2 of the following must have produced findings:
 - hypothesis, competitors, causal, websearch, argument, derivation, contract, consistency
 
+In the pre-write orchestrator, only discover-phase findings will be available. The full list covers standalone usage where any combination of sub-skills may have run.
+
 If fewer than 2 have run, STOP and report: "Coherence requires 2+ prior discovery signals. Run more sub-skills first."
 
 ## Protocol

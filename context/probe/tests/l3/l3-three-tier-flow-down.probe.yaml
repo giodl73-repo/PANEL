@@ -36,7 +36,7 @@ steps:
 
   # Panel applies board findings down to papers
   - action: invoke-skill
-    skill: "panel:convene --apply"
+    skill: "panel:module apply"
     sandbox: true
     cwd: tests/fixtures/mock-monorepo/cookie-science
     store: panel_apply

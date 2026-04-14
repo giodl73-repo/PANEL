@@ -1,12 +1,12 @@
 id: l2-panel-review
-name: "panel:convene generates module-level REVIEW_PANEL.md"
+name: "panel:module review generates module-level REVIEW_PANEL.md"
 tier: L2
 plugin: panel
 target: commands/convene.md
 timeout: 60
 
 description: |
-  Verify panel:convene reads all paper states in a module, selects 7
+  Verify panel:module review reads all paper states in a module, selects 7
   panel reviewers, generates REVIEW_PANEL.md with cross-portfolio
   assessment and PP1/PP2/PP3 findings.
 
@@ -17,7 +17,7 @@ steps:
     description: "Cookie Science Lab: chip-distribution, crumb-analysis, dunk-methodology, optimal-cookie, sharing-economics"
 
   - action: invoke-skill
-    skill: "panel:convene --review"
+    skill: "panel:module review"
     sandbox: true
     store: result
 

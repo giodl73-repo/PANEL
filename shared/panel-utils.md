@@ -68,7 +68,7 @@ Priority classification for panel-level items:
 
 | Priority | Label | Criteria |
 |----------|-------|----------|
-| **PP1** | Blocking | Cross-paper pattern threatening module quality OR affects 3+ papers |
+| **PP1** | High Impact | Cross-paper pattern threatening module quality OR affects 3+ papers |
 | **PP2** | Important | Affects 2+ papers OR substantive module-level improvement |
 | **PP3** | Nice-to-have | Affects 1 paper, surfaced by panel perspective |
 
@@ -204,7 +204,7 @@ Determines current round by scanning `panel-reviews/round-*/` directories. If no
 ```markdown
 # Panel Revision Plan — [Module Name] — Round {N}
 
-## PP1: Blocking (must address)
+## PP1: High Impact (address before next round)
 - [ ] PP1.1: [Title] — affects: [papers] — [description]
 - [ ] PP1.2: ...
 

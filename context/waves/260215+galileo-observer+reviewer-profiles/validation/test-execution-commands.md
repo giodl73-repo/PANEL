@@ -102,7 +102,7 @@ grep "AI Simulation" research/panel-review-methodology/revisions.md
 
 ```bash
 # Run panel review
-panel:convene --review
+panel:module review
 
 # Monitor console output for cache hits
 # Expected:
@@ -130,7 +130,7 @@ grep "PP1" research/REVIEW_PANEL.md
 
 ```bash
 # After revisions, run round 2
-panel:convene --review
+panel:module review
 
 # Verify round directory structure
 ls research/panel-reviews/

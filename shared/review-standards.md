@@ -90,7 +90,7 @@ Synthesis consolidates individual reviews into `SYNTHESIS.md` with priority clas
 
 | Level | Criteria | Action |
 |-------|----------|--------|
-| **P1** (Blocking) | 3+ reviewers raise it, OR any reviewer marks as major issue, OR threatens validity | Address before next round |
+| **P1** (High Impact) | 3+ reviewers raise it, OR any reviewer marks as major issue, OR threatens validity | Address before next round |
 | **P2** (Important) | 2+ reviewers raise it, OR substantive improvement | Should address; strengthens paper |
 | **P3** (Nice-to-have) | 1 reviewer, minor suggestion | Address if time permits |
 

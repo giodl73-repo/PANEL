@@ -1,6 +1,6 @@
 ---
 name: research
-description: "Research pipeline for academic papers. Sub-commands: pre-write (6-phase discovery pipeline), post-write (7-phase validation pipeline), plus 14 individual research skills (hypothesis, competitors, causal, websearch, coherence, synthesize, argument, derivation, contract, consistency, dimensional, referee, abstract, score). Run individually or chained via the orchestrators."
+description: "Research pipeline for academic papers. Sub-commands: pre-write (6-phase discovery pipeline), post-write (8-phase validation pipeline), plus 14 individual research skills (hypothesis, competitors, causal, websearch, coherence, synthesize, argument, derivation, contract, consistency, dimensional, referee, abstract, score). Run individually or chained via the orchestrators."
 ---
 
 You are running `/panel:research` for: **{{args}}**
@@ -23,7 +23,7 @@ If no sub-command is given, show the help summary and stop.
 | Sub-command | Description |
 |-------------|-------------|
 | `pre-write <topic>` | Full 6-phase pre-writing pipeline |
-| `post-write <topic>` | Full 7-phase post-writing validation |
+| `post-write <topic>` | Full 8-phase post-writing validation |
 
 ### Discover Phase (pre-write components)
 
@@ -117,11 +117,11 @@ After each skill, summarize the top 1-2 findings before proceeding.
 
 ### Phase 3 — Coherence + Synthesize
 
-7. **coherence** — `coherence.md`
+8. **coherence** — `coherence.md`
 
 Print the verdict: `COHERENCE: [N] blocking, [M] advisory`
 
-8. **synthesize** — `synthesize.md`
+9. **synthesize** — `synthesize.md`
 
 - If **PROCEED**: continue to Phase 4.
 - If **PAUSE**: present blocking items. Wait for user to confirm resolution. Re-run coherence to verify blocks are cleared.

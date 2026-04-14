@@ -1,12 +1,12 @@
 id: l2-panel-apply-revisions
-name: "panel:convene --apply drives PP1/PP2 revisions down to papers"
+name: "panel:module apply drives PP1/PP2 revisions down to papers"
 tier: L2
 plugin: panel
 target: commands/convene.md
 timeout: 60
 
 description: |
-  Verify panel:convene --apply generates per-paper revision plans from
+  Verify panel:module apply generates per-paper revision plans from
   PP1/PP2 findings and applies edits to paper LaTeX source files.
 
 steps:
@@ -16,7 +16,7 @@ steps:
     description: "Cookie Science Lab with complete REVIEW_PANEL.md containing PP1 (methodology inconsistency)"
 
   - action: invoke-skill
-    skill: "panel:convene --apply"
+    skill: "panel:module apply"
     sandbox: true
     store: result
 
