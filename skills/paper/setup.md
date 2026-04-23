@@ -5,6 +5,10 @@
 Initialize one or more paper directories. Each gets `_panel.yaml`, `sections/`,
 `reviews/`, `Makefile`, `REVISION-PLAN.md`. Prompts for venue if not supplied.
 
+**Slug rule**: the paper directory name is a bare slug — do NOT prefix it with the
+module name (e.g. `token-efficiency`, not `panel-token-efficiency`). Papers live
+under `{researchDir}/papers/{slug}/`; the module is the parent directory.
+
 **Bulk**: `panel:paper setup name-1 name-2 name-3 "ACL 2026"` — batch-initialize.
 **From MODULE.md**: if MODULE.md exists, seeds `plan.md` with track context.
 

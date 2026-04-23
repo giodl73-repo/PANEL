@@ -160,4 +160,4 @@ Higher-tier scores aggregate lower-tier results:
 
 ## See Also
 
-- `.claude/skills/research/score.md` — CEMCK self-assessment protocol
+- `skills/research/score.md` — CEMCK self-assessment protocol

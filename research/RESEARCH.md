@@ -8,18 +8,20 @@
 
 ## Paper Inventory
 
+Directories are bare slugs under `publications/`; generated PDFs are prefixed with the module name (`panel-`) so they can share a global `docs/` across modules.
+
 | # | Directory | Title | PDF | Venue Target | Score | Tier |
 |---|-----------|-------|-----|-------------|-------|------|
-| 1 | [panel-review-methodology](panel-review-methodology/) | AI-Simulated Expert Review: A Methodology for Pre-Submission Paper Assessment | [PDF](docs/panel-review-methodology.pdf) | CHI / CSCW | — | — |
-| 2 | [panel-reviewer-calibration](panel-reviewer-calibration/) | Calibrating AI Reviewer Personas: Domain Expertise Simulation Without Fine-Tuning | [PDF](docs/panel-reviewer-calibration.pdf) | EMNLP / ACL | — | — |
-| 3 | [panel-revision-dynamics](panel-revision-dynamics/) | Multi-Round Revision Dynamics: Measuring Paper Quality Improvement Through Iterative AI Review | [PDF](docs/panel-revision-dynamics.pdf) | NeurIPS D&B | — | — |
-| 4 | [panel-portfolio-assessment](panel-portfolio-assessment/) | Cross-Portfolio Expert Panels: Holistic Assessment of Multi-Paper Research Programs | [PDF](docs/panel-portfolio-assessment.pdf) | JCDL / Scientometrics | — | — |
-| 5 | [panel-synthesis-methods](panel-synthesis-methods/) | From Reviews to Revisions: Automated Synthesis and Priority Classification of Expert Feedback | [PDF](docs/panel-synthesis-methods.pdf) | AAAI / IJCAI | — | — |
-| 6 | [panel-hierarchical-review-architecture](panel-hierarchical-review-architecture/) | Hierarchical Review Architecture: Scaling Expert Feedback Through Three-Tier Synthesis | [PDF](docs/panel-hierarchical-review-architecture.pdf) | ICSE / FSE / OOPSLA | — | — |
-| 7 | [panel-closed-loop-automation](panel-closed-loop-automation/) | From Reviews to Revisions: Closed-Loop Automation of Academic Paper Improvement | [PDF](docs/panel-closed-loop-automation.pdf) | CHI / CSCW / HCOMP | — | — |
-| 8 | [panel-meta-research-automation](panel-meta-research-automation/) | Meta-Research Automation: Generating Research Papers from Development Artifacts | [PDF](docs/panel-meta-research-automation.pdf) | MSR / ICSE-NIER / Empirical SE | — | — |
-| 9 | [panel-research-quality-impact](panel-research-quality-impact/) | Panel-Driven Research Quality Impact: Comparing Traditional and AI-Simulated Expert Review | [PDF](docs/panel-research-quality-impact.pdf) | CSCW / CHI | — | — |
-| 10 | [panel-reviewer-profiles](panel-reviewer-profiles/) | Token-Efficient Persona Simulation: Persistent Profiles for AI-Simulated Expert Reviews | [PDF](docs/panel-reviewer-profiles.pdf) | EMNLP Demo | — | — |
+| 1 | [review-methodology](publications/review-methodology/) | AI-Simulated Expert Review: A Methodology for Pre-Submission Paper Assessment | [PDF](docs/panel-review-methodology.pdf) | CHI / CSCW | — | — |
+| 2 | [reviewer-calibration](publications/reviewer-calibration/) | Calibrating AI Reviewer Personas: Domain Expertise Simulation Without Fine-Tuning | [PDF](docs/panel-reviewer-calibration.pdf) | EMNLP / ACL | — | — |
+| 3 | [revision-dynamics](publications/revision-dynamics/) | Multi-Round Revision Dynamics: Measuring Paper Quality Improvement Through Iterative AI Review | [PDF](docs/panel-revision-dynamics.pdf) | NeurIPS D&B | — | — |
+| 4 | [portfolio-assessment](publications/portfolio-assessment/) | Cross-Portfolio Expert Panels: Holistic Assessment of Multi-Paper Research Programs | [PDF](docs/panel-portfolio-assessment.pdf) | JCDL / Scientometrics | — | — |
+| 5 | [synthesis-methods](publications/synthesis-methods/) | From Reviews to Revisions: Automated Synthesis and Priority Classification of Expert Feedback | [PDF](docs/panel-synthesis-methods.pdf) | AAAI / IJCAI | — | — |
+| 6 | [hierarchical-review-architecture](publications/hierarchical-review-architecture/) | Hierarchical Review Architecture: Scaling Expert Feedback Through Three-Tier Synthesis | [PDF](docs/panel-hierarchical-review-architecture.pdf) | ICSE / FSE / OOPSLA | — | — |
+| 7 | [closed-loop-automation](publications/closed-loop-automation/) | From Reviews to Revisions: Closed-Loop Automation of Academic Paper Improvement | [PDF](docs/panel-closed-loop-automation.pdf) | CHI / CSCW / HCOMP | — | — |
+| 8 | [meta-research-automation](publications/meta-research-automation/) | Meta-Research Automation: Generating Research Papers from Development Artifacts | [PDF](docs/panel-meta-research-automation.pdf) | MSR / ICSE-NIER / Empirical SE | — | — |
+| 9 | [research-quality-impact](publications/research-quality-impact/) | Panel-Driven Research Quality Impact: Comparing Traditional and AI-Simulated Expert Review | [PDF](docs/panel-research-quality-impact.pdf) | CSCW / CHI | — | — |
+| 10 | [reviewer-profiles](publications/reviewer-profiles/) | Token-Efficient Persona Simulation: Persistent Profiles for AI-Simulated Expert Reviews | [PDF](docs/panel-reviewer-profiles.pdf) | EMNLP Demo | — | — |
 
 ---
 

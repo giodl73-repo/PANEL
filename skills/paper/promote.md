@@ -22,7 +22,8 @@ panel:paper promote my-quick-research --venue "CHI 2026"
 to fill in the formal LaTeX sections using the markdown paper as source material.
 
 ```
-✓ Promoted: my-quick-research → publications/panel-my-quick-research/
+✓ Promoted: my-quick-research → publications/my-quick-research/
+  PDF target: docs/panel-my-quick-research.pdf
   Track assignments carried over: [A, C]
-  Next: panel:publication author panel-my-quick-research
+  Next: panel:publication author my-quick-research
 ```

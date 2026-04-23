@@ -97,7 +97,7 @@ fi
 echo ""
 echo "Files to sync:"
 echo "  - .claude-plugin/"
-echo "  - commands/"
+echo "  - skills/"
 echo "  - shared/"
 echo "  - templates/"
 echo "  - config/"
@@ -129,10 +129,10 @@ if [ -d ".claude-plugin" ]; then
     echo "  ✓ .claude-plugin/"
 fi
 
-# commands/
-if [ -d "commands" ]; then
-    cp -r commands "$PLUGIN_DIR/"
-    echo "  ✓ commands/"
+# skills/
+if [ -d "skills" ]; then
+    cp -r skills "$PLUGIN_DIR/"
+    echo "  ✓ skills/"
 fi
 
 # shared/

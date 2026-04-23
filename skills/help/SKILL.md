@@ -1,5 +1,5 @@
 ---
-name: panel:help
+name: help
 description: Interactive help system with topics (stages, reviewers, scoring, workflow)
 user-invocable: true
 ---

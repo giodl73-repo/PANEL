@@ -1,5 +1,5 @@
 ---
-name: panel:reviewers
+name: reviewers
 description: Browse, search, filter reviewer database by category/venue/expertise
 user-invocable: true
 ---

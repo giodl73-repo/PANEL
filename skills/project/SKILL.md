@@ -1,5 +1,5 @@
 ---
-name: panel:project
+name: project
 description: Switch between panel projects or list all projects
 user-invocable: true
 ---

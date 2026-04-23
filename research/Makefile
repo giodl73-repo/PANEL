@@ -2,7 +2,7 @@
 # Discovers all publications dynamically
 # PDFs land in docs/
 
-PUBS     := $(sort $(dir $(wildcard panel-*/main.tex)))
+PUBS     := $(sort $(dir $(wildcard publications/*/main.tex)))
 DOCS_DIR := docs
 
 .PHONY: all pdf dist clean list

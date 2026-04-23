@@ -1,5 +1,5 @@
 ---
-name: panel:uninstall
+name: uninstall
 description: Remove panel plugin data and configuration — clean uninstall with selective retention
 user-invocable: true
 ---

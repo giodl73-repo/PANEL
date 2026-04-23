@@ -67,35 +67,35 @@ panel/
 │   ├── marketplace.json         # Standalone marketplace (panel only)
 │   └── craft.json               # Craft feature tracking
 ├── .claude/
-│   ├── panel.json               # Plugin configuration (gitStrategy, suppressMessages)
-│   └── skills/                  # Skill definitions (.claude/skills/{name}/SKILL.md)
-│       ├── paper/SKILL.md       # Quick markdown research papers
-│       ├── publication/SKILL.md # Formal LaTeX publication lifecycle
-│       ├── module/SKILL.md      # Module-tier operations
-│       ├── board/SKILL.md       # Monorepo-level board review
-│       ├── setup/SKILL.md       # Project initialization
-│       ├── upgrade/SKILL.md     # Migration from v1.x to v2.0
-│       ├── reviewers/SKILL.md   # Reviewer database browser
-│       ├── project/SKILL.md     # Multi-project switching
-│       ├── report/SKILL.md      # Generate review reports
-│       ├── help/SKILL.md        # Interactive help system
-│       ├── uninstall/SKILL.md   # Clean plugin removal
-│       └── research/            # Research pipeline (pre-write, post-write, 14 sub-skills)
-│           ├── SKILL.md         # Dispatcher + orchestrators
-│           ├── hypothesis.md    # Falsifiable claim + test designs
-│           ├── competitors.md   # Competitive landscape, inertia-first
-│           ├── causal.md        # Cause-effect chain tracing
-│           ├── websearch.md     # Evidence grounding via web search
-│           ├── coherence.md     # Cross-finding contradiction detection
-│           ├── synthesize.md    # PROCEED / PAUSE / PIVOT verdict
-│           ├── argument.md      # 4-specialist logical argument trace
-│           ├── derivation.md    # Math derivation verification (STEM)
-│           ├── contract.md      # Methodology vs claims verification
-│           ├── consistency.md   # Quantitative consistency checking
-│           ├── dimensional.md   # Unit analysis (STEM)
-│           ├── referee.md       # Hostile peer review simulation
-│           ├── abstract.md      # Structured 6-part abstract
-│           └── score.md         # CEMCK self-assessment rubric (25-point)
+│   └── panel.json               # Plugin configuration (gitStrategy, suppressMessages)
+├── skills/                      # Plugin skills (auto-discovered by Claude Code)
+│   ├── paper/SKILL.md           # Quick markdown research papers
+│   ├── publication/SKILL.md     # Formal LaTeX publication lifecycle
+│   ├── module/SKILL.md          # Module-tier operations
+│   ├── board/SKILL.md           # Monorepo-level board review
+│   ├── setup/SKILL.md           # Project initialization
+│   ├── upgrade/SKILL.md         # Migration from v1.x to v2.0
+│   ├── reviewers/SKILL.md       # Reviewer database browser
+│   ├── project/SKILL.md         # Multi-project switching
+│   ├── report/SKILL.md          # Generate review reports
+│   ├── help/SKILL.md            # Interactive help system
+│   ├── uninstall/SKILL.md       # Clean plugin removal
+│   └── research/                # Research pipeline (pre-write, post-write, 14 sub-skills)
+│       ├── SKILL.md             # Dispatcher + orchestrators
+│       ├── hypothesis.md        # Falsifiable claim + test designs
+│       ├── competitors.md       # Competitive landscape, inertia-first
+│       ├── causal.md            # Cause-effect chain tracing
+│       ├── websearch.md         # Evidence grounding via web search
+│       ├── coherence.md         # Cross-finding contradiction detection
+│       ├── synthesize.md        # PROCEED / PAUSE / PIVOT verdict
+│       ├── argument.md          # 4-specialist logical argument trace
+│       ├── derivation.md        # Math derivation verification (STEM)
+│       ├── contract.md          # Methodology vs claims verification
+│       ├── consistency.md       # Quantitative consistency checking
+│       ├── dimensional.md       # Unit analysis (STEM)
+│       ├── referee.md           # Hostile peer review simulation
+│       ├── abstract.md          # Structured 6-part abstract
+│       └── score.md             # CEMCK self-assessment rubric (25-point)
 ├── shared/
 │   ├── project-config.md        # Multi-project configuration loader (v1.2.0+)
 │   ├── stage-machine.md         # Stage progression logic + gates
@@ -123,7 +123,6 @@ panel/
 │   ├── synthesis-template.md    # Synthesis document structure
 │   ├── revision-plan-template.md  # Revision plan structure
 │   └── reviewer-profile-template.md  # Reviewer profile structure (v1.3.0+)
-├── commands/                    # Legacy command files (migrated to .claude/skills/)
 ├── config/
 │   ├── stages.yaml              # Stage definitions + gates
 │   ├── scoring.yaml             # Scoring rubrics (1-4 scale, 0-10 scale)
@@ -134,13 +133,15 @@ panel/
 │       └── reviewers/
 │           ├── _index.yaml      # Master registry (45 reviewers, 10 categories)
 │           └── profiles/        # Persistent reviewer profiles (~2KB each)
-├── research/                    # Research papers (5 papers)
-│   ├── panel-{name}/           # Each paper: main.tex, sections/, Makefile
-│   ├── docs/                   # Compiled PDFs
-│   ├── Makefile                # Master build
-│   ├── RESEARCH.md             # Paper inventory + dependency graph
-│   ├── REVIEWERS.md            # Module reviewer subset
-│   └── REVIEW_PANEL.md         # Module-level panel review
+├── research/                    # Research module root (10 publications)
+│   ├── publications/            # LaTeX publications (bare slugs; PDFs prefixed with module)
+│   │   └── {slug}/              # Each publication: main.tex, sections/, Makefile
+│   ├── papers/                  # Quick markdown papers (optional; bare slugs)
+│   ├── docs/                    # Compiled PDFs — {module}-{slug}.pdf
+│   ├── Makefile                 # Master build (globs publications/*/main.tex)
+│   ├── RESEARCH.md              # Paper inventory + dependency graph
+│   ├── REVIEWERS.md             # Module reviewer subset
+│   └── REVIEW_PANEL.md          # Module-level panel review
 ├── docs/                        # Plugin documentation
 ├── scripts/
 │   ├── sync-to-plugin.sh       # → C:\src\plugins\panel
@@ -249,14 +250,15 @@ craftworks/                          # Monorepo root
 │   ├── craft/                       # Plugin implementations
 │   ├── waves/
 │   └── probe/
-├── research/                        # Research papers by plugin
+├── research/                        # Research papers by module (directories are bare slugs)
 │   ├── craft/                       # Craft research (module)
-│   │   ├── panel-paper-1/
-│   │   ├── panel-paper-2/
+│   │   ├── publications/{slug}/     # PDFs emit as docs/craft-{slug}.pdf
+│   │   ├── papers/{slug}/
+│   │   ├── docs/                    # craft-{slug}.pdf outputs
 │   │   ├── RESEARCH.md
 │   │   └── REVIEW_PANEL.md
 │   ├── waves/                       # Waves research (module)
-│   │   ├── panel-paper-1/
+│   │   ├── publications/{slug}/     # PDFs emit as docs/waves-{slug}.pdf
 │   │   ├── RESEARCH.md
 │   │   └── REVIEW_PANEL.md
 │   └── probe/                       # Probe research (module)
@@ -284,7 +286,7 @@ Existing standalone installations continue to work without changes:
 
 ## Skills (12)
 
-All skills are in `.claude/skills/{name}/SKILL.md` format.
+All skills are in `skills/{name}/SKILL.md` format (auto-discovered by the plugin loader).
 
 | Skill | Tier | Purpose |
 |-------|------|---------|
@@ -545,10 +547,10 @@ Run validation suite:
 **Generate review with profiles**:
 ```bash
 # Profiles loaded automatically
-panel:review --paper panel-review-methodology
+panel:review --paper review-methodology
 
 # Check profile reference in state
-cat research/panel-review-methodology/_panel.yaml | grep profile_ref
+cat research/publications/review-methodology/_panel.yaml | grep profile_ref
 ```
 
 **Browse profiles**:
@@ -581,7 +583,7 @@ panel:reviewers edit percy-liang
 - Master registry: `context/panel/reviewers/_index.yaml`
 - Template: `templates/reviewer-profile-template.md`
 - Validation: Wave 7 (Galileo Observer) experimental protocol
-- Research paper: `research/panel-reviewer-profiles/` (token efficiency study)
+- Research paper: `research/publications/reviewer-profiles/` (token efficiency study)
 
 ## Round Tracking (Panel + Board Tiers)
 
@@ -608,15 +610,24 @@ Paper-level keeps flat file pattern (`ROUND2-REVIEW-*.md`). Panel and board tier
 │       └── ...
 ```
 
-## Research Papers (5)
+## Research Publications (10)
 
-| # | Paper | Venue Target |
-|---|-------|-------------|
-| 1 | panel-review-methodology | CHI / CSCW |
-| 2 | panel-reviewer-calibration | EMNLP / ACL |
-| 3 | panel-revision-dynamics | NeurIPS D&B |
-| 4 | panel-portfolio-assessment | JCDL / Scientometrics |
-| 5 | panel-synthesis-methods | AAAI / IJCAI |
+Directories in `research/publications/` are bare slugs — the module name (`panel`) is
+the parent, not a filename prefix. Generated PDFs *are* module-prefixed
+(`docs/panel-{slug}.pdf`) so a global `docs/` across modules stays collision-free.
+
+| # | Publication | Venue Target |
+|---|-------------|-------------|
+| 1 | review-methodology | CHI / CSCW |
+| 2 | reviewer-calibration | EMNLP / ACL |
+| 3 | revision-dynamics | NeurIPS D&B |
+| 4 | portfolio-assessment | JCDL / Scientometrics |
+| 5 | synthesis-methods | AAAI / IJCAI |
+| 6 | hierarchical-review-architecture | ICSE / FSE / OOPSLA |
+| 7 | closed-loop-automation | CHI / CSCW / HCOMP |
+| 8 | meta-research-automation | MSR / ICSE-NIER / Empirical SE |
+| 9 | research-quality-impact | CSCW / CHI |
+| 10 | reviewer-profiles | EMNLP Demo |
 
 ## Build Commands
 
@@ -626,7 +637,7 @@ cd research
 make all
 
 # Build single paper
-make -C research/panel-review-methodology pdf
+make -C research/publications/review-methodology pdf
 
 # Copy PDFs to docs/
 cd research
