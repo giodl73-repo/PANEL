@@ -1,5 +1,5 @@
 ---
-name: panel:paper
+name: paper
 description: Quick markdown research papers — setup, author, review, status, show, promote. Fast-cycle lightweight research notes and position papers in papers/ directory.
 user-invocable: true
 allowed-tools:

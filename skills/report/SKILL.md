@@ -1,5 +1,5 @@
 ---
-name: panel:report
+name: report
 description: Generate review reports — per-paper, per-round, portfolio-level
 user-invocable: true
 ---

@@ -1,7 +1,8 @@
-SLUG     := panel-portfolio-assessment
-OUTPUT   := main.pdf
-DOCS_DIR := ../docs
-DIST_FILE := $(DOCS_DIR)/$(SLUG).pdf
+MODULE    := panel
+SLUG      := portfolio-assessment
+OUTPUT    := main.pdf
+DOCS_DIR  := ../../docs
+DIST_FILE := $(DOCS_DIR)/$(MODULE)-$(SLUG).pdf
 
 .PHONY: all pdf dist clean watch
 

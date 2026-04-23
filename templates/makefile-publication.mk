@@ -1,11 +1,18 @@
 # Per-publication Makefile
 # Placed at: {researchPath}/publications/{slug}/Makefile
-# PDF lands at: {researchPath}/docs/{slug}.pdf
+# PDF lands at: {researchPath}/docs/{module}-{slug}.pdf
+#
+# The module prefix on the output PDF lets a global docs/ directory collect
+# PDFs from multiple modules without filename collisions.
+#
+# {{MODULE}} is substituted by panel:publication setup from the active project's
+# projectName (.claude/panel.json). Override by editing this line if needed.
 
-SLUG     := $(notdir $(CURDIR))
-OUTPUT   := main.pdf
-DOCS_DIR := ../../docs
-DIST_FILE := $(DOCS_DIR)/$(SLUG).pdf
+MODULE    := {{MODULE}}
+SLUG      := $(notdir $(CURDIR))
+OUTPUT    := main.pdf
+DOCS_DIR  := ../../docs
+DIST_FILE := $(DOCS_DIR)/$(MODULE)-$(SLUG).pdf
 
 .PHONY: all pdf dist clean watch
 

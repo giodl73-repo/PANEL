@@ -1,5 +1,5 @@
 ---
-name: panel:board
+name: board
 description: Board-tier operations — cross-module review, status, revision tracking. Operates across all configured modules in the monorepo.
 user-invocable: true
 allowed-tools:

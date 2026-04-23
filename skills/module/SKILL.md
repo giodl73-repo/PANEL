@@ -1,5 +1,5 @@
 ---
-name: panel:module
+name: module
 description: Module-tier operations — design tracks, run cross-portfolio review, curate toward 9.0+, track status. Runs on one or more modules.
 user-invocable: true
 allowed-tools:

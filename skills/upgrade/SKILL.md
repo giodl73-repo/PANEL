@@ -1,5 +1,5 @@
 ---
-name: panel:upgrade
+name: upgrade
 description: Smart migration from v1.x to v2.0. Detects current layout, renames panel- prefixed directories, restructures into papers/publications, installs Makefiles, migrates reviewer profiles to .craft/roles, updates panel.json. Safe — shows plan before touching anything.
 user-invocable: true
 allowed-tools:
@@ -103,9 +103,13 @@ For each `panel-*/` directory:
 
 ### Plan: Makefile upgrades
 
-- Per-publication: replace hardcoded `DIST_DIR = ../docs` with `../../docs` + dynamic `SLUG`
+- Per-publication: rewrite to new convention — bare `SLUG` from `$(notdir $(CURDIR))`,
+  explicit `MODULE := {{projectName}}`, `DOCS_DIR := ../../docs`, and
+  `DIST_FILE := $(DOCS_DIR)/$(MODULE)-$(SLUG).pdf`. The module-prefixed PDF lets a
+  shared global `docs/` across modules avoid filename collisions while keeping
+  directory names bare.
 - Publications-level: create `publications/Makefile` from `templates/makefile-publications.mk`
-- Module-level: replace hardcoded paper list with `wildcard` discovery
+- Module-level: replace hardcoded paper list with `wildcard publications/*/main.tex` discovery
 
 ### Plan: Reviewer profile migration
 

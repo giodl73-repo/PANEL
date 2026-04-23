@@ -1,5 +1,5 @@
 ---
-name: panel:setup
+name: setup
 description: Initialize panel in a project — create directory structure, copy reviewer database
 user-invocable: true
 ---
@@ -97,10 +97,12 @@ panel:setup --project <path>
 
 ### Level 2 — Per-Paper Setup
 
+Directory slugs are **bare** — the module name is the parent directory, not a filename prefix.
+
 ```
 panel:setup <paper-name> [venue]
-panel:setup panel-cross-venue-analysis "ACL 2026"
-panel:setup panel-new-paper                          # prompts for venue
+panel:setup cross-venue-analysis "ACL 2026"
+panel:setup new-paper                                # prompts for venue
 ```
 
 ### Research Monorepo Connection
@@ -123,7 +125,7 @@ panel:setup --connect <path>
 - `--connect <path>` — Explicit monorepo path (default: ../research)
 
 ### Per-paper
-- `<paper-name>` — Paper directory name (auto-prefixed with `panel-` if missing)
+- `<paper-name>` — Paper directory slug. Bare names only — if a module prefix (e.g. `panel-`) is supplied it is stripped. The module name lives in the parent directory and is prepended only to the generated PDF filename.
 - `[venue]` — Target venue (e.g., "CHI 2026", "NeurIPS D&B"); prompts via AskUserQuestion if omitted
 - `--mode <abstract|draft|full>` — Content mode (default: auto-detect during first review)
 

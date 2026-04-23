@@ -1,5 +1,5 @@
 ---
-name: panel:publication
+name: publication
 description: Formal LaTeX publication lifecycle — setup, author, review, status, show, venue. Full academic paper pipeline with sections, PDF, and venue submission in publications/ directory.
 user-invocable: true
 allowed-tools:
