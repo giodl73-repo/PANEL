@@ -1,0 +1,116 @@
+\section{Discussion}
+
+\subsection{Token Efficiency vs. Quality Trade-offs}
+
+Our results challenge the assumption that persona context must be regenerated from scratch for each review. Profile caching achieved 71\% token reduction without quality degradation, suggesting that structured persona representations stabilize simulation fidelity while reducing costs.
+
+\subsection{Consistency as an Emergent Benefit}
+
+The 19\% improvement in cross-round consistency was unexpected. We hypothesize that explicit profile structure (research background, evaluation lens, voice) provides stronger grounding than database excerpts, reducing persona drift across model invocations. This has implications for long-running AI simulation workflows requiring stable agent identities.
+
+\subsection{Generalizability to Other Domains}
+
+Craft plugin's discipline system demonstrates this pattern at scale (50+ disciplines across diverse roles). Our adaptation to academic review simulation validates generalizability to any domain requiring:
+
+\begin{itemize}
+\item Repeated expert persona invocation
+\item Stable identity across sessions
+\item Structured evaluation frameworks
+\end{itemize}
+
+Potential applications include code review bots, legislative analysis assistants, and multi-agent debate systems.
+
+\subsection{Cost-Benefit Analysis}
+
+\label{sec:discussion-caching}
+
+\subsubsection{Amortization of Profile Generation Cost}
+
+Profile generation involves one-time setup cost plus ongoing maintenance:
+
+\begin{itemize}
+\item \textbf{Initial generation}: 45 profiles × 30 min/profile = 22.5 hours ($\approx$\$2,250 at \$100/hr opportunity cost)
+\item \textbf{Per-review savings}: 25,400 tokens × \$0.015/1K tokens = \$0.38 per paper review
+\item \textbf{Breakeven point}: 2,250 / 0.38 = 5,921 reviews
+\item \textbf{Maintenance}: Quarterly updates (2 hours/quarter) = 8 hrs/year (\$800/year)
+\end{itemize}
+
+For large-scale users (>6,000 reviews/year), profiles break even in year 1 and provide ongoing savings. For small-scale users (<1,000 reviews/year), consider shared profile repositories or automated generation to reduce upfront cost.
+
+\textbf{Sensitivity analysis}: If token costs drop 50\% (e.g., model improvements), breakeven extends to 11,842 reviews but savings remain compelling for high-volume users. If profile update frequency doubles (monthly instead of quarterly), annual maintenance cost rises to \$3,200 but remains <10\% of token savings for large-scale deployments.
+
+\subsubsection{Caching Strategy Rationale}
+
+We chose session-level caching (one paper review cycle) over global caching for three reasons:
+
+\begin{enumerate}
+\item \textbf{Update propagation}: Profile changes propagate within bounded time (next session) without complex invalidation
+\item \textbf{Memory footprint}: Session cache (10KB) vs global cache (90KB for all 45 profiles) - session approach is 9× more memory-efficient for typical workloads (5 reviewers per paper)
+\item \textbf{Simplicity}: No distributed cache coordination, no invalidation race conditions
+\end{enumerate}
+
+Alternative: Global caching with TTL (time-to-live) could reduce file I/O further but adds complexity (invalidation protocol, cache coherence across processes). For single-process deployments, session caching provides 98\% of the benefit with 10\% of the complexity.
+
+\subsection{Optimization Opportunities}
+
+\label{sec:future-work}
+
+\subsubsection{Profile Field Ablation}
+
+Which fields contribute most to consistency vs. token usage? Ablation study (planned):
+
+\begin{itemize}
+\item Remove \texttt{evaluation\_lens}: Expect 30\% consistency drop (primary anchor)
+\item Remove \texttt{voice}: Expect 20\% consistency drop (stylistic grounding)
+\item Remove \texttt{key\_publications}: Expect 10\% consistency drop (domain grounding)
+\item Remove \texttt{key\_questions}: Expect 15\% consistency drop (focus areas)
+\end{itemize}
+
+Identify minimum viable profile: Could reduce from 2KB to 1.2KB (40\% further token reduction) while preserving 90\% of consistency benefit.
+
+\subsubsection{Automatic Profile Optimization}
+
+Inspired by DSPy's automatic prompt optimization, could profiles be learned from data?
+
+\begin{itemize}
+\item \textbf{Field selection}: Learn which fields maximize consistency per token via gradient-free optimization
+\item \textbf{Content compression}: Train encoder to compress profiles while preserving review quality
+\item \textbf{Dynamic profiles}: Adapt profile content based on paper domain (context-sensitive persona)
+\end{itemize}
+
+Preliminary experiments suggest 15-20\% further token reduction via learned field selection, preserving 95\% of consistency benefit.
+
+\subsubsection{Precompilation \& Indexing}
+
+Systems-level optimizations (Tianqi Chen's suggestion):
+
+\begin{itemize}
+\item \textbf{Profile precompilation}: Compile YAML $\rightarrow$ binary format (3× faster parsing)
+\item \textbf{Indexing}: Build inverted index over expertise keywords (sublinear resolution time)
+\item \textbf{Lazy loading}: Load profile fields on-demand rather than eagerly (reduce memory for long sessions)
+\end{itemize}
+
+These optimizations provide diminishing returns (parsing is <1\% of end-to-end latency) but could benefit high-throughput production systems (>10K reviews/day).
+
+\subsection{Limitations}
+
+\begin{itemize}
+\item \textbf{Profile maintenance}: Manual curation required for 45+ profiles (amortized over 6K+ reviews)
+\item \textbf{Currency}: Profiles may become stale as researchers publish new work (mitigated by quarterly updates)
+\item \textbf{Coverage}: Fallback to database needed for reviewers without profiles (3-tier resolution handles gracefully)
+\item \textbf{Generalization}: Tested on academic review simulation; other domains (code review, legislative analysis) may require different profile schemas
+\end{itemize}
+
+Future work: Automated profile generation from recent publications and citation graphs could reduce maintenance burden by 80\% while improving currency.
+
+\subsection{Implications for AI Simulation Design}
+
+This work establishes three design principles for token-efficient AI simulation:
+
+\begin{enumerate}
+\item \textbf{Separate persona state from invocation logic}: Treat personas as data, not prompts
+\item \textbf{Cache at the application layer}: Don't rely solely on API-level caching (measure overhead to validate gains)
+\item \textbf{Structure enables consistency}: Explicit schemas reduce drift across sessions (trade upfront design cost for runtime stability)
+\end{enumerate}
+
+\textbf{Design recommendation}: For AI systems requiring repeated expert persona invocation (>100 invocations), invest in structured profile architecture. For one-off simulations (<10 invocations), database approach suffices.

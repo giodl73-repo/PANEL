@@ -1,0 +1,8 @@
+{
+  "name": "panel",
+  "version": "2.3.0",
+  "description": "AI-simulated expert review lifecycle for research papers. Three-tier architecture: panel:paper (paper lifecycle), panel:module (module review + tracks), panel:board (cross-module program review). Research pipeline: panel:research (pre-write discovery, post-write validation, 14 sub-skills).",
+  "author": {
+    "name": "Gio Della-Libera"
+  }
+}

@@ -1,0 +1,53 @@
+id: l1-state-loader-write
+name: state-loader writes updated state back to _panel.yaml
+tier: L1
+plugin: panel
+target: shared/state-loader.md
+timeout: 30
+
+description: |
+  Verify that state-loader can write an updated state object back to _panel.yaml,
+  preserving existing fields, adding new history entries, and producing valid YAML.
+
+steps:
+  - action: prepare-fixture
+    source: tests/fixtures/mock-monorepo/grover-adventures/panel-waiter-dilemma/_panel.yaml
+    dest: mock-scenarios/write-test/_panel.yaml
+
+  - action: mutate-state
+    path: mock-scenarios/write-test/_panel.yaml
+    changes:
+      stage: revision
+      history_append:
+        stage: revision
+        date: "2026-02-01"
+        note: "Grover begins revising the waiter dilemma"
+        round: 1
+
+  - action: read-file
+    path: mock-scenarios/write-test/_panel.yaml
+    store: updated
+
+  - action: assert-valid-yaml
+    input: $updated
+
+  - action: assert-field
+    input: $updated
+    field: stage
+    expected: revision
+
+  - action: assert-field
+    input: $updated
+    field: paper
+    expected: panel-waiter-dilemma
+    description: Original fields preserved
+
+  - action: assert-reviewer-names
+    input: $updated.reviewers
+    expected: [Grover, Big Bird, Mr. Snuffleupagus, Elmo, Dr. Bunsen Honeydew]
+    description: Reviewer panel preserved
+
+  - action: assert-array-length-gte
+    input: $updated.history
+    expected: 4
+    description: History now has 4 entries (3 original + 1 appended)

@@ -1,0 +1,99 @@
+# Sesame Street Mock Monorepo — Fixture Index
+# Source: tests/fixtures/mock-monorepo/
+# Coverage: All 3 tiers, all 8 stages, rounds 1-2, 15 papers, 15+ reviewers
+
+monorepo_root: tests/fixtures/mock-monorepo
+
+modules:
+  cookie-science:
+    papers: 5
+    stage_coverage: [draft, panel, synthesis, revision, recheck, ready]
+    has_round2: true
+    has_review_panel: true
+    has_pp_findings: true
+    reviewers: [Cookie Monster, Swedish Chef, Count von Count, Prairie Dawn, Bert]
+    panel_members: [Cookie Monster, Swedish Chef, Count von Count, Prairie Dawn, Bert, Telly Monster, Ernie]
+    papers_detail:
+      panel-chip-distribution:
+        stage: ready
+        round: 2
+        avg_score: 3.2
+        has_revision_plan: true
+      panel-optimal-cookie-consumption:
+        stage: ready
+        round: 2
+        avg_score: 3.2
+      panel-dunk-methodology:
+        stage: ready
+        round: 2
+        avg_score: 3.2
+      panel-crumb-analysis:
+        stage: recheck
+        round: 1
+        avg_score: 3.0
+      panel-sharing-economics:
+        stage: ready
+        round: 2
+        avg_score: 2.6
+
+  grover-adventures:
+    papers: 5
+    stage_coverage: [draft, panel, synthesis]
+    has_round2: false
+    has_review_panel: true
+    reviewers: [Grover, Big Bird, Mr. Snuffleupagus, Elmo, Dr. Bunsen Honeydew]
+    papers_detail:
+      panel-waiter-dilemma:
+        stage: synthesis
+        round: 1
+        avg_score: 2.4
+      panel-helping-dynamics:
+        stage: synthesis
+        round: 1
+      panel-monster-anxiety:
+        stage: synthesis
+        round: 1
+      panel-super-grover-flight:
+        stage: synthesis
+        round: 1
+      panel-near-far-metrics:
+        stage: synthesis
+        round: 1
+
+  oscar-trash-lab:
+    papers: 5
+    stage_coverage: [draft, panel]
+    has_round2: false
+    has_review_panel: true
+    reviewers: [Oscar the Grouch, Miss Piggy, Scooter, Statler, Waldorf]
+    papers_detail:
+      panel-trash-aesthetics:
+        stage: panel
+        has_reviews: true
+        has_synthesis: true
+      panel-worm-composting:
+        stage: panel
+        has_reviews: true
+      panel-grouch-sentiment:
+        stage: panel
+        has_reviews: true
+      panel-recycling-optimization:
+        stage: draft
+        round: 0
+      panel-trash-can-architecture:
+        stage: draft
+        round: 0
+
+board:
+  review_board: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
+  status: awaiting (only cookie-science ready)
+
+# Stage coverage map (which fixture to use for each test scenario)
+stage_fixtures:
+  draft: oscar-trash-lab/panel-recycling-optimization
+  panel: oscar-trash-lab/panel-trash-aesthetics
+  synthesis: grover-adventures/panel-waiter-dilemma
+  revision: cookie-science/panel-crumb-analysis
+  recheck: cookie-science/panel-crumb-analysis
+  ready: cookie-science/panel-chip-distribution
+  multi_round: cookie-science/panel-chip-distribution

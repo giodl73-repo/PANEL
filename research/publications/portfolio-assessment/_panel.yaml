@@ -1,0 +1,79 @@
+paper: panel-portfolio-assessment
+title: "Cross-Portfolio Expert Panels: Holistic Assessment of Multi-Paper Research Programs"
+venue: "JCDL / Scientometrics"
+stage: ready
+round: 2
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford
+    expertise: Evaluation, benchmarks, foundation models
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Michael Bernstein
+    affiliation: Stanford
+    expertise: Crowdsourcing, human computation, social computing
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Ben Shneiderman
+    affiliation: UMD
+    expertise: Human-Centered AI, human agency, oversight
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Shreya Shankar
+    affiliation: Berkeley
+    expertise: ML ops, observability, pipelines
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Ludwig Schmidt
+    affiliation: UW
+    expertise: Distribution shift, robustness, evaluation methodology
+    score: 3
+    verdict: "Accept with Minor Revisions"
+reviews:
+  round1:
+    - reviews/REVIEW-PERCY-LIANG.md
+    - reviews/REVIEW-MICHAEL-BERNSTEIN.md
+    - reviews/REVIEW-BEN-SHNEIDERMAN.md
+    - reviews/REVIEW-SHREYA-SHANKAR.md
+    - reviews/REVIEW-LUDWIG-SCHMIDT.md
+  round1_synthesis: reviews/SYNTHESIS.md
+  revision_plan: reviews/REVISION-PLAN.md
+  round2:
+    - reviews/ROUND2-REVIEW-PERCY-LIANG.md
+    - reviews/ROUND2-REVIEW-MICHAEL-BERNSTEIN.md
+    - reviews/ROUND2-REVIEW-BEN-SHNEIDERMAN.md
+    - reviews/ROUND2-REVIEW-SHREYA-SHANKAR.md
+    - reviews/ROUND2-REVIEW-LUDWIG-SCHMIDT.md
+  round2_synthesis: reviews/ROUND2-SYNTHESIS.md
+p1_items:
+  - id: P1.1
+    title: "No calibration or validation against real expert panels"
+    addressed: true
+  - id: P1.2
+    title: "Missing uncertainty quantification and robustness analysis"
+    addressed: true
+  - id: P1.3
+    title: "No comparison against simpler baselines"
+    addressed: true
+  - id: P1.4
+    title: "Human-in-the-loop design missing"
+    addressed: true
+history:
+  - stage: draft
+    date: "2026-02-05"
+    note: "Paper initialized via panel:setup"
+  - stage: panel
+    date: "2026-02-05"
+    note: "5 reviewers assigned, Round 1 reviews generated"
+  - stage: synthesis
+    date: "2026-02-05"
+    note: "Reviews consolidated into SYNTHESIS.md — 4 P1, 3 P2, 6 P3 items identified"
+  - stage: revision
+    date: "2026-02-05"
+    note: "REVISION-PLAN.md created. All 4 P1 items addressed: calibration/epistemic framing (Sec 6.4), uncertainty quantification with bootstrap CIs (Sec 4.2), baseline comparison (Sec 4.3), human-in-the-loop design (Sec 6.3). Also addressed P2 items (expanded related work, failure modes, operationalization) and all P3 items."
+  - stage: recheck
+    date: "2026-02-05"
+    note: "Round 2 reviews generated. All 5 reviewers at 3/4 (Accept with Minor Revisions). Avg 3.0/4, σ=0.00. All P1 items confirmed resolved. 8 minor suggestions remain."
+  - stage: ready
+    date: "2026-02-05"
+    note: "All gates passed (avg 3.0/4 ≥ 2.5, min 3/4 ≥ 2, 5 reviewers ≥ 5). Paper ready for submission to JCDL / Scientometrics."

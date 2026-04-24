@@ -1,0 +1,67 @@
+id: l3-ai-disclosure-everywhere
+name: AI simulation disclosure present in all generated review artifacts
+tier: L3
+plugin: panel
+target: templates/
+timeout: 120
+
+description: |
+  Verify every template and generated artifact type includes the AI
+  Simulation Disclosure. This is a critical compliance requirement:
+  all review documents using named researcher personas must disclose
+  that these are AI simulations.
+
+steps:
+  - action: read-file
+    path: templates/review-template.md
+    store: review_tmpl
+
+  - action: assert-contains
+    input: $review_tmpl
+    pattern: "AI Simulation Disclosure"
+    description: Review template has disclosure
+
+  - action: read-file
+    path: templates/synthesis-template.md
+    store: synthesis_tmpl
+
+  - action: assert-contains
+    input: $synthesis_tmpl
+    pattern: "AI Simulation Disclosure"
+    description: Synthesis template has disclosure
+
+  - action: read-file
+    path: templates/REVIEWER-DATABASE.md
+    store: reviewer_db
+
+  - action: assert-contains
+    input: $reviewer_db
+    pattern: "AI Simulation"
+    description: Reviewer database has disclosure
+
+  - action: read-file
+    path: templates/REVIEWERS.md
+    store: reviewers
+
+  - action: assert-contains
+    input: $reviewers
+    pattern: "AI"
+    description: Module reviewers template has disclosure
+
+  - action: read-file
+    path: templates/REVIEW_PANEL.md
+    store: panel_tmpl
+
+  - action: assert-contains
+    input: $panel_tmpl
+    pattern: "AI"
+    description: Panel review template has disclosure
+
+  - action: read-file
+    path: README.md
+    store: readme
+
+  - action: assert-contains
+    input: $readme
+    pattern: "AI Simulation"
+    description: README documents AI simulation methodology

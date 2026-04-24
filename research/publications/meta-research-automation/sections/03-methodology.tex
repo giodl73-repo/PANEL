@@ -1,0 +1,241 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{System Overview}
+
+Figure~\ref{fig:pipeline} illustrates the three-phase pipeline from development artifacts to research papers.
+
+\begin{figure}[t]
+\centering
+\begin{verbatim}
+  ┌──────────────────┐
+  │   Development    │ Commits, waves, docs, roadmaps
+  │    Artifacts     │
+  └────────┬─────────┘
+           ↓
+  ┌──────────────────┐
+  │ Phase 1: Topic   │ Cluster artifacts by theme,
+  │   Discovery      │ score by novelty/evidence/fit
+  └────────┬─────────┘
+           ↓
+  ┌──────────────────┐
+  │ Phase 2: Evidence│ Extract quantitative data,
+  │   Extraction     │ design rationale, references
+  └────────┬─────────┘
+           ↓
+  ┌──────────────────┐
+  │ Phase 3: Paper   │ Generate LaTeX structure,
+  │   Generation     │ write 6 sections, compile
+  └────────┬─────────┘
+           ↓
+  ┌──────────────────┐
+  │ Research Paper   │ main.tex, sections/, PDF
+  └──────────────────┘
+\end{verbatim}
+\caption{Three-phase pipeline from development artifacts to research papers.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Phase 1: Topic Discovery}
+
+Topic discovery scans development artifacts to identify research-worthy themes.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item Git commit history (git log --oneline --all)
+\item Project waves (wave-index.yaml, wave metadata, pulses)
+\item Design documents (DESIGN.md, RFC files, ADR records)
+\item Roadmaps (ROADMAP.md with priority sections)
+\end{itemize}
+
+\textbf{Process}:
+\begin{enumerate}
+\item \textbf{Artifact scanning}: For each source:
+  \begin{itemize}
+  \item \textbf{Commits}: Parse commit messages, extract keywords, group by prefix ([panel], [waves]).
+  \item \textbf{Waves}: Load wave-index.yaml, extract wave titles, descriptions, and pulses.
+  \item \textbf{Docs}: Parse markdown files for headings, technical terms, design rationale.
+  \item \textbf{Roadmaps}: Extract "Not started" items from priority sections with venue targets.
+  \end{itemize}
+
+\item \textbf{Clustering}: Group artifacts by theme using:
+  \begin{itemize}
+  \item Keyword matching (e.g., "hierarchical", "three-tier", "board" → cluster as "hierarchical review architecture")
+  \item Temporal proximity (commits within same week likely related)
+  \item Wave membership (pulses in same wave likely address same theme)
+  \end{itemize}
+
+\item \textbf{Scoring}: For each cluster, compute novelty, evidence, and fit scores:
+  \begin{itemize}
+  \item \textbf{Novelty} (0-1): First implementation of pattern (1.0), incremental improvement (0.5), bug fix (0.1)
+  \item \textbf{Evidence} (0-1): Quantitative data available (1.0), qualitative observations (0.5), no data (0.0)
+  \item \textbf{Fit} (0-1): Match to research venues (ICSE/CHI/MSR): architectural contribution (1.0), empirical study (0.8), tool demo (0.6)
+  \end{itemize}
+  Total score = 0.4 × novelty + 0.4 × evidence + 0.2 × fit
+
+\item \textbf{Proposal generation}: For each cluster with score ≥ 0.6:
+  \begin{itemize}
+  \item Generate paper title (e.g., "Hierarchical Review Architecture: Scaling Expert Feedback Through Three-Tier Synthesis")
+  \item Suggest venue target based on contribution type
+  \item Summarize evidence (commit count, wave count, quantitative data available)
+  \end{itemize}
+\end{enumerate}
+
+\textbf{Outputs}: List of proposed papers with title, venue, evidence summary, and score.
+
+\subsection{Phase 2: Evidence Extraction}
+
+Evidence extraction locates and structures data relevant to each approved paper topic.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item Approved paper topic (title, venue, theme)
+\item Development artifact sources (as in Phase 1)
+\end{itemize}
+
+\textbf{Process}:
+\begin{enumerate}
+\item \textbf{Relevance filtering}: For each artifact, compute relevance to topic using keyword matching and semantic similarity (sentence embeddings, cosine similarity threshold 0.7).
+
+\item \textbf{Quantitative extraction}: Scan relevant artifacts for numbers:
+  \begin{itemize}
+  \item Commit messages: "47/47 tests passed" → extract 47, 47, 100\%
+  \item Wave descriptions: "14 papers across 3 modules" → extract 14, 3
+  \item Review files: "Score: 3/4" → extract score data
+  \end{itemize}
+
+\item \textbf{Qualitative extraction}: Extract design rationale from:
+  \begin{itemize}
+  \item Commit messages (motivation for change)
+  \item Wave descriptions (problem being solved)
+  \item Design documents (architectural decisions)
+  \end{itemize}
+
+\item \textbf{Timeline construction}: Order relevant commits and waves chronologically to show evolution of the system.
+
+\item \textbf{Cross-referencing}: Link artifacts (e.g., commit 6b9286e implements Wave 5 pulse h8i9j2 "active-revisions").
+\end{enumerate}
+
+\textbf{Outputs}:
+\begin{itemize}
+\item Evidence database: structured records linking artifacts to paper sections
+\item Quantitative data table: numbers ready for results section
+\item Timeline: chronological development narrative
+\end{itemize}
+
+\subsection{Phase 3: Paper Generation}
+
+Paper generation creates LaTeX structure and writes substantive content drawing on extracted evidence.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item Paper topic (title, venue, theme)
+\item Evidence database from Phase 2
+\item Paper templates (structure, citation style, section outlines)
+\end{itemize}
+
+\textbf{Process}:
+
+\textbf{3.1: Structure generation}
+\begin{enumerate}
+\item Create directory: research/panel-\{slug\}/
+\item Generate main.tex with preamble, abstract, section includes, bibliography
+\item Create sections/ directory with 6 files:
+  \begin{itemize}
+  \item 01-introduction.tex
+  \item 02-related-work.tex
+  \item 03-methodology.tex
+  \item 04-results.tex
+  \item 05-discussion.tex
+  \item 06-conclusion.tex
+  \end{itemize}
+\item Create Makefile for building PDF (pdflatex + bibtex)
+\item Create \_panel.yaml with initial state (stage: draft, round: 0)
+\end{enumerate}
+
+\textbf{3.2: Content generation by section}
+
+\textbf{Introduction (01-introduction.tex)}:
+\begin{itemize}
+\item Problem statement: What gap does this work address?
+\item Motivation: Why is the problem important? (reference evidence timeline)
+\item Contributions: List 3-5 key contributions (reference quantitative findings)
+\item Paper outline: Briefly describe remaining sections
+\end{itemize}
+
+\textbf{Related work (02-related-work.tex)}:
+\begin{itemize}
+\item Survey 4-6 related areas (mining software repositories, automated documentation, etc.)
+\item For each area, cite 2-4 papers and explain relationship to this work
+\item Conclude with gap analysis: what existing work doesn't address
+\end{itemize}
+
+\textbf{Methodology (03-methodology.tex)}:
+\begin{itemize}
+\item System architecture: Describe phases/components (reference design documents)
+\item Implementation details: Algorithms, data structures (reference commits)
+\item Design decisions: Justify choices (reference wave descriptions)
+\end{itemize}
+
+\textbf{Results (04-results.tex)}:
+\begin{itemize}
+\item Evaluation setup: Dataset, metrics, baseline
+\item Quantitative findings: Tables and figures with extracted numbers
+\item Qualitative findings: Observations from development history
+\end{itemize}
+
+\textbf{Discussion (05-discussion.tex)}:
+\begin{itemize}
+\item Interpretation of results: Why did numbers come out this way?
+\item Limitations: What doesn't the system handle? (reference "requires human judgment" evidence)
+\item Generalization: How does this apply to other domains?
+\end{itemize}
+
+\textbf{Conclusion (06-conclusion.tex)}:
+\begin{itemize}
+\item Summary: Restate contributions
+\item Future work: Next steps (reference roadmap items)
+\item Acknowledgments: Contributors, funding
+\item AI disclosure: Note that paper was generated by AI from artifacts
+\end{itemize}
+
+\textbf{3.3: Compilation and validation}
+\begin{enumerate}
+\item Run make pdf to compile LaTeX
+\item Check for errors (missing references, syntax errors)
+\item If errors: fix automatically where possible, flag for human review otherwise
+\item Generate PDF output
+\end{enumerate}
+
+\textbf{Outputs}:
+\begin{itemize}
+\item Complete paper directory with LaTeX source
+\item Compiled PDF (if validation successful)
+\item \_panel.yaml state file for tracking review progress
+\end{itemize}
+
+\subsection{Self-Referential Paper Generation}
+
+This paper (panel-meta-research-automation) was generated using the system described above:
+
+\begin{enumerate}
+\item \textbf{Topic discovery}: Scanned 6 waves of panel development, identified "meta-research automation" theme (Wave 4 pulse g7h8ia, commit 7eac5de).
+
+\item \textbf{Evidence extraction}: Found panel:import implementation, topic-discovery.md and paper-generator.md modules, 5 papers generated using the system.
+
+\item \textbf{Paper generation}: Created this LaTeX structure, wrote 6 sections drawing on wave descriptions and commit messages, compiled to PDF.
+\end{enumerate}
+
+This creates a self-referential loop: the system documents its own methodology, providing both technical contribution and meta-level validation.
+
+\subsection{Implementation}
+
+The system is implemented as part of the panel plugin for Claude Code:
+
+\begin{itemize}
+\item \textbf{Topic discovery}: panel:import --from waves, --from commits, --from roadmap
+\item \textbf{Evidence extraction}: shared/topic-discovery.md module
+\item \textbf{Paper generation}: shared/paper-generator.md module
+\end{itemize}
+
+The system uses Claude (Anthropic) for natural language generation, git for commit history access, and LaTeX for document compilation.

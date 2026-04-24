@@ -1,0 +1,64 @@
+# Scoring rubrics for the panel review process
+
+# 4-point scale (per-reviewer, per-round)
+four_point:
+  1:
+    label: Reject
+    meaning: Major flaws, not suitable for venue
+    color: red
+  2:
+    label: Weak Accept
+    meaning: Acceptable with revisions, some concerns
+    color: yellow
+  3:
+    label: Accept
+    meaning: Good contribution, minor issues
+    color: green
+  4:
+    label: Strong Accept
+    meaning: Excellent contribution, clearly above venue threshold
+    color: brightgreen
+
+# Submission readiness thresholds
+thresholds:
+  min_average: 2.5        # Average score >= 2.5/4 across all reviewers
+  min_individual: 2       # No reviewer below 2/4
+  min_reviewers: 5        # At least 5 reviewers per paper
+
+# 10-point scale (cross-portfolio panel)
+ten_point:
+  ranges:
+    - range: [8.0, 10.0]
+      tier: A
+      label: Program Flagship
+    - range: [7.0, 8.0]
+      tier: A-
+      label: Strong
+    - range: [6.5, 7.0]
+      tier: B+
+      label: Solid
+    - range: [6.0, 6.5]
+      tier: B
+      label: Competent
+    - range: [5.0, 6.0]
+      tier: B-
+      label: Needs Work
+    - range: [0.0, 5.0]
+      tier: C
+      label: Not Ready
+
+# Verdict mapping (reviewer language → numeric)
+verdict_mapping:
+  "Strong Accept": 4
+  "Accept": 3
+  "Accept with Minor Revisions": 2.5
+  "Weak Accept": 2
+  "Major Revisions Required": 1.5
+  "Reject": 1
+
+# Consensus metrics
+consensus:
+  strong_consensus: 0.5    # StdDev < 0.5 across reviewers
+  moderate_consensus: 1.0   # StdDev < 1.0
+  weak_consensus: 1.5       # StdDev < 1.5
+  no_consensus: 1.5         # StdDev >= 1.5

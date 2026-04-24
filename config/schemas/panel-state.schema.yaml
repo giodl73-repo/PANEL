@@ -1,0 +1,147 @@
+# JSON Schema (in YAML) for _panel.yaml per-paper state files
+# Validates the structure that panel:go reads and writes
+
+$schema: "http://json-schema.org/draft-07/schema#"
+title: Panel State
+description: Per-paper review lifecycle state tracked by the panel plugin
+type: object
+
+required:
+  - paper
+  - title
+  - venue
+  - stage
+
+properties:
+  paper:
+    type: string
+    description: Paper directory name (e.g., panel-review-methodology)
+    pattern: "^[a-z0-9-]+$"
+
+  title:
+    type: string
+    description: Full paper title
+
+  venue:
+    type: string
+    description: Target venue (e.g., CHI 2026, NeurIPS D&B)
+
+  stage:
+    type: string
+    enum: [draft, panel, synthesis, revision, recheck, ready, submit, accepted]
+    description: Current lifecycle stage
+
+  round:
+    type: integer
+    minimum: 0
+    default: 0
+    description: Current review round number
+
+  content_mode:
+    type: string
+    enum: [abstract, draft, full]
+    description: Content maturity level (affects review expectations and max stage)
+
+  content_mode_confirmed:
+    type: boolean
+    description: Whether content mode was explicitly confirmed by user
+
+  content_analysis:
+    type: object
+    description: Automated content analysis results
+    properties:
+      main_tex_exists:
+        type: boolean
+      main_tex_lines:
+        type: integer
+      abstract_found:
+        type: boolean
+      abstract_words:
+        type: integer
+      section_count:
+        type: integer
+      section_words:
+        type: integer
+      bibliography_exists:
+        type: boolean
+      figures_dir_exists:
+        type: boolean
+      total_word_count:
+        type: integer
+      inferred_mode:
+        type: string
+        enum: [abstract, draft, full]
+      confidence:
+        type: string
+        enum: [high, medium, low]
+      analyzed_at:
+        type: string
+        format: date
+
+  reviewers:
+    type: array
+    description: Assigned reviewer panel
+    items:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        affiliation:
+          type: string
+        expertise:
+          type: string
+        profile_ref:
+          type: [string, "null"]
+          description: Profile reference (slug or file path) for loading full reviewer context
+        score:
+          type: [number, "null"]
+          minimum: 1
+          maximum: 4
+
+  reviews:
+    type: object
+    description: Review completion status by round
+    patternProperties:
+      "^round-[0-9]+$":
+        type: object
+        properties:
+          completed:
+            type: integer
+            minimum: 0
+          synthesis:
+            type: boolean
+          avg_score:
+            type: [number, "null"]
+          verdict:
+            type: string
+
+  p1_items:
+    type: array
+    description: Priority 1 items from synthesis
+    items:
+      type: object
+      properties:
+        item:
+          type: string
+        addressed:
+          type: boolean
+        notes:
+          type: string
+
+  history:
+    type: array
+    description: Stage transition history
+    items:
+      type: object
+      required: [stage, date]
+      properties:
+        stage:
+          type: string
+        date:
+          type: string
+          format: date
+        note:
+          type: string
+        round:
+          type: integer

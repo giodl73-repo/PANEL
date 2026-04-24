@@ -1,0 +1,479 @@
+# Reviewer Index
+# Maps R-N identifiers to reviewer metadata for profile resolution
+# Source: research/craft/REVIEWER-DATABASE.md (shared across all modules)
+# Total: 51 reviewers across 10 categories
+
+reviewers:
+  # ML Research / Learning
+  R-1:
+    name: Percy Liang
+    slug: percy-liang
+    category: ml-research
+    affiliation: Stanford
+    expertise: [evaluation, benchmarks, holistic, transparency]
+
+  # Human-AI Interaction
+  R-2:
+    name: Michael Bernstein
+    slug: michael-bernstein
+    category: hci
+    affiliation: Stanford
+    expertise: [crowdsourcing, social-computing, interaction, systems]
+
+  R-3:
+    name: Ben Shneiderman
+    slug: ben-shneiderman
+    category: hci
+    affiliation: UMD
+    expertise: [visualization, interaction-design, direct-manipulation, usability]
+
+  # Software Engineering & DevOps
+  R-4:
+    name: Shreya Shankar
+    slug: shreya-shankar
+    category: software-engineering
+    affiliation: Berkeley
+    expertise: [ml-ops, data-quality, monitoring, debugging]
+
+  # Human-AI Interaction
+  R-5:
+    name: Saleema Amershi
+    slug: saleema-amershi
+    category: hci
+    affiliation: Microsoft Research
+    expertise: [human-ai, interactive-ml, user-studies, guidelines]
+
+  # Systems & Infrastructure
+  R-6:
+    name: Matei Zaharia
+    slug: matei-zaharia
+    category: systems-infrastructure
+    affiliation: Databricks/Stanford
+    expertise: [spark, mlflow, data-systems, scalability]
+
+  R-7:
+    name: Tri Dao
+    slug: tri-dao
+    category: systems-infrastructure
+    affiliation: Princeton/Together AI
+    expertise: [flash-attention, efficiency, systems, memory-hierarchy]
+
+  R-8:
+    name: Ion Stoica
+    slug: ion-stoica
+    category: systems-infrastructure
+    affiliation: Berkeley/Databricks
+    expertise: [ray, distributed-systems, infrastructure, scheduling]
+
+  R-9:
+    name: Joseph Gonzalez
+    slug: joseph-gonzalez
+    category: systems-infrastructure
+    affiliation: Berkeley
+    expertise: [graphx, distributed-ml, communication-patterns]
+
+  R-10:
+    name: Reynold Xin
+    slug: reynold-xin
+    category: systems-infrastructure
+    affiliation: Databricks
+    expertise: [spark-sql, query-optimization, declarative-systems]
+
+  # Compilers & PL Theory
+  R-11:
+    name: Chris Lattner
+    slug: chris-lattner
+    category: compilers-pl
+    affiliation: Modular/LLVM
+    expertise: [llvm, swift, mlir, mojo, ir-design]
+
+  R-12:
+    name: Nada Amin
+    slug: nada-amin
+    category: compilers-pl
+    affiliation: Harvard
+    expertise: [pl-theory, scala, staging, formal-semantics]
+
+  R-13:
+    name: Jonathan Ragan-Kelley
+    slug: jonathan-ragan-kelley
+    category: compilers-pl
+    affiliation: MIT
+    expertise: [halide, compilers, performance, design-space-search]
+
+  R-14:
+    name: Emery Berger
+    slug: emery-berger
+    category: compilers-pl
+    affiliation: UMass
+    expertise: [performance, memory, profiling, overhead-analysis]
+
+  R-15:
+    name: Armando Solar-Lezama
+    slug: armando-solar-lezama
+    category: compilers-pl
+    affiliation: MIT
+    expertise: [program-synthesis, sketch, synthesis-vs-templates]
+
+  # AI Agents & Orchestration
+  R-16:
+    name: Harrison Chase
+    slug: harrison-chase
+    category: ai-agents
+    affiliation: LangChain
+    expertise: [langchain, langgraph, agents, framework-integration]
+
+  R-17:
+    name: Jerry Liu
+    slug: jerry-liu
+    category: ai-agents
+    affiliation: LlamaIndex
+    expertise: [rag, retrieval, agents, autonomous-execution]
+
+  R-18:
+    name: Omar Khattab
+    slug: omar-khattab
+    category: ai-agents
+    affiliation: Stanford/Databricks
+    expertise: [dspy, prompting, optimization, retrieval]
+
+  R-19:
+    name: Shunyu Yao
+    slug: shunyu-yao
+    category: ai-agents
+    affiliation: Princeton
+    expertise: [react, tree-of-thoughts, structured-reasoning]
+
+  R-20:
+    name: Noah Shinn
+    slug: noah-shinn
+    category: ai-agents
+    affiliation: Princeton
+    expertise: [reflexion, self-improvement, learning-from-mistakes]
+
+  # Prompting & LLM Capabilities
+  R-21:
+    name: Jason Wei
+    slug: jason-wei
+    category: prompting-llm
+    affiliation: OpenAI
+    expertise: [chain-of-thought, emergent-abilities, error-analysis]
+
+  R-22:
+    name: Denny Zhou
+    slug: denny-zhou
+    category: prompting-llm
+    affiliation: Google DeepMind
+    expertise: [least-to-most, self-consistency, structured-decomposition]
+
+  R-23:
+    name: Sewon Min
+    slug: sewon-min
+    category: prompting-llm
+    affiliation: Berkeley/AI2
+    expertise: [in-context-learning, few-shot, comparison]
+
+  R-24:
+    name: Xiang Lisa Li
+    slug: xiang-lisa-li
+    category: prompting-llm
+    affiliation: Stanford
+    expertise: [prefix-tuning, prompt-tuning, soft-prompts]
+
+  # Human-AI Interaction (continued)
+  R-25:
+    name: Ece Kamar
+    slug: ece-kamar
+    category: hci
+    affiliation: Microsoft Research
+    expertise: [complementarity, deferral, confidence-based-blocking]
+
+  R-26:
+    name: Krzysztof Gajos
+    slug: krzysztof-gajos
+    category: hci
+    affiliation: Harvard
+    expertise: [adaptive-interfaces, personalization, user-behavior]
+
+  R-27:
+    name: Jeffrey Heer
+    slug: jeffrey-heer
+    category: hci
+    affiliation: UW
+    expertise: [visualization, human-data-interaction, decision-presentation]
+
+  # ML Systems & Efficiency
+  R-28:
+    name: Song Han
+    slug: song-han
+    category: ml-systems
+    affiliation: MIT
+    expertise: [pruning, quantization, efficiency, latency]
+
+  R-29:
+    name: Tianqi Chen
+    slug: tianqi-chen
+    category: ml-systems
+    affiliation: CMU
+    expertise: [tvm, mlc, model-optimization, compilation]
+
+  R-30:
+    name: Ce Zhang
+    slug: ce-zhang
+    category: ml-systems
+    affiliation: ETH/Together
+    expertise: [data-centric-ai, systems, data-quality]
+
+  R-31:
+    name: Dan Fu
+    slug: dan-fu
+    category: ml-systems
+    affiliation: Stanford
+    expertise: [efficient-architectures, state-space, sequence-scaling]
+
+  # ML Research / Learning (continued)
+  R-32:
+    name: Chuang Gan
+    slug: chuang-gan
+    category: ml-research
+    affiliation: MIT-IBM Watson
+    expertise: [vision-language, multimodal, learning]
+
+  R-33:
+    name: Pieter Abbeel
+    slug: pieter-abbeel
+    category: ml-research
+    affiliation: Berkeley/Covariant
+    expertise: [robotics, rl, imitation, reward-specification]
+
+  R-34:
+    name: Chelsea Finn
+    slug: chelsea-finn
+    category: ml-research
+    affiliation: Stanford
+    expertise: [meta-learning, robotics, generalization]
+
+  R-35:
+    name: Ludwig Schmidt
+    slug: ludwig-schmidt
+    category: ml-research
+    affiliation: UW
+    expertise: [distribution-shift, robustness, out-of-distribution]
+
+  # Software Engineering & DevOps (continued)
+  R-36:
+    name: Sarah Bird
+    slug: sarah-bird
+    category: software-engineering
+    affiliation: Microsoft/Responsible AI
+    expertise: [ml-ops, responsible-ai, failure-modes]
+
+  R-37:
+    name: Nadia Polikarpova
+    slug: nadia-polikarpova
+    category: software-engineering
+    affiliation: UCSD
+    expertise: [verification, synthesis, types, correctness]
+
+  R-38:
+    name: Sumit Gulwani
+    slug: sumit-gulwani
+    category: software-engineering
+    affiliation: Microsoft Research
+    expertise: [program-synthesis, flashfill, synthesis-from-examples]
+
+  # NLP & Information Retrieval
+  R-39:
+    name: Danqi Chen
+    slug: danqi-chen
+    category: nlp-ir
+    affiliation: Princeton
+    expertise: [dense-retrieval, qa, retrieval-quality]
+
+  R-40:
+    name: Mike Lewis
+    slug: mike-lewis
+    category: nlp-ir
+    affiliation: Meta AI
+    expertise: [rag, bart, generation, retrieval-generation-tradeoff]
+
+  R-41:
+    name: Kenton Lee
+    slug: kenton-lee
+    category: nlp-ir
+    affiliation: Google
+    expertise: [qa, retrieval, entity-linking, ambiguity]
+
+  R-42:
+    name: Luke Zettlemoyer
+    slug: luke-zettlemoyer
+    category: nlp-ir
+    affiliation: UW/Meta
+    expertise: [semantic-parsing, nlu, structured-output]
+
+  # Security & Safety
+  R-43:
+    name: Dan Hendrycks
+    slug: dan-hendrycks
+    category: security
+    affiliation: Center for AI Safety
+    expertise: [benchmarks, safety-evaluation, edge-cases]
+
+  R-44:
+    name: Jacob Steinhardt
+    slug: jacob-steinhardt
+    category: security
+    affiliation: Berkeley
+    expertise: [robustness, adversarial, failure-modes]
+
+  R-45:
+    name: Nicholas Carlini
+    slug: nicholas-carlini
+    category: security
+    affiliation: Google DeepMind
+    expertise: [adversarial-ml, extraction, attacks]
+
+  R-46:
+    name: Florian Tramer
+    slug: florian-tramer
+    category: security
+    affiliation: ETH
+    expertise: [privacy, security, ml, information-leaks]
+
+  # Dragon Book Authors (Compilers)
+  R-48:
+    name: Alfred V. Aho
+    slug: alfred-aho
+    category: compilers-pl
+    affiliation: Columbia
+    expertise: [compiler-fundamentals, parsing, pattern-matching, formal-languages, awk]
+
+  R-49:
+    name: Monica S. Lam
+    slug: monica-lam
+    category: compilers-pl
+    affiliation: Stanford
+    expertise: [compiler-optimization, static-analysis, parallelism, dataflow, suif]
+
+  R-50:
+    name: Jeffrey D. Ullman
+    slug: jeffrey-ullman
+    category: compilers-pl
+    affiliation: Stanford
+    expertise: [automata-theory, algorithms, database-systems, complexity, query-optimization]
+
+  R-51:
+    name: Ravi Sethi
+    slug: ravi-sethi
+    category: compilers-pl
+    affiliation: Bell Labs/Avaya
+    expertise: [compiler-design, language-semantics, code-generation, specification-methodology]
+
+  # Data Systems & Distributed Sync
+  R-47:
+    name: Martin Kleppmann
+    slug: martin-kleppmann
+    category: data-systems
+    affiliation: Cambridge
+    expertise: [distributed-systems, crdt, operational-transformation, data-sync, conflict-resolution]
+
+  # Theory of Computation & Formal Methods
+  R-52:
+    name: Nancy Lynch
+    slug: nancy-lynch
+    category: tcs-formal-methods
+    affiliation: MIT CSAIL
+    expertise: [distributed-algorithms, flp-impossibility, io-automata, formal-specification, ode-well-posedness, tcs]
+
+  # Statistical Methodology & Social Science
+  R-53:
+    name: Andrew Gelman
+    slug: andrew-gelman
+    category: statistical-methods
+    affiliation: Columbia
+    expertise: [bayesian-modeling, multilevel-regression, causal-inference, pre-registration, garden-of-forking-paths, survey-methods]
+
+  R-54:
+    name: Matthew Gentzkow
+    slug: matthew-gentzkow
+    category: statistical-methods
+    affiliation: Stanford
+    expertise: [political-economy, media-effects, affective-polarization, social-media, identification-strategies, cross-national]
+
+  # Nonlinear Dynamics & Applied Mathematics
+  R-55:
+    name: Steven Strogatz
+    slug: steven-strogatz
+    category: nonlinear-dynamics
+    affiliation: Cornell
+    expertise: [nonlinear-dynamics, bifurcation-theory, synchronization, kuramoto, phase-portraits, mathematical-biology, ode-stability]
+
+  # Complex Systems & Critical Transitions
+  R-56:
+    name: Didier Sornette
+    slug: didier-sornette
+    category: complex-systems
+    affiliation: ETH-Zurich
+    expertise: [log-periodic-power-laws, dragon-kings, critical-transitions, endogenous-crises, bubble-detection, fat-tails, forecasting]
+
+# Categories
+categories:
+  - id: systems-infrastructure
+    description: Distributed systems, state management, fault tolerance, scalability
+    members: [R-6, R-7, R-8, R-9, R-10]
+
+  - id: compilers-pl
+    description: Code generation, DSLs, formal methods, type systems
+    members: [R-11, R-12, R-13, R-14, R-15, R-48, R-49, R-50, R-51]
+
+  - id: ai-agents
+    description: LLM agents, multi-agent systems, workflow orchestration
+    members: [R-16, R-17, R-18, R-19, R-20]
+
+  - id: prompting-llm
+    description: Prompt engineering, LLM capabilities, optimization
+    members: [R-21, R-22, R-23, R-24]
+
+  - id: hci
+    description: Human-AI interaction, UX, interface design, usability
+    members: [R-2, R-3, R-5, R-25, R-26, R-27]
+
+  - id: ml-systems
+    description: ML infrastructure, training systems, deployment, efficiency
+    members: [R-28, R-29, R-30, R-31]
+
+  - id: ml-research
+    description: Learning algorithms, theory, evaluation, benchmarking
+    members: [R-1, R-32, R-33, R-34, R-35]
+
+  - id: software-engineering
+    description: DevOps, testing, CI/CD, code quality
+    members: [R-4, R-36, R-37, R-38]
+
+  - id: nlp-ir
+    description: NLP, information retrieval, text processing
+    members: [R-39, R-40, R-41, R-42]
+
+  - id: security
+    description: Security, safety, adversarial robustness, privacy
+    members: [R-43, R-44, R-45, R-46]
+
+  - id: data-systems
+    description: Distributed data systems, sync protocols, conflict resolution, CRDTs
+    members: [R-47]
+
+  - id: tcs-formal-methods
+    description: Theory of computation, distributed algorithms, formal specification, impossibility results
+    members: [R-52]
+
+  - id: statistical-methods
+    description: Statistical methodology, causal inference, social science quantitative methods
+    members: [R-53, R-54]
+
+  - id: nonlinear-dynamics
+    description: ODE analysis, bifurcation theory, synchronization, phase portraits, mathematical biology
+    members: [R-55]
+
+  - id: complex-systems
+    description: Critical transitions, acceleration sequences, Dragon Kings, fat tails, forecasting
+    members: [R-56]

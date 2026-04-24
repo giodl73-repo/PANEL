@@ -1,0 +1,21 @@
+\section{Introduction}
+
+Consider an author who receives 5 expert reviews of their paper. Each review contains 3--5 major issues, 4--6 minor issues, and several recommendations. The author faces 15--25 major issues and 20--30 minor issues from 5 different perspectives. Many issues overlap, some conflict, and their relative importance varies. Without synthesis, the author must mentally merge these reviews, identify duplicates, resolve conflicts, and prioritize---a cognitively demanding task that is often done poorly.
+
+We present an automated approach to \textbf{review synthesis}: consolidating multi-reviewer feedback into a structured, prioritized action plan. The method operates in three stages:
+
+\begin{enumerate}
+    \item \textbf{Issue extraction}: Parse individual reviews to extract discrete issues with metadata (severity, topic, specificity)
+    \item \textbf{Cross-reviewer deduplication}: Group similar issues across reviewers using semantic matching
+    \item \textbf{Priority classification}: Assign P1 (blocking), P2 (important), or P3 (nice-to-have) based on reviewer count, severity, and impact on validity
+\end{enumerate}
+
+The method has been applied to 33+ review cycles (14 papers $\times$ 2--4 rounds, with 5--9 reviewers per round), producing 186+ individual reviews consolidated into focused synthesis documents. Empirical analysis demonstrates that P1 items account for 72\% of achievable score improvement---validating the classification as an effective triage mechanism.
+
+\noindent Key contributions:
+\begin{enumerate}
+    \item A \textbf{three-stage synthesis pipeline} that transforms multi-reviewer feedback into prioritized revision plans
+    \item \textbf{Priority classification rules} (P1/P2/P3) grounded in reviewer agreement and issue severity
+    \item \textbf{Empirical validation} showing P1 items capture the majority of score improvement potential
+    \item \textbf{Deduplication strategies} for identifying equivalent issues expressed differently by different reviewers
+\end{enumerate}

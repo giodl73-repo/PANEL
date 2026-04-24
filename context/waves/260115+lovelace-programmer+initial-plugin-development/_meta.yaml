@@ -1,0 +1,15 @@
+uuid: 2503d141
+slug: initial-plugin-development
+order: 1
+title: Initial Plugin Development
+status: completed
+created: 2026-01-15
+completed: 2026-01-20
+description: |
+  Foundation of the panel plugin - plugin structure, command files, sync scripts,
+  and the 5 research papers that document the methodology.
+pulses:
+  - "~d4e5f6+plugin-foundation"
+  - "~d4e5f7+command-structure"
+  - "~d4e5f8+sync-scripts"
+  - "~d4e5f9+research-papers"

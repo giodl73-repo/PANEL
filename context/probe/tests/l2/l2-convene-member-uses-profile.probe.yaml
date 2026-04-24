@@ -1,0 +1,74 @@
+id: l2-convene-member-uses-profile
+name: "panel:module member loads OLE profile and injects context into regenerated assessment"
+tier: L2
+plugin: panel
+target: commands/convene.md
+timeout: 60
+
+description: |
+  Regression test for bug: convene --member was regenerating a member's assessment
+  without loading their profile or calling buildReviewerContext(). Assessment was
+  produced with no OLE preamble and no structured orientation/lens context.
+
+  Fix: --member now calls loadReviewerProfile() + buildReviewerContext() before
+  generating the assessment, same as --review does.
+
+steps:
+  # Seed with a module that already has a completed round-1 panel review
+  - action: prepare-module
+    source: tests/fixtures/mock-monorepo/cookie-science
+    override_panel_round: 1
+    description: "Cookie Science with existing REVIEW_PANEL.md from round 1"
+
+  - action: file-exists
+    path: research/REVIEW_PANEL.md
+    description: "Pre-condition: REVIEW_PANEL.md exists from round 1"
+
+  # Capture the existing assessment for comparison
+  - action: read-file
+    path: research/REVIEW_PANEL.md
+    store: original_panel
+
+  # Regenerate one member's assessment
+  - action: invoke-skill
+    skill: "panel:module member \"Percy Liang\""
+    sandbox: true
+    store: result
+
+  - action: read-file
+    path: research/REVIEW_PANEL.md
+    store: updated_panel
+
+  # Core assertion: OLE preamble present in the regenerated assessment
+  - action: assert-contains
+    input: $updated_panel
+    expected: "Each tier of your role has two faces"
+    description: "OLE preamble injected — confirms buildReviewerContext() called for --member"
+
+  # Orientation fields present (confirms OLE profile loaded, not raw text)
+  - action: assert-contains
+    input: $updated_panel
+    expected: "self-directed"
+    description: "Self-directed face present in regenerated assessment"
+
+  - action: assert-contains
+    input: $updated_panel
+    expected: "receiver-directed"
+    description: "Receiver-directed face present in regenerated assessment"
+
+  # REVIEW_PANEL.md still valid — synthesis re-ran correctly
+  - action: assert-contains
+    input: $updated_panel
+    expected: "PP"
+    description: "PP items still present after member regeneration"
+
+  # Still same round (--member does not increment round)
+  - action: read-file
+    path: research/REVIEW_PANEL.md
+    store: panel_state
+
+  - action: assert-field-equals
+    input: $panel_state
+    field: round
+    expected: 1
+    description: "--member does not create a new round"

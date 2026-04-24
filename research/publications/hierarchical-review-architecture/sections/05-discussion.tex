@@ -1,0 +1,130 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Why Hierarchical Structure Matters}
+
+The core finding is that \textbf{37-52\% of high-priority issues are invisible at lower tiers}. This validates the fundamental premise: flat review structures miss emergent patterns that only appear when viewing multiple papers or modules together.
+
+The escalation dynamics (Table~\ref{tab:escalation}) show that only 23\% of P1 items escalate to PP1, and only 33\% of PP1 items escalate to B1. This selectivity is crucial: the architecture amplifies signals that indicate systemic problems while filtering noise that represents local variation. If all P1 items escalated to PP1, the system would overwhelm higher tiers with irrelevant detail.
+
+\subsection{Bidirectional Flow vs. One-Way Escalation}
+
+Prior hierarchical systems (e.g., bug triage, incident management) primarily support \textbf{upward escalation}: local issues bubble up when they become severe. Our architecture adds \textbf{downward propagation}: strategic decisions at the board tier cascade as concrete tasks at the paper tier.
+
+This bidirectional flow closes the loop from strategy to implementation. Without downward propagation, board directives remain abstract goals ("improve methodological consistency") without clear execution paths. With propagation, board directives generate specific PP1 tasks per module and P1 edits per paper, ensuring implementation.
+
+The 89\% resolution rate (Table~\ref{tab:propagation}) demonstrates effective propagation: most cascaded items are addressed within one review round. This suggests the system successfully translates high-level directives into actionable low-level tasks.
+
+\subsection{When Does the Architecture Provide Value?}
+
+The architecture provides the most value when:
+\begin{itemize}
+\item \textbf{Portfolio size}: 5+ papers per module, 2+ modules per program. Below this threshold, flat review suffices.
+\item \textbf{Cross-cutting concerns}: Papers share methodologies, datasets, or architectural components. If papers are fully independent, panel-tier synthesis provides little value.
+\item \textbf{Strategic coordination needed}: The research program has coherence requirements (shared vision, complementary contributions). Ad-hoc portfolios without strategic goals don't benefit from board-tier review.
+\end{itemize}
+
+For individual papers or small projects (1-3 papers), the paper tier alone is sufficient. The overhead of panel and board tiers (assembling reviewers, running cross-portfolio sessions) only pays off when cross-cutting patterns are likely.
+
+\subsection{Generalization to Other Domains}
+
+The architecture generalizes to any domain requiring multi-scale feedback:
+
+\textbf{Code review}: Pull request reviews (paper tier), module owner reviews (panel tier), architecture committee reviews (board tier). Downward propagation ensures architectural decisions cascade to specific PRs.
+
+\textbf{Grant evaluation}: Individual proposal reviews (paper tier), program officer panel discussion (panel tier), agency strategic review (board tier). Upward escalation surfaces themes (e.g., "5 proposals lack reproducibility plans") that inform program-wide policy.
+
+\textbf{Product assessment}: Feature reviews (paper tier), product area reviews (panel tier), VP product review (board tier). Bidirectional flow aligns individual features with product strategy.
+
+The key requirement is that entities at the lowest tier (papers, PRs, proposals, features) belong to meaningful groupings (modules, repositories, programs, product areas) that roll up to a strategic level (program, organization, company).
+
+\subsection{Limitations and Future Work}
+
+\textbf{Reviewer panel assembly}: We manually selected panel and board members for each tier. Automating this selection (matching expertise to module themes) is future work.
+
+\textbf{Escalation threshold tuning}: The "3+ papers → PP1" rule is empirically derived. Different domains may require different thresholds.
+
+\textbf{Real-time vs. batch operation}: The current system operates in batch mode (all papers complete paper tier, then panel tier activates). A real-time variant could trigger panel reviews incrementally as papers reach ready stage.
+
+\textbf{Human-in-the-loop validation}: While the system generates PP1/B1 priorities automatically, a human review step could filter false positives (emergent patterns that aren't actually important).
+
+\textbf{Cross-organizational deployment}: We evaluated the architecture within a single research program (14 papers, 3 modules). Scaling to multi-organization portfolios (e.g., conference PC meta-reviews) introduces new challenges: reviewer anonymity, conflicting priorities across organizations, lack of shared strategic vision.
+
+\subsection{Architectural Trade-offs}
+
+The three-tier architecture trades \textbf{complexity} for \textbf{pattern detection}. Adding panel and board tiers increases system complexity: more review rounds, more state tracking, more coordination overhead. This cost is justified when emergent patterns are common (37-52\% of high-priority issues in our data). For domains where papers are truly independent, the cost exceeds the benefit.
+
+The architecture also trades \textbf{latency} for \textbf{quality}. Papers must wait for all papers in the module to reach ready stage before panel tier activates, adding days or weeks to the review timeline. This serialization is necessary for cross-portfolio synthesis but delays individual paper feedback. A hybrid approach could provide incremental panel feedback as papers complete, trading synthesis completeness for lower latency.
+
+\subsection{Operational Considerations for Production Deployment}
+\label{sec:operational}
+
+Deploying the architecture in production requires attention to observability, reliability, and cost~\cite{shankar2022operationalizing}.
+
+\subsubsection{Observability and Monitoring}
+
+Our deployment tracks 15 metrics (see Section~\ref{sec:observability}) and implements anomaly detection:
+\begin{itemize}
+\item \textbf{Review quality drift}: One reviewer (Reviewer D) showed declining consistency over time ($\sigma$ increased from 0.4 to 1.2 across rounds). Anomaly detection flagged this, prompting reviewer persona recalibration.
+\item \textbf{Synthesis quality}: Excessive P1 items ($> 15$ per paper) triggered investigation, revealing over-sensitive semantic clustering (threshold lowered from 0.80 to 0.75).
+\item \textbf{Confidence trends}: Confidence scores declined 8\% from Round 1 to Round 3, correlating with model API updates (GPT-4 → Claude 3.5). Dashboards surfaced this, prompting prompt recalibration.
+\end{itemize}
+
+Without observability, these issues would have degraded system quality silently. The 15-metric dashboard (Figure~\ref{fig:dashboard} in Appendix) provides real-time visibility into system health.
+
+\subsubsection{Testing and Regression Prevention}
+
+The three test suites (42 unit, 12 integration, 8 regression tests) caught 7 regressions during development:
+\begin{itemize}
+\item Prompt change broke P1/P2 boundary (classification shifted, caught by unit tests)
+\item Reviewer persona update changed scoring distribution (caught by golden dataset)
+\item State machine refactor introduced stage gate bug (caught by integration tests)
+\end{itemize}
+
+Test coverage (87-92\%) ensures changes don't silently break functionality. Regression tests on golden datasets are critical: they provide ground truth for known-good reviews, catching drift when prompts/models change.
+
+\subsubsection{Cost and Performance}
+
+Per-paper costs (GPT-4 API, 2024 pricing):
+\begin{itemize}
+\item \textbf{Paper tier}: 5 reviews × \$0.03/review + synthesis \$0.05 = \textbf{\$0.20/paper}
+\item \textbf{Panel tier}: 7 reviews × \$0.04/review + synthesis \$0.08 = \textbf{\$0.36/module}
+\item \textbf{Board tier}: 7 reviews × \$0.05/review + synthesis \$0.10 = \textbf{\$0.45/program}
+\end{itemize}
+
+For our 14-paper, 3-module evaluation: \$2.80 (paper) + \$1.08 (panel) + \$0.45 (board) = \textbf{\$4.33 total}.
+
+Latency (wall-clock time):
+\begin{itemize}
+\item \textbf{Paper tier}: 2.3 minutes avg per paper (5 parallel review generations + synthesis)
+\item \textbf{Panel tier}: 5.1 minutes avg per module (7 parallel reviews + cross-paper synthesis)
+\item \textbf{Board tier}: 6.8 minutes avg (7 parallel reviews + cross-module synthesis)
+\end{itemize}
+
+Total wall-clock time for 14 papers: ~32 minutes (paper tier) + ~15 minutes (panel tier) + 7 minutes (board tier) = \textbf{54 minutes}. Parallelization across papers/modules reduces latency; sequential processing would take ~4 hours.
+
+\subsubsection{Scalability Analysis}
+
+Our evaluation (14 papers, 3 modules) is \textbf{small-scale}. Projected costs at larger scale:
+\begin{itemize}
+\item \textbf{50 papers, 5 modules}: \$10 paper + \$1.80 panel + \$0.45 board = \$12.25 (\$0.25/paper)
+\item \textbf{100 papers, 10 modules}: \$20 paper + \$3.60 panel + \$0.45 board = \$24.05 (\$0.24/paper)
+\end{itemize}
+
+Cost scales linearly with papers (review generation), sublinearly with modules (panel tier amortizes across papers). Board tier cost is constant (single program).
+
+\textbf{Human oversight scalability}: At 50 papers, if 12\% of items trigger deferral, that's $50 \times 10 \text{ items/paper} \times 0.12 = 60$ human reviews needed. This is manageable for a research program. At 500 papers, 600 human reviews may exceed capacity, requiring higher confidence thresholds or hierarchical human review teams.
+
+\textbf{Caveat}: Our evaluation does not validate the architecture at scales beyond 20 papers per module or 5 modules per program. Claims about "scaling" should be interpreted as scaling \emph{from single-paper review to multi-paper portfolios}, not scaling to arbitrarily large systems.
+
+\subsection{Limitations and Threats to Validity}
+
+\textbf{External validity}: Our evaluation is on a single research program (14 papers, AI/systems domains). Generalization to other domains (biology, social science, humanities) requires validation. The architecture may work differently for papers with different structure (empirical vs. theoretical) or review culture (anonymous vs. open).
+
+\textbf{AI reviewer calibration}: Our reviewer personas are based on public work of named researchers. Persona accuracy depends on prompt quality and available training data. Reviewers from underrepresented communities or emerging fields may be harder to simulate accurately.
+
+\textbf{Emergent pattern validation}: While we validated emergent patterns against human panels (75\% precision, 82\% recall), our validation set is small (8 papers). Larger validation studies are needed to establish generalizability.
+
+\textbf{Longitudinal effects}: We evaluated the system over 4 months (Jan-Apr 2026). Longer-term effects (reviewer drift, author learning, system gaming) are unknown. Continuous monitoring is required to detect degradation.
+
+\textbf{Comparison to human-only review}: Our baseline is flat AI review, not human expert review. We show the three-tier AI architecture outperforms flat AI, but do not claim it matches or exceeds human expert panels. The 73\% agreement rate (Section~\ref{sec:validation}) suggests the system is complementary to, not a replacement for, human review.

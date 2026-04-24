@@ -1,0 +1,48 @@
+id: l2-paper-synthesis
+name: "panel:review generates synthesis from reviews"
+tier: L2
+plugin: panel
+target: commands/review.md
+timeout: 60
+
+description: |
+  Verify panel:review reads all REVIEW-*.md files, produces SYNTHESIS.md
+  with P1/P2/P3 classification, and updates _panel.yaml state.
+
+steps:
+  # Use Oscar's trash-aesthetics paper — has 5 reviews, needs synthesis
+  - action: prepare-paper
+    fixture: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-trash-aesthetics/_panel.yaml
+    reviews: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-trash-aesthetics/reviews
+    description: "Oscar's trash aesthetics — 5 reviews from Miss Piggy, Oscar, Scooter, Statler, Waldorf"
+
+  - action: invoke-skill
+    skill: "panel:review --paper panel-trash-aesthetics"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: research/panel-trash-aesthetics/reviews/SYNTHESIS.md
+
+  - action: read-file
+    path: research/panel-trash-aesthetics/reviews/SYNTHESIS.md
+    store: synthesis
+
+  - action: assert-contains
+    input: $synthesis
+    pattern: "P1"
+    description: "Synthesis contains P1 classification (Statler and Waldorf's harsh feedback)"
+
+  - action: assert-contains
+    input: $synthesis
+    pattern: "P2"
+    description: Synthesis contains P2 classification
+
+  - action: read-file
+    path: research/panel-trash-aesthetics/_panel.yaml
+    store: state
+
+  - action: assert-field
+    input: $state
+    field: stage
+    expected: synthesis

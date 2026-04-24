@@ -1,0 +1,69 @@
+\section{Panel Methodology}
+
+\subsection{Panel Composition}
+
+Each cross-portfolio panel consists of 7 reviewers selected for:
+\begin{itemize}
+    \item \textbf{Breadth}: Coverage across the module's paper topics
+    \item \textbf{Continuity}: At least 3 reviewers who served on individual paper panels
+    \item \textbf{Perspective diversity}: Representatives from different research communities
+    \item \textbf{Industry-academia balance}: At least 2 industry practitioners and 2 academics
+\end{itemize}
+
+The choice of 7 reviewers is motivated by the optimal jury size literature. Under Condorcet's jury theorem with heterogeneous competence \cite{list2001epistemic}, odd-numbered panels of 5--9 members provide a favorable balance between aggregation accuracy and diminishing marginal returns from additional members. We select 7 as a practical upper bound that ensures three-member minimum per disciplinary bloc while remaining feasible for full-text review of all papers.
+
+\subsection{Assessment Protocol}
+
+Each panel member:
+\begin{enumerate}
+    \item Reads all papers in the module (full text)
+    \item Scores each paper on a 10-point scale
+    \item Produces a top-5 ranking with justification
+    \item Identifies cross-cutting observations (strengths, weaknesses, themes)
+    \item Provides strategic recommendations for the program
+\end{enumerate}
+
+\subsection{Tier Classification}
+
+Papers are classified into tiers based on aggregated panel scores:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+Tier & Score Range & Characterization \\
+\midrule
+A: Flagship & 8.0--10.0 & Lead submissions, distinct contributions \\
+A-: Strong & 7.0--8.0 & Clear contributions, addressable weaknesses \\
+B+: Solid & 6.5--7.0 & Valuable, venue-specific appeal \\
+B: Competent & 6.0--6.5 & Real but narrower contributions \\
+B-: Needs Work & $<$ 6.0 & Reframing needed before submission \\
+\bottomrule
+\end{tabular}
+\caption{Tier classification rubric for cross-portfolio panels.}
+\end{table}
+
+\subsection{Synthesis Process}
+
+After individual assessments, the board produces a consolidated synthesis:
+\begin{enumerate}
+    \item Consolidated rankings (average of 7 reviewer scores)
+    \item Cross-cutting themes (identified through structured extraction: each reviewer independently lists themes; themes mentioned by 2+ reviewers are retained and merged)
+    \item Agreement matrix (pairwise Spearman correlations)
+    \item Strategic priorities (ranked by the number of reviewer advocates weighted by stated conviction level)
+\end{enumerate}
+
+We use the arithmetic mean for score aggregation rather than the median or trimmed mean. With 7 reviewers, the mean and median are typically close; the mean preserves the full information from outlier scores, which in our context represent genuine disciplinary perspectives rather than noise. We report both mean and median in our results to enable comparison.
+
+\subsection{Operationalization}
+
+Each panel assessment requires the following resources:
+\begin{itemize}
+    \item \textbf{Input preparation}: All papers converted to standardized format with consistent section structure. Approximately 30 minutes per paper.
+    \item \textbf{Review generation}: Each reviewer assessment of the full module requires one LLM call with the complete paper set as context. For the Merit module (9 papers, $\sim$45 pages), each reviewer call takes approximately 3--5 minutes and consumes $\sim$120K input tokens. Total for 7 reviewers: 25--35 minutes.
+    \item \textbf{Synthesis}: The consolidation step processes all 7 assessments into a unified synthesis. Single LLM call, approximately 5 minutes, $\sim$80K input tokens.
+    \item \textbf{Total runtime}: Approximately 45--60 minutes per module assessment, dominated by review generation.
+    \item \textbf{Compute cost}: At current API pricing, approximately \$15--25 per full module panel assessment.
+\end{itemize}
+
+Version control of assessment parameters (reviewer personas, scoring rubrics, synthesis prompts) is maintained in a configuration repository to ensure reproducibility across assessment rounds.

@@ -1,0 +1,48 @@
+\section{Persona Construction Method}
+
+\subsection{Profile Database}
+
+Each reviewer persona is constructed from a structured profile containing:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+Field & Example \\
+\midrule
+Name & Percy Liang \\
+Affiliation & Stanford (HELM) \\
+Category & ML Research / Learning \\
+Expertise & HELM, benchmarks, foundations \\
+Key Question & ``How was this evaluated?'' \\
+Venue Alignment & ICML, NeurIPS, ICLR \\
+Expertise Tags & \texttt{evaluation}, \texttt{benchmarks} \\
+\bottomrule
+\end{tabular}
+\caption{Structured profile fields for persona construction.}
+\end{table}
+
+The database contains 45+ researchers across 10 categories, selected for coverage of major AI/ML research areas.
+
+\subsection{Prompt Construction}
+
+The review prompt for each persona includes:
+\begin{enumerate}
+    \item \textbf{Identity block}: ``You are [Name] from [Affiliation], an expert in [Expertise].''
+    \item \textbf{Key question injection}: ``Your characteristic concern is: [Key Question]''
+    \item \textbf{Venue context}: ``You are reviewing for [Venue], where papers are expected to [venue standards].''
+    \item \textbf{Review structure}: Score rubric (1--4), required sections (major issues, minor issues, strengths, recommendations)
+    \item \textbf{Paper content}: Full paper text or relevant sections
+\end{enumerate}
+
+\subsection{Panel Composition Rules}
+
+Panels follow diversity constraints:
+\begin{itemize}
+    \item Minimum 5 reviewers per paper
+    \item At least 1 industry practitioner and 1 academic
+    \item At least 2 different expertise categories
+    \item Maximum 2 reviewers from the same institution
+    \item Venue-matched reviewers prioritized
+\end{itemize}

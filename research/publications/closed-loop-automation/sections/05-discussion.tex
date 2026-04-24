@@ -1,0 +1,233 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{Why 78\% P1 Completion Matters}
+
+The core finding is that \textbf{78\% of critical (P1) revision items are automatable}. This validates the central hypothesis: the gap between review generation and revision implementation is tractable for structured documents like LaTeX papers.
+
+The 22\% of P1 items requiring human judgment (Table~\ref{tab:human-required}) are inherently complex: structural changes, content expansion, and major rewrites. These tasks require author judgment about what to say and how to say it, not just where to edit. The system correctly identifies these as non-automatable rather than attempting edits that would likely be rejected.
+
+\subsection{64\% Time Reduction: What Authors Gained}
+
+The 64\% reduction in revision time (Table~\ref{tab:time}) represents a shift in how authors spend effort:
+
+\textbf{Before automation}:
+\begin{itemize}
+\item 60\% mechanical edits (fix typos, improve phrasing, add citations)
+\item 30\% complex edits (restructure, expand content)
+\item 10\% coordination (track feedback, locate code, validate changes)
+\end{itemize}
+
+\textbf{After automation}:
+\begin{itemize}
+\item 41\% review automated edits (verify correctness)
+\item 48\% complex edits (same as before)
+\item 11\% coordination (same as before)
+\end{itemize}
+
+The system eliminates the 60\% spent on mechanical edits, freeing authors to focus on complex edits requiring domain expertise. Reviewing automated edits takes substantially less time (41\%) than implementing them manually would have (60\%), as authors need only verify correctness rather than locate code and apply changes.
+
+\subsection{94\% Acceptance Rate: Edit Quality}
+
+The 94\% acceptance rate (Table~\ref{tab:acceptance}) indicates high edit quality. Authors reject only 2\% of edits, primarily for subjective style reasons rather than correctness issues.
+
+This success stems from two architectural decisions:
+
+\textbf{(1) Exact text matching}: The Edit tool requires exact match of old text before applying replacement. This prevents ambiguous or incorrect edits (e.g., replacing the wrong occurrence of a phrase).
+
+\textbf{(2) Concrete revision plans}: The system generates REVISION-PLAN.md with specific old text and new text before executing edits. This intermediate representation allows authors to review planned edits before they're applied, catching potential issues.
+
+\subsection{Generalization to Other Domains}
+
+The closed-loop architecture generalizes to any domain with:
+
+\textbf{(1) Structured documents}: The target artifact has well-defined syntax (LaTeX, code, HTML, JSON, YAML). This enables precise text matching and validation.
+
+\textbf{(2) Automated validation}: There exists a compiler, linter, or test suite that can validate edits (LaTeX compiler, unit tests, type checker).
+
+\textbf{(3) Concrete feedback}: Review feedback can be translated to specific edit locations (file, line, old text, new text).
+
+\textbf{Applicable domains}:
+\begin{itemize}
+\item \textbf{Code review}: Apply reviewer suggestions to source code (rename variable, extract function, add error handling).
+\item \textbf{Documentation}: Update technical docs based on review feedback (fix typos, clarify instructions, add examples).
+\item \textbf{Legal document editing}: Apply attorney comments to contracts (modify clause, add disclaimer).
+\item \textbf{Configuration files}: Apply admin feedback to config files (update ports, add feature flags).
+\end{itemize}
+
+The key requirement is that feedback can be mapped to concrete edits. Domains with purely subjective feedback (creative writing, art) are less suitable.
+
+\subsection{Limitations and Risks}
+
+\textbf{LaTeX syntax complexity}: While LaTeX has well-defined syntax, papers use diverse packages and macros, making some edits fragile. For example, edits inside custom environments (\texttt{\textbackslash{}begin\{theorem\}}) require understanding environment semantics.
+
+\textbf{Semantic validation gap}: LaTeX compilation checks syntax but not semantics. An edit can compile successfully while introducing logical errors (e.g., citing wrong reference, stating incorrect claim). The system relies on re-review to catch semantic errors.
+
+\textbf{Ambiguous feedback}: Some reviewer comments are vague ("improve clarity") without specifying what to change. The system attempts to localize and propose edits, but vague feedback often ends up in the "requires human judgment" category.
+
+\textbf{Multi-file coordination}: LaTeX papers span multiple files (main.tex, sections/*.tex, figures/). Edits that require coordinated changes across files (e.g., rename section and update references) are not currently automated.
+
+\textbf{Over-reliance on automation}: Authors may become overly dependent on automated revision, accepting edits without careful review. The finding that 2 of 7 authors "stopped reading edits carefully after the first few were correct" (Section~\ref{sec:results}) suggests this risk is real. Mitigation: require explicit approval for each edit class (typos, phrasing, structure) rather than bulk approval.
+
+\textbf{Loss of tacit learning}: Manual revision teaches authors about writing quality — where their arguments are weak, which claims lack support, what patterns reviewers notice. Four authors noted missing this learning opportunity with automation. This suggests automated revision is most appropriate for experienced authors who have internalized writing principles, less appropriate for novices who benefit from engaging deeply with feedback.
+
+\textbf{Adversarial gaming}: Authors could exploit automation by submitting weak drafts, expecting the system to "fix" them. While we observed no evidence of this in our corpus (all papers were genuine research submissions), the incentive exists. Conferences may need to establish norms: is it acceptable to submit papers where 78\% of revisions were automated? Should this be disclosed?
+
+\textbf{Homogenization of style}: As noted earlier, pairwise similarity increased from 0.31 to 0.38 after automated revision. If this effect scales across the research community, papers may become stylistically uniform. Diversity in writing style is valuable — it reflects disciplinary conventions, author voice, and intellectual traditions. Over-standardization risks making papers more readable but less distinctive.
+
+\textbf{Accountability and authorship}: When an automated edit introduces an error (factual mistake, incorrect citation), who is responsible? The author who approved it? The AI system that proposed it? The reviewer whose feedback prompted it? This raises ethical and legal questions about authorship and accountability in AI-assisted writing. Current academic norms assume authors are fully responsible for all content, but this assumption may need updating as automation increases.
+
+\textbf{Quality comparison gap}: While we demonstrate efficiency (64\% time reduction) and edit acceptance (94\%), we do not provide blind expert ratings comparing final paper quality between manual and automated revision paths. Future work should conduct such a study: recruit domain experts to rate 10-12 papers (half manually revised, half automated) on dimensions like clarity, coherence, argumentation quality, and depth of engagement with feedback. This would definitively establish whether automation sacrifices quality for speed. Our hypothesis: mechanical edits (78\% of P1 items) produce equivalent quality, while complex edits may show quality differences depending on whether authors actively engage with automation outputs versus passively accept them.
+
+\subsection{Human Agency in Automated Revision}
+
+While the efficiency gains (64\% time reduction) are substantial, it's critical to examine \textbf{what is lost when revision becomes algorithmic}. Academic writing is not merely code transformation — revision is where authors refine thinking, discover connections, and exercise judgment about their contribution~\cite{flower1981cognitive,hayes1996new}. This section addresses the tension between automation efficiency and authorial agency.
+
+\textbf{When should authors resist automation?} Not all P1 items are equally appropriate for automation. Our analysis reveals three categories:
+
+\begin{enumerate}
+\item \textbf{Mechanical corrections} (42\% of P1 items): Typo fixes, citation formatting, phrasing improvements. These are appropriately automated — they require no deep thought, only execution.
+
+\item \textbf{Evidence insertion} (36\% of P1 items): Adding statistical tests, expanding related work with specific citations, clarifying methodology details. These benefit from automation when the content is straightforward (e.g., "add power analysis using standard formula"), but require human judgment when trade-offs exist (e.g., "which 3 papers should I cite from 20 candidates?").
+
+\item \textbf{Conceptual refinement} (22\% of P1 items): Restructuring arguments, reframing contributions, resolving tensions between reviewers. These \textbf{should not} be automated — they require authorial judgment about what the paper is trying to say.
+\end{enumerate}
+
+The 94\% acceptance rate must be interpreted carefully. It demonstrates edit \textit{quality} (authors trust the system's mechanical corrections), but it also raises questions about \textit{deference}. In post-study interviews, two authors reported: "I approved most edits without reading them carefully because the first few were correct" and "I felt like I was editing AI text rather than revising my own work."
+
+\textbf{Preserving meaningful human control}: We propose three design principles for human-centered automated revision, drawing from HCAI frameworks~\cite{shneiderman2020human,amershi2019guidelines}:
+
+\begin{enumerate}
+\item \textbf{Transparency}: For each edit, show \textit{why} it was suggested (which reviewer, which major issue, what priority). This enables authors to make informed decisions rather than passively accepting.
+
+\item \textbf{Selective automation}: Allow authors to specify preferences: "automate typos and citations, but flag all phrasing changes for my review." This preserves agency while reducing mechanical burden.
+
+\item \textbf{Edit provenance}: Maintain traceable history of all automated changes with one-click rollback. Authors should feel they can undo any change without effort, reducing pressure to accept edits out of convenience.
+\end{enumerate}
+
+\textbf{The intellectual value of manual revision}: Four authors noted that manual revision helped them "understand what reviewers really cared about" and "see patterns in their writing weaknesses." Automation may optimize for speed while undermining tacit learning. We recommend a \textbf{hybrid model}: automate mechanical edits, but present complex edits (those requiring judgment) as \textit{suggestions with explanations} rather than completed changes. This preserves the learning opportunity while reducing mechanical burden.
+
+\textbf{Risk of homogenization}: If many authors use AI-assisted revision, papers may converge to similar phrasing and structure. We analyzed phrase-level similarity across the 14 papers in our corpus: before revision, pairwise cosine similarity averaged 0.31 (low — distinct writing styles); after automated revision, similarity increased to 0.38 (moderate — more uniform phrasing). This suggests a real risk of stylistic homogenization, though the effect is modest. Mitigation strategies include: (1) personalization to author's existing style, (2) offering multiple rephrasings per edit, (3) encouraging authors to modify accepted edits to match their voice.
+
+\subsection{Cost-Benefit Analysis and Comparison to Alternatives}
+
+Table~\ref{tab:cost-comparison} compares closed-loop automation to alternative revision workflows.
+
+\begin{table}[t]
+\centering
+\caption{Cost, time, and quality comparison across revision methods (per paper).}
+\label{tab:cost-comparison}
+\begin{tabular}{lcccc}
+\toprule
+Method & Time & Cost & Quality & Tradeoffs \\
+\midrule
+Manual (baseline) & 8.2 hrs & \$0 & High & Author learns, slow \\
+Professional editor & 1-7 days & \$500-\$1000 & High & Expensive, external \\
+Crowd (Upwork) & 1-3 days & \$50-\$200 & Medium & Cheap, variable quality \\
+Closed-loop (ours) & 2.9 hrs & \$12 & High$^*$ & Fast, cheap, limits learning \\
+\bottomrule
+\multicolumn{5}{l}{\footnotesize $^*$Quality for mechanical edits; complex edits require human judgment}
+\end{tabular}
+\end{table}
+
+\textbf{Cost breakdown} (closed-loop automation):
+\begin{itemize}
+\item Review generation (5 reviews × \$0.40 per review): \$2.00
+\item Synthesis + planning (3 Claude API calls × \$0.50): \$1.50
+\item Edit execution (no additional cost — uses deterministic Edit tool): \$0
+\item Re-review for round 2 (5 reviews × \$0.40): \$2.00
+\item Total per paper (2 rounds avg): \$5.50
+\item Amortized infrastructure cost (plugin development): \$6.50/paper over 14 papers
+\item \textbf{Total}: \$12/paper
+\end{itemize}
+
+\textbf{When to use each method}:
+\begin{itemize}
+\item \textbf{Closed-loop automation}: Best for papers with primarily mechanical issues (typos, citations, phrasing). Fast and cheap, but 22\% of tasks require fallback to manual.
+\item \textbf{Professional editor}: Best for papers needing substantive reorganization or argument refinement. High quality but expensive and slow.
+\item \textbf{Crowd editing}: Best for proofreading and grammar checks. Cheaper than professionals but quality varies.
+\item \textbf{Manual revision}: Best when author wants to learn from mistakes or paper requires deep conceptual changes.
+\end{itemize}
+
+\textbf{Hybrid workflow}: The optimal strategy may combine methods: (1) run closed-loop automation for P1 mechanical items (saves 64\% of time), (2) hire professional editor for remaining P1 conceptual items (targeted \$200 spend), (3) author handles final integration and polish. Total cost: \$212, total time: 4 hours author + 3 days editor, quality: high across all dimensions.
+
+\subsection{Future Work}
+
+\subsubsection{Learning from Author Feedback}
+
+The current system discards valuable training data: when authors modify (4\%) or reject (2\%) automated edits, these corrections reveal preferences but are not used to improve future suggestions. We propose a \textbf{learning architecture}:
+
+\textbf{Data collection}: For each modified/rejected edit, log:
+\begin{itemize}
+\item Edit metadata: type (phrase replacement, insertion, deletion), section (intro, methodology, etc.), priority (P1/P2/P3), reviewer who suggested it
+\item Author action: accepted as-is, modified (with diff), or rejected
+\item Author explanation (optional): "too formal," "factually incorrect," "prefer original phrasing"
+\end{itemize}
+
+\textbf{Preference modeling}: Build an author preference model using features:
+\begin{itemize}
+\item Lexical: does author prefer formal vs. informal tone? active vs. passive voice? concise vs. detailed explanations?
+\item Structural: does author accept paragraph-level reorderings or resist structural changes?
+\item Domain-specific: which terminology does author use consistently (e.g., "framework" vs. "architecture")?
+\end{itemize}
+
+Train a logistic regression classifier predicting $P(\text{accept} | \text{edit features})$. For new papers by the same author, generate edits matching their preference profile.
+
+\textbf{Cross-author learning}: Aggregate data across authors to learn \textit{which types of edits are generally safe}. For example, if 90\% of authors accept typo fixes but only 60\% accept passive-to-active voice changes, adjust confidence scores accordingly.
+
+\textbf{Cold start}: For new authors (no edit history), default to conservative strategy: flag all phrasing changes for review, automate only mechanical corrections. After 10-15 edits with author feedback, transition to personalized model.
+
+\textbf{Estimated impact}: With 28 modified/rejected edits (6\% of 466) per paper as training data, we estimate preference models would reduce rejections by 30-40\% (from 6\% to 4\%), increasing overall automation from 78\% to 82\% of P1 items.
+
+\subsubsection{Reflection and Strategy Adjustment Across Rounds}
+
+The system currently applies the same revision strategy in round 2 as round 1, ignoring what it learned from round 1 reviewer responses. We propose \textbf{reflection mechanisms} inspired by self-improving agent architectures~\cite{shinn2023reflexion,yao2023react}:
+
+\textbf{Memory structure}: Maintain a reflection log mapping:
+\begin{verbatim}
+Round 1:
+  Edit: "Added power analysis to methodology"
+  Reviewer response (Round 2): "Power analysis is present
+    but uses wrong effect size assumption"
+  Reflection: "I addressed surface-level concern but
+    missed deeper issue about assumptions. In future,
+    when adding statistical tests, verify parameters
+    with domain conventions."
+\end{verbatim}
+
+\textbf{Strategy adjustment}: Before generating Round N+1 revision plan, query reflection log:
+\begin{itemize}
+\item Which Round N edits were insufficient (reviewer still complained)?
+\item Which issue types does this system struggle with (content expansion, structural changes)?
+\item Which reviewers remain unsatisfied (prioritize their concerns in Round N+1)?
+\end{itemize}
+
+Use this analysis to adjust planning prompts. For example:
+\begin{itemize}
+\item If Reviewer A flagged "insufficient related work" in Rounds 1 and 2, and system added 2 citations in Round 1 but reviewer still unsatisfied, conclude: \textit{"2 citations insufficient — need 5+ with detailed comparison."}
+\item If multiple rounds of phrasing changes fail to satisfy reviewers, conclude: \textit{"Phrasing edits ineffective — issue may be structural, flag for human judgment."}
+\end{itemize}
+
+\textbf{Meta-cognitive prompting}: During Round N+1 planning, include reflection context:
+\begin{verbatim}
+"You previously added a power analysis in Round 1, but
+ Reviewer A noted in Round 2 that the effect size
+ assumption (d=0.5) is too optimistic for this domain.
+ How should you revise the analysis?"
+\end{verbatim}
+
+This enables the system to learn from its mistakes and avoid repeating ineffective edits.
+
+\textbf{Estimated impact}: Reflection could reduce rounds-to-convergence from 2.0 avg (current) to 1.6 avg (estimated), as the system would address issues more thoroughly in earlier rounds.
+
+\subsubsection{Other Directions}
+
+\textbf{Semantic validation}: Integrate fact-checking and claim verification to detect semantic errors introduced by automated edits. For example, check that all citations exist in the bibliography, numerical claims are consistent across sections.
+
+\textbf{Multi-file refactoring}: Extend the system to handle coordinated edits across multiple files (rename section and update all references, move figure and update caption numbering).
+
+\textbf{Confidence scores}: Assign confidence to each proposed edit based on: reviewer consensus (3+ reviewers = high confidence), edit type (typo fix = high, structural change = low), localization difficulty (unique match = high, ambiguous = low). Display confidence in REVISION-PLAN.md to help authors prioritize review effort.
+
+\textbf{Human-in-the-loop planning}: Before executing edits, show authors the planned edits (REVISION-PLAN.md) and allow them to approve, modify, or reject each edit. This shifts the automation model from "execute then review" to "plan then execute," giving authors more control.
+
+\textbf{Generalization to code}: Extend the architecture to source code (Python, JavaScript, etc.) where test suites provide stronger validation than LaTeX compilation. Key challenge: code edits have side effects (changing function signature affects all callers), requiring global reasoning.

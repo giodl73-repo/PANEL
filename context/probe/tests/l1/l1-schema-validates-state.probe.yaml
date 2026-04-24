@@ -1,0 +1,60 @@
+id: l1-schema-validates-state
+name: panel-state schema validates well-formed _panel.yaml
+tier: L1
+plugin: panel
+target: config/schemas/panel-state.schema.yaml
+fixture: fixtures/sample-panel-state.yaml
+timeout: 30
+
+description: |
+  Verify the panel-state schema correctly validates a well-formed
+  _panel.yaml and rejects an invalid one.
+
+steps:
+  - action: read-file
+    path: config/schemas/panel-state.schema.yaml
+    store: schema
+
+  # Validate the most complete fixture: chip-distribution (all fields, round 2, ready stage)
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
+    store: valid_complete
+
+  - action: validate-against-schema
+    schema: $schema
+    data: $valid_complete
+    expect: pass
+    description: "Cookie Monster's chip-distribution passes schema (most complete state)"
+
+  # Validate a minimal fixture: recycling-optimization (draft stage, round 0)
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-recycling-optimization/_panel.yaml
+    store: valid_minimal
+
+  - action: validate-against-schema
+    schema: $schema
+    data: $valid_minimal
+    expect: pass
+    description: "Oscar's recycling paper passes schema (minimal draft state)"
+
+  # Validate mid-lifecycle: waiter-dilemma (synthesis, round 1)
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/grover-adventures/panel-waiter-dilemma/_panel.yaml
+    store: valid_mid
+
+  - action: validate-against-schema
+    schema: $schema
+    data: $valid_mid
+    expect: pass
+    description: "Grover's waiter-dilemma passes schema (synthesis stage)"
+
+  # Invalid state should fail
+  - action: read-file
+    path: context/probe/fixtures/sample-panel-state-invalid.yaml
+    store: invalid_state
+
+  - action: validate-against-schema
+    schema: $schema
+    data: $invalid_state
+    expect: fail
+    description: "Invalid fixture fails schema (bad stage, missing title, score out of range)"

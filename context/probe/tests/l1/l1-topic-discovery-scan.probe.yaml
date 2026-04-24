@@ -1,0 +1,34 @@
+id: l1-topic-discovery-scan
+name: topic-discovery scans sources and returns structured proposals
+tier: L1
+plugin: panel
+target: shared/topic-discovery.md
+timeout: 30
+
+description: |
+  Verify topic-discovery scans external sources (roadmap, waves, commits)
+  and returns structured topic proposals with title, abstract sketch,
+  and venue suggestion.
+
+steps:
+  - action: mock-source
+    type: commits
+    data:
+      - message: "Add three-tier review architecture"
+        files: [commands/board.md, shared/board-utils.md]
+      - message: "Implement synthesis engine P1/P2/P3"
+        files: [shared/synthesis-engine.md]
+    store: source
+
+  - action: invoke-discovery
+    input: $source
+    store: topics
+
+  - action: assert-array-length-gte
+    input: $topics
+    expected: 1
+    description: At least one topic proposed
+
+  - action: assert-each-has-field
+    input: $topics
+    fields: [title, description, venue_suggestion]

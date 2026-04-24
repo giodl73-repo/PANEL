@@ -1,0 +1,50 @@
+paper: panel-super-grover-flight
+title: "Cape-Assisted Aerial Locomotion: Dynamics of Heroic Flight Attempts"
+venue: "AIAA 2026"
+stage: synthesis
+round: 1
+reviewers:
+  - name: Grover
+    affiliation: Sesame Street Adventure Academy
+    expertise: Near-far classification
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Big Bird
+    affiliation: Sesame Street Ornithology Dept
+    expertise: Aerial observation
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Mr. Snuffleupagus
+    affiliation: Imaginary Studies Institute
+    expertise: Unverifiable phenomena
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Elmo
+    affiliation: Sesame Street Child Dev Center
+    expertise: Third-person self-reference
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Dr. Bunsen Honeydew
+    affiliation: Muppet Labs
+    expertise: Experimental design
+    score: 3
+    verdict: "Accept with Minor Revisions"
+reviews:
+  round1:
+    - reviews/REVIEW-GROVER.md
+    - reviews/REVIEW-BIG-BIRD.md
+    - reviews/REVIEW-MR-SNUFFLEUPAGUS.md
+    - reviews/REVIEW-ELMO.md
+    - reviews/REVIEW-DR-BUNSEN-HONEYDEW.md
+  round1_synthesis: reviews/SYNTHESIS.md
+
+history:
+  - stage: draft
+    date: "2025-12-01"
+    note: "Paper created"
+  - stage: panel
+    date: "2025-12-15"
+    note: "Reviewers assigned and reviews generated"
+  - stage: synthesis
+    date: "2026-01-01"
+    note: "Reviews consolidated"

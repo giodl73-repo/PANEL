@@ -1,0 +1,57 @@
+{
+  "default": "panel",
+  "projects": {
+    "panel": {
+      "projectType": "plugin",
+      "wavesPath": "context/waves",
+      "disciplinesPath": "context/waves/disciplines",
+      "description": "panel waves",
+      "stack": {
+        "backend": "FastAPI (Python)",
+        "frontend": "React",
+        "testing": "pytest (Python)"
+      },
+      "documentation": {
+        "scope": "Complete",
+        "documents": [
+          {
+            "path": "README.md",
+            "type": "README.md",
+            "discipline": "technical-writer",
+            "autoUpdate": true
+          },
+          {
+            "path": "CHANGELOG.md",
+            "type": "CHANGELOG.md",
+            "discipline": "technical-writer",
+            "autoUpdate": true
+          },
+          {
+            "path": "docs/architecture.md",
+            "type": "Architecture docs",
+            "discipline": "technical-writer",
+            "autoUpdate": true
+          },
+          {
+            "path": "docs/api.md",
+            "type": "API documentation",
+            "discipline": "technical-writer",
+            "autoUpdate": true
+          },
+          {
+            "path": "CONTRIBUTING.md",
+            "type": "Contributing guide",
+            "discipline": "technical-writer",
+            "autoUpdate": true
+          },
+          {
+            "path": "docs/user-guide.md",
+            "type": "User guide",
+            "discipline": "technical-writer",
+            "autoUpdate": true
+          }
+        ]
+      }
+    }
+  }
+}

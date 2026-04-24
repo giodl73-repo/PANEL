@@ -1,0 +1,41 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+\title{Hierarchical Review Architecture: Scaling Expert Feedback\\Through Three-Tier Synthesis}
+
+\author{
+Gio Della-Libera \\
+\texttt{giodl@microsoft.com}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+AI-simulated expert review systems face a critical scaling challenge: as research portfolios grow from individual papers to multi-module programs, flat review structures fail to surface cross-cutting patterns and strategic concerns. We present a three-tier hierarchical review architecture that addresses this through bidirectional information flow and priority escalation. The architecture comprises: (1) paper-level reviews with P1/P2/P3 priority classification, (2) module-level panel reviews synthesizing cross-portfolio patterns into PP1/PP2/PP3 priorities, and (3) monorepo-level board reviews coordinating cross-module strategy with B1/B2/B3 priorities. Evaluation across 14 papers in 3 modules shows the architecture successfully surfaces issues invisible at lower tiers: 37\% of PP1 priorities and 52\% of B1 priorities represent emergent patterns not flagged by any individual paper review. The system demonstrates both upward issue escalation (local problems bubble up when they indicate systemic concerns) and downward directive propagation (strategic decisions cascade as concrete revision requirements). This work contributes the first hierarchical architecture for AI review systems, with applications to any domain requiring structured expert feedback at multiple scales.
+\end{abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-methodology}
+\input{sections/04-results}
+\input{sections/05-discussion}
+\input{sections/06-conclusion}
+
+\bibliographystyle{plain}
+\bibliography{../references}
+
+\end{document}

@@ -1,0 +1,62 @@
+id: l3-three-tier-flow-up
+name: "Bottom-up: paper reviews surface to panel, panel findings surface to board"
+tier: L3
+plugin: panel
+target:
+  - commands/review.md
+  - commands/convene.md
+  - commands/board.md
+timeout: 120
+
+description: |
+  End-to-end bottom-up flow: individual paper reviews surface issues
+  to module-level panel, which surfaces patterns to board-level review.
+  Verify priority escalation (P1 → PP1 → B1) when patterns span papers/modules.
+
+steps:
+  # Bottom-up flow using all 3 Sesame Street modules
+  - action: prepare-monorepo
+    source: tests/fixtures/mock-monorepo
+    description: "Full Sesame Street monorepo: cookie-science (ready), grover-adventures (synthesis), oscar-trash-lab (mixed)"
+
+  # Tier 1: Paper-level reviews already exist in fixtures
+  - action: verify-reviews-exist
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/reviews
+    expected_count: 10
+    description: "Chip distribution has 5 round-1 + 5 round-2 reviews"
+
+  # Tier 2: Panel review synthesizes paper findings
+  - action: invoke-skill
+    skill: "panel:module review"
+    sandbox: true
+    cwd: tests/fixtures/mock-monorepo/cookie-science
+    store: panel_result
+
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
+    store: panel_review
+
+  - action: assert-contains
+    input: $panel_review
+    pattern: "PP1"
+    description: "Paper P1 patterns surface to panel PP1 (methodology inconsistency across cookie papers)"
+
+  # Tier 3: Board review synthesizes module findings
+  - action: invoke-skill
+    skill: "panel:board --review --repo tests/fixtures/mock-monorepo"
+    sandbox: true
+    store: board_result
+
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
+    store: board_review
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "cookie-science"
+    description: "Board review incorporates cookie-science findings"
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "grover-adventures"
+    description: "Board review incorporates grover-adventures findings"

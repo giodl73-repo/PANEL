@@ -1,0 +1,12 @@
+{
+  "default": "mock",
+  "gitStrategy": "manual",
+  "projects": {
+    "mock": {
+      "panelPath": "context/panel/mock",
+      "researchPath": ".",
+      "clientSlug": "mock",
+      "projectName": "mock"
+    }
+  }
+}

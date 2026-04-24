@@ -1,0 +1,34 @@
+id: l2-panel-apply-revisions
+name: "panel:module apply drives PP1/PP2 revisions down to papers"
+tier: L2
+plugin: panel
+target: commands/convene.md
+timeout: 60
+
+description: |
+  Verify panel:module apply generates per-paper revision plans from
+  PP1/PP2 findings and applies edits to paper LaTeX source files.
+
+steps:
+  # Use cookie-science module — has REVIEW_PANEL.md with PP1/PP2/PP3 findings
+  - action: prepare-module
+    source: tests/fixtures/mock-monorepo/cookie-science
+    description: "Cookie Science Lab with complete REVIEW_PANEL.md containing PP1 (methodology inconsistency)"
+
+  - action: invoke-skill
+    skill: "panel:module apply"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: research/panel-reviews/round-1/PANEL-REVISION-PLAN.md
+    description: "Revision plan generated from PP1/PP2 findings"
+
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
+    store: state
+
+  - action: assert-field
+    input: $state
+    field: stage
+    description: "Chip distribution state updated after panel revisions"

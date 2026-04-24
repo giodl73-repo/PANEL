@@ -1,0 +1,321 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{System Architecture Overview}
+
+Figure~\ref{fig:architecture} illustrates the three-phase closed-loop architecture. Each review cycle proceeds through synthesis → planning → execution → validation.
+
+\begin{figure}[t]
+\centering
+\begin{verbatim}
+   +-------------+
+   |  Reviews    | REVIEW-ALICE.md, REVIEW-BOB.md, ...
+   +------+------+
+          |
+          v
+   +-------------+
+   | Synthesis   | SYNTHESIS.md (P1/P2/P3 items)
+   +------+------+
+          |
+          v
+   +-------------+
+   |  Planning   | REVISION-PLAN.md (file, line, old, new)
+   +------+------+
+          |
+          v
+   +-------------+
+   | Execution   | Apply edits to LaTeX source
+   +------+------+
+          |
+          v
+   +-------------+
+   | Validation  | Compile LaTeX, re-review, repeat
+   +-------------+
+\end{verbatim}
+\caption{Three-phase closed-loop architecture from reviews to revisions.}
+\label{fig:architecture}
+\end{figure}
+
+\subsection{Phase 1: Review Synthesis}
+
+Review synthesis follows methods from prior work~\cite{dellalibera2026synthesis}:
+
+\textbf{Inputs}: 5-7 review files (REVIEW-EXPERT-NAME.md) with structured feedback (strengths, weaknesses, questions, score).
+
+\textbf{Process}:
+\begin{enumerate}
+\item Extract all issues from weaknesses sections.
+\item Deduplicate issues using semantic similarity (cosine similarity on sentence embeddings, threshold 0.85).
+\item Classify priority based on reviewer consensus:
+  \begin{itemize}
+  \item P1: 3+ reviewers flag issue OR issue threatens acceptance
+  \item P2: 2+ reviewers flag issue
+  \item P3: 1 reviewer flags issue
+  \end{itemize}
+\item Generate SYNTHESIS.md with prioritized issue list.
+\end{enumerate}
+
+\textbf{Outputs}: SYNTHESIS.md with P1/P2/P3 sections listing issues in order of priority.
+
+\subsection{Phase 2: Revision Planning}
+
+Revision planning translates abstract feedback into concrete edit instructions.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item SYNTHESIS.md with prioritized issues
+\item Paper LaTeX source (main.tex, sections/*.tex)
+\item Prior REVISION-PLAN.md (if round $\geq$ 2) to avoid redundant edits
+\end{itemize}
+
+\textbf{Process}: For each issue in SYNTHESIS.md (P1 first, then P2, then P3):
+\begin{enumerate}
+\item \textbf{Localize}: Identify the file and line range where the issue occurs. Use grep to search for relevant keywords (e.g., issue "methodology section lacks detail" → search for "methodology" in sections/*.tex).
+
+\item \textbf{Propose edit}: Generate old text (exact text to replace) and new text (replacement). Ensure old text is unique within the file to avoid ambiguous matches.
+
+\item \textbf{Validate}: Check that old text exists in the file at the specified location. If not found, mark issue as "requires human judgment" (cannot localize automatically).
+
+\item \textbf{Format}: Write edit as structured entry in REVISION-PLAN.md:
+\begin{verbatim}
+## P1-3: Methodology lacks statistical power analysis
+
+**File**: sections/03-methodology.tex
+**Lines**: 127-132
+**Action**: Insert
+
+**Old text**: (none - insertion)
+
+**New text**:
+We conducted a power analysis using G*Power 3.1 \cite{faul2007gpower}.
+With $\alpha = 0.05$ and desired power $1-\beta = 0.80$, the minimum
+sample size is $n = 47$ for detecting a medium effect size ($d = 0.5$).
+
+**Rationale**: Reviewers Alice, Bob, and Carol all noted the lack of
+statistical justification for sample size. Adding power analysis
+addresses this P1 concern.
+\end{verbatim}
+\end{enumerate}
+
+\textbf{Outputs}: REVISION-PLAN.md with structured edit entries for all addressable issues. Issues requiring human judgment (e.g., "restructure paper", "expand related work with 3+ new citations") are marked but not assigned concrete edits.
+
+\subsection{Phase 3: Edit Execution}
+
+Edit execution parses REVISION-PLAN.md and applies edits to LaTeX files.
+
+\textbf{Inputs}:
+\begin{itemize}
+\item REVISION-PLAN.md with structured edit entries
+\item Paper LaTeX source (writable)
+\end{itemize}
+
+\textbf{Process}:
+\begin{enumerate}
+\item Parse REVISION-PLAN.md to extract edit entries (file, action, old text, new text).
+
+\item For each edit entry in priority order (P1 → P2 → P3):
+  \begin{enumerate}
+  \item Read target file.
+  \item Verify old text exists (exact match). If not found, skip edit and log warning.
+  \item Apply edit using string replacement:
+    \begin{itemize}
+    \item \textbf{Replace}: Substitute old text with new text.
+    \item \textbf{Insert}: Add new text at specified line.
+    \item \textbf{Delete}: Remove old text.
+    \end{itemize}
+  \item Write modified file.
+  \item Mark edit as completed in \_panel.yaml state file.
+  \end{enumerate}
+
+\item After all edits applied, run \texttt{make pdf} to compile LaTeX.
+
+\item If compilation fails:
+  \begin{itemize}
+  \item Identify the failing edit (last edit before error).
+  \item Rollback that edit (restore old text).
+  \item Mark edit as "requires human judgment".
+  \item Recompile to verify rollback succeeded.
+  \end{itemize}
+
+\item If compilation succeeds, commit changes to git with message listing completed P1 items.
+\end{enumerate}
+
+\textbf{Outputs}:
+\begin{itemize}
+\item Modified LaTeX files with edits applied
+\item Compiled PDF (if successful)
+\item \_panel.yaml updated with completion status per revision item
+\end{itemize}
+
+\subsection{Phase 4: Validation and Iteration}
+
+After edits are applied, the paper enters the recheck stage for re-review.
+
+\textbf{Process}:
+\begin{enumerate}
+\item Compile paper to PDF.
+\item Generate round 2 reviews (ROUND2-REVIEW-EXPERT-NAME.md) from the same reviewers.
+\item Synthesize round 2 feedback into new SYNTHESIS.md.
+\item Check convergence criteria:
+  \begin{itemize}
+  \item Average score $\geq$ 2.5/4 (weak accept or better)
+  \item No individual score < 2/4 (no rejects)
+  \item All P1 items from prior round addressed
+  \end{itemize}
+\item If converged: paper advances to ready stage (panel tier review).
+\item If not converged: generate new REVISION-PLAN.md and repeat phases 2-4.
+\end{enumerate}
+
+Iteration continues until convergence or a maximum of 4 rounds (empirically, 85\% of papers converge within 2 rounds~\cite{dellalibera2026dynamics}).
+
+\subsection{Edit Types and Complexity}
+
+We classify edits by complexity:
+
+\textbf{Simple edits} (fully automatable):
+\begin{itemize}
+\item Phrase replacement: "replace X with Y"
+\item Insertion: "add text at line N"
+\item Deletion: "remove text at line N"
+\item Typo fixes: "change 'recieve' to 'receive'"
+\end{itemize}
+
+\textbf{Complex edits} (require human judgment):
+\begin{itemize}
+\item Structural changes: "move section 4 before section 3"
+\item Content expansion: "add 3 paragraphs explaining X"
+\item Figure creation: "add figure showing Y"
+\item Major rewrites: "rewrite introduction for clarity"
+\end{itemize}
+
+The system attempts all simple edits automatically. Complex edits are flagged in REVISION-PLAN.md with \texttt{[HUMAN REQUIRED]} tags, signaling that author intervention is needed.
+
+\subsection{Implementation}
+
+The system is implemented as part of the panel plugin for Claude Code:
+
+\begin{itemize}
+\item \textbf{Synthesis}: \texttt{panel:review} command, synthesis stage
+\item \textbf{Planning}: \texttt{panel:review} command, revision stage (plan generation)
+\item \textbf{Execution}: \texttt{panel:review} command, revision stage (edit application)
+\item \textbf{Validation}: \texttt{panel:review} command, recheck stage
+\end{itemize}
+
+Edits use Claude Code's Edit tool, which performs exact string matching and diff validation, ensuring edits are applied precisely as specified or fail with clear error messages.
+
+\subsection{Failure Detection and Debugging}
+
+When automated edits fail, the system must: (1) detect the failure, (2) localize the failing edit, (3) rollback safely, and (4) provide debugging tools to authors.
+
+\textbf{Failure detection pipeline}:
+\begin{enumerate}
+\item \textbf{Edit application failures}: The Edit tool fails if old text is not found or not unique. These are caught immediately before any file modification occurs.
+\item \textbf{Compilation failures}: After all edits applied, run \texttt{make pdf}. If LaTeX compilation fails, parse error log to identify failing file and line number.
+\item \textbf{Semantic validation} (limited): Check basic invariants: (1) all \texttt{\textbackslash{}cite\{\}} references exist in .bib file, (2) all \texttt{\textbackslash{}ref\{\}} labels are defined, (3) all included files exist.
+\end{enumerate}
+
+\textbf{Failure localization}: When compilation fails, identify which edit caused the error:
+\begin{enumerate}
+\item Map LaTeX error line number to original source location (accounting for \texttt{\textbackslash{}input\{\}} directives).
+\item Binary search through applied edits: revert second half, recompile; if success, failing edit is in second half; if failure, failing edit is in first half. Repeat until isolated.
+\item Typical localization time: 2-3 minutes for corpus of 20-30 edits.
+\end{enumerate}
+
+\textbf{Rollback mechanism}: The system maintains edit provenance in \texttt{\_panel.yaml}:
+\begin{verbatim}
+applied_edits:
+  - id: P1-3
+    file: sections/03-methodology.tex
+    old_text: "We use standard methods."
+    new_text: "We conducted power analysis..."
+    status: applied
+    timestamp: 2026-02-07T14:23:15Z
+\end{verbatim}
+
+To rollback edit P1-3: read old\_text and new\_text, apply reverse transformation (replace new\_text with old\_text), mark status as \texttt{rolled\_back}. All rollbacks are logged for audit trail.
+
+\textbf{Debugging tools provided to authors}:
+\begin{itemize}
+\item \textbf{Diff view}: Generate unified diff of all applied edits: \texttt{git diff HEAD sections/}. This shows exactly what changed.
+\item \textbf{Selective rollback}: Authors can rollback individual edits by ID: \texttt{panel:review --rollback P1-3}.
+\item \textbf{Edit provenance}: For any line in the paper, trace back to which reviewer suggested the change and why: \texttt{panel:show --edit-history sections/03-methodology.tex:127}.
+\item \textbf{Validation report}: After edits, generate report listing: successful edits (green), rolled-back edits (red), skipped edits (yellow), with reasons.
+\end{itemize}
+
+\textbf{Failure case walkthrough}: In one paper, an edit inserted \texttt{\{additional analysis\}} without the matching closing brace. LaTeX compilation failed with error: \texttt{File ended while scanning use of \textbackslash{}emph}. The system:
+\begin{enumerate}
+\item Detected compilation failure (exit code 1 from pdflatex).
+\item Localized to edit P1-7 in sections/03-methodology.tex (binary search took 2 minutes, 3 recompilation attempts).
+\item Rolled back P1-7 (restored old text).
+\item Recompiled successfully.
+\item Marked P1-7 as "requires human judgment" with note: "Automated edit introduced unmatched brace — manual fix needed."
+\item Author reviewed edit, fixed brace mismatch, reapplied manually.
+\end{enumerate}
+
+Total time from failure detection to rollback: 4 minutes. No broken state committed to git.
+
+\subsection{Observability and Metrics}
+
+The system logs metrics at three levels: edit-level (per edit decision), paper-level (per paper per round), and corpus-level (across all papers).
+
+\textbf{Edit-level metrics} (logged to \texttt{\_panel.yaml}):
+\begin{itemize}
+\item Edit ID (P1-3), priority tier (P1/P2/P3), edit type (replace/insert/delete)
+\item File and line range
+\item Outcome: applied, rolled\_back, skipped (old text not found), or rejected (by author)
+\item If rolled back: reason (compilation error, semantic validation failure)
+\item Timestamp
+\end{itemize}
+
+\textbf{Paper-level metrics} (aggregated in \texttt{\_panel.yaml}):
+\begin{itemize}
+\item Completion rate: \% of P1/P2/P3 items addressed
+\item Acceptance rate: \% of applied edits accepted by author
+\item Failure rate: \% of edits rolled back due to errors
+\item Round number, average reviewer score, convergence status
+\end{itemize}
+
+\textbf{Corpus-level metrics} (aggregated across all papers):
+\begin{itemize}
+\item Average completion rate by priority tier (P1: 78\%, P2: 68\%, P3: 58\%)
+\item Average acceptance rate (94\%)
+\item Failure rate by edit type (phrase replacement: 1\%, insertion: 3\%, deletion: 2\%, block reordering: 15\%)
+\item Time to convergence (avg 2.0 rounds)
+\end{itemize}
+
+\textbf{Dashboard and monitoring}: Authors access metrics via \texttt{panel:status --paper panel-closed-loop-automation}, which displays:
+\begin{verbatim}
+Paper: panel-closed-loop-automation
+Stage: revision
+Round: 1
+Edits: 12 applied, 10 accepted, 1 rolled back, 1 pending review
+Completion: P1: 3/4 (75%), P2: 2/4 (50%), P3: 0/4 (0%)
+Next action: Address remaining P1.4 item
+\end{verbatim}
+
+This provides real-time visibility into revision progress and helps authors prioritize remaining work.
+
+\subsection{Error Propagation and Edit Dependencies}
+
+Edits are not always independent — some edits depend on others succeeding. When dependencies exist, failures can cascade.
+
+\textbf{Dependency types}:
+\begin{enumerate}
+\item \textbf{Ordering dependencies}: Edit B references text introduced by Edit A. If A is rolled back, B becomes invalid.
+\item \textbf{Semantic dependencies}: Edit A changes term "model" to "framework", Edit B (applied later) references "model" and introduces inconsistency.
+\item \textbf{Structural dependencies}: Edit A reorders paragraphs, Edit B adds cross-reference to "previous paragraph" — reordering breaks reference.
+\end{enumerate}
+
+\textbf{Dependency detection}: The current system does not explicitly model dependencies. Instead, it uses two heuristics:
+\begin{enumerate}
+\item \textbf{Sequential ordering}: Apply edits in dependency order (P1 before P2 before P3; within priority, order by section: intro → methodology → results → discussion).
+\item \textbf{Full recompilation}: After each edit, recompile entire paper. This detects cascading failures immediately (e.g., if Edit B breaks because Edit A removed text B references).
+\end{enumerate}
+
+\textbf{Dependency-related failure analysis}: Of the 9\% of revision cycles with compilation failures (Table~\ref{tab:compilation}), we analyzed root causes:
+\begin{itemize}
+\item \textbf{Independent failures} (67\%): Edit itself malformed (unmatched brace, invalid figure path). Rollback of failing edit sufficient.
+\item \textbf{Dependent failures} (33\%): Edit valid in isolation but breaks due to prior edit. Example: Edit A removed citation [Smith2020], Edit B added "as shown in [Smith2020]" — B now references non-existent citation. Requires rollback of both A and B.
+\end{itemize}
+
+\textbf{Future enhancement}: Explicit dependency tracking. Before applying Edit B, check if it references any text modified by previous edits. If so, mark B as \textit{dependent on edits [A, C]} and propagate rollback if A or C fails. This would reduce dependent failures from 33\% to near-zero.

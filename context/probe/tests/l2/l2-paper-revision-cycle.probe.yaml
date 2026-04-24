@@ -1,0 +1,46 @@
+id: l2-paper-revision-cycle
+name: "panel:review handles revision to recheck to synthesis loop"
+tier: L2
+plugin: panel
+target: commands/review.md
+timeout: 60
+
+description: |
+  Verify panel:review handles the full revision cycle: create revision plan,
+  apply revisions, advance to recheck, generate round-N reviews,
+  re-synthesize. Round number should increment.
+
+steps:
+  # Use cookie-science/panel-crumb-analysis — at recheck/round 1, has REVISION-PLAN.md
+  - action: prepare-paper
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/_panel.yaml
+    reviews: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/reviews
+    revision_plan: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/REVISION-PLAN.md
+    description: "Crumb analysis — round 1 complete, P1 items addressed, needs round 2"
+
+  - action: invoke-skill
+    skill: "panel:review --paper panel-crumb-analysis --until recheck"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: research/panel-crumb-analysis/REVISION-PLAN.md
+
+  - action: read-file
+    path: research/panel-crumb-analysis/_panel.yaml
+    store: state
+
+  - action: assert-field-gte
+    input: $state
+    field: round
+    expected: 2
+    description: "Round incremented (Cookie Monster et al. do round 2)"
+
+  - action: glob
+    pattern: research/panel-crumb-analysis/reviews/ROUND2-REVIEW-*.md
+    store: round2_reviews
+
+  - action: assert-count-gte
+    input: $round2_reviews
+    expected: 5
+    description: "Round 2 reviews generated (ROUND2-REVIEW-COOKIE-MONSTER.md, etc.)"

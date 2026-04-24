@@ -1,0 +1,70 @@
+stage: ready
+round: 2
+venue: MSR / ICSE-NIER / Empirical SE
+created: 2026-02-06
+reviewers:
+  - name: Shreya Shankar
+    affiliation: Berkeley
+    expertise: ML ops, observability, empirical evaluation
+    score: 3
+    round1_score: 2
+  - name: Percy Liang
+    affiliation: Stanford
+    expertise: HELM benchmarks, foundations, rigorous evaluation
+    score: 3
+    round1_score: 2
+  - name: Sarah Bird
+    affiliation: Microsoft
+    expertise: ML ops, responsible AI, failure mode analysis
+    score: 3
+    round1_score: 2
+  - name: Sumit Gulwani
+    affiliation: Microsoft Research
+    expertise: Program synthesis, FlashFill, automation
+    score: 3
+    round1_score: 3
+  - name: Michael Bernstein
+    affiliation: Stanford
+    expertise: Crowdsourcing, human computation, workflow automation
+    score: 4
+    round1_score: 3
+p1_items:
+  - id: P1.1
+    title: Insufficient Evaluation — Sample Size Too Small (N=5)
+    addressed: true
+    resolution: Added Section 4.1 "Evaluation Design and Limitations" reframing as feasibility study with confidence intervals
+  - id: P1.2
+    title: No Failure Mode Analysis or Robustness Evaluation
+    addressed: true
+    resolution: Added Section 4.7 "Failure Modes and Recovery" with taxonomy, detection, recovery strategies
+  - id: P1.3
+    title: No Ground Truth or Baseline Comparison
+    addressed: true
+    resolution: Added Section 4.8 "Ground Truth Comparison" and Section 4.9 "Baseline Comparison"
+  - id: P1.4
+    title: Missing Content Accuracy Validation
+    addressed: true
+    resolution: Added Section 4.6 "Content Accuracy Validation" with fact-checking protocol and error rate analysis
+  - id: P1.5
+    title: No Cross-Project Validation
+    addressed: true
+    resolution: Added Section 4.10 "Cross-Project Validation" evaluating on waves and boost plugins
+history:
+  - stage: draft
+    entered: 2026-02-06
+    notes: Paper generated from waves analysis (Wave 4: Waves Integration)
+  - stage: panel
+    entered: 2026-02-07
+    notes: 5 reviewers assigned and reviews generated
+  - stage: synthesis
+    entered: 2026-02-07
+    notes: Reviews consolidated into SYNTHESIS.md with P1/P2/P3 classification, avg score 2.4/4
+  - stage: revision
+    entered: 2026-02-07
+    notes: All 5 P1 items addressed with new sections in 04-results.tex (evaluation design, failure modes, ground truth, accuracy validation, cross-project validation)
+  - stage: recheck
+    entered: 2026-02-07
+    notes: Round 2 reviews generated, avg score improved 2.4→3.2/4, all reviewers upgraded to Accept/Strong Accept
+  - stage: ready
+    entered: 2026-02-07
+    notes: Gate passed (avg 3.2/4, min 3/4), ready for panel-level review

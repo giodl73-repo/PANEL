@@ -1,0 +1,46 @@
+id: l1-score-utils-10point
+name: score-utils computes 10-point cross-portfolio scale
+tier: L1
+plugin: panel
+target: shared/score-utils.md
+timeout: 30
+
+description: |
+  Verify score-utils maps paper-level 4-point scores to the 10-point
+  cross-portfolio scale and classifies into tiers (A/A-/B+/B/B-/C).
+
+steps:
+  - action: map-to-10point
+    four_point_avg: 3.5
+    store: high
+
+  - action: assert-tier
+    input: $high
+    expected_range: [8.0, 10.0]
+    expected_tier: A
+
+  - action: map-to-10point
+    four_point_avg: 3.0
+    store: solid
+
+  - action: assert-tier
+    input: $solid
+    expected_range: [6.5, 8.0]
+    expected_tier_in: [A-, B+]
+
+  - action: map-to-10point
+    four_point_avg: 2.0
+    store: weak
+
+  - action: assert-tier
+    input: $weak
+    expected_range: [0.0, 6.0]
+    expected_tier_in: [B-, C]
+
+  - action: map-to-10point
+    four_point_avg: 1.0
+    store: reject
+
+  - action: assert-tier
+    input: $reject
+    expected_tier: C

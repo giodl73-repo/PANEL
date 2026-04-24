@@ -1,0 +1,59 @@
+id: l2-setup-paper
+name: "panel:setup <name> creates single paper with _panel.yaml"
+tier: L2
+plugin: panel
+target: commands/setup.md
+timeout: 60
+
+description: |
+  Verify panel:setup in per-paper mode creates a paper directory
+  with main.tex, sections/, Makefile, _panel.yaml, and updates RESEARCH.md.
+
+steps:
+  - action: invoke-skill
+    skill: "panel:setup test-new-paper CHI"
+    sandbox: true
+    store: paper_result
+
+  - action: file-exists
+    path: research/panel-test-new-paper/main.tex
+
+  - action: file-exists
+    path: research/panel-test-new-paper/Makefile
+
+  - action: file-exists
+    path: research/panel-test-new-paper/_panel.yaml
+
+  - action: glob
+    pattern: research/panel-test-new-paper/sections/*.tex
+    store: sections
+
+  - action: assert-count-gte
+    input: $sections
+    expected: 1
+
+  - action: read-file
+    path: research/panel-test-new-paper/_panel.yaml
+    store: state
+
+  - action: assert-valid-yaml
+    input: $state
+
+  - action: assert-field
+    input: $state
+    field: stage
+    expected: draft
+
+  - action: assert-field
+    input: $state
+    field: paper
+    expected: panel-test-new-paper
+
+  - action: read-file
+    path: research/RESEARCH.md
+    store: research_md
+
+  - action: assert-contains
+    input: $research_md
+    pattern: "test-new-paper"
+    description: RESEARCH.md updated with new paper

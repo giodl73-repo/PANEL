@@ -1,0 +1,54 @@
+id: l3-venue-recommendation-pipeline
+name: "Complete flow: paper reviewed to scored to venue recommended to submission strategy"
+tier: L3
+plugin: panel
+target:
+  - commands/review.md
+  - commands/venue.md
+timeout: 120
+
+description: |
+  End-to-end test: paper goes through review, gets scored, then
+  panel:venue uses those scores to recommend appropriate venues
+  and generate a submission strategy.
+
+steps:
+  # Use chip-distribution — ready stage, strong scores (3.2 avg), venue ICBD 2026
+  - action: prepare-paper
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
+    reviews: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/reviews
+    description: "Chip distribution — ready stage, avg 3.2/4, Cookie Monster gave Strong Accept"
+
+  - action: invoke-skill
+    skill: "panel:venue --paper panel-chip-distribution"
+    sandbox: true
+    store: venue_result
+
+  - action: assert-contains-any
+    input: $venue_result
+    patterns: ["ICBD", "venue", "conference"]
+    description: "Recommends venue matching paper topic (originally targeted ICBD 2026)"
+
+  - action: assert-contains-any
+    input: $venue_result
+    patterns: ["strategy", "submission", "timeline", "recommendation"]
+    description: Includes submission strategy or recommendation
+
+  - action: assert-contains-any
+    input: $venue_result
+    patterns: ["3.2", "Strong Accept", "Accept", "score"]
+    description: "References review scores in recommendation (Count von Count gave 4/4)"
+
+  # Also test with a weaker paper — sharing-economics (2.6 avg)
+  - action: prepare-paper
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-sharing-economics/_panel.yaml
+    description: "Sharing economics — lower scores (2.6 avg), needs different venue strategy"
+
+  - action: invoke-skill
+    skill: "panel:venue --paper panel-sharing-economics"
+    sandbox: true
+    store: weak_venue_result
+
+  - action: assert-non-empty
+    input: $weak_venue_result
+    description: "Venue recommendation produced even for weaker paper"

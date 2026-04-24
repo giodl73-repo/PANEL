@@ -1,0 +1,73 @@
+\section{Methodology}
+
+\subsection{Design Principles}
+
+The methodology is built on four principles:
+
+\begin{enumerate}
+    \item \textbf{Domain specificity}: Reviewer personas are constructed from real expert profiles with known research interests, publication venues, and characteristic questions.
+    \item \textbf{Structured progression}: Papers advance through defined stages with explicit gate conditions, preventing both premature advancement and stagnation.
+    \item \textbf{Priority-driven revision}: Feedback is consolidated and classified by priority, focusing author effort on blocking issues first.
+    \item \textbf{Quantitative thresholds}: Submission readiness is defined by measurable criteria (score averages and minimums), not subjective judgment.
+\end{enumerate}
+
+\subsection{Reviewer Persona Construction}
+
+Each reviewer persona is defined by:
+\begin{itemize}
+    \item \textbf{Identity}: Name, affiliation, research area (drawn from real researchers)
+    \item \textbf{Expertise tags}: Categorized expertise (e.g., \texttt{distributed-systems}, \texttt{human-ai}, \texttt{evaluation})
+    \item \textbf{Key question}: The characteristic concern this reviewer always raises (e.g., Percy Liang: ``How was this evaluated?'')
+    \item \textbf{Venue alignment}: Conferences where this reviewer would plausibly serve
+\end{itemize}
+
+The database contains 45+ reviewers across 10 categories: Systems \& Infrastructure, Compilers \& PL Theory, AI Agents \& Orchestration, Prompting \& LLM Capabilities, Human-AI Interaction, ML Systems \& Efficiency, ML Research, Software Engineering, NLP \& IR, and Security \& Safety.
+
+\subsection{Panel Composition}
+
+Each paper receives a panel of 5 reviewers selected for:
+\begin{itemize}
+    \item \textbf{Venue match}: Reviewers who would plausibly review at the target venue
+    \item \textbf{Diversity}: At least 1 industry practitioner and 1 academic
+    \item \textbf{Complementarity}: Different focus areas (e.g., systems + HCI + evaluation)
+    \item \textbf{No institutional clustering}: Maximum 2 reviewers from the same institution
+\end{itemize}
+
+\subsection{Scoring Rubric}
+
+Individual reviews use a 4-point scale:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cl}
+\toprule
+Score & Meaning \\
+\midrule
+1/4 & Reject --- major flaws, not suitable for venue \\
+2/4 & Weak Accept --- acceptable with revisions \\
+3/4 & Accept --- good contribution, minor issues \\
+4/4 & Strong Accept --- excellent, must accept \\
+\bottomrule
+\end{tabular}
+\caption{Individual reviewer scoring rubric.}
+\end{table}
+
+Cross-portfolio panels use a 10-point scale with tier classifications (A through C).
+
+\subsection{Reproducibility: Prompts and Parameters}
+
+For full reproducibility, we specify the review generation pipeline:
+
+\textbf{Model.} All reviews are generated using Claude (Anthropic), specifically Claude Sonnet 4.5 (\texttt{claude-sonnet-4-5-20250929}). Temperature is set to 1.0 (default) with no top-$k$ or top-$p$ overrides.
+
+\textbf{Prompt template.} Each review is generated from a structured prompt with four components:
+\begin{enumerate}
+    \item \textbf{Persona block}: Reviewer name, affiliation, expertise, characteristic question, and venue alignment drawn from the reviewer database.
+    \item \textbf{Paper content}: Full paper text (all sections), injected as context.
+    \item \textbf{Review template}: The structured review format (overall assessment, score, major/minor issues, strengths, questions, recommendations, verdict).
+    \item \textbf{Calibration instruction}: ``Score relative to the target venue's acceptance standards. A score of 3/4 means the paper would be competitive at [venue].''
+\end{enumerate}
+
+\noindent The prompt template, reviewer database, scoring rubrics, and stage definitions are available as open-source components of the \texttt{panel} plugin. The persona injection protocol concatenates the persona block with the review template, ensuring each reviewer's expertise and characteristic concerns are reflected in the generated review.
+
+\textbf{Context management.} Each review is generated independently---reviewer $i$'s output is not visible to reviewer $j$. Synthesis is generated with all individual reviews in context. Round 2+ reviews include the synthesis and revision plan from the previous round, simulating a reviewer who has seen the author's response.

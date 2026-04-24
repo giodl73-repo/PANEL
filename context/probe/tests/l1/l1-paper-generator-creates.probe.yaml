@@ -1,0 +1,45 @@
+id: l1-paper-generator-creates
+name: paper-generator creates complete paper directory with LaTeX
+tier: L1
+plugin: panel
+target: shared/paper-generator.md
+timeout: 30
+
+description: |
+  Verify paper-generator creates a complete paper directory with
+  main.tex, sections/ subdirectory with .tex files, per-paper Makefile,
+  and _panel.yaml state file.
+
+steps:
+  - action: invoke-generator
+    paper_name: test-paper
+    venue: "NeurIPS 2026"
+    title: "Test Paper Title"
+    store: generated_path
+
+  - action: file-exists
+    path: $generated_path/main.tex
+
+  - action: file-exists
+    path: $generated_path/Makefile
+
+  - action: file-exists
+    path: $generated_path/_panel.yaml
+
+  - action: glob
+    pattern: $generated_path/sections/*.tex
+    store: sections
+
+  - action: assert-count-gte
+    input: $sections
+    expected: 1
+    description: At least one section .tex file
+
+  - action: read-file
+    path: $generated_path/main.tex
+    store: main_tex
+
+  - action: assert-contains
+    input: $main_tex
+    pattern: "documentclass"
+    description: Valid LaTeX document

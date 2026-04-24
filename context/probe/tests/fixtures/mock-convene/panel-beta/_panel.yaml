@@ -1,0 +1,52 @@
+paper: panel-beta
+title: "Beta: Role-Profile Caching for Multi-Round Review"
+venue: ACL 2026
+stage: recheck
+round: 1
+content_mode: full
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford
+    profile_ref: R-1
+    score: 3
+  - name: Jacob Steinhardt
+    affiliation: UC Berkeley
+    profile_ref: R-2
+    score: 2
+  - name: Graham Neubig
+    affiliation: CMU
+    profile_ref: R-3
+    score: 3
+  - name: Yejin Choi
+    affiliation: UW
+    profile_ref: R-4
+    score: 3
+  - name: Noah Smith
+    affiliation: UW / AI2
+    profile_ref: R-5
+    score: 2
+reviews:
+  round-1:
+    completed: 5
+    synthesis: true
+    avg_score: 2.6
+    verdict: "Weak Accept"
+p1_items:
+  - item: "Methodology section lacks formal notation"
+    addressed: false
+history:
+  - stage: draft
+    date: "2026-01-02"
+    note: "Initialized"
+  - stage: panel
+    date: "2026-01-11"
+    note: "Reviewers assigned"
+  - stage: synthesis
+    date: "2026-01-16"
+    note: "Synthesis complete"
+  - stage: revision
+    date: "2026-01-21"
+    note: "P1 items in progress"
+  - stage: recheck
+    date: "2026-02-02"
+    note: "Round 1 complete, ready for panel"

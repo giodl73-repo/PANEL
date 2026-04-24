@@ -1,0 +1,30 @@
+id: l2-import-discovery
+name: "panel:import discovers papers from external sources"
+tier: L2
+plugin: panel
+target: commands/import.md
+timeout: 60
+
+description: |
+  Verify panel:import scans external sources (commits, roadmap, waves)
+  and proposes paper topics, then generates paper directories.
+
+steps:
+  - action: invoke-skill
+    skill: "panel:import --from commits --count 10 --dry-run"
+    sandbox: true
+    store: result
+
+  - action: assert-contains
+    input: $result
+    pattern: "topic"
+    description: Proposes at least one topic
+
+  - action: invoke-skill
+    skill: "panel:import --from commits --count 5"
+    sandbox: true
+    store: generate_result
+
+  - action: assert-non-empty
+    input: $generate_result
+    description: Import produces output

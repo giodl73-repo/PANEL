@@ -1,0 +1,49 @@
+id: l2-paper-draft-to-panel
+name: "panel:review advances from draft to panel stage"
+tier: L2
+plugin: panel
+target: commands/review.md
+timeout: 60
+
+description: |
+  Verify panel:review checks the draft gate (main.tex + venue),
+  selects 5 reviewers, generates REVIEW-*.md files, and advances
+  state to panel stage.
+
+steps:
+  # Use Oscar's recycling paper — it's at draft stage with no reviews
+  - action: prepare-paper
+    fixture: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-recycling-optimization/_panel.yaml
+    override:
+      stage: draft
+      round: 0
+      reviewers: []
+    description: "Oscar's recycling paper — draft stage, needs reviewers"
+
+  - action: invoke-skill
+    skill: "panel:review --paper panel-recycling-optimization"
+    sandbox: true
+    store: result
+
+  - action: read-file
+    path: research/panel-recycling-optimization/_panel.yaml
+    store: state
+
+  - action: assert-field
+    input: $state
+    field: stage
+    expected: panel
+
+  - action: assert-array-length
+    input: $state.reviewers
+    expected: 5
+    description: "5 reviewers selected (expect Oscar, Statler, Waldorf, Miss Piggy, Scooter)"
+
+  - action: glob
+    pattern: research/panel-recycling-optimization/reviews/REVIEW-*.md
+    store: reviews
+
+  - action: assert-count-gte
+    input: $reviews
+    expected: 5
+    description: 5+ review files generated

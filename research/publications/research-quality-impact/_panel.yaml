@@ -1,0 +1,43 @@
+paper: panel-research-quality-impact
+title: "Panel-Driven Research Quality Impact: Comparing Traditional and AI-Simulated Expert Review"
+venue: CSCW / CHI
+stage: synthesis
+round: 1
+reviewers:
+  - name: Ben Shneiderman
+    affiliation: UMD
+    expertise: Human-centered AI, human agency, oversight
+    score: 2
+  - name: Michael Bernstein
+    affiliation: Stanford
+    expertise: Crowdsourcing, human computation
+    score: 3
+  - name: Percy Liang
+    affiliation: Stanford
+    expertise: Evaluation, benchmarks, foundations
+    score: 2
+  - name: Ece Kamar
+    affiliation: Microsoft Research
+    expertise: Complementarity, deferral, human-AI systems
+    score: 3
+  - name: Saleema Amershi
+    affiliation: Microsoft Research
+    expertise: Interactive ML, HITL
+    score: 3
+history:
+  - date: 2026-02-07
+    event: Paper initialized
+    note: Quality impact study comparing traditional Claude-assisted research (apportionment artifacts) with panel-driven research (VRA investigation)
+  - date: 2026-02-07
+    event: Stage transition draft → panel
+    note: Assigned 5 reviewers (Shneiderman, Bernstein, Liang, Kamar, Amershi)
+  - date: 2026-02-07
+    event: Stage transition panel → synthesis
+    note: Generated 5 reviews and synthesis. Avg score 2.6/4 (moderate consensus, σ=0.49)
+score_history:
+  - round: 1
+    date: 2026-02-07
+    average: 2.6
+    scores: [2, 3, 2, 3, 3]
+    consensus: moderate
+p1_items: []

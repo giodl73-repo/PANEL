@@ -1,0 +1,67 @@
+id: l0-shared-exist
+name: All 24 shared utility files exist
+tier: L0
+plugin: panel
+target: shared/*.md
+timeout: 5
+
+steps:
+  - action: glob
+    pattern: shared/*.md
+    store: shared_files
+
+  - action: assert-count
+    input: $shared_files
+    expected: 24
+
+  - action: file-exists
+    path: shared/batch-utils.md
+  - action: file-exists
+    path: shared/board-utils.md
+  - action: file-exists
+    path: shared/content-analyzer.md
+  - action: file-exists
+    path: shared/display-utils.md
+  - action: file-exists
+    path: shared/error-handler.md
+  - action: file-exists
+    path: shared/git-helper.md
+  - action: file-exists
+    path: shared/git-utils.md
+  - action: file-exists
+    path: shared/message-utils.md
+  - action: file-exists
+    path: shared/migrator.md
+  - action: file-exists
+    path: shared/panel-utils.md
+  - action: file-exists
+    path: shared/paper-generator.md
+  - action: file-exists
+    path: shared/plan-parser.md
+  - action: file-exists
+    path: shared/project-config.md
+  - action: file-exists
+    path: shared/quality-checker.md
+  - action: file-exists
+    path: shared/reviewer-profile-loader.md
+  - action: file-exists
+    path: shared/reviewer-selector.md
+  - action: file-exists
+    path: shared/score-utils.md
+  - action: file-exists
+    path: shared/stage-machine.md
+  - action: file-exists
+    path: shared/state-loader.md
+  - action: file-exists
+    path: shared/synthesis-engine.md
+  - action: file-exists
+    path: shared/topic-discovery.md
+  - action: file-exists
+    path: shared/uuid-generator.md
+  - action: file-exists
+    path: shared/version-detector.md
+  - action: file-exists
+    path: shared/yaml-parser.md
+
+  - action: assert-non-empty
+    paths: $shared_files

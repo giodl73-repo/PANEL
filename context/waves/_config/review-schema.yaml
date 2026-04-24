@@ -1,0 +1,274 @@
+# Review Schema - Defines review processes for all stages
+# Schema-driven review execution for wave system
+version: 1.3
+format_version: "4.0"
+
+# Roles that support interactive interviews during revision flow
+# These roles can ask clarifying questions when their feedback needs addressing
+interview-roles:
+  pm:
+    name: Product Manager
+    focus: user value and business alignment
+    questions:
+      - question: "Who is the primary user for this feature?"
+        header: User
+        options: ["End users", "Developers", "Admins", "Internal team"]
+      - question: "What problem does this solve for them?"
+        header: Problem
+        options: ["Enter...", "Skip"]
+      - question: "How will we measure success?"
+        header: Metrics
+        options: ["Usage metrics", "User feedback", "Performance", "Other"]
+      - question: "What's the priority level?"
+        header: Priority
+        options: ["P0 - Critical", "P1 - High", "P2 - Medium", "Learning/Exploration"]
+
+  designer:
+    name: Designer
+    focus: user experience and accessibility
+    questions:
+      - question: "What accessibility standards apply?"
+        header: A11y
+        options: ["WCAG AA (Recommended)", "WCAG AAA", "Basic semantics", "Not applicable"]
+      - question: "What devices/viewports need support?"
+        header: Responsive
+        options: ["Desktop + Mobile", "Desktop only", "Mobile first", "All breakpoints"]
+      - question: "Any brand/style guidelines to follow?"
+        header: Style
+        options: ["Project defaults", "Custom guidelines", "None specified"]
+
+  tpm:
+    name: Technical Program Manager
+    focus: technical feasibility and timeline
+    questions:
+      - question: "Are there known blockers or dependencies?"
+        header: Blockers
+        options: ["None known", "External APIs", "Other teams", "Enter details..."]
+      - question: "Testing approach for this work?"
+        header: Testing
+        options: ["Unit + Integration", "Manual only", "E2E required", "TBD"]
+
+  # Domain roles - fix-driven interviews that update pulses
+  # These roles don't have static questions - they present the specific
+  # issues found during review, grouped by severity, and ask for confirmation
+  backend:
+    name: Backend Developer
+    focus: API design, data models, and server-side implementation
+    fix_driven: true
+    updates_pulse: true
+
+  frontend:
+    name: Frontend Developer
+    focus: UI components, state management, and user experience
+    fix_driven: true
+    updates_pulse: true
+
+  testing:
+    name: Testing Engineer
+    focus: test coverage, test types, and quality assurance
+    fix_driven: true
+    updates_pulse: true
+
+  architect:
+    name: Software Architect
+    focus: system design, patterns, and technical decisions
+    fix_driven: true
+    updates_pulse: true
+
+  security:
+    name: Security Engineer
+    focus: authentication, authorization, and vulnerability prevention
+    fix_driven: true
+    updates_pulse: true
+
+# Base options for TPM to select from when assigning reviewers
+# TPM can also specify custom disciplines not in this list
+reviewer-options:
+  design-quality-gate:
+    description: First reviewer in Design stage - blocks if standards not met
+    options:
+      - name: designer
+        discipline: designer
+        when: [ui-heavy, ux-design, user-facing, component-design]
+      - name: skills-architect
+        discipline: skills
+        when: [plugin-architecture, command-design, skill-patterns]
+      - name: backend-architect
+        discipline: backend
+        when: [api-design, data-architecture, infrastructure]
+      - name: frontend-architect
+        discipline: frontend
+        when: [frontend-architecture, state-management, component-patterns]
+      - name: security-architect
+        discipline: security
+        when: [auth-design, security-architecture, access-control]
+    default: skills-architect
+
+  technical-reviewers:
+    description: Technical reviewers for planning and design stages
+    options:
+      - { name: skills-architect, discipline: skills }
+      - { name: backend, discipline: backend }
+      - { name: frontend, discipline: frontend }
+      - { name: devops, discipline: devops }
+      - { name: security, discipline: security }
+      - { name: testing, discipline: testing }
+    default: [skills-architect, backend]
+
+stages:
+  planning:
+    order: 1
+    review:
+      blocking: true
+      can-contribute-to: [design, execution, validation]
+      # TPM assignments from this stage are stored in:
+      # {waveDir}/planning/reviews/tpm-assignments.yaml
+      steps:
+        - name: strategic
+          execution: parallel
+          roles:
+            - name: pm
+              discipline: pm
+              responsibilities: [business-alignment, user-value, go-no-go]
+            - name: tpm
+              discipline: tpm
+              responsibilities: [technical-feasibility, timeline, assign-technical-reviewers, assign-design-quality-gate]
+            - name: designer
+              discipline: designer
+              responsibilities: [ux-considerations, accessibility]
+
+        - name: director-synthesis
+          execution: sequential
+          roles:
+            - name: director
+              discipline: director
+              responsibilities: [validate-pm-decision, assess-strategic-alignment, go-no-go-revise]
+
+        - name: technical
+          execution: parallel
+          roles: assigned-by-tpm
+          responsibilities: [implementation-feasibility, technical-risks, testing-requirements]
+
+        - name: manager-synthesis
+          execution: sequential
+          roles:
+            - name: manager
+              discipline: manager
+              responsibilities: [validate-technical-reviews, consolidate-recommendations, approve-revise]
+
+  design:
+    order: 2
+    review:
+      blocking: true
+      can-contribute-to: [execution, validation]
+      # Reads TPM assignments from: {waveDir}/planning/reviews/tpm-assignments.yaml
+      steps:
+        - name: quality-gate
+          execution: sequential
+          # Role assigned by TPM during planning review
+          # Falls back to reviewer-options.design-quality-gate.default if not assigned
+          roles: assigned-by-tpm:design-quality-gate
+          responsibilities: [design-standards, blocks-if-fail]
+
+        - name: strategic
+          execution: parallel
+          roles:
+            - name: pm
+              discipline: pm
+              responsibilities: [business-alignment]
+
+        - name: technical
+          execution: parallel
+          # Role assigned by TPM during planning review
+          # Falls back to reviewer-options.technical-reviewers.default if not assigned
+          roles: assigned-by-tpm:technical-reviewers
+          responsibilities: [implementation-feasibility]
+
+        - name: manager-synthesis
+          execution: sequential
+          roles:
+            - name: manager
+              discipline: manager
+              responsibilities: [final-approval]
+
+  execution:
+    order: 3
+    review:
+      blocking: false
+      can-create-followups: true
+      can-contribute-to: [validation, documentation]
+      steps:
+        - name: domain
+          execution: parallel
+          roles:
+            - name: frontend
+              discipline: frontend
+              responsibilities: [code-quality, standards-compliance, bugs]
+            - name: backend
+              discipline: backend
+              responsibilities: [code-quality, security, bugs]
+            - name: testing
+              discipline: testing
+              responsibilities: [test-coverage, quality]
+
+        - name: manager-synthesis
+          execution: sequential
+          roles:
+            - name: manager
+              discipline: manager
+              responsibilities: [validate-reviews, create-followups, validation-planning]
+
+        - name: strategic
+          execution: parallel
+          roles:
+            - name: pm
+              discipline: pm
+              responsibilities: [business-impact]
+
+        - name: director-synthesis
+          execution: sequential
+          roles:
+            - name: director
+              discipline: director
+              responsibilities: [may-cut-scope, adjusted-scope-must-be-complete, verify-deliverables-exist, verify-runnable, final-decision]
+
+  validation:
+    order: 4
+    interactiveActions:
+      - type: user-testing
+        when: pre-review
+        prompt: "Please test the implementation before we proceed to review."
+        contentFile: validation/testing-checklist.md
+        collectFeedback: true
+    review:
+      blocking: true
+      can-contribute-to: [documentation]
+      steps:
+        - name: user-approval
+          execution: sequential
+          roles:
+            - name: user
+              type: manual
+              responsibilities: [manual-testing, approve-revise]
+
+        - name: doc-planning
+          execution: sequential
+          roles:
+            - name: tpm
+              discipline: tpm
+              responsibilities: [analyze-doc-impacts]
+            - name: documentation-manager
+              discipline: documentation-manager
+              responsibilities: [create-doc-assignments, create-documentation-stage-plan]
+
+  documentation:
+    order: 5
+    review:
+      blocking: true
+      steps:
+        - name: quality-review
+          execution: sequential
+          roles:
+            - name: documentation-manager
+              discipline: documentation-manager
+              responsibilities: [review-all-doc-updates, approve-revise]

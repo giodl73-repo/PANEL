@@ -1,0 +1,48 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[table]{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,arrows}
+\usepackage{amsmath}
+
+\definecolor{primaryblue}{RGB}{0,120,212}
+\definecolor{textgray}{RGB}{50,50,50}
+\definecolor{codebg}{RGB}{248,248,248}
+
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{codebg},breaklines=true,frame=single,framerule=0pt}
+\hypersetup{colorlinks=true,linkcolor=primaryblue,urlcolor=primaryblue,citecolor=primaryblue}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Multi-Round Revision Dynamics:\\[0.3em]Measuring Paper Quality Improvement Through Iterative AI Review\par}
+\vspace{0.8cm}
+{\large Gio Della-Libera, VP Engineering\par}
+{\normalsize Business \& Industry Copilots Agents 365\par}
+\vspace{0.3cm}
+{\normalsize February 2026\par}
+\vspace{0.8cm}
+\end{center}
+
+\begin{abstract}
+\noindent
+Iterative review-and-revise cycles are central to improving research paper quality, yet the dynamics of these cycles---how scores change across rounds, which revision strategies yield the greatest improvement, and how many rounds are needed---remain poorly characterized. We present an empirical study of multi-round revision dynamics across 14 papers subjected to AI-simulated expert review. Tracking score trajectories across 2--4 review rounds with 5--9 reviewers per paper, we find: (1) first-round scores average 5.6/10, improving to 7.4/10 after revision---a 32\% relative improvement; (2) addressing Priority 1 (blocking) issues accounts for 72\% of total score improvement, while Priority 2 items contribute 22\% and Priority 3 items have negligible impact; (3) 85\% of papers reach submission readiness (avg $\geq$ 2.5/4, no score $<$ 2/4) within two rounds; and (4) score improvement follows a logarithmic curve with diminishing returns after round 2. These findings provide empirical grounding for iterative review processes and practical guidance on revision prioritization and round budgeting.
+\end{abstract}
+
+\vspace{0.5cm}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-study-design}
+\input{sections/04-score-trajectories}
+\input{sections/05-revision-strategies}
+\input{sections/06-discussion}
+\input{sections/07-conclusion}
+
+\end{document}

@@ -1,0 +1,45 @@
+id: l1-board-utils-module-discovery
+name: board-utils discovers modules across monorepo
+tier: L1
+plugin: panel
+target: shared/board-utils.md
+timeout: 30
+
+description: |
+  Verify board-utils can discover modules in a monorepo by finding
+  directories with REVIEW_PANEL.md or research/ subdirectories,
+  and reads their panel review findings.
+
+steps:
+  # Use the real Sesame Street mock monorepo (3 modules, all have REVIEW_PANEL.md)
+  - action: invoke-discover-modules
+    repo: tests/fixtures/mock-monorepo
+    store: discovered
+
+  - action: assert-array-length
+    input: $discovered
+    expected: 3
+    description: "All 3 Sesame Street modules discovered"
+
+  - action: assert-array-contains
+    input: $discovered
+    key: name
+    values: [cookie-science, grover-adventures, oscar-trash-lab]
+
+  - action: assert-module-papers
+    input: $discovered
+    module: cookie-science
+    expected_count: 5
+    description: "Cookie Monster's lab has 5 papers"
+
+  - action: assert-module-papers
+    input: $discovered
+    module: grover-adventures
+    expected_count: 5
+    description: "Grover's adventures has 5 papers"
+
+  - action: assert-module-papers
+    input: $discovered
+    module: oscar-trash-lab
+    expected_count: 5
+    description: "Oscar's trash lab has 5 papers"

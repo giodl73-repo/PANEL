@@ -1,0 +1,25 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We presented a closed-loop automation system that bridges the gap between AI-generated review feedback and automated revision implementation for academic papers. The system operates in three phases: synthesis of reviewer feedback into priority-classified items, generation of concrete revision plans with specific edit instructions, and automated application of edits to LaTeX source files with validation and rollback.
+
+Evaluation on 14 papers (186 reviews, 33 revision cycles) demonstrates that 78\% of critical (P1) revision items are automatable, reducing author revision time by 64\% while maintaining high edit quality (94\% acceptance rate). The system successfully compiles LaTeX on 91\% of first attempts, with automatic rollback handling the remaining 9\% of failures.
+
+Key contributions:
+\begin{enumerate}
+\item The first end-to-end closed-loop system spanning AI review generation, concrete revision planning, and automated edit execution for academic papers.
+
+\item Empirical characterization of what revision tasks are automatable (65\% overall, 78\% of P1) vs. requiring human judgment (35\%, primarily structural changes and content expansion).
+
+\item A reusable architecture for structured document transformation applicable to code review, documentation maintenance, and legal document editing.
+\end{enumerate}
+
+This work demonstrates that the gap between review and revision is tractable: by generating concrete edit plans and using precise text matching with validation, we can automate the majority of mechanical revision tasks. This frees authors to focus on complex edits requiring domain expertise and judgment, accelerating the research publication cycle.
+
+Future work includes semantic validation (fact-checking automated edits), multi-file refactoring, learning from edit rejections, and generalization to source code with test suite validation.
+
+\section*{Acknowledgments}
+
+This work was conducted at Microsoft. We thank the authors of the 14 papers who participated in the evaluation and provided time estimates for manual vs. automated revision. We acknowledge Claude (Anthropic) for AI assistance in review generation, revision planning, and edit execution.
+
+\textbf{AI Simulation Disclosure}: This research involves AI-simulated expert review personas and AI-generated revision plans. See \url{https://github.com/panel-review/methodology} for full methodology disclosure.

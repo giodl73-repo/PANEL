@@ -1,0 +1,122 @@
+id: l2-convene-mock
+name: "panel:module review: P1/P2 bubble up from papers, PP items flow back down"
+tier: L2
+plugin: panel
+target: commands/convene.md
+timeout: 90
+
+description: |
+  Lightweight mock test for panel:module review using minimal pre-built fixtures
+  (2 papers at recheck stage). Validates the full signal loop:
+
+  BUBBLE UP:  paper P1/P2 findings → cross-paper PP1/PP2 themes in REVIEW_PANEL.md
+  FLOW DOWN:  PANEL-REVISION-PLAN.md produced with PP items referencing specific papers
+
+  Also validates: 7 panel members selected, OLE profiles loaded from .roles/roles,
+  buildReviewerContext() injected (OLE preamble present), round archived.
+
+setup:
+  fixture: tests/fixtures/mock-convene
+  sandbox: true
+
+steps:
+  # Pre-conditions: 2 papers at recheck with passing scores
+  - action: assert-field-equals
+    input: tests/fixtures/mock-convene/panel-alpha/_panel.yaml
+    field: stage
+    expected: recheck
+
+  - action: assert-field-equals
+    input: tests/fixtures/mock-convene/panel-beta/_panel.yaml
+    field: stage
+    expected: recheck
+
+  # Run convene
+  - action: invoke-skill
+    skill: "panel:module review"
+    sandbox: true
+    store: result
+
+  # ── REVIEW_PANEL.md produced ────────────────────────────────────────────
+  - action: file-exists
+    path: REVIEW_PANEL.md
+
+  - action: read-file
+    path: REVIEW_PANEL.md
+    store: panel_review
+
+  # 7 panel members
+  - action: assert-contains
+    input: $panel_review
+    expected: "7"
+    description: "7 panel members"
+
+  # OLE preamble confirms buildReviewerContext() was called
+  - action: assert-contains
+    input: $panel_review
+    expected: "Each tier of your role has two faces"
+    description: "OLE preamble injected into panel assessments"
+
+  # AI disclosure
+  - action: assert-contains
+    input: $panel_review
+    expected: "AI Simulation"
+
+  # ── BUBBLE UP: paper P1s surface as PP items ────────────────────────────
+  # panel-alpha P1.2 (GPT-4 baseline) + panel-beta P1.1 (formal notation)
+  # should both appear as PP findings
+  - action: assert-contains
+    input: $panel_review
+    expected: "PP1"
+    description: "PP1 items generated from cross-paper P1 patterns"
+
+  - action: assert-contains
+    input: $panel_review
+    expected: "PP2"
+    description: "PP2 items generated from cross-paper P2 patterns"
+
+  # Both papers referenced in panel findings
+  - action: assert-contains
+    input: $panel_review
+    expected: "panel-alpha"
+    description: "alpha's findings bubble up to panel"
+
+  - action: assert-contains
+    input: $panel_review
+    expected: "panel-beta"
+    description: "beta's findings bubble up to panel"
+
+  # ── FLOW DOWN: PANEL-REVISION-PLAN.md with per-paper items ──────────────
+  - action: file-exists
+    path: PANEL-REVISION-PLAN.md
+    description: "Revision plan produced for papers to act on"
+
+  - action: read-file
+    path: PANEL-REVISION-PLAN.md
+    store: revision_plan
+
+  - action: assert-contains
+    input: $revision_plan
+    expected: "PP1"
+    description: "PP1 blocking items in revision plan"
+
+  - action: assert-contains
+    input: $revision_plan
+    expected: "panel-alpha"
+    description: "Revision plan references panel-alpha (flow down)"
+
+  - action: assert-contains
+    input: $revision_plan
+    expected: "panel-beta"
+    description: "Revision plan references panel-beta (flow down)"
+
+  # Unchecked boxes — items are actionable, not pre-ticked
+  - action: assert-contains
+    input: $revision_plan
+    expected: "- [ ]"
+    description: "Revision items are open checkboxes"
+
+  # ── Round archived ───────────────────────────────────────────────────────
+  - action: file-exists
+    path: panel-reviews/round-1/REVIEW_PANEL.md
+    description: "Round 1 snapshot archived"

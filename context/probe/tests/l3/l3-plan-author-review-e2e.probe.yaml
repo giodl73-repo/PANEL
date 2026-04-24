@@ -1,0 +1,166 @@
+id: l3-plan-author-review-e2e
+name: "E2E smoke: plan.md → panel:setup → panel:author → panel:review reaches panel stage"
+tier: L3
+plugin: panel
+target: commands/author.md, commands/review.md
+timeout: 180
+
+description: |
+  Full end-to-end smoke test from a bare plan.md through to the first review round.
+  No pre-existing main.tex — the paper is written by panel:author from plan.md.
+
+  Flow:
+    1. Fresh sandbox with plan.md only
+    2. panel:setup initializes the paper directory (_panel.yaml, sections/, reviews/)
+    3. panel:author writes main.tex and sections/*.tex from plan.md
+    4. panel:review advances draft → panel stage (selects reviewers, generates reviews)
+
+  Catches integration issues across: CPR/pluginRoot, project-config, reviewer profile
+  loader (.roles/roles path), OLE preamble injection, author → review handoff.
+
+setup:
+  sandbox: true
+  plugin_root_env: true   # Ensure CLAUDE_PLUGIN_ROOT set so pluginRoot can be cached
+
+steps:
+  # ── Step 1: Seed sandbox with just plan.md ─────────────────────────────────
+  - action: copy-fixture
+    from: tests/fixtures/smoke/plan.md
+    to: research/panel-smoke-test/plan.md
+    description: "Bare plan.md — no main.tex, no _panel.yaml yet"
+
+  - action: assert-file-missing
+    path: research/panel-smoke-test/main.tex
+    description: "Confirm paper is not yet written"
+
+  - action: assert-file-missing
+    path: research/panel-smoke-test/_panel.yaml
+    description: "Confirm paper is not yet initialized"
+
+  # ── Step 2: panel:setup initializes the paper directory ────────────────────
+  - action: invoke-skill
+    skill: "panel:setup panel-smoke-test \"EMNLP 2026\""
+    sandbox: true
+    store: setup_result
+
+  - action: file-exists
+    path: research/panel-smoke-test/_panel.yaml
+    description: "_panel.yaml created by setup"
+
+  - action: file-exists
+    path: research/panel-smoke-test/reviews/
+    description: "reviews/ directory created"
+
+  - action: read-file
+    path: research/panel-smoke-test/_panel.yaml
+    store: setup_state
+
+  - action: assert-field-equals
+    input: $setup_state
+    field: stage
+    expected: draft
+    description: "Stage initialized to draft"
+
+  - action: assert-field-equals
+    input: $setup_state
+    field: venue
+    expected: "EMNLP 2026"
+
+  # Verify pluginRoot was cached into .claude/panel.json
+  - action: read-file
+    path: .claude/panel.json
+    store: panel_config
+
+  - action: assert-field-not-empty
+    input: $panel_config
+    field: pluginRoot
+    description: "pluginRoot cached during setup"
+
+  # ── Step 3: panel:author writes the paper from plan.md ─────────────────────
+  - action: invoke-skill
+    skill: "panel:author --paper panel-smoke-test"
+    sandbox: true
+    store: author_result
+
+  - action: file-exists
+    path: research/panel-smoke-test/main.tex
+    description: "main.tex produced by panel:author"
+
+  - action: glob
+    pattern: research/panel-smoke-test/sections/*.tex
+    store: section_files
+
+  - action: assert-count-gte
+    input: $section_files
+    expected: 4
+    description: "At least 4 section files written (intro, related, methodology, evaluation)"
+
+  - action: read-file
+    path: research/panel-smoke-test/main.tex
+    store: main_tex
+
+  - action: assert-contains
+    input: $main_tex
+    expected: "\\begin{document}"
+    description: "main.tex is valid LaTeX"
+
+  - action: assert-contains
+    input: $main_tex
+    expected: "EMNLP"
+    description: "Venue appears in paper"
+
+  # ── Step 4: panel:review advances draft → panel stage ──────────────────────
+  - action: invoke-skill
+    skill: "panel:review --paper panel-smoke-test"
+    sandbox: true
+    store: review_result
+
+  - action: read-file
+    path: research/panel-smoke-test/_panel.yaml
+    store: review_state
+
+  - action: assert-field-equals
+    input: $review_state
+    field: stage
+    expected: panel
+    description: "Stage advanced from draft to panel"
+
+  - action: assert-array-length
+    input: $review_state.reviewers
+    expected: 5
+    description: "5 reviewers selected"
+
+  - action: assert-each-has-field
+    input: $review_state.reviewers
+    fields: [name, profile_ref]
+    description: "Each reviewer has name and profile_ref (loaded from .roles/roles)"
+
+  - action: glob
+    pattern: research/panel-smoke-test/reviews/REVIEW-*.md
+    store: reviews
+
+  - action: assert-count-gte
+    input: $reviews
+    expected: 5
+    description: "5+ review files generated"
+
+  # ── Step 5: Verify OLE preamble in at least one review ─────────────────────
+  - action: read-file
+    path: $reviews[0]
+    store: first_review
+
+  - action: assert-contains
+    input: $first_review
+    expected: "Each tier of your role has two faces"
+    description: "OLE preamble injected into reviewer context (confirms buildReviewerContext used)"
+
+  # ── Step 6: Verify reviewer profiles resolved from .roles/roles (not context/) ─
+  - action: assert-field-matches
+    input: $review_state.reviewers[0]
+    field: profile_ref
+    pattern: "^R-\\d+$"
+    description: "profile_ref is an R-N ID (loaded from .roles/panel-reviewer)"
+
+  - action: assert-file-missing
+    path: context/panel/reviewers/profiles/
+    description: "Old context/ profile path not used — profiles come from pluginRoot"

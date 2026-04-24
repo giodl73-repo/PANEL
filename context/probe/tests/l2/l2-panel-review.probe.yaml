@@ -1,0 +1,54 @@
+id: l2-panel-review
+name: "panel:module review generates module-level REVIEW_PANEL.md"
+tier: L2
+plugin: panel
+target: commands/convene.md
+timeout: 60
+
+description: |
+  Verify panel:module review reads all paper states in a module, selects 7
+  panel reviewers, generates REVIEW_PANEL.md with cross-portfolio
+  assessment and PP1/PP2/PP3 findings.
+
+steps:
+  # Use cookie-science module — 5 papers, all reviewed, various stages
+  - action: prepare-module
+    source: tests/fixtures/mock-monorepo/cookie-science
+    description: "Cookie Science Lab: chip-distribution, crumb-analysis, dunk-methodology, optimal-cookie, sharing-economics"
+
+  - action: invoke-skill
+    skill: "panel:module review"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: research/REVIEW_PANEL.md
+
+  - action: read-file
+    path: research/REVIEW_PANEL.md
+    store: panel_review
+
+  - action: assert-contains
+    input: $panel_review
+    pattern: "PP1"
+    description: "Contains PP1 findings (cross-paper methodology inconsistency)"
+
+  - action: assert-contains
+    input: $panel_review
+    pattern: "PP2"
+    description: Contains PP2 findings
+
+  - action: assert-contains
+    input: $panel_review
+    pattern: "AI Simulation"
+    description: Contains AI disclosure
+
+  # Verify against actual cookie-science REVIEW_PANEL.md for structure comparison
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
+    store: reference_panel
+
+  - action: assert-contains
+    input: $reference_panel
+    pattern: "7"
+    description: "Reference panel has 7 members (Cookie Monster, Swedish Chef, Count, Prairie Dawn, Bert, Telly, Ernie)"

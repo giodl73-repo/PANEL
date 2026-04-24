@@ -1,0 +1,27 @@
+id: l0-research-makefile
+name: Master Makefile exists in research/
+tier: L0
+plugin: panel
+target: research/Makefile
+timeout: 5
+
+steps:
+  - action: file-exists
+    path: research/Makefile
+
+  - action: read-file
+    path: research/Makefile
+    store: makefile
+
+  - action: assert-non-empty
+    input: $makefile
+
+  - action: assert-contains
+    input: $makefile
+    pattern: "all"
+    description: Contains 'all' target
+
+  - action: assert-contains
+    input: $makefile
+    pattern: "pdf"
+    description: Contains 'pdf' target or reference

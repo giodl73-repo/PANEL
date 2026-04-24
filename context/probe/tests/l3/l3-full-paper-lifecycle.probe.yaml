@@ -1,0 +1,73 @@
+id: l3-full-paper-lifecycle
+name: "Complete paper lifecycle: draft to panel to synthesis to revision to recheck to ready"
+tier: L3
+plugin: panel
+target: commands/review.md
+timeout: 120
+
+description: |
+  End-to-end test: create a paper, advance through all stages from draft
+  to ready using panel:review --until ready. Verify all artifacts are
+  produced and scores improve across rounds.
+
+steps:
+  # Verify the full lifecycle using chip-distribution as reference (draft→ready in fixture)
+  # Then run a fresh lifecycle on oscar-trash-lab/panel-trash-can-architecture (draft, no reviews)
+  - action: prepare-paper
+    fixture: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-trash-can-architecture/_panel.yaml
+    source_dir: tests/fixtures/mock-monorepo/oscar-trash-lab/panel-trash-can-architecture
+    description: "Oscar's trash can architecture — draft stage, venue target set, ready for full lifecycle"
+
+  - action: invoke-skill
+    skill: "panel:review --paper panel-trash-can-architecture --until ready"
+    sandbox: true
+    store: lifecycle_result
+
+  - action: read-file
+    path: research/panel-trash-can-architecture/_panel.yaml
+    store: final_state
+
+  - action: assert-field-in
+    input: $final_state
+    field: stage
+    values: [ready, recheck]
+    description: "Oscar's paper reached ready or at least recheck stage"
+
+  - action: assert-field-gte
+    input: $final_state
+    field: round
+    expected: 1
+    description: At least 1 review round completed
+
+  - action: glob
+    pattern: research/panel-trash-can-architecture/reviews/REVIEW-*.md
+    store: round1_reviews
+
+  - action: assert-count-gte
+    input: $round1_reviews
+    expected: 5
+    description: "Round 1 reviews generated (Statler, Waldorf, Miss Piggy, Oscar, Scooter)"
+
+  - action: file-exists
+    path: research/panel-trash-can-architecture/reviews/SYNTHESIS.md
+    description: Synthesis produced
+
+  - action: file-exists
+    path: research/panel-trash-can-architecture/REVISION-PLAN.md
+    description: Revision plan produced
+
+  # Cross-reference: verify chip-distribution's lifecycle is valid (ready at round 2)
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution/_panel.yaml
+    store: reference_state
+
+  - action: assert-field
+    input: $reference_state
+    field: stage
+    expected: ready
+    description: "Reference: chip-distribution completed full lifecycle to ready"
+
+  - action: assert-array-length
+    input: $reference_state.history
+    expected: 6
+    description: "Reference: 6 stage transitions (draft→panel→synthesis→revision→recheck→ready)"

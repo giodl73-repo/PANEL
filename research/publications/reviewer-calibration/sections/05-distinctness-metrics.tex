@@ -1,0 +1,113 @@
+\section{Distinctness Metrics}
+
+\subsection{Pairwise Rank Correlation}
+
+For each pair of reviewers who assessed the same set of papers, we compute Spearman's $\rho$ on their score rankings:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Pair & $\rho$ & Interpretation \\
+\midrule
+Chase--Khattab & 0.80 & Strong agreement (same bloc) \\
+Zaharia--Shankar & 0.80 & Strong agreement (same bloc) \\
+Shneiderman--Amershi & 0.80 & Strong agreement (same bloc) \\
+Chase--Zaharia & 0.70 & Moderate agreement \\
+Liang--Shankar & 0.60 & Moderate agreement \\
+Shneiderman--Chase & 0.10 & Near-orthogonal \\
+Shneiderman--Zaharia & 0.05 & Near-orthogonal \\
+\bottomrule
+\end{tabular}
+\caption{Pairwise Spearman rank correlations for cross-portfolio panel.}
+\end{table}
+
+\subsection{Topic Focus Divergence}
+
+We measure the Jensen-Shannon divergence of issue topics across reviewers. Each reviewer's issues are categorized into themes (statistical rigor, scalability, human factors, competitive positioning, reproducibility). The JS divergence between reviewers measures how differently they distribute attention across themes.
+
+\begin{itemize}
+    \item Within-bloc JS divergence: 0.08 (similar topic focus)
+    \item Between-bloc JS divergence: 0.42 (substantially different focus)
+    \item Maximum divergence: Shneiderman vs.\ Zaharia (0.61)
+\end{itemize}
+
+\subsection{Calibration Quality Indicators}
+
+We identify three indicators of well-calibrated personas:
+\begin{enumerate}
+    \item \textbf{Score discrimination}: The persona assigns different scores to different papers (not all 3/4)
+    \item \textbf{Issue specificity}: Major issues reference specific paper content, not generic concerns
+    \item \textbf{Expertise alignment}: The reviewer's feedback aligns with their stated expertise category
+\end{enumerate}
+
+Across the database, 89\% of personas meet all three indicators. (See Section 4.6 for analysis of the 11\% that fail.)
+
+\subsection{Inter-Rater Reliability}
+
+We report standard inter-rater reliability metrics alongside Spearman correlations to enable comparison with the human peer review literature:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Metric & Value (AI Panels) & Typical Human Review \\
+\midrule
+Krippendorff's $\alpha$ (ordinal) & $0.41$ (95\% CI: [0.34, 0.48]) & $0.20$--$0.40$ \\
+ICC (two-way, absolute) & $0.38$ (95\% CI: [0.30, 0.46]) & $0.17$--$0.35$ \\
+Mean pairwise $\rho$ & $0.42$ (95\% CI: [0.35, 0.49]) & $0.20$--$0.45$ \\
+\bottomrule
+\end{tabular}
+\caption{Inter-rater reliability metrics for AI panels vs.\ published human review statistics.}
+\end{table}
+
+\noindent AI panels exhibit inter-rater reliability comparable to --- and at the upper end of --- human peer review ranges. Krippendorff's $\alpha = 0.41$ indicates moderate agreement, consistent with the well-documented ``noisy'' nature of peer review (Shah et al.\ 2022). The confidence intervals are computed via bootstrap resampling ($n = 1000$) over paper-reviewer pairs.
+
+\textbf{Random baselines.} To contextualize JS divergence values, we compute a null model by permuting reviewer identities across reviews 1000 times. The mean null JS divergence is $0.52 \pm 0.06$, compared to the observed between-bloc divergence of $0.42$ and within-bloc divergence of $0.08$. The within-bloc divergence is significantly below the null ($p < 0.001$), confirming that within-bloc similarity reflects genuine expertise alignment, not chance.
+
+\textbf{Clustering methodology.} Hierarchical clustering (Section 4.2) uses Ward's linkage on a distance matrix derived from $1 - |\rho|$ for each reviewer pair. The three-cluster solution is supported by silhouette analysis (mean silhouette score $= 0.71$, compared to $0.54$ for two clusters and $0.48$ for four clusters).
+
+\subsection{Comparison with Alternative Approaches}
+
+To assess the contribution of structured profile prompting, we compare four persona construction methods on a subset of 5 papers:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Method & Mean $|\rho|$ & Mean JS Div. & Calib.\ Pass Rate \\
+\midrule
+No persona (generic reviewer) & $0.85$ & $0.06$ & 42\% \\
+Name + affiliation only & $0.72$ & $0.14$ & 61\% \\
+Full structured profile (ours) & $0.42$ & $0.35$ & 89\% \\
+Retrieval-augmented (profile + abstracts) & $0.39$ & $0.38$ & 91\% \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of persona construction methods. Lower $|\rho|$ and higher JS divergence indicate greater distinctness.}
+\end{table}
+
+\noindent Without personas, reviews are highly correlated ($|\rho| = 0.85$), confirming that the LLM converges on generic feedback by default. Adding name and affiliation alone provides modest differentiation. The full structured profile achieves substantial distinctness, and retrieval-augmented construction (adding 5 abstracts from the reviewer's actual publications to the prompt) provides marginal additional benefit ($+0.03$ JS divergence, $+2\%$ calibration pass rate). This suggests that the structured profile captures the majority of useful calibration signal; retrieval augmentation helps but is not essential.
+
+The progressive contribution of each profile field:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+Fields Included & Mean $|\rho|$ & $\Delta$ JS Div. \\
+\midrule
+Name only & $0.81$ & baseline \\
+$+$ Affiliation & $0.72$ & $+0.08$ \\
+$+$ Expertise tags & $0.58$ & $+0.12$ \\
+$+$ Key question & $0.42$ & $+0.15$ \\
+$+$ Venue alignment & $0.40$ & $+0.02$ \\
+\bottomrule
+\end{tabular}
+\caption{Progressive ablation: marginal contribution of each profile field to distinctness.}
+\end{table}
+
+\noindent Key-question injection provides the largest marginal contribution ($+0.15$ JS divergence), confirming our earlier finding (Section 4.3). Expertise tags are the second most important field ($+0.12$), while venue alignment has a small but positive effect ($+0.02$).

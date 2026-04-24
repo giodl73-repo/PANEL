@@ -1,0 +1,43 @@
+stages:
+  - name: draft
+    description: Paper exists, target venue identified
+    gate: main.tex exists and venue set in _panel.yaml
+    artifacts: [main.tex, sections/]
+
+  - name: panel
+    description: Reviewer panel assembled, individual reviews running
+    gate: 5+ REVIEW-*.md files in reviews/
+    artifacts: [reviews/REVIEW-*.md]
+
+  - name: synthesis
+    description: Reviews consolidated with priority tiering
+    gate: SYNTHESIS.md exists with P1/P2/P3 classification
+    artifacts: [reviews/SYNTHESIS.md]
+
+  - name: revision
+    description: Create revision plan from synthesis, then apply revisions to paper LaTeX source
+    gate: REVISION-PLAN.md exists AND all P1 items marked addressed in _panel.yaml
+    artifacts: [REVISION-PLAN.md, updated sections/]
+    behavior: two-phase — (1) create plan from P1/P2/P3, (2) offer to apply edits to sections/*.tex
+
+  - name: recheck
+    description: Round N reviews (loops to synthesis if needed)
+    gate: Average score >= 2.5/4, no score < 2/4
+    artifacts: [reviews/ROUND{N}-REVIEW-*.md, reviews/ROUND{N}-SYNTHESIS.md]
+    loop_to: synthesis  # if gate fails
+
+  - name: ready
+    description: Panel review complete, paper cleared for submission
+    gate: REVIEW_PANEL.md completed by panel:module review AND all PP1 items addressed
+    requires: panel:module review  # paper-level command waits for panel-level output
+    artifacts: [REVIEW_PANEL.md, PANEL-REVISION-PLAN.md]
+
+  - name: submit
+    description: Paper submitted to target venue
+    gate: User confirms submission
+    artifacts: [submission confirmation]
+
+  - name: accepted
+    description: Paper accepted at venue
+    gate: User confirms acceptance
+    artifacts: [acceptance notification]

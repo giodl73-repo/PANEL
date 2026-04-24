@@ -1,0 +1,282 @@
+\section{Discussion}
+\label{sec:discussion}
+
+Our results demonstrate that panel-driven research achieves +127\% quality improvement over traditional Claude-assisted work. We now analyze the \emph{mechanisms} driving this improvement, characterize role dynamics, and discuss implications for AI-assisted research.
+
+\subsection{Mechanisms Driving Quality Improvement}
+
+We identify four mechanisms through which panel review elevates research quality beyond user-directed work.
+
+\subsubsection{Mechanism 1: Systematic Questioning}
+
+\textbf{Panel process}:
+
+Panel reviews systematically ask: ``Have you tried alternative approaches? How do you know this is optimal? What if you varied parameter X?''
+
+Example from VRA research:
+\begin{quote}
+\textit{``The multi-constraint approach shows promise, but have you systematically tested alternative partitioning strategies? N-way partitioning might avoid the greedy decisions of recursive bisection.''}
+\end{quote}
+
+This question forced exploration of n-way, adaptive bisection, and 6 tree structure variations, ultimately exposing the fundamental limitation of multi-constraint optimization and motivating the edge-weighting paradigm shift.
+
+\textbf{Traditional process}:
+
+User satisfied with working approach. No external pressure to explore alternatives. Alabama's 49.6\% result would be noted as a limitation (``this approach doesn't work for all states''), not investigated as a scientific puzzle.
+
+\textbf{Impact}: Systematic questioning transforms research from \emph{validation} (``does my approach work?'') to \emph{exploration} (``is this the best approach? why or why not?'').
+
+\subsubsection{Mechanism 2: Embracing Negative Results}
+
+\textbf{Panel process}:
+
+Panel reviews treat failures as scientific puzzles demanding explanation. Alabama's 49.6\% result (0.4 points short of 50\% VRA threshold) prompted:
+
+\begin{quote}
+\textit{``Alabama reaches 49.6\%, just 0.4 points short. This suggests a fundamental limit. What geographic factors prevent crossing the 50\% threshold?''}
+\end{quote}
+
+This question led to systematic failure investigation across 6 tree structures, 3 partitioning methods, and constraint relaxation variations. The persistent 49.6\% ceiling established a geographic limit, not an algorithmic deficiency, leading to the 42\% threshold theory and geographic dominance hypothesis.
+
+\textbf{Traditional process}:
+
+Failures are noted as limitations. ``Alabama doesn't achieve VRA compliance with this approach'' would appear in a limitations section without deeper investigation. Research focus remains on successful states.
+
+\textbf{Impact}: Embracing negative results drives theory building. The most important scientific insights often emerge from systematic failure analysis~\cite{firestein2015failure}, which panel reviews demand but user-directed work rarely prioritizes.
+
+\subsubsection{Mechanism 3: Standards Elevation}
+
+\textbf{Panel process}:
+
+Multi-expert perspectives demand:
+\begin{itemize}[leftmargin=*]
+\item Explicit research questions (not implicit in methodology)
+\item Enumerated contributions with quantitative claims
+\item Systematic testing with controls and ablation studies
+\item Mechanistic explanations (why, not just what)
+\item Targeted citations supporting specific claims
+\end{itemize}
+
+Claude must meet journal-level standards to satisfy expert review. The bar is ``would this pass peer review at a top venue?'' not ``does the user understand and accept this?''
+
+\textbf{Traditional process}:
+
+User satisfaction is the bar. Standards depend on user's familiarity with academic publishing norms. Users without deep research backgrounds may accept narrative structure, general citations, and validation-focused results---all acceptable for accessibility but insufficient for rigorous publication.
+
+\textbf{Impact}: Standards elevation enables users without deep research backgrounds to produce rigorous work. The panel provides the expert judgment that the user may lack.
+
+\subsubsection{Mechanism 4: Iteration Forcing}
+
+\textbf{Panel process}:
+
+Review $\to$ revise $\to$ review $\to$ revise cycle continues until panel satisfied. Gate conditions enforce quality thresholds: average score $\geq$ 2.5/4, no score $<$ 2/4, all P1 items addressed~\cite{dellalibera2026review}. Research cannot advance until meeting these standards.
+
+VRA research required 8+ rounds:
+\begin{enumerate}
+\item Multi-constraint $\to$ insufficient
+\item N-way $\to$ insufficient improvement
+\item Adaptive $\to$ still fails
+\item 6 trees $\to$ fundamental limitation exposed
+\item Edge-weighting $\to$ breakthrough
+\item Validation $\to$ panel satisfied
+\item Ablation study demanded
+\item 140 configs tested, theory built
+\end{enumerate}
+
+\textbf{Traditional process}:
+
+Draft $\to$ user feedback $\to$ revise $\to$ done. Typically 1--2 rounds. Iteration stops when user is satisfied, which often occurs before expert-level rigor is achieved.
+
+\textbf{Impact}: Iteration forcing prevents premature convergence. Many breakthrough contributions require multiple failed approaches to expose fundamental limitations and motivate paradigm shifts. User-directed work rarely iterates deeply enough to reach these insights.
+
+\subsection{Role Dynamics and Human Agency}
+
+Our analysis reveals distinct role patterns between traditional and panel-driven research. However, the observed shift from user-as-director to user-as-facilitator raises fundamental questions about human agency and meaningful control in AI-assisted research~\cite{shneiderman2022human}.
+
+\subsubsection{Traditional Research Roles}
+
+\textbf{User: Director}
+\begin{itemize}[leftmargin=*]
+\item Identifies research question
+\item Directs methodology choices
+\item Reviews drafts and requests revisions
+\item Makes final decisions on publication
+\item \textbf{Primary driver}: User scientific judgment
+\end{itemize}
+
+\textbf{Claude: Executor}
+\begin{itemize}[leftmargin=*]
+\item Executes user directions
+\item Writes sections as instructed
+\item Generates figures and tables
+\item Responds to user feedback
+\item \textbf{Role}: Assistant following user guidance
+\end{itemize}
+
+This mirrors the traditional research assistant model: senior researcher (user) directs, junior researcher (Claude) executes.
+
+\subsubsection{Panel-Driven Research Roles}
+
+\textbf{Panel: Scientific Driver}
+\begin{itemize}[leftmargin=*]
+\item Identifies gaps in methodology
+\item Questions assumptions and demands justification
+\item Requires systematic testing and alternative exploration
+\item Validates breakthroughs and demands rigorous evaluation
+\item \textbf{Primary driver}: Panel scientific standards
+\end{itemize}
+
+\textbf{Claude: Autonomous Researcher}
+\begin{itemize}[leftmargin=*]
+\item Responds to panel feedback by designing experiments
+\item Explores alternatives to address panel concerns
+\item Iterates on approaches until panel satisfaction
+\item Documents rigorously per panel standards
+\item \textbf{Role}: Researcher responding to peer review
+\end{itemize}
+
+\textbf{User: Facilitator + Insight Provider}
+\begin{itemize}[leftmargin=*]
+\item Facilitates execution (debugging, infrastructure fixes)
+\item Provides domain insights at critical junctures
+\item Enables Claude to execute panel requirements
+\item \textbf{Role}: Infrastructure provider and domain expert, not scientific director
+\end{itemize}
+
+\subsubsection{Critical User Contribution: Edge-Weighting Insight}
+
+The user's edge-weighting idea (``weight edges to avoid cutting minority communities'') appears to contradict the claim that panel drove innovation. However, process tracing reveals:
+
+\textbf{Context}: This insight emerged \emph{after}:
+\begin{itemize}[leftmargin=*]
+\item Panel identified multi-constraint limitations (round 1)
+\item Claude systematically tested alternatives per panel demands (rounds 2--4)
+\item Alabama remained at 49.6\% across all variations (rounds 2--4)
+\item Panel questioned fundamental approach (round 4)
+\end{itemize}
+
+\textbf{User contribution type}: Domain knowledge (minority community preservation) translated into algorithmic strategy (weighted edges).
+
+\textbf{Enabling factor}: Panel-driven systematic exploration created the context for this insight. Without 8+ rounds exposing multi-constraint limitations, the need for paradigm shift would not have been apparent.
+
+\textbf{Verdict}: The breakthrough required \textbf{essential collaboration} between all three parties. Panel-driven systematic exploration created conditions for insight, user provided critical domain knowledge, and Claude executed experiments. Rather than panel primacy with user facilitation, this represents genuine complementarity where each party contributes unique capabilities.
+
+\subsubsection{Human Agency in Panel-Driven Research}
+
+The observed role shift from user-as-director to user-as-facilitator raises fundamental questions about meaningful human control~\cite{shneiderman2022human}. We analyze panel-driven research through the four principles of Human-Centered AI (HCAI):
+
+\textbf{1. Comprehension}: \textit{Can users understand what the system is doing and why?}
+
+In panel-driven research, the user must comprehend: (1) what questions the panel is asking, (2) why Claude explores specific alternatives, and (3) how findings relate to research goals. The VRA case study suggests comprehension is maintained---the user recognized when Claude exhausted algorithmic alternatives (round 4) and when domain insight was needed (round 5). However, this comprehension may require substantial expertise. The author (who created the panel system and has software engineering background) could follow the investigation trajectory. Whether users without research methodology training or technical backgrounds can maintain comprehension remains an open question requiring multi-user validation.
+
+\textbf{2. Appropriate Trust}: \textit{Do users know when to trust vs.\ question system decisions?}
+
+Panel-driven research demands calibrated trust. Users must trust the panel to identify methodological gaps while questioning panel suggestions that conflict with domain constraints. The edge-weighting example demonstrates appropriate trust: the user trusted panel-driven exploration through rounds 1-4 (trying n-way, adaptive, tree variations) but recognized when a fundamentally different approach was needed (round 5). This calibration may be fragile---over-trust could lead users to follow panel suggestions into dead ends, while under-trust could cause premature termination of productive exploration. The study's single-user design prevents assessing whether trust calibration generalizes.
+
+\textbf{3. Self-Efficacy}: \textit{Do users feel capable of influencing outcomes?}
+
+The role shift from director to facilitator may reduce self-efficacy for some users. In traditional workflows, users directly control research direction, experiencing clear cause-effect relationships between their decisions and outcomes. In panel-driven workflows, users influence outcomes indirectly through domain insights and facilitation. The VRA breakthrough shows users can maintain efficacy---the edge-weighting insight directly enabled the Alabama breakthrough. However, users may experience reduced efficacy during extended panel-driven exploration periods (rounds 1-4) where their role is primarily monitoring and technical support. Whether this efficacy reduction is acceptable depends on users' intrinsic motivation (do they value breakthrough outcomes over process control?) and requires empirical study.
+
+\textbf{4. Agency}: \textit{Do users retain meaningful control over the research process?}
+
+This is the most critical concern. Agency requires not just the \textit{ability} to influence outcomes, but \textit{meaningful control} over key decisions. In panel-driven research, the panel controls:
+\begin{itemize}[leftmargin=*]
+\item What methodological gaps are prioritized
+\item Which alternative approaches are explored
+\item When exploration is sufficient vs.\ requires more iteration
+\item What constitutes acceptable evidence for claims
+\end{itemize}
+
+Users control:
+\begin{itemize}[leftmargin=*]
+\item Domain knowledge and problem framing
+\item When to override panel suggestions based on domain constraints
+\item Whether to continue panel-driven investigation or terminate
+\item What insights to contribute at critical junctures
+\end{itemize}
+
+The question is whether user-controlled elements constitute \textit{meaningful} control. We argue they do, but with important caveats:
+
+\textbf{For expert users} (domain knowledge + research methodology + technical skills): Panel-driven research preserves agency through complementarity. Users contribute what the panel cannot (domain insights, constraint recognition, intervention timing), while the panel contributes what users may lack (systematic exploration, methodological rigor, exhaustive alternative testing). The VRA case demonstrates this complementarity---neither party could have achieved the breakthrough alone.
+
+\textbf{For domain-expert-only users} (domain knowledge but limited methodology/technical skills): Agency may be preserved but fragile. Domain insights remain valuable (edge-weighting idea), but users may struggle to recognize when panel exploration has stalled or when intervention is needed. The ability to override panel suggestions requires understanding why suggestions were made, which requires some methodological literacy.
+
+\textbf{For novice users} (limited domain + methodology + technical skills): Agency is likely compromised. Without domain knowledge to contribute or methodology expertise to evaluate panel suggestions, users become passive observers. The panel makes scientific decisions, Claude executes, and users lack the expertise to meaningfully influence either. This contradicts the paper's claim that panel-driven workflows ``lower expertise thresholds''---they may actually require \textit{different} expertise (domain + facilitation) rather than less expertise overall.
+
+\textbf{Expert-user confound}: Critically, our evidence comes from the author---who created the panel system, has software engineering expertise, and successfully recognized intervention moments. This represents a best-case scenario for maintaining agency. Multi-user validation with varying expertise levels is essential to assess whether agency is preserved for typical users.
+
+\textbf{Recommendation}: Panel-driven research should be framed as \textit{shifting expertise requirements} rather than \textit{lowering expertise thresholds}. Users need strong domain knowledge and sufficient technical literacy to facilitate execution, but may need less research methodology expertise than traditional workflows require. Whether this tradeoff increases or decreases accessibility depends on the user population.
+
+\subsection{Implications for AI-Assisted Research}
+
+\subsubsection{For AI Research Agents}
+
+\textbf{Autonomy vs.\ quality tradeoff}: Traditional work positions Claude as executor following user direction (low autonomy, quality depends on user expertise). Panel-driven work positions Claude as autonomous researcher responding to expert review (high autonomy, quality depends on review standards).
+
+\textbf{Cognitive load}: Panel-driven work requires Claude to satisfy expert-level scrutiny, design systematic experiments, and build theory---higher cognitive load than executing user instructions. However, this may be optimal for frontier model capabilities~\cite{anthropic2025sonnet45}.
+
+\textbf{Research output}: Panel-driven work produces theory building and breakthrough contributions, not just validation and application. This suggests AI research agents can achieve higher scientific impact when guided by structured review rather than user direction alone.
+
+\subsubsection{For Users}
+
+\textbf{Shifted burden, not reduced burden}: Panel reduces user need to direct every research step, identify methodological gaps, and demand systematic testing. However, it introduces new demands: monitoring extended exploration periods, recognizing intervention moments, and providing domain insights at critical junctures. Whether total burden decreases depends on user expertise and task characteristics.
+
+\textbf{Shifted value}: User value moves from research direction to domain expertise and facilitation. The VRA breakthrough required both panel-driven systematic exploration (rounds 1--4) and user domain insight (edge-weighting, round 5). This complementarity works when users possess strong domain knowledge but may lack research methodology training.
+
+\textbf{Expertise requirements, not thresholds}: Panel-driven workflows \textit{shift} expertise requirements rather than simply lowering thresholds. Users need: (1) domain knowledge to contribute insights, (2) technical skills to facilitate execution (debugging, infrastructure), and (3) sufficient methodology literacy to recognize when to intervene. Whether this bundle is more or less accessible than traditional research direction expertise requires multi-user validation. Our evidence comes from an expert user (the author), representing a best-case scenario.
+
+\textbf{Expert-user confound}: The study's single-user design introduces a critical limitation. The author created the panel system, has software engineering expertise, and successfully identified intervention moments. Multi-user studies with varying expertise levels (novice, domain-only, methodology-only, both) are essential to assess whether panel-driven workflows truly enable broader participation or merely redistribute expertise demands.
+
+\subsubsection{For Research Quality}
+
+\textbf{Panel as multiplier}: Panel review amplifies research impact from ``working methodology'' (regional conference) to ``publishable science'' (top-tier journal). The +127\% quality improvement translates to venue tier shifts.
+
+\textbf{Systematic peer review goals}: AI-simulated expert review achieves goals of human peer review---identifying gaps, demanding rigor, validating contributions---with temporal efficiency (8 rounds in days vs.\ months for human review cycles).
+
+\textbf{Limitations}: Panel review within a single domain (computational redistricting) with one user limits generalizability. Multi-domain, multi-user validation is needed.
+
+\subsection{Comparison to Related Work}
+
+Our findings complement and extend prior work:
+
+\textbf{Revision dynamics}~\cite{dellalibera2026revision}: Showed P1 items account for 72\% of score improvement across review rounds. We extend this by showing panel review \emph{generates different types of P1 items} (systematic testing, negative result analysis, theory building) compared to user-directed feedback (clarity, presentation, incremental improvements).
+
+\textbf{Hierarchical review architecture}~\cite{dellalibera2026hierarchical}: Showed 37\% of PP1 items and 52\% of B1 items are emergent patterns not visible at paper level. We extend this by showing panel-driven research elevates \emph{individual paper quality}, not just cross-portfolio synthesis.
+
+\textbf{Synthesis methods}~\cite{dellalibera2026synthesis}: Showed automated P1/P2/P3 classification achieves 94\% issue coverage. We extend this by showing P1 items from panel review drive breakthrough innovations (edge-weighting, 42\% threshold) that user-directed P1 items do not.
+
+\subsection{Threats to Validity}
+
+\subsubsection{Internal Validity}
+
+\textbf{Sample size}: 3 traditional papers vs.\ 1 panel-driven paper limits statistical power. However, within-project design controls for domain, author, model, and timeframe, isolating review methodology effects.
+
+\textbf{Author bias}: The author served as one rater and produced all papers, introducing potential bias toward panel-driven work. Mitigation: independent second rater, explicit scoring rubrics, process tracing evidence from git history and session notes.
+
+\textbf{Confounding factors}: Panel-driven research occurred later (Feb 2026) than traditional work (early 2026), potentially benefiting from accumulated project knowledge. However, the VRA problem was novel (first investigation of VRA compliance vs.\ general redistricting), suggesting learning effects are minimal.
+
+\subsubsection{External Validity}
+
+\textbf{Domain specificity}: Computational redistricting may not represent all research domains. Replication across domains (NLP, systems, HCI) is needed.
+
+\textbf{User expertise}: Single author with software engineering background but limited political science expertise. Users with deeper domain knowledge might achieve higher traditional research quality, narrowing the gap.
+
+\textbf{AI model}: All work used Claude Sonnet 4.5 (Jan--Feb 2026). Results may not transfer to models with different capabilities or training.
+
+\subsubsection{Construct Validity}
+
+\textbf{Quality dimensions}: Our 10 dimensions emphasize structural rigor and scientific maturity, potentially underweighting accessibility, clarity, and practical impact. Alternative dimension sets might show different effect sizes.
+
+\textbf{Scoring subjectivity}: Despite explicit rubrics and dual raters, quality assessment involves judgment. Different raters might score differently, though substantial inter-rater agreement ($\kappa = 0.78$) suggests robustness.
+
+\subsection{Future Work}
+
+\textbf{Multi-domain validation}: Replicate analysis across NLP, systems, HCI, and other domains to assess generalizability.
+
+\textbf{Multi-user study}: Recruit diverse users (varying expertise levels, domain backgrounds) to test whether panel-driven quality improvements transfer.
+
+\textbf{Longitudinal impact}: Track publication outcomes (acceptance rates, citation impact) for traditional vs.\ panel-driven papers to validate venue projections.
+
+\textbf{Mechanism isolation}: Design controlled experiments varying review characteristics (number of reviewers, iteration depth, P1/P2/P3 thresholds) to isolate individual mechanism contributions.
+
+\textbf{Cost-benefit analysis}: Quantify time investment for panel review (8+ rounds) vs.\ traditional work (1--2 rounds) to assess efficiency tradeoffs.

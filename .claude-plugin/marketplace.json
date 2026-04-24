@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "panel-standalone",
+  "description": "Standalone marketplace for the Panel plugin - AI-simulated expert review lifecycle for research papers",
+  "owner": {
+    "name": "Gio Della-Libera"
+  },
+  "plugins": [
+    {
+      "name": "panel",
+      "source": "./",
+      "description": "AI-simulated expert review lifecycle for research papers. Three-tier review architecture: paper-level reviews, module-level panels, and monorepo-level board reviews.",
+      "version": "2.3.0",
+      "category": "research"
+    }
+  ]
+}

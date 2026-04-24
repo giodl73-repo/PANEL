@@ -1,0 +1,48 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[table]{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,arrows}
+\usepackage{amsmath}
+
+\definecolor{primaryblue}{RGB}{0,120,212}
+\definecolor{textgray}{RGB}{50,50,50}
+\definecolor{codebg}{RGB}{248,248,248}
+
+\lstset{basicstyle=\ttfamily\small,backgroundcolor=\color{codebg},breaklines=true,frame=single,framerule=0pt}
+\hypersetup{colorlinks=true,linkcolor=primaryblue,urlcolor=primaryblue,citecolor=primaryblue}
+
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Cross-Portfolio Expert Panels:\\[0.3em]Holistic Assessment of Multi-Paper Research Programs\par}
+\vspace{0.8cm}
+{\large Gio Della-Libera, VP Engineering\par}
+{\normalsize Business \& Industry Copilots Agents 365\par}
+\vspace{0.3cm}
+{\normalsize February 2026\par}
+\vspace{0.8cm}
+\end{center}
+
+\begin{abstract}
+\noindent
+Research programs consisting of multiple papers face an assessment challenge absent from individual paper review: how do the papers relate to each other, and does the collection constitute more than the sum of its parts? We present a methodology for cross-portfolio expert panels---groups of 7 reviewers who assess complete multi-paper research programs rather than individual submissions. Applied to two modules (13 papers total: 9 in performance assessment, 4 in AI orchestration), the methodology produces tier-classified rankings, identifies cross-cutting themes invisible at the individual paper level, and generates strategic recommendations for the program as a whole. Panel members exhibit structured disagreement: pairwise Spearman correlations reveal three consistent reviewer blocs (Systems, Agents, Human-Centered) with within-bloc agreement ($\rho = 0.60$--$0.80$) and between-bloc orthogonality ($\rho = 0.05$--$0.10$). The cross-module synthesis identifies 6 themes spanning both modules, demonstrating that portfolio-level review surfaces insights that individual paper reviews cannot.
+\end{abstract}
+
+\vspace{0.5cm}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-panel-methodology}
+\input{sections/04-ranking-analysis}
+\input{sections/05-cross-module-synthesis}
+\input{sections/06-discussion}
+\input{sections/07-conclusion}
+
+\end{document}

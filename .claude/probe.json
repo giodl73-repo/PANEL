@@ -1,0 +1,17 @@
+{
+  "default": "panel",
+  "gitStrategy": "auto-commit",
+  "suppressMessages": [],
+  "projects": {
+    "panel": {
+      "probePath": "context/probe",
+      "description": "panel probe configuration",
+      "targetPlugin": "panel",
+      "targetPath": ".",
+      "tiers": ["L0", "L1", "L2", "L3"],
+      "defaultTiers": ["L0", "L1"],
+      "concurrency": 4,
+      "timeout": { "L0": 5, "L1": 30, "L2": 60, "L3": 120 }
+    }
+  }
+}

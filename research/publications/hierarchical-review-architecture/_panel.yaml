@@ -1,0 +1,70 @@
+stage: ready
+round: 2
+venue: ICSE / FSE / OOPSLA
+created: 2026-02-06
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford
+    expertise: HELM, benchmarks, evaluation methodology
+    score: 3
+    round1_score: 2
+  - name: Ben Shneiderman
+    affiliation: University of Maryland
+    expertise: Human-Centered AI, human agency, oversight
+    score: 4
+    round1_score: 3
+  - name: Ece Kamar
+    affiliation: Microsoft Research
+    expertise: AI complementarity, human-AI deferral
+    score: 4
+    round1_score: 3
+  - name: Shreya Shankar
+    affiliation: UC Berkeley
+    expertise: ML ops, observability, production systems
+    score: 3
+    round1_score: 2
+  - name: Michael Bernstein
+    affiliation: Stanford
+    expertise: Crowdsourcing, human computation
+    score: 4
+    round1_score: 3
+history:
+  - stage: draft
+    entered: 2026-02-06
+    notes: Paper generated from waves analysis (Wave 3: Three-Tier Architecture)
+  - stage: panel
+    entered: 2026-02-07
+    notes: 5 reviewers assigned, reviews generated
+  - stage: synthesis
+    entered: 2026-02-07
+    notes: Reviews consolidated into SYNTHESIS.md with 5 P1, 6 P2, 12 P3 items
+  - stage: revision
+    entered: 2026-02-07
+    notes: REVISION-PLAN.md created with 5 P1 items
+  - stage: recheck
+    entered: 2026-02-07
+    notes: Round 2 reviews generated, avg score 3.6/4 (up from 2.6/4), gate passed
+  - stage: ready
+    entered: 2026-02-07
+    notes: Paper-level review complete, ready for panel-level review (panel:module review)
+p1_items:
+  - id: P1.1
+    description: "Evaluation lacks ground truth and validation"
+    addressed: true
+    resolution: "Added validation study (Section 4.6) with human baseline, emergent pattern validation (75% precision, 82% recall), outcome analysis showing +0.8 score improvement"
+  - id: P1.2
+    description: "No human oversight mechanisms for AI-generated classifications"
+    addressed: true
+    resolution: "Added human oversight section (3.7) with confidence-based deferral, override mechanisms, emergent pattern validation. Results in Sections 4.7-4.8"
+  - id: P1.3
+    description: "Aggregation algorithm is unspecified"
+    addressed: true
+    resolution: "Added detailed aggregation algorithm (Section 3.6) with equations for P1/P2/P3, PP1/PP2/PP3, B1/B2/B3 classification, worked example, semantic clustering details"
+  - id: P1.4
+    description: "Missing ablation studies on architecture design"
+    addressed: true
+    resolution: "Added ablation section (4.7) comparing three-tier vs. two-tier vs. flat, bidirectional vs. unidirectional flow. Shows three-tier achieves best precision/recall balance"
+  - id: P1.5
+    description: "No observability, testing, or debugging infrastructure"
+    addressed: true
+    resolution: "Added observability section (3.8) with 15 metrics, 3 test suites (42 unit, 12 integration, 8 regression), provenance tracking. Operational discussion in Section 5.6"

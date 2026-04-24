@@ -1,0 +1,233 @@
+\section{Results}
+\label{sec:results}
+
+We present comparative quality assessments across 10 dimensions, organized by category. For each dimension, we report individual paper scores, corpus averages, and illustrative excerpts demonstrating observed differences. \textbf{Important}: All quantitative comparisons are descriptive observations from this case study (N=1 panel-driven, N=3 traditional). Statistical inference is not possible, and differences may reflect problem complexity, temporal factors, or review methodology.
+
+\subsection{Overall Quality Comparison}
+
+Table~\ref{tab:overall} presents aggregate scores across all quality dimensions. In this case study, panel-driven research scores 5.0/5.0 overall compared to 2.2/5.0 for traditional Claude-assisted work---a +127\% difference. Whether this difference generalizes to other papers, users, or domains requires experimental validation.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Dimension} & \textbf{Traditional (avg)} & \textbf{Panel-Driven} & \textbf{Diff} & \textbf{Effect Size} \\
+\midrule
+Hypothesis clarity & 2.0 & 5.0 & +3.0 & +150\% \\
+Citation precision & 3.0 & 5.0 & +2.0 & +67\% \\
+Reproducibility & 4.0 & 5.0 & +1.0 & +25\% \\
+\midrule
+Experimental rigor & 2.0 & 5.0 & +3.0 & +150\% \\
+Systematic testing & 1.0 & 5.0 & +4.0 & +400\% \\
+\midrule
+Negative results & 1.0 & 5.0 & +4.0 & +400\% \\
+Theory building & 2.0 & 5.0 & +3.0 & +150\% \\
+Discussion depth & 3.0 & 5.0 & +2.0 & +67\% \\
+\midrule
+Innovation level & 2.0 & 5.0 & +3.0 & +150\% \\
+Iteration depth & 2.0 & 5.0 & +3.0 & +150\% \\
+\midrule
+\textbf{Overall} & \textbf{2.2} & \textbf{5.0} & \textbf{+2.8} & \textbf{+127\%} \\
+\bottomrule
+\end{tabular}
+\caption{Quality dimension scores (1--5 scale) comparing traditional Claude-assisted papers (n=3) with panel-driven research (n=1). Effect sizes computed as percentage improvement over traditional baseline.}
+\label{tab:overall}
+\end{table}
+
+The largest observed differences occur in dimensions related to systematic exploration (systematic testing: +400\%, negative results: +400\%) and scientific rigor (experimental rigor: +150\%, hypothesis clarity: +150\%, theory building: +150\%). Smaller but consistent differences appear in structural dimensions already well-supported by traditional Claude-assisted writing (reproducibility: +25\%, citation precision: +67\%). These patterns warrant investigation in larger samples.
+
+\subsection{Research Structure}
+
+\subsubsection{Hypothesis Clarity: 2.0 vs.\ 5.0 (+150\%)}
+
+\textbf{Traditional approach} (artifacts/01\_recursive\_bisection/sections/01\_introduction.tex):
+
+\begin{quote}
+\textit{``Every decade following the U.S. Census, states must redraw congressional district boundaries... [narrative opening] The 2019 Supreme Court decision... [historical context] Mathematical and computational approaches... [background] We argue that similar principles can govern district boundary design.''}
+\end{quote}
+
+Traditional papers open with narrative context (historical, political, legal) before stating a general thesis. Research questions are implicit in the methodology description.
+
+\textbf{Panel-driven approach} (research/gerry-vra-compliance/sections/01\_introduction.tex):
+
+\begin{quote}
+\textit{``This paper investigates three fundamental questions: (1) \textbf{Feasibility}: Can principled, multi-constraint optimization methods achieve VRA compliance...? (2) \textbf{Geographic Constraints}: What demographic and geographic factors determine...? (3) \textbf{Methodological Comparison}: How do different optimization approaches...?''}
+\end{quote}
+
+Panel-driven work explicitly enumerates research questions with quantitative predictions, followed by numbered contributions with specific claims (``42\% threshold,'' ``geographic dominance'').
+
+\textbf{Quality mechanism}: Panel reviews demanded explicit research questions, forcing hypothesis-driven structure. Traditional work relied on user judgment, which favored narrative accessibility over scientific rigor.
+
+\subsubsection{Citation Precision: 3.0 vs.\ 5.0 (+67\%)}
+
+Traditional papers cite 12+ sources in introductions, covering historical context (Supreme Court cases), political science background, and algorithmic precedents. Citations establish broad domain knowledge.
+
+Panel-driven work cites 4 focused sources directly supporting specific claims: legal precedent for VRA thresholds (Thornburg, Bartlett), recent algorithmic work (Duchin, DeFord) establishing state-of-the-art baselines.
+
+\textbf{Quality mechanism}: Panel reviews flagged broad citations as ``general background'' and demanded targeted precedents for specific claims. Traditional work optimized for reader accessibility; panel work optimized for expert scrutiny.
+
+\subsubsection{Reproducibility: 4.0 vs.\ 5.0 (+25\%)}
+
+Both traditional and panel-driven work score highly on reproducibility---Claude's default behavior includes citing data sources (Census PL 94-171), specifying algorithms (METIS gpmetis), and documenting parameters. The modest improvement reflects panel demands for complete ablation study configurations (7 weight factors $\times$ 4 thresholds $\times$ 5 states = 140 documented configurations vs.\ single-run parameters in traditional work).
+
+\subsection{Experimental Design}
+
+\subsubsection{Experimental Rigor: 2.0 vs.\ 5.0 (+150\%)}
+
+\textbf{Traditional approach} (artifacts/01\_recursive\_bisection/):
+
+\textit{Single approach}: Recursive bisection applied to all 50 states. Results presented descriptively (population balance achieved, compactness metrics reported). No alternative approaches tested. No systematic parameter exploration.
+
+\textbf{Panel-driven approach} (research/gerry-vra-compliance/):
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{Four approaches tested}:
+  \begin{enumerate}
+  \item Recursive bisection (6 tree structures: depth-first, breadth-first, random)
+  \item N-way partitioning (direct k-way split)
+  \item Adaptive recursive bisection (dynamic tree construction)
+  \item Edge-weighted single-objective (breakthrough)
+  \end{enumerate}
+\item \textbf{Systematic comparison}: Each approach evaluated on same 5 states with identical metrics (minority-majority district count, population balance, compactness).
+\item \textbf{Ablation study}: 7 weight factors $\times$ 4 minority thresholds $\times$ 5 states = 140 configurations for edge-weighted approach.
+\item \textbf{Control conditions}: Baseline (1$\times$ weight) vs.\ amplified (2--32$\times$).
+\end{itemize}
+
+\textbf{Quality mechanism}: Panel reviews questioned whether recursive bisection was optimal, demanding systematic exploration. Each failed alternative prompted the next: multi-constraint $\to$ n-way $\to$ adaptive $\to$ edge-weighted. Traditional work validated a single working approach; panel work systematically eliminated alternatives.
+
+\subsubsection{Systematic Testing: 1.0 vs.\ 5.0 (+400\%)}
+
+Traditional papers test single configurations (e.g., California with 52 districts, ufactor=1.005) and report success metrics. If results are acceptable, no further exploration occurs.
+
+Panel-driven work conducts 140 ablation study configurations, systematically varying parameters to identify critical thresholds. Example: Alabama testing revealed a 49.6\% minority ceiling with multi-constraint optimization (0.4 points short of 50\% VRA threshold)---panel demanded explanation, leading to 6 tree structure variations, then methodological pivot to edge-weighting.
+
+\textbf{Quality mechanism}: Panel reviews treated acceptable results as the \emph{starting point} for investigation (``Why does this work? Would alternatives work better?''), while traditional reviews treated them as the \emph{endpoint} (``Does this work? Yes, done.'').
+
+\subsection{Scientific Maturity}
+
+\subsubsection{Negative Results: 1.0 vs.\ 5.0 (+400\%)}
+
+\textbf{Traditional treatment of failure}:
+
+Failures are noted briefly as limitations. Example: ``Recursive bisection may struggle with highly irregular state boundaries, though this did not affect our 50-state results.'' No mechanistic explanation or deeper investigation.
+
+\textbf{Panel-driven treatment of failure}:
+
+Alabama's 49.6\% result (0.4 points short) receives full subsection analysis:
+
+\begin{quote}
+\textit{``Alabama illustrates this starkly: After testing six different tree structures, three partitioning methods, and constraint relaxation, the best result (49.6\% minority) still falls short of the 50\% MM threshold. The 0.4 percentage point gap represents a fundamental geographic limit, not an algorithmic deficiency. Minority populations in Alabama are geographically dispersed...''}
+\end{quote}
+
+Failure analysis leads to theory building: 42\% threshold as critical value where VRA compliance and compactness become compatible. Geographic dominance hypothesis emerges from systematic failure investigation.
+
+\textbf{Quality mechanism}: Panel reviews asked ``Why did Alabama fail? What's the fundamental constraint?'' Traditional reviews asked ``Does the approach work overall? Yes, for 49 states.''
+
+\subsubsection{Theory Building: 2.0 vs.\ 5.0 (+150\%)}
+
+Traditional papers describe results (``recursive bisection achieves population balance'') and validate approaches (``compactness comparable to human-drawn plans''). General principles are implicit.
+
+Panel-driven work builds explicit theory:
+
+\begin{itemize}[leftmargin=*]
+\item \textbf{42\% threshold}: States with $\geq$42\% minority population can achieve VRA compliance while maintaining compact districts; states below this threshold face VRA-compactness tradeoff.
+
+\item \textbf{Geographic dominance}: VRA feasibility depends primarily on geographic clustering of minority populations, not algorithmic sophistication. 3--7 percentage point improvements from algorithm choice cannot overcome 10+ point deficits from geographic dispersion.
+
+\item \textbf{VRA-compactness tension}: Multi-objective optimization with demographic and compactness goals creates fundamental conflict. Edge-weighting resolves this by encoding demographic preservation as graph structure rather than optimization objective.
+\end{itemize}
+
+\textbf{Quality mechanism}: Panel reviews demanded explanations (``Why does edge-weighting work when multi-constraint fails?'') and quantitative thresholds (``At what demographic level does VRA compliance become feasible?''). Traditional work lacked external pressure to abstract results into theory.
+
+\subsubsection{Discussion Depth: 3.0 vs.\ 5.0 (+67\%)}
+
+Traditional discussions validate approaches worked (``recursive bisection achieves goals''), compare to baselines (``compactness comparable to human plans''), and note policy implications (``offers transparency advantages'').
+
+Panel-driven discussions provide mechanistic explanations (``edge-weighting works because it encodes community preservation as graph topology rather than optimization objective''), quantitative precision (``49.6\% vs.\ 50\% MM threshold, 0.4 point gap''), and negative result integration (``six tree structures and three methods insufficient to overcome geographic dispersion'').
+
+\subsection{Innovation and Iteration}
+
+\subsubsection{Innovation Level: 2.0 vs.\ 5.0 (+150\%)}
+
+\textbf{Traditional innovation type}: Methodological application---applying known algorithm (METIS recursive bisection) to new domain (congressional redistricting). Demonstrates feasibility and measures outcomes. Incremental improvements in paper 02 (edge-weighting for compactness).
+
+\textbf{Panel-driven innovation type}: Methodological breakthrough---edge-weighting shifts paradigm from multi-objective optimization to graph topology encoding. Achieves impossible result (Alabama 0 MM $\to$ 2 MM). Identifies critical threshold (42\%) and builds geographic dominance theory.
+
+\textbf{Innovation trajectory comparison}:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Stage} & \textbf{Traditional} & \textbf{Panel-Driven} \\
+\midrule
+Initial approach & Recursive bisection & Multi-constraint optimization \\
+Initial results & Works for 50 states & Fails for Alabama (49.6\%) \\
+Response & Validate \& publish & Systematic alternatives \\
+Alternatives tested & 0 (validated works) & N-way, adaptive, 6 trees \\
+Outcome & Incremental contribution & Still fails $\to$ paradigm shift \\
+Breakthrough & Not applicable & Edge-weighting (0 MM $\to$ 2 MM) \\
+Theory & Implicit validation & 42\% threshold, geographic dominance \\
+\bottomrule
+\end{tabular}
+\caption{Innovation trajectory comparison showing how panel-driven systematic failure exploration led to breakthrough contributions.}
+\label{tab:innovation}
+\end{table}
+
+\textbf{Critical observation}: User provided the edge-weighting \emph{idea} (``weight edges to preserve minority communities''), but this insight emerged \emph{after} 8+ panel-driven rounds systematically eliminating multi-constraint variations. Traditional work would not have explored alternatives deeply enough to expose the need for paradigm shift.
+
+\subsubsection{Iteration Depth: 2.0 vs.\ 5.0 (+150\%)}
+
+\textbf{Traditional iteration}:
+\begin{itemize}[leftmargin=*]
+\item Round 1: User identifies problem, Claude writes methodology
+\item Round 2: User reviews, suggests edits, Claude revises
+\item Depth: 1--2 rounds, surface-level revisions
+\item Driving force: User satisfaction
+\end{itemize}
+
+\textbf{Panel-driven iteration}:
+\begin{itemize}[leftmargin=*]
+\item Round 1: Multi-constraint approach $\to$ Panel identifies limitations
+\item Round 2: N-way partitioning $\to$ Panel notes insufficient improvement
+\item Round 3: Adaptive bisection $\to$ Panel notes Alabama still fails
+\item Round 4: 6 tree structure variations $\to$ Panel questions fundamental approach
+\item Round 5: User suggests edge-weighting $\to$ Claude implements
+\item Round 6: Breakthrough (Alabama 0 $\to$ 2 MM) $\to$ Panel validates
+\item Round 7: Panel demands comprehensive ablation study
+\item Round 8+: 140 configurations tested, theory built
+\item Depth: 8+ rounds with multiple methodological pivots
+\item Driving force: Panel review satisfaction
+\end{itemize}
+
+\textbf{User role shift}: Traditional work---user as director (``write X'', ``revise Y''). Panel-driven work---user as facilitator (debugging METIS errors, fixing infrastructure) and insight provider (edge-weighting idea at critical juncture). Panel drove scientific trajectory.
+
+\subsection{Publication Venue Projections}
+
+Based on quality assessments, we project target venues and acceptance likelihoods:
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Corpus} & \textbf{Target Venue} & \textbf{Acceptance Likelihood} \\
+\midrule
+Traditional & Regional conferences & 60--70\% \\
+ & Workshop papers & \\
+ & Domain-specific journals (low-tier) & \\
+\midrule
+Panel-Driven & Science Advances & 80--90\% (after revision) \\
+ & Nature Computational Science & \\
+ & Top political science (APSR, AJPS) & \\
+\bottomrule
+\end{tabular}
+\caption{Projected publication venues based on quality assessments. Traditional papers target incremental contribution venues; panel-driven work targets top-tier breakthrough venues.}
+\label{tab:venues}
+\end{table}
+
+\textbf{Reasoning}: Panel-driven work demonstrates (1) novel methodological contribution (edge-weighting paradigm shift), (2) systematic experimental validation (140 configurations), (3) clear theoretical insights (42\% threshold, geographic dominance), (4) policy-relevant findings (VRA compliance feasibility), and (5) rigorous comparison to alternatives---characteristics of top-tier computational science and political science publications.
+
+Traditional work demonstrates feasibility and measures outcomes---characteristics of solid regional conference papers or workshop contributions.

@@ -1,0 +1,37 @@
+paper: panel-trash-can-architecture
+title: "Sustainable Single-Occupancy Dwelling Design: The Trash Can Paradigm"
+venue: "UbiComp 2026"
+stage: draft
+round: 0
+reviewers:
+  - name: Oscar the Grouch
+    affiliation: Trash Can Research Institute
+    expertise: Contrarian analysis
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Scooter
+    affiliation: Stage Management & Logistics Lab
+    expertise: Resource logistics
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Statler
+    affiliation: Balcony Peer Review Board
+    expertise: Negative criticism
+    score: 1
+    verdict: "Reject"
+  - name: Waldorf
+    affiliation: Balcony Peer Review Board
+    expertise: Collaborative negativity
+    score: 1
+    verdict: "Reject"
+  - name: Miss Piggy
+    affiliation: Assertiveness Research Center
+    expertise: Self-advocacy
+    score: 2
+    verdict: "Major Revisions Required"
+reviews:
+
+history:
+  - stage: draft
+    date: "2025-12-01"
+    note: "Paper created"

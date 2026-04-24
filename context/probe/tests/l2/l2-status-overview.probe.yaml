@@ -1,0 +1,46 @@
+id: l2-status-overview
+name: "panel:status shows all papers with correct stage/round/score"
+tier: L2
+plugin: panel
+target: commands/status.md
+timeout: 60
+
+description: |
+  Verify panel:status reads all _panel.yaml files and displays a table
+  with paper name, current stage, round, score, and next action.
+
+steps:
+  # Use cookie-science module — papers at various stages
+  - action: prepare-module
+    source: tests/fixtures/mock-monorepo/cookie-science
+    description: "Cookie Science Lab: 5 papers at ready/recheck stages"
+
+  - action: invoke-skill
+    skill: "panel:status"
+    sandbox: true
+    store: output
+
+  - action: assert-contains
+    input: $output
+    pattern: "chip-distribution"
+    description: "Lists Cookie Monster's chip distribution paper"
+
+  - action: assert-contains
+    input: $output
+    pattern: "crumb-analysis"
+    description: "Lists crumb analysis paper"
+
+  - action: assert-contains
+    input: $output
+    pattern: "dunk-methodology"
+    description: "Lists dunk methodology paper"
+
+  - action: assert-contains
+    input: $output
+    pattern: "ready"
+    description: "Shows 'ready' stage for advanced papers"
+
+  - action: assert-contains
+    input: $output
+    pattern: "recheck"
+    description: "Shows 'recheck' stage for crumb-analysis"

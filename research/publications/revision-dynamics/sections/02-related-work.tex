@@ -1,0 +1,21 @@
+\section{Related Work}
+
+\subsection{Peer Review Outcome Studies}
+
+Prior work has studied peer review from the reviewer's perspective: inter-reviewer agreement, bias detection, and review quality. Studies of major ML venues (NeurIPS, ICLR) report moderate inter-reviewer agreement (Cohen's $\kappa \approx 0.2$--$0.4$) and significant noise in accept/reject decisions. Our work complements this by studying the \emph{author's} side: how papers improve in response to structured feedback.
+
+\subsection{Iterative Crowd Workflows}
+
+The revision dynamics we study have direct parallels in crowdsourcing research. Bernstein et al.'s Soylent demonstrated that complex crowd tasks benefit from structured decomposition into find-fix-verify stages---our P1/P2/P3 priority triage serves an analogous function, decomposing multi-reviewer feedback into actionable categories ranked by impact. Little et al.\ showed that iterative improvement workflows with quality gates outperform single-pass approaches, consistent with our finding that the stage-gated review lifecycle produces measurable quality gains. Dow et al.\ found that parallel feedback from multiple independent assessors, followed by structured synthesis, yields better outcomes than serial feedback---a pattern our multi-reviewer panel with independent reviews directly mirrors. We extend these crowd workflow principles from human workers to AI-simulated expert personas, preserving the structural benefits while enabling controlled experimentation on revision dynamics.
+
+\subsection{Iterative Refinement in Software Engineering}
+
+The revision dynamics we observe also parallel patterns in software engineering: code review iterations show diminishing returns after 2--3 rounds, with critical bugs caught early and style issues dominating later rounds. Our P1/P2/P3 priority classification maps directly to bug severity classification in software triage systems.
+
+\subsection{Score Prediction and Paper Quality}
+
+Models for predicting review scores have been explored using textual features of papers. Our work differs in that we study score \emph{change} rather than absolute prediction, focusing on the intervention (revision) that connects two review rounds.
+
+\subsection{Interactive ML and Human-AI Feedback Loops}
+
+The review-revise cycle is structurally an interactive ML feedback loop: an AI system provides structured feedback, a human acts on it, and the AI re-evaluates. This connects to work on interactive ML systems where human-in-the-loop feedback iteratively improves outputs. Our contribution is empirical characterization of how this loop converges, which feedback types drive improvement, and where diminishing returns set in.

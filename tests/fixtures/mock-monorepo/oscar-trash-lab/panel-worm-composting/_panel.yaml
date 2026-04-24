@@ -1,0 +1,46 @@
+paper: panel-worm-composting
+title: "Slimey's Contribution to Organic Waste Processing: A Vermiculture Study"
+venue: "EnvSci 2026"
+stage: panel
+round: 1
+reviewers:
+  - name: Oscar the Grouch
+    affiliation: Trash Can Research Institute
+    expertise: Contrarian analysis
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Scooter
+    affiliation: Stage Management & Logistics Lab
+    expertise: Resource logistics
+    score: 2
+    verdict: "Major Revisions Required"
+  - name: Statler
+    affiliation: Balcony Peer Review Board
+    expertise: Negative criticism
+    score: 1
+    verdict: "Reject"
+  - name: Waldorf
+    affiliation: Balcony Peer Review Board
+    expertise: Collaborative negativity
+    score: 1
+    verdict: "Reject"
+  - name: Miss Piggy
+    affiliation: Assertiveness Research Center
+    expertise: Self-advocacy
+    score: 2
+    verdict: "Major Revisions Required"
+reviews:
+  round1:
+    - reviews/REVIEW-OSCAR-THE-GROUCH.md
+    - reviews/REVIEW-SCOOTER.md
+    - reviews/REVIEW-STATLER.md
+    - reviews/REVIEW-WALDORF.md
+    - reviews/REVIEW-MISS-PIGGY.md
+
+history:
+  - stage: draft
+    date: "2025-12-01"
+    note: "Paper created"
+  - stage: panel
+    date: "2025-12-15"
+    note: "Reviewers assigned and reviews generated"

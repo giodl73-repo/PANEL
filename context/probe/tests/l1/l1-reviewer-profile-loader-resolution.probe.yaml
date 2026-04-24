@@ -1,0 +1,118 @@
+id: l1-reviewer-profile-loader-resolution
+name: reviewer-profile-loader resolves profiles from .roles/panel-reviewer via pluginRoot
+tier: L1
+plugin: panel
+target: shared/reviewer-profile-loader.md
+timeout: 30
+
+description: |
+  Verify the profile loader resolution chain:
+  1. Reads _index.yaml from pluginReviewersPath (.roles/panel-reviewer)
+  2. Resolves R-N ID directly (Tier 2)
+  3. Resolves by full name via index (Tier 3)
+  4. Local .roles/panel-reviewer takes priority for extensions (Tier 2/3 local)
+  5. Falls back to REVIEWER-DATABASE.md when profile missing (Tier 5)
+  No file copying — plugin path is read directly via pluginRoot.
+
+setup:
+  plugin_root: .  # Simulate pluginRoot = panel repo root
+  config:
+    pluginRoot: "."
+    pluginReviewersPath: ".roles/panel-reviewer"
+    localReviewersPath: ".roles/panel-reviewer"
+
+steps:
+  # Tier 2: R-N ID direct lookup
+  - action: invoke-profile-loader
+    name: "R-1"
+    plugin_reviewers_path: .roles/panel-reviewer
+    store: r1_profile
+
+  - action: assert-field-equals
+    input: $r1_profile
+    field: format
+    expected: ole
+
+  - action: assert-field-not-empty
+    input: $r1_profile
+    field: name
+
+  - action: assert-field-not-empty
+    input: $r1_profile
+    fields: [orientation.frame, orientation.serves, lens.verify, lens.simplify]
+
+  # Tier 3: name lookup via index
+  - action: invoke-profile-loader
+    name: "Percy Liang"
+    plugin_reviewers_path: .roles/panel-reviewer
+    store: percy_profile
+
+  - action: assert-field-equals
+    input: $percy_profile
+    field: format
+    expected: ole
+
+  - action: assert-same
+    a: $r1_profile.name
+    b: $percy_profile.name
+    description: "R-1 and 'Percy Liang' should resolve to the same profile"
+
+  # buildReviewerContext includes OLE_PREAMBLE
+  - action: invoke-build-reviewer-context
+    profile: $percy_profile
+    store: context_str
+
+  - action: assert-contains
+    input: $context_str
+    expected: "Each tier of your role has two faces"
+
+  - action: assert-contains
+    input: $context_str
+    expected: "self-directed"
+
+  - action: assert-contains
+    input: $context_str
+    expected: "receiver-directed"
+
+  # Local extension override: a custom profile in localReviewersPath takes priority
+  - action: write-temp-file
+    path: .roles/panel-reviewer/R-custom.md
+    content: |
+      ---
+      name: test-reviewer
+      version: "1.0"
+      archetype: structural
+      orientation:
+        frame: "Test frame for extension validation"
+        serves: "Test serves"
+      lens:
+        verify: ["Test verify item"]
+        simplify: ["Test simplify item"]
+      expertise:
+        depth: "Test depth"
+        relevance: "Test relevance"
+      ---
+      # R-custom: Test Reviewer
+
+  - action: invoke-profile-loader
+    name: "R-custom"
+    plugin_reviewers_path: .roles/panel-reviewer
+    local_reviewers_path: .roles/panel-reviewer
+    store: custom_profile
+
+  - action: assert-field-equals
+    input: $custom_profile
+    field: format
+    expected: ole
+
+  - action: cleanup-temp-file
+    path: .roles/panel-reviewer/R-custom.md
+
+  # Cache hit: second load of same profile is a cache hit
+  - action: invoke-profile-loader
+    name: "R-1"
+    plugin_reviewers_path: .roles/panel-reviewer
+    store: r1_cached
+
+  - action: assert-cache-hit
+    description: "Second load of R-1 should be a cache hit"

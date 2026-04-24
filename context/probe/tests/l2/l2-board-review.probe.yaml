@@ -1,0 +1,48 @@
+id: l2-board-review
+name: "panel:board generates REVIEW_BOARD.md across modules"
+tier: L2
+plugin: panel
+target: commands/board.md
+timeout: 60
+
+description: |
+  Verify panel:board discovers modules in the monorepo, selects 7 board
+  members, generates REVIEW_BOARD.md with B1/B2/B3 cross-module findings.
+
+steps:
+  # Use the full Sesame Street mock monorepo (3 modules)
+  - action: prepare-monorepo
+    source: tests/fixtures/mock-monorepo
+    description: "Sesame Street monorepo: cookie-science, grover-adventures, oscar-trash-lab"
+
+  - action: invoke-skill
+    skill: "panel:board --review --repo tests/fixtures/mock-monorepo"
+    sandbox: true
+    store: result
+
+  - action: file-exists
+    path: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
+
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
+    store: board_review
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "cookie-science"
+    description: "References Cookie Monster's science module"
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "grover-adventures"
+    description: "References Grover's adventure module"
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "oscar-trash-lab"
+    description: "References Oscar's trash research module"
+
+  - action: assert-contains
+    input: $board_review
+    pattern: "AI Simulation"
+    description: Contains AI disclosure

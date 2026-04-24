@@ -1,0 +1,45 @@
+id: l1-stage-machine-recheck-loop
+name: stage-machine handles recheck to synthesis loop correctly
+tier: L1
+plugin: panel
+target: shared/stage-machine.md
+timeout: 30
+
+description: |
+  When recheck gate fails (avg < 2.5 or any score < 2), stage-machine
+  should loop back to synthesis for another round. When gate passes,
+  it should advance to ready. Uses cookie-science papers for realistic scenarios.
+
+steps:
+  - action: validate-transition
+    from: recheck
+    mock_state:
+      avg_score: 1.8
+      min_score: 1
+    expect_next: synthesis
+    description: "Statler-Waldorf scenario: harsh scores loop back to synthesis"
+
+  - action: validate-transition
+    from: recheck
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis
+    description: "Crumb analysis (avg 3.0, min 3) — good scores advance to ready"
+    expect_next: ready
+
+  - action: validate-transition
+    from: recheck
+    mock_state:
+      avg_score: 2.6
+      min_score: 1.5
+    expect_next: synthesis
+    description: "Prairie Dawn's score below 2 forces loop even with good average"
+
+  - action: validate-transition
+    from: recheck
+    fixture: tests/fixtures/mock-monorepo/cookie-science/panel-chip-distribution
+    description: "Chip distribution (round 2, avg 3.2) — advanced to ready"
+    expect_next: ready
+
+  - action: assert-round-increment
+    from_round: 1
+    expect_round: 2
+    description: Round number increments on loop (cookie-science papers did round 1→2)

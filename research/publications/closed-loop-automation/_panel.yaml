@@ -1,0 +1,69 @@
+stage: ready
+round: 2
+venue: CHI / CSCW / HCOMP
+created: 2026-02-06
+p1_items:
+  - id: P1.1
+    description: Missing Human-Centered Analysis and Framing
+    addressed: true
+    changes: Added Discussion subsection on human agency, reframed intro/contributions, added author experience section to Results
+  - id: P1.2
+    description: No Comparison to Manual Revision Quality or Alternative Workflows
+    addressed: true
+    changes: Added Related Work subsection on crowd-based revision, added cost-benefit analysis to Discussion, noted quality comparison gap in Limitations
+  - id: P1.3
+    description: Insufficient Treatment of Learning and Adaptation
+    addressed: true
+    changes: Added detailed Future Work subsections on learning from feedback and reflection mechanisms with concrete architectures
+  - id: P1.4
+    description: Underspecified Operational Aspects and Failure Modes
+    addressed: true
+    changes: Added Methodology subsections on failure detection, observability, error propagation; expanded Limitations with risks
+reviewers:
+  - name: Ben Shneiderman
+    affiliation: University of Maryland
+    expertise: Human-Centered AI, Human Agency, Oversight Systems
+    score_r1: 2.0
+    score_r2: 3.0
+  - name: Michael Bernstein
+    affiliation: Stanford University
+    expertise: Crowdsourcing, Human Computation, Collaborative Systems
+    score_r1: 2.0
+    score_r2: 3.0
+  - name: Saleema Amershi
+    affiliation: Microsoft Research
+    expertise: Interactive Machine Learning, Human-in-the-Loop Systems
+    score_r1: 2.0
+    score_r2: 3.0
+  - name: Shreya Shankar
+    affiliation: UC Berkeley
+    expertise: ML Ops, Observability, Pipeline Debugging
+    score_r1: 2.0
+    score_r2: 3.0
+  - name: Noah Shinn
+    affiliation: Princeton University
+    expertise: Reflexion, Self-Improvement, Agent Learning
+    score_r1: 3.0
+    score_r2: 3.5
+reviews_completed:
+  round_1: 5
+  round_2: 5
+history:
+  - stage: draft
+    entered: 2026-02-06
+    notes: Paper generated from waves analysis (Wave 5: Active Revisions)
+  - stage: panel
+    entered: 2026-02-07
+    notes: 5 reviewers assigned and reviews generated
+  - stage: synthesis
+    entered: 2026-02-07
+    notes: Reviews consolidated into SYNTHESIS.md with P1/P2/P3 classification (avg 2.2/4, 4 P1 items)
+  - stage: revision
+    entered: 2026-02-07
+    notes: REVISION-PLAN.md generated with detailed actions for 4 P1 items, 4 P2 items, 4 P3 items
+  - stage: recheck
+    entered: 2026-02-07
+    notes: All P1 items addressed - paper expanded from 15 to 22 pages with human-centered analysis, cost comparison, learning mechanisms, operational details
+  - stage: ready
+    entered: 2026-02-07
+    notes: Convergence achieved - avg 3.1/4 (was 2.2/4), all reviewers improved scores, unanimous Accept/Strong Accept, gate passed

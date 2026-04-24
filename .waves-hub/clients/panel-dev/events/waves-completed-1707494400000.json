@@ -1,0 +1,13 @@
+{
+  "event": "waves:completed",
+  "timestamp": "2026-02-09T20:00:00Z",
+  "client": "panel-dev",
+  "sequence": 1,
+  "data": {
+    "wave_id": "test-wave-123",
+    "slug": "local-roundtrip-test",
+    "order": 99,
+    "pulses_count": 3
+  },
+  "checksum": "sha256:1234567890abcdef"
+}

@@ -1,0 +1,320 @@
+{
+  "plugin": "panel",
+  "version": "1.1.0",
+  "generated": "2026-02-06",
+  "meta": {
+    "totalTests": 47,
+    "tiers": {
+      "L0": 12,
+      "L1": 16,
+      "L2": 12,
+      "L3": 7
+    }
+  },
+  "tiers": {
+    "L0": {
+      "description": "Structural validation — files exist, schemas parse, configs load",
+      "tests": [
+        {
+          "id": "l0-plugin-manifest",
+          "name": "Plugin manifest is valid JSON with required fields",
+          "target": ".claude-plugin/plugin.json",
+          "assertions": ["file-exists", "valid-json", "has-name", "has-version", "has-commands"]
+        },
+        {
+          "id": "l0-commands-exist",
+          "name": "All 11 command files exist and are non-empty",
+          "target": "commands/*.md",
+          "assertions": ["files-exist", "count-equals-11", "non-empty"]
+        },
+        {
+          "id": "l0-shared-exist",
+          "name": "All 11 shared utility files exist",
+          "target": "shared/*.md",
+          "assertions": ["files-exist", "count-equals-11", "non-empty"]
+        },
+        {
+          "id": "l0-config-scoring",
+          "name": "scoring.yaml is valid YAML with 4-point and 10-point scales",
+          "target": "config/scoring.yaml",
+          "assertions": ["file-exists", "valid-yaml", "has-key:scales"]
+        },
+        {
+          "id": "l0-config-stages",
+          "name": "stages.yaml defines all 8 stages with gates",
+          "target": "config/stages.yaml",
+          "assertions": ["file-exists", "valid-yaml", "stage-count-8"]
+        },
+        {
+          "id": "l0-schema-valid",
+          "name": "panel-state.schema.yaml is valid schema",
+          "target": "config/schemas/panel-state.schema.yaml",
+          "assertions": ["file-exists", "valid-yaml"]
+        },
+        {
+          "id": "l0-templates-exist",
+          "name": "All template files exist (review, synthesis, revision-plan, REVIEWER-DATABASE, REVIEWERS, REVIEW_PANEL, RESEARCH)",
+          "target": "templates/",
+          "assertions": ["files-exist", "count-gte-7"]
+        },
+        {
+          "id": "l0-help-topics-exist",
+          "name": "Help topic files exist in templates/help/",
+          "target": "templates/help/*.md",
+          "assertions": ["files-exist", "count-gte-1"]
+        },
+        {
+          "id": "l0-references-bib",
+          "name": "references.bib exists in templates",
+          "target": "templates/references.bib",
+          "assertions": ["file-exists", "non-empty"]
+        },
+        {
+          "id": "l0-research-papers-exist",
+          "name": "All 5 research paper directories exist with main.tex",
+          "target": "research/panel-*/main.tex",
+          "assertions": ["files-exist", "count-equals-5"]
+        },
+        {
+          "id": "l0-research-makefile",
+          "name": "Master Makefile exists in research/",
+          "target": "research/Makefile",
+          "assertions": ["file-exists", "non-empty"]
+        },
+        {
+          "id": "l0-ai-disclosure-templates",
+          "name": "AI simulation disclosure present in review and synthesis templates",
+          "target": "templates/review-template.md",
+          "assertions": ["contains:AI Simulation Disclosure"]
+        }
+      ]
+    },
+    "L1": {
+      "description": "Unit behavior — individual commands and shared utilities produce correct output",
+      "tests": [
+        {
+          "id": "l1-state-loader-read",
+          "name": "state-loader reads _panel.yaml and returns structured state",
+          "target": "shared/state-loader.md",
+          "fixture": "fixtures/sample-panel-state.yaml",
+          "assertions": ["returns-stage", "returns-round", "returns-reviewers"]
+        },
+        {
+          "id": "l1-state-loader-write",
+          "name": "state-loader writes updated state back to _panel.yaml",
+          "target": "shared/state-loader.md",
+          "assertions": ["file-updated", "valid-yaml", "preserves-history"]
+        },
+        {
+          "id": "l1-stage-machine-gates",
+          "name": "stage-machine enforces gate conditions for each stage transition",
+          "target": "shared/stage-machine.md",
+          "assertions": ["blocks-without-gate", "advances-with-gate", "all-8-stages"]
+        },
+        {
+          "id": "l1-stage-machine-recheck-loop",
+          "name": "stage-machine handles recheck→synthesis loop correctly",
+          "target": "shared/stage-machine.md",
+          "assertions": ["loops-on-low-score", "advances-on-threshold"]
+        },
+        {
+          "id": "l1-reviewer-selector-match",
+          "name": "reviewer-selector matches appropriate reviewers to paper topics",
+          "target": "shared/reviewer-selector.md",
+          "assertions": ["returns-5-reviewers", "matches-topic", "no-duplicates"]
+        },
+        {
+          "id": "l1-synthesis-engine-consolidation",
+          "name": "synthesis-engine consolidates reviews into P1/P2/P3 tiers",
+          "target": "shared/synthesis-engine.md",
+          "assertions": ["produces-p1-items", "produces-p2-items", "produces-p3-items", "correct-threshold"]
+        },
+        {
+          "id": "l1-score-utils-4point",
+          "name": "score-utils computes 4-point scale correctly",
+          "target": "shared/score-utils.md",
+          "assertions": ["correct-average", "correct-min", "correct-consensus"]
+        },
+        {
+          "id": "l1-score-utils-10point",
+          "name": "score-utils computes 10-point cross-portfolio scale",
+          "target": "shared/score-utils.md",
+          "assertions": ["correct-mapping", "tier-classification"]
+        },
+        {
+          "id": "l1-display-utils-formatting",
+          "name": "display-utils produces formatted terminal output",
+          "target": "shared/display-utils.md",
+          "assertions": ["box-drawing", "status-indicators", "table-format"]
+        },
+        {
+          "id": "l1-panel-utils-pp-classification",
+          "name": "panel-utils generates PP1/PP2/PP3 findings correctly",
+          "target": "shared/panel-utils.md",
+          "assertions": ["cross-paper-patterns", "correct-priority-thresholds"]
+        },
+        {
+          "id": "l1-board-utils-module-discovery",
+          "name": "board-utils discovers modules across monorepo",
+          "target": "shared/board-utils.md",
+          "assertions": ["finds-modules", "reads-panel-reviews"]
+        },
+        {
+          "id": "l1-board-utils-b-classification",
+          "name": "board-utils generates B1/B2/B3 findings",
+          "target": "shared/board-utils.md",
+          "assertions": ["cross-module-patterns", "correct-priority-thresholds"]
+        },
+        {
+          "id": "l1-topic-discovery-scan",
+          "name": "topic-discovery scans sources and returns structured proposals",
+          "target": "shared/topic-discovery.md",
+          "assertions": ["returns-topics", "includes-venue-suggestion"]
+        },
+        {
+          "id": "l1-paper-generator-creates",
+          "name": "paper-generator creates complete paper directory with LaTeX",
+          "target": "shared/paper-generator.md",
+          "assertions": ["creates-main-tex", "creates-sections", "creates-makefile"]
+        },
+        {
+          "id": "l1-git-utils-commit",
+          "name": "git-utils auto-commits with [panel] prefix",
+          "target": "shared/git-utils.md",
+          "assertions": ["uses-panel-prefix", "scoped-staging"]
+        },
+        {
+          "id": "l1-schema-validates-state",
+          "name": "panel-state schema validates well-formed _panel.yaml",
+          "target": "config/schemas/panel-state.schema.yaml",
+          "fixture": "fixtures/sample-panel-state.yaml",
+          "assertions": ["passes-valid", "rejects-invalid"]
+        }
+      ]
+    },
+    "L2": {
+      "description": "Integration — commands orchestrate shared utilities correctly end-to-end",
+      "tests": [
+        {
+          "id": "l2-setup-project",
+          "name": "panel:setup creates full project infrastructure",
+          "target": "commands/setup.md",
+          "assertions": ["creates-research-dir", "copies-reviewer-db", "creates-research-md", "creates-reviewers-md"]
+        },
+        {
+          "id": "l2-setup-paper",
+          "name": "panel:setup <name> creates single paper with _panel.yaml",
+          "target": "commands/setup.md",
+          "assertions": ["creates-paper-dir", "creates-main-tex", "creates-panel-yaml", "updates-research-md"]
+        },
+        {
+          "id": "l2-paper-draft-to-panel",
+          "name": "panel:review advances from draft to panel stage",
+          "target": "commands/review.md",
+          "assertions": ["checks-gate", "selects-reviewers", "updates-state", "generates-reviews"]
+        },
+        {
+          "id": "l2-paper-synthesis",
+          "name": "panel:review generates synthesis from reviews",
+          "target": "commands/review.md",
+          "assertions": ["reads-all-reviews", "produces-synthesis-md", "classifies-p1-p2-p3", "updates-state"]
+        },
+        {
+          "id": "l2-paper-revision-cycle",
+          "name": "panel:review handles revision→recheck→synthesis loop",
+          "target": "commands/review.md",
+          "assertions": ["increments-round", "generates-round-reviews", "re-synthesizes"]
+        },
+        {
+          "id": "l2-panel-review",
+          "name": "panel:module review generates module-level REVIEW_PANEL.md",
+          "target": "commands/convene.md",
+          "assertions": ["reads-paper-states", "selects-7-reviewers", "produces-review-panel", "generates-pp1-pp2-pp3"]
+        },
+        {
+          "id": "l2-panel-apply-revisions",
+          "name": "panel:module apply drives PP1/PP2 revisions down to papers",
+          "target": "commands/convene.md",
+          "assertions": ["generates-revision-plans", "applies-to-paper-latex"]
+        },
+        {
+          "id": "l2-board-review",
+          "name": "panel:board generates REVIEW_BOARD.md across modules",
+          "target": "commands/board.md",
+          "assertions": ["discovers-modules", "selects-board-members", "produces-review-board", "generates-b1-b2-b3"]
+        },
+        {
+          "id": "l2-status-overview",
+          "name": "panel:status shows all papers with correct stage/round/score",
+          "target": "commands/status.md",
+          "assertions": ["lists-all-papers", "shows-stage", "shows-score", "shows-next-action"]
+        },
+        {
+          "id": "l2-show-detail",
+          "name": "panel:show displays detailed paper view with reviews and history",
+          "target": "commands/show.md",
+          "assertions": ["shows-reviews", "shows-history", "shows-scores"]
+        },
+        {
+          "id": "l2-import-discovery",
+          "name": "panel:import discovers papers from external sources",
+          "target": "commands/import.md",
+          "assertions": ["scans-sources", "proposes-topics", "generates-papers"]
+        },
+        {
+          "id": "l2-report-generation",
+          "name": "panel:report generates portfolio-level report",
+          "target": "commands/report.md",
+          "assertions": ["reads-all-states", "produces-markdown", "includes-scores"]
+        }
+      ]
+    },
+    "L3": {
+      "description": "End-to-end — full lifecycle scenarios across all three tiers",
+      "tests": [
+        {
+          "id": "l3-full-paper-lifecycle",
+          "name": "Complete paper lifecycle: draft→panel→synthesis→revision→recheck→ready",
+          "target": "commands/review.md",
+          "assertions": ["traverses-6-stages", "produces-all-artifacts", "scores-improve-across-rounds"]
+        },
+        {
+          "id": "l3-three-tier-flow-up",
+          "name": "Bottom-up: paper reviews surface to panel, panel findings surface to board",
+          "target": ["commands/review.md", "commands/convene.md", "commands/board.md"],
+          "assertions": ["paper-findings-in-panel", "panel-findings-in-board", "priority-escalation"]
+        },
+        {
+          "id": "l3-three-tier-flow-down",
+          "name": "Top-down: board B1/B2 → panel PP1/PP2 → paper revisions",
+          "target": ["commands/board.md", "commands/convene.md", "commands/review.md"],
+          "assertions": ["board-generates-revision-plans", "panel-applies-revisions", "papers-updated"]
+        },
+        {
+          "id": "l3-multi-round-convergence",
+          "name": "Multiple revision rounds converge toward acceptance threshold",
+          "target": "commands/review.md",
+          "assertions": ["scores-increase", "p1-items-decrease", "reaches-ready-stage"]
+        },
+        {
+          "id": "l3-five-paper-portfolio",
+          "name": "Full portfolio: all 5 research papers through review + panel synthesis",
+          "target": ["commands/review.md", "commands/convene.md", "commands/status.md"],
+          "assertions": ["all-5-papers-reviewed", "panel-synthesizes-all", "status-reflects-all"]
+        },
+        {
+          "id": "l3-ai-disclosure-everywhere",
+          "name": "AI simulation disclosure present in all generated review artifacts",
+          "target": "templates/",
+          "assertions": ["reviews-have-disclosure", "synthesis-has-disclosure", "panel-has-disclosure"]
+        },
+        {
+          "id": "l3-venue-recommendation-pipeline",
+          "name": "Complete flow: paper reviewed → scored → venue recommended → submission strategy",
+          "target": ["commands/review.md", "commands/venue.md"],
+          "assertions": ["uses-review-scores", "matches-venue-tier", "produces-strategy"]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,82 @@
+paper: panel-reviewer-calibration
+title: "Calibrating AI Reviewer Personas: Domain Expertise Simulation Without Fine-Tuning"
+venue: "EMNLP / ACL"
+stage: ready
+round: 2
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford / HELM
+    category: ML Research / Learning
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Jason Wei
+    affiliation: OpenAI
+    category: Prompting & LLM Capabilities
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Michael Bernstein
+    affiliation: Stanford
+    category: Human-AI Interaction
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Danqi Chen
+    affiliation: Princeton
+    category: NLP & Information Retrieval
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Omar Khattab
+    affiliation: Stanford / Databricks
+    category: Prompting & LLM Capabilities
+    score: 4
+    verdict: "Accept"
+reviews:
+  round1:
+    - reviews/REVIEW-PERCY-LIANG.md
+    - reviews/REVIEW-JASON-WEI.md
+    - reviews/REVIEW-MICHAEL-BERNSTEIN.md
+    - reviews/REVIEW-DANQI-CHEN.md
+    - reviews/REVIEW-OMAR-KHATTAB.md
+  round1_synthesis: reviews/SYNTHESIS.md
+  round2:
+    - reviews/ROUND2-REVIEW-PERCY-LIANG.md
+    - reviews/ROUND2-REVIEW-JASON-WEI.md
+    - reviews/ROUND2-REVIEW-MICHAEL-BERNSTEIN.md
+    - reviews/ROUND2-REVIEW-DANQI-CHEN.md
+    - reviews/ROUND2-REVIEW-OMAR-KHATTAB.md
+  round2_synthesis: reviews/ROUND2-SYNTHESIS.md
+p1_items:
+  - id: P1.1
+    title: "No ground truth or validation against human reviews"
+    addressed: true
+    resolution: "Added external validation subsection comparing AI panel statistics against published EMNLP/ACL review patterns"
+  - id: P1.2
+    title: "Insufficient statistical methodology"
+    addressed: true
+    resolution: "Added Krippendorff's alpha, ICC, bootstrap CIs, random baselines for JS divergence, clustering methodology details"
+  - id: P1.3
+    title: "Limited technical novelty — no comparison with alternative approaches"
+    addressed: true
+    resolution: "Added 4-method comparison (no persona, name-only, full profile, retrieval-augmented) + progressive ablation"
+  - id: P1.4
+    title: "Missing error analysis of calibration failures"
+    addressed: true
+    resolution: "Added failure analysis by category, indicator, and pattern (domain mismatch, profile under-specification)"
+history:
+  - stage: draft
+    date: "2026-02-05"
+    note: "Paper initialized via panel:setup"
+  - stage: panel
+    date: "2026-02-05"
+    note: "5 reviewers assigned, Round 1 reviews generated. Scores: 2, 3, 2, 2, 3 (avg 2.4/4)"
+  - stage: synthesis
+    date: "2026-02-05"
+    note: "Reviews consolidated into SYNTHESIS.md. 4 P1 items, 3 P2 items, 8 P3 items identified."
+  - stage: revision
+    date: "2026-02-05"
+    note: "Revision stage entered. 4 P1 items require addressing before recheck."
+  - stage: recheck
+    date: "2026-02-05"
+    note: "All 4 P1 items addressed + P2.1-P2.3 + P3.1/P3.7. Advancing to Round 2 recheck."
+  - stage: ready
+    date: "2026-02-05"
+    note: "Round 2 complete — scores: 3, 3, 3, 3, 4 (avg 3.2/4). Gate passed. Paper ready for submission."

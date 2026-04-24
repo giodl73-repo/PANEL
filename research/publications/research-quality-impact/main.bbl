@@ -1,0 +1,182 @@
+\begin{thebibliography}{10}
+
+\bibitem{aksnes2019citations}
+D.~W. Aksnes et~al.
+\newblock Citations, citation indicators, and research quality.
+\newblock {\em Quantitative Science Studies}, 2019.
+
+\bibitem{anthropic2025sonnet45}
+Anthropic.
+\newblock Claude sonnet 4.5 technical report, 2025.
+
+\bibitem{beach2019process}
+D.~Beach and R.~B. Pedersen.
+\newblock {\em Process-Tracing Methods}.
+\newblock University of Michigan Press, 2019.
+
+\bibitem{boiko2023autonomous}
+D.~Boiko et~al.
+\newblock Autonomous chemical research with large language models.
+\newblock {\em Nature}, 2023.
+
+\bibitem{bornmann2011scientific}
+L.~Bornmann.
+\newblock Scientific peer review.
+\newblock {\em Annual Review of Information Science and Technology}, 2011.
+
+\bibitem{bran2024chemcrow}
+A.~Bran et~al.
+\newblock Chemcrow: Augmenting llms with chemistry tools.
+\newblock {\em Nature Machine Intelligence}, 2024.
+
+\bibitem{chen2019neural}
+J.~Chen et~al.
+\newblock Neural approaches to paper review generation.
+\newblock In {\em Proc. ACL}, 2019.
+
+\bibitem{consensus2023}
+{Consensus}.
+\newblock Consensus: Ai-powered academic search, 2023.
+
+\bibitem{dellalibera2026review}
+G.~Della-Libera.
+\newblock Ai-simulated expert review: A methodology for pre-submission paper
+  assessment.
+\newblock In {\em Proc. CHI}, 2026.
+
+\bibitem{dellalibera2026calibration}
+G.~Della-Libera.
+\newblock Calibrating ai reviewer personas.
+\newblock In {\em Proc. EMNLP}, 2026.
+
+\bibitem{dellalibera2026synthesis}
+G.~Della-Libera.
+\newblock From reviews to revisions: Automated synthesis.
+\newblock In {\em Proc. AAAI}, 2026.
+
+\bibitem{dellalibera2026hierarchical}
+G.~Della-Libera.
+\newblock Hierarchical review architecture.
+\newblock In {\em Proc. ICSE}, 2026.
+
+\bibitem{dellalibera2026revision}
+G.~Della-Libera.
+\newblock Multi-round revision dynamics.
+\newblock In {\em Proc. NeurIPS D\&B}, 2026.
+
+\bibitem{dell2023navigating}
+F.~Dell'Acqua et~al.
+\newblock Navigating the jagged technological frontier.
+\newblock {\em Harvard Business School Working Paper}, 2023.
+
+\bibitem{dycke2023automated}
+N.~Dycke et~al.
+\newblock Automated review quality assessment.
+\newblock In {\em Proc. EMNLP}, 2023.
+
+\bibitem{elicit2023}
+{Elicit}.
+\newblock Elicit: The ai research assistant, 2023.
+
+\bibitem{firestein2015failure}
+S.~Firestein.
+\newblock {\em Failure: Why Science is So Successful}.
+\newblock Oxford University Press, 2015.
+
+\bibitem{gao2023apo}
+Y.~Gao et~al.
+\newblock Apo: Automated peer review analysis.
+\newblock {\em Transactions on Machine Learning Research}, 2023.
+
+\bibitem{gero2024social}
+K.~Gero et~al.
+\newblock Social dynamics of ai idea generation.
+\newblock In {\em Proc. CSCW}, 2024.
+
+\bibitem{glass2021hypothesis}
+D.~Glass and N.~Hall.
+\newblock Hypothesis clarity in philosophical research.
+\newblock {\em Erkenntnis}, 2021.
+
+\bibitem{lee2013bias}
+C.~J. Lee et~al.
+\newblock Bias in peer review.
+\newblock {\em Journal of the American Society for Information Science and
+  Technology}, 2013.
+
+\bibitem{lee2022coauthor}
+M.~Lee et~al.
+\newblock Coauthor: Designing a human-ai collaborative writing dataset.
+\newblock In {\em Proc. CHI}, 2022.
+
+\bibitem{liang2024can}
+W.~Liang et~al.
+\newblock Can large language models help researchers search literature?
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{lu2024ai}
+K.~Lu et~al.
+\newblock Co-scientist: Ai-assisted hypothesis generation.
+\newblock {\em Science}, 2024.
+
+\bibitem{riley2019cochrane}
+R.~D. Riley et~al.
+\newblock {\em Cochrane Handbook for Systematic Reviews}.
+\newblock Wiley, 2019.
+
+\bibitem{shneiderman2022human}
+B.~Shneiderman.
+\newblock Human-centered ai.
+\newblock {\em Oxford University Press}, 2022.
+
+\bibitem{squazzoni2020peer}
+F.~Squazzoni et~al.
+\newblock Peer review and editorial decision-making at covid-19 speed.
+\newblock {\em Research Policy}, 2020.
+
+\bibitem{stodden2016enhancing}
+V.~Stodden et~al.
+\newblock Enhancing reproducibility for computational methods.
+\newblock {\em Science}, 2016.
+
+\bibitem{tomkins2017reviewer}
+A.~Tomkins et~al.
+\newblock Reviewer bias in single- versus double-blind peer review.
+\newblock In {\em Proc. National Academy of Sciences}, 2017.
+
+\bibitem{waltman2016review}
+L.~Waltman.
+\newblock A review of the literature on citation impact indicators.
+\newblock {\em Journal of Informetrics}, 2016.
+
+\bibitem{wang2024chemreasoner}
+B.~Wang et~al.
+\newblock Chemreasoner: Autonomous chemical research.
+\newblock {\em arXiv preprint}, 2024.
+
+\bibitem{wang2023scientific}
+Q.~Wang et~al.
+\newblock Scientific discovery in the age of ai.
+\newblock {\em Nature}, 2023.
+
+\bibitem{wang2020reviewing}
+X.~Wang et~al.
+\newblock Reviewing research papers with neural networks.
+\newblock In {\em Proc. EMNLP}, 2020.
+
+\bibitem{wang2024can}
+X.~Wang et~al.
+\newblock Can llms replace human collaborators in research?
+\newblock {\em Nature Human Behaviour}, 2024.
+
+\bibitem{zhang2023coauthor}
+Y.~Zhang et~al.
+\newblock Co-author: Human-ai collaborative writing.
+\newblock In {\em Proc. CHI}, 2023.
+
+\bibitem{zhou2024large}
+Y.~Zhou et~al.
+\newblock Large language models in research.
+\newblock {\em Nature}, 2024.
+
+\end{thebibliography}

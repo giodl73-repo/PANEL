@@ -1,0 +1,52 @@
+id: l1-board-utils-b-classification
+name: board-utils generates B1/B2/B3 findings
+tier: L1
+plugin: panel
+target: shared/board-utils.md
+timeout: 30
+
+description: |
+  Verify board-utils classifies cross-module findings:
+  B1 = 3+ board members flag or threatens program (blocking)
+  B2 = 2+ modules affected (important)
+  B3 = 1 module only (nice-to-have)
+
+steps:
+  # Load PP findings from all 3 Sesame Street modules
+  - action: load-panel-findings
+    modules:
+      cookie-science:
+        review_panel: tests/fixtures/mock-monorepo/cookie-science/REVIEW_PANEL.md
+      grover-adventures:
+        review_panel: tests/fixtures/mock-monorepo/grover-adventures/REVIEW_PANEL.md
+      oscar-trash-lab:
+        review_panel: tests/fixtures/mock-monorepo/oscar-trash-lab/REVIEW_PANEL.md
+    store: module_findings
+
+  - action: invoke-board-classify
+    input: $module_findings
+    store: b_results
+
+  - action: assert-b1-or-b2-exists
+    input: $b_results
+    description: "Cross-module patterns should produce B1/B2 findings"
+
+  # Verify against actual REVIEW_BOARD.md structure
+  - action: read-file
+    path: tests/fixtures/mock-monorepo/REVIEW_BOARD.md
+    store: board
+
+  - action: assert-contains
+    input: $board
+    pattern: "cookie-science"
+    description: "Board review references cookie-science module"
+
+  - action: assert-contains
+    input: $board
+    pattern: "grover-adventures"
+    description: "Board review references grover-adventures module"
+
+  - action: assert-contains
+    input: $board
+    pattern: "oscar-trash-lab"
+    description: "Board review references oscar-trash-lab module"

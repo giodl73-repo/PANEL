@@ -1,0 +1,89 @@
+paper: panel-review-methodology
+title: "AI-Simulated Expert Review: A Methodology for Pre-Submission Paper Assessment"
+venue: "CHI / CSCW"
+stage: submit
+round: 2
+reviewers:
+  - name: Michael Bernstein
+    affiliation: Stanford University
+    expertise: Crowdsourcing, human computation
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Ben Shneiderman
+    affiliation: University of Maryland
+    expertise: Human-centered AI, human agency
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Percy Liang
+    affiliation: Stanford University / HELM
+    expertise: Evaluation methodology, benchmarking
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Saleema Amershi
+    affiliation: Microsoft Research
+    expertise: Interactive ML, human-in-the-loop
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Shreya Shankar
+    affiliation: UC Berkeley
+    expertise: ML operations, pipelines
+    score: 3
+    verdict: "Accept with Minor Revisions"
+reviews:
+  round1:
+    - reviews/REVIEW-MICHAEL-BERNSTEIN.md
+    - reviews/REVIEW-BEN-SHNEIDERMAN.md
+    - reviews/REVIEW-PERCY-LIANG.md
+    - reviews/REVIEW-SALEEMA-AMERSHI.md
+    - reviews/REVIEW-SHREYA-SHANKAR.md
+  round1_synthesis: reviews/SYNTHESIS.md
+  round2:
+    - reviews/ROUND2-REVIEW-MICHAEL-BERNSTEIN.md
+    - reviews/ROUND2-REVIEW-BEN-SHNEIDERMAN.md
+    - reviews/ROUND2-REVIEW-PERCY-LIANG.md
+    - reviews/ROUND2-REVIEW-SALEEMA-AMERSHI.md
+    - reviews/ROUND2-REVIEW-SHREYA-SHANKAR.md
+  round2_synthesis: reviews/ROUND2-SYNTHESIS.md
+p1_items:
+  - id: P1.1
+    title: "Evaluation Circularity — Self-Referential Metrics"
+    raised_by: [Bernstein, Liang, Amershi, Shankar]
+    addressed: true
+    resolution: "Added External Validation subsection with author experience comparison and prospective validation protocol"
+  - id: P1.2
+    title: "Missing Baselines and Ablation Studies"
+    raised_by: [Bernstein, Shneiderman, Amershi, Shankar]
+    addressed: true
+    resolution: "Added Ablation Analysis subsection comparing full methodology vs generic LLM vs single-prompt"
+  - id: P1.3
+    title: "Missing Statistical Rigor"
+    raised_by: [Liang, Shankar]
+    addressed: true
+    resolution: "Added Statistical Analysis subsection with CIs, paired t-test, per-module breakdowns, run-to-run variance"
+  - id: P1.4
+    title: "No Reproducibility Details for Core Pipeline"
+    raised_by: [Liang, Shankar]
+    addressed: true
+    resolution: "Added Reproducibility subsection to Methodology with prompt template, model specs, context management"
+history:
+  - stage: draft
+    date: "2026-02-05"
+    note: "Paper initialized via panel:setup"
+  - stage: panel
+    date: "2026-02-05"
+    note: "5 reviewers assigned, 5 reviews generated (Round 1)"
+  - stage: synthesis
+    date: "2026-02-05"
+    note: "Advancing to synthesis — all 5 reviews complete, all scored 2/4"
+  - stage: revision
+    date: "2026-02-05"
+    note: "Synthesis complete — 4 P1 items, 3 P2 items, 6 P3 items identified"
+  - stage: recheck
+    date: "2026-02-05"
+    note: "All 4 P1 items addressed + P2.1-P2.3 + P3.1 addressed. Advancing to Round 2 recheck."
+  - stage: ready
+    date: "2026-02-05"
+    note: "Round 2 complete — all reviewers Accept (3/4). Avg 3.0/4, gate passed. Paper ready for submission."
+  - stage: submit
+    date: "2026-02-05"
+    note: "Submission confirmed by author. Target venue: CHI / CSCW."

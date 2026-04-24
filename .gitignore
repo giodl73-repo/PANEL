@@ -1,0 +1,17 @@
+# Waves - temporary files
+context/waves/**/*.tmp
+context/waves/**/*.bak
+# Local settings and IDE files
+.vscode/
+.claude/settings.local.json
+*.local.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor backups
+*~
+*.swp
+*.swo
+.idea/

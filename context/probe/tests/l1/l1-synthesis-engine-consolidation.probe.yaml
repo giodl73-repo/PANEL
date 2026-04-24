@@ -1,0 +1,58 @@
+id: l1-synthesis-engine-consolidation
+name: synthesis-engine consolidates reviews into P1/P2/P3 tiers
+tier: L1
+plugin: panel
+target: shared/synthesis-engine.md
+timeout: 30
+
+description: |
+  Verify synthesis-engine reads multiple review files and consolidates
+  findings into P1 (blocking: 3+ reviewers or major), P2 (important:
+  2+ reviewers), P3 (nice-to-have: 1 reviewer) tiers.
+
+steps:
+  # Use real review files from cookie-science/panel-crumb-analysis (5 reviews)
+  - action: load-reviews
+    path: tests/fixtures/mock-monorepo/cookie-science/panel-crumb-analysis/reviews
+    pattern: "REVIEW-*.md"
+    store: reviews
+    description: "Load Cookie Monster, Swedish Chef, Count von Count, Prairie Dawn, Bert reviews"
+
+  - action: assert-array-length
+    input: $reviews
+    expected: 5
+
+  - action: invoke-synthesis
+    input: $reviews
+    store: synthesis
+
+  - action: assert-contains-section
+    input: $synthesis
+    section: P1
+    description: Has P1 blocking items
+
+  - action: assert-contains-section
+    input: $synthesis
+    section: P2
+    description: Has P2 important items
+
+  - action: assert-contains-section
+    input: $synthesis
+    section: P3
+    description: Has P3 nice-to-have items
+
+  # Also verify with waiter-dilemma reviews (mixed scores: 2-3 range)
+  - action: load-reviews
+    path: tests/fixtures/mock-monorepo/grover-adventures/panel-waiter-dilemma/reviews
+    pattern: "REVIEW-*.md"
+    store: grover_reviews
+    description: "Load Grover, Big Bird, Mr. Snuffleupagus, Elmo reviews"
+
+  - action: invoke-synthesis
+    input: $grover_reviews
+    store: grover_synthesis
+
+  - action: assert-contains-section
+    input: $grover_synthesis
+    section: P1
+    description: "Mixed-score paper should have P1 items (Big Bird and Snuffy gave 2/4)"

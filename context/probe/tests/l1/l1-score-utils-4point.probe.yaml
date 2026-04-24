@@ -1,0 +1,75 @@
+id: l1-score-utils-4point
+name: score-utils computes 4-point scale correctly
+tier: L1
+plugin: panel
+target: shared/score-utils.md
+timeout: 30
+
+description: |
+  Verify score-utils aggregates individual reviewer scores on the
+  4-point scale (1=Reject, 2=Weak Accept, 3=Accept, 4=Strong Accept)
+  and computes average, min, max, and consensus metric.
+
+steps:
+  # chip-distribution scores: Cookie Monster=4, Swedish Chef=3, Count=4, Prairie Dawn=2, Bert=3
+  - action: compute-scores
+    scores: [4, 3, 4, 2, 3]
+    source: "cookie-science/panel-chip-distribution reviewers"
+    store: chip_result
+
+  - action: assert-field
+    input: $chip_result
+    field: average
+    expected: 3.2
+
+  - action: assert-field
+    input: $chip_result
+    field: min
+    expected: 2
+
+  - action: assert-field
+    input: $chip_result
+    field: max
+    expected: 4
+
+  - action: assert-consensus
+    input: $chip_result
+    scores: [4, 3, 4, 2, 3]
+    description: "StdDev ~0.75 → moderate consensus (Prairie Dawn dissenting)"
+
+  # waiter-dilemma scores: Grover=3, Big Bird=2, Snuffy=2, Elmo=3, Bunsen=2
+  - action: compute-scores
+    scores: [3, 2, 2, 3, 2]
+    source: "grover-adventures/panel-waiter-dilemma reviewers"
+    store: waiter_result
+
+  - action: assert-field
+    input: $waiter_result
+    field: average
+    expected: 2.4
+
+  - action: assert-field
+    input: $waiter_result
+    field: min
+    expected: 2
+
+  - action: assert-consensus-level
+    input: $waiter_result
+    expected: moderate
+    description: "Moderate split — Grover and Elmo liked it, Big Bird/Snuffy/Bunsen skeptical"
+
+  # crumb-analysis scores: all 3/4 (unanimous moderate)
+  - action: compute-scores
+    scores: [3, 3, 3, 3, 3]
+    source: "cookie-science/panel-crumb-analysis reviewers"
+    store: crumb_result
+
+  - action: assert-field
+    input: $crumb_result
+    field: average
+    expected: 3.0
+
+  - action: assert-consensus-level
+    input: $crumb_result
+    expected: strong
+    description: "All reviewers gave 3/4 — strong consensus"

@@ -1,0 +1,78 @@
+paper: panel-revision-dynamics
+title: "Multi-Round Revision Dynamics: Measuring Paper Quality Improvement Through Iterative AI Review"
+venue: "NeurIPS D&B"
+stage: ready
+round: 2
+reviewers:
+  - name: Percy Liang
+    affiliation: Stanford
+    expertise: HELM, benchmarks, foundations
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Michael Bernstein
+    affiliation: Stanford
+    expertise: Crowdsourcing, human computation
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Saleema Amershi
+    affiliation: Microsoft Research
+    expertise: Interactive ML, HITL
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Ludwig Schmidt
+    affiliation: UW
+    expertise: Distribution shift, robustness
+    score: 3
+    verdict: "Accept with Minor Revisions"
+  - name: Shreya Shankar
+    affiliation: Berkeley
+    expertise: ML ops, observability, pipelines
+    score: 3
+    verdict: "Accept with Minor Revisions"
+reviews:
+  round1:
+    - REVIEW-PERCY-LIANG.md
+    - REVIEW-MICHAEL-BERNSTEIN.md
+    - REVIEW-SALEEMA-AMERSHI.md
+    - REVIEW-LUDWIG-SCHMIDT.md
+    - REVIEW-SHREYA-SHANKAR.md
+  round1_synthesis: SYNTHESIS.md
+  round2:
+    - ROUND2-REVIEW-PERCY-LIANG.md
+    - ROUND2-REVIEW-MICHAEL-BERNSTEIN.md
+    - ROUND2-REVIEW-SALEEMA-AMERSHI.md
+    - ROUND2-REVIEW-LUDWIG-SCHMIDT.md
+    - ROUND2-REVIEW-SHREYA-SHANKAR.md
+  round2_synthesis: ROUND2-SYNTHESIS.md
+p1_items:
+  - id: P1.1
+    title: "Statistical methodology insufficient for N=14 single-author dataset"
+    addressed: true
+  - id: P1.2
+    title: "Circularity / ecological validity — AI reviews studying AI review dynamics"
+    addressed: true
+  - id: P1.3
+    title: "Logarithmic improvement model asserted but not tested"
+    addressed: true
+  - id: P1.4
+    title: "Revision process treated as black box / no failure mode analysis"
+    addressed: true
+history:
+  - stage: draft
+    date: "2026-02-05"
+    note: "Paper initialized via panel:setup"
+  - stage: panel
+    date: "2026-02-05"
+    note: "Panel assembled: Percy Liang, Michael Bernstein, Saleema Amershi, Ludwig Schmidt, Shreya Shankar"
+  - stage: synthesis
+    date: "2026-02-05"
+    note: "5 reviews complete. All reviewers: 2/4 (Weak Accept / Major Revisions Required). Avg: 2.0/4"
+  - stage: revision
+    date: "2026-02-05"
+    note: "Synthesis complete with 4 P1 items, 4 P2 items, 6 P3 items. Entering revision stage."
+  - stage: recheck
+    date: "2026-02-05"
+    note: "All 4 P1 items addressed. P2.1 (crowd workflows), P2.2 (review content analysis), P3.1 (Basecamp), P3.2 (score mapping) also addressed. Entering round 2 recheck."
+  - stage: ready
+    date: "2026-02-05"
+    note: "Round 2 complete — all reviewers Accept (3/4). Avg 3.0/4, gate passed. Paper ready for submission."

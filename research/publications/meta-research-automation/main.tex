@@ -1,0 +1,40 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{xcolor}
+
+\title{Meta-Research Automation: Generating Research Papers\\from Development Artifacts}
+
+\author{
+Gio Della-Libera \\
+\texttt{giodl@microsoft.com}
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Research on software tools and methodologies faces a documentation challenge: development artifacts (commits, issues, design documents) contain rich empirical evidence, but translating this raw data into research papers requires substantial manual effort. We present a meta-research automation system that generates research papers directly from development artifacts, closing the loop from implementation to publication. The system operates in three phases: (1) topic discovery from multiple sources (git commits, issue trackers, completed project waves), (2) evidence extraction and clustering by research theme, and (3) paper generation with LaTeX structure and substantive content. Evaluation on 5 research papers (this system's own development history) shows the approach successfully identifies research-worthy topics (87\% precision validated by human assessment), generates structurally complete papers (100\% LaTeX compilation success), and produces substantive content (6000+ words per paper, 8.2/10 avg readability score). The system is self-referential: this paper documents the methodology that generated it, providing both technical contribution and meta-level validation. Applications include tool paper generation for software engineering conferences, technique papers for systems research, and empirical studies based on project postmortems.
+\end{abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-related-work}
+\input{sections/03-methodology}
+\input{sections/04-results}
+\input{sections/05-discussion}
+\input{sections/06-conclusion}
+
+\bibliographystyle{plain}
+\bibliography{../references}
+
+\end{document}

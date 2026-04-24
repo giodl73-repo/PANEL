@@ -1,0 +1,85 @@
+# Reviewer Index
+# Maps R-N identifiers to reviewer metadata for profile resolution
+
+reviewers:
+  R-1:
+    name: Percy Liang
+    slug: percy-liang
+    category: ml-research
+    expertise:
+      - evaluation
+      - benchmarks
+      - holistic
+      - transparency
+
+  R-2:
+    name: Michael Bernstein
+    slug: michael-bernstein
+    category: hci
+    expertise:
+      - crowdsourcing
+      - social-computing
+      - interaction
+      - systems
+
+  R-3:
+    name: Ben Shneiderman
+    slug: ben-shneiderman
+    category: hci
+    expertise:
+      - visualization
+      - interaction-design
+      - direct-manipulation
+      - usability
+
+  R-4:
+    name: Shreya Shankar
+    slug: shreya-shankar
+    category: ml-systems
+    expertise:
+      - ml-systems
+      - data-quality
+      - monitoring
+      - debugging
+
+  R-5:
+    name: Saleema Amershi
+    slug: saleema-amershi
+    category: hci
+    expertise:
+      - human-ai
+      - interactive-ml
+      - user-studies
+      - guidelines
+
+# Categories
+categories:
+  - name: systems-infrastructure
+    description: Distributed systems, state management, fault tolerance, scalability
+
+  - name: compilers-pl
+    description: Code generation, DSLs, formal methods, type systems
+
+  - name: ai-agents
+    description: LLM agents, multi-agent systems, workflow orchestration
+
+  - name: prompting-llm
+    description: Prompt engineering, LLM capabilities, optimization
+
+  - name: hci
+    description: Human-AI interaction, UX, interface design, usability
+
+  - name: ml-systems
+    description: ML infrastructure, training systems, deployment, efficiency
+
+  - name: ml-research
+    description: Learning algorithms, theory, evaluation, benchmarking
+
+  - name: software-engineering
+    description: DevOps, testing, CI/CD, code quality
+
+  - name: nlp-ir
+    description: NLP, information retrieval, text processing
+
+  - name: security
+    description: Security, safety, adversarial robustness, privacy
