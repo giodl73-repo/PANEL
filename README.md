@@ -231,3 +231,7 @@ make clean        # Remove build artifacts
 # Sync research to research monorepo
 ./scripts/sync-to-research.sh
 ```
+
+## License
+
+[MIT](LICENSE) — © 2026 Gio Della-Libera.
