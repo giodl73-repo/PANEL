@@ -19,7 +19,7 @@ Two-level setup: project-level scaffolding or per-paper initialization.
 const projectConfig = loadProjectConfig();
 const researchPath = projectConfig.researchPath;
 
-targetDir = project root directory (e.g., "C:\src\panel" or "C:\src\craftworks")
+targetDir = project root directory (e.g., "C:\src\panel" or "C:\src\workspace")
            All research files go in ${targetDir}/${researchPath}/
 
            Examples:
@@ -27,9 +27,9 @@ targetDir = project root directory (e.g., "C:\src\panel" or "C:\src\craftworks")
                         researchPath = "research"
                         Full path: "C:\src\panel/research/RESEARCH.md"
 
-           - Monorepo:   targetDir = "C:\src\craftworks"
+           - Monorepo:   targetDir = "C:\src\workspace"
                         researchPath = "research/craft"
-                        Full path: "C:\src\craftworks/research/craft/RESEARCH.md"
+                        Full path: "C:\src\workspace/research/craft/RESEARCH.md"
 ```
 
 **Multi-Project Support**: The `researchPath` is loaded from `.claude/panel.json` based on the active project. Use `panel:project` to switch between projects in a monorepo.
@@ -75,7 +75,7 @@ All infrastructure files are placed in `researchDir`, which is created if missin
 
 **Multi-Project Examples**:
 - Standalone mode: `researchPath = "research"` → `C:\src\panel/research/`
-- Monorepo mode: `researchPath = "research/craft"` → `C:\src\craftworks/research/craft/`
+- Monorepo mode: `researchPath = "research/craft"` → `C:\src\workspace/research/craft/`
 
 ## Invocation Modes
 

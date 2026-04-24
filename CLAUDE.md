@@ -216,7 +216,7 @@ Projects are defined in `.claude/panel.json`:
 
 **Monorepo Mode** (new):
 - Multiple projects: each with its own `researchPath`
-- Example: `"researchPath": "research/craft"` → `C:\src\craftworks/research/craft/`
+- Example: `"researchPath": "research/craft"` → `C:\src\workspace/research/craft/`
 - Switch between projects using `panel:project`
 - Each project has independent research papers and context
 
@@ -243,7 +243,7 @@ panel:status
 ### Directory Structure (Monorepo)
 
 ```
-craftworks/                          # Monorepo root
+workspace/                          # Monorepo root
 ├── .claude/
 │   └── panel.json                   # Multi-project config
 ├── plugins/

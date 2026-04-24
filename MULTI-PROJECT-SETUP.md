@@ -40,7 +40,7 @@ Panel now supports multi-project configuration similar to probe's `testsPath` mo
 }
 ```
 
-#### Monorepo Mode (C:\src\craftworks)
+#### Monorepo Mode (C:\src\workspace)
 
 ```json
 {
@@ -125,10 +125,10 @@ panel/
 └── context/panel/panel-dev/    # Panel context data
 ```
 
-### Monorepo Mode (Craftworks)
+### Monorepo Mode (Workspace)
 
 ```
-craftworks/
+workspace/
 ├── .claude/
 │   └── panel.json              # Multi-project config
 ├── .panel-hub/                 # Monorepo-level hub
@@ -159,7 +159,7 @@ craftworks/
 ### Setup in Monorepo
 
 ```bash
-cd C:\src\craftworks
+cd C:\src\workspace
 
 # Setup panel for craft research
 panel:project craft-research
@@ -356,13 +356,13 @@ No changes required! The new config format is backward compatible:
 7. ⬜ Update `commands/board.md` to use `researchPath`
 8. ⬜ Create `commands/project.md` for project switching
 9. ⬜ Test in standalone mode (C:\src\panel)
-10. ⬜ Test in monorepo mode (C:\src\craftworks)
+10. ⬜ Test in monorepo mode (C:\src\workspace)
 
-## Example: Adding Panel to Craftworks
+## Example: Adding Panel to Workspace
 
 ### Step 1: Create Config
 
-Add to `C:\src\craftworks\.claude\panel.json`:
+Add to `C:\src\workspace\.claude\panel.json`:
 
 ```json
 {
@@ -383,7 +383,7 @@ Add to `C:\src\craftworks\.claude\panel.json`:
 ### Step 2: Initialize
 
 ```bash
-cd C:\src\craftworks
+cd C:\src\workspace
 panel:setup
 ```
 

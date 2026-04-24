@@ -604,7 +604,7 @@ function convertDatabaseToProfile(section) {
 
 /**
  * OLE_PREAMBLE — canonical text explaining the self/receiver two-face structure.
- * Source: craftworks/craft-cli/src/astro/types/roles.ts (Paper 50 F-07 + F-11).
+ * Source: workspace/craft-cli/src/astro/types/roles.ts (Paper 50 F-07 + F-11).
  * Must be prepended to every OLE profile rendered for AI consumption so the model
  * correctly interprets the self-directed vs receiver-directed sub-fields.
  */

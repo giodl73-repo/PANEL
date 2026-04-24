@@ -11,7 +11,7 @@ const targetDir = process.cwd();
 const researchDir = path.join(targetDir, projectConfig.researchPath);
 ```
 
-Research files go in `researchDir` (e.g., `C:\src\panel/research/` or `C:\src\craftworks/research/craft/`).
+Research files go in `researchDir` (e.g., `C:\src\panel/research/` or `C:\src\workspace/research/craft/`).
 
 ## Step 1: Interactive Topic Discovery
 

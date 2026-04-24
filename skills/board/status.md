@@ -6,7 +6,7 @@ Board status: module registry, cross-module track map, revision progress.
 panel:board status
 ═══════════════════════════════════════════════════════════════════════
 
-Program: craftworks research | Board round 1 | Score: 7.7/10 (A-)
+Program: workspace research | Board round 1 | Score: 7.7/10 (A-)
 
 Module Registry:
   module-alpha   5 papers  Panel: ✓ (7.2)  Board: ✓  B1: 0/1 addressed

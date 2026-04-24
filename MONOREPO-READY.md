@@ -90,9 +90,9 @@ const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 }
 ```
 
-### Monorepo Mode (Future - C:\src\craftworks)
+### Monorepo Mode (Future - C:\src\workspace)
 
-Create `.claude/panel.json` in craftworks:
+Create `.claude/panel.json` in workspace:
 
 ```json
 {
@@ -151,10 +151,10 @@ Create `.claude/panel.json` in craftworks:
 
 ## Directory Structure
 
-### Craftworks Monorepo with Panel
+### Workspace Monorepo with Panel
 
 ```
-craftworks/
+workspace/
 ├── .claude/
 │   ├── waves.json              # Wave tracking (10 projects)
 │   ├── probe.json              # Testing (10 projects)
@@ -199,10 +199,10 @@ craftworks/
 
 ## Usage Examples
 
-### In Craftworks Monorepo
+### In Workspace Monorepo
 
 ```bash
-cd C:\src\craftworks
+cd C:\src\workspace
 
 # List panel projects
 panel:project
@@ -236,7 +236,7 @@ panel:setup panel-new-paper "CHI 2026"
 panel:review panel-new-paper
 ```
 
-## Alignment with Craftworks
+## Alignment with Workspace
 
 Panel now follows the same multi-project pattern as:
 
@@ -261,9 +261,9 @@ All three plugins use:
 3. ⬜ Test backward compatibility
 4. ⬜ Update CLAUDE.md with multi-project info
 
-### For Craftworks Monorepo (C:\src\craftworks)
+### For Workspace Monorepo (C:\src\workspace)
 
-1. ⬜ Move panel plugin to `craftworks/plugins/panel/`
+1. ⬜ Move panel plugin to `workspace/plugins/panel/`
 2. ⬜ Create `.claude/panel.json` with 5 projects (craft, waves, probe, boost, panel)
 3. ⬜ Setup each project: `panel:project <name> && panel:setup`
 4. ⬜ Migrate existing research papers if any
@@ -283,4 +283,4 @@ All three plugins use:
 **Version**: 1.2.0
 **Phase**: Configuration Complete
 **Next**: Command Updates
-**Target**: Full monorepo support in craftworks
+**Target**: Full monorepo support in workspace
