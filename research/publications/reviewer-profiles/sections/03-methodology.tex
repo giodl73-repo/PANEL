@@ -16,7 +16,7 @@ Each reviewer profile is a structured markdown file with YAML frontmatter confor
 \item \textbf{Version} (required): Profile version for tracking updates
 \end{itemize}
 
-Profiles average 2KB each (min: 1.5KB, max: 3KB, σ = 0.4KB), stored in \texttt{context/panel/reviewers/profiles/\{name\}.md}. The structured format enables validation, composition, and future optimization (Section~\ref{sec:future-work}).
+Profiles average 2KB each (min: 1.5KB, max: 3KB, $\sigma$ = 0.4KB), stored in \texttt{context/panel/reviewers/profiles/\{name\}.md}. The structured format enables validation, composition, and future optimization (Section~\ref{sec:future-work}).
 
 \subsubsection{Profile Generation Protocol}
 
@@ -60,7 +60,7 @@ We conduct experiments with \textbf{n=25 papers} across 10 venues to achieve 80\
 \item \textbf{Theory}: STOC (2 papers), WWW (1 paper)
 \end{itemize}
 
-Sample size calculated using paired t-test assumptions: µ\_diff = 15\% token reduction, σ\_diff = 20\% (conservative estimate from pilot), power = 0.80, α = 0.05 (two-tailed). Pilot data (n=5) used only for effect size estimation, not included in final analysis.
+Sample size calculated using paired t-test assumptions: µ\_diff = 15\% token reduction, $\sigma$\_diff = 20\% (conservative estimate from pilot), power = 0.80, α = 0.05 (two-tailed). Pilot data (n=5) used only for effect size estimation, not included in final analysis.
 
 \subsubsection{Three-Condition Ablation Study}
 
@@ -112,7 +112,7 @@ Aggregate quality score = mean of subscores. Validation via human evaluation: 3 
 
 \subsubsection{Consistency}
 
-Cross-round correlation: semantic similarity of Round 1 vs Round 2 reviews from same reviewer (BERT embeddings, cosine distance). Higher consistency indicates stable persona across invocations. Reported per-reviewer with aggregate statistics (µ, σ, range).
+Cross-round correlation: semantic similarity of Round 1 vs Round 2 reviews from same reviewer (BERT embeddings, cosine distance). Higher consistency indicates stable persona across invocations. Reported per-reviewer with aggregate statistics (µ, $\sigma$, range).
 
 \subsubsection{Diversity}
 
