@@ -80,119 +80,20 @@ Re-entrancy: `panel:go` reads `_panel.yaml` to determine current stage, picks up
 ### 💡 Best Practice:
 Treat suggestions like insights from a smart colleague, not mandates from reviewers. Use what strengthens your work, ignore what doesn't align with your research goals.
 
-## Reviewer Profile System (v1.3.0+)
+## Reviewers
 
-Panel uses **persistent reviewer profiles** for efficient persona simulation with dramatically reduced token costs.
+Panel ships with a registry of 45 simulated reviewer personas across 10 categories — Systems & Infrastructure, Compilers & PL Theory, AI Agents & Orchestration, Prompting & LLM Capabilities, Human-AI Interaction, ML Systems & Efficiency, ML Research / Learning, Software Engineering & DevOps, NLP & Information Retrieval, and Security & Safety. Each persona is loaded as a persistent **profile** (research background, evaluation lens, characteristic concerns, voice) and cached across review rounds for consistency.
 
-### Why Profiles?
+Browse them:
 
-**Problem**: Loading the full reviewer database (11.5KB, ~3000 tokens) for each reviewer on every review wastes tokens and slows down review generation.
-
-**Solution**: Persistent profiles (~2KB each) loaded once and cached for reuse across rounds and papers.
-
-**Benefits**:
-- **60-75% token reduction** for reviewer context (validated via A/B testing)
-- **15× faster** on cache hits (<1ms vs 12ms file loads)
-- **Consistent personas** across review rounds
-- **Richer context** with research background, evaluation lens, characteristic concerns
-
-### Quick Start
-
-**Browse reviewer profiles**:
 ```bash
-# List all reviewers with summaries
-panel:reviewers --detailed
-
-# Show full profile for one reviewer
-panel:reviewers show "Percy Liang"
-
-# Filter by category
-panel:reviewers --category ml-research
-
-# Filter by venue
-panel:reviewers --venue NeurIPS
+panel:reviewers --detailed                  # all reviewers with summaries
+panel:reviewers show "Percy Liang"          # one full profile
+panel:reviewers --category ml-research      # filter by category
+panel:reviewers --venue NeurIPS             # filter by venue
 ```
 
-**Reviews automatically use profiles** — no configuration needed. The system loads profiles during review generation and caches them for subsequent rounds.
-
-### Profile Structure
-
-Each profile (1.8-2.2KB) contains:
-- **Research Background**: 2-3 paragraphs on expertise and contributions
-- **Key Publications**: 3-5 seminal papers
-- **Evaluation Lens**: Characteristic questions this reviewer asks
-- **Review Criteria**: Checklist for evaluating papers
-- **Characteristic Concerns**: Common issues they raise
-- **Voice & Tone**: Writing style descriptors
-- **AI Simulation Disclosure**: Explicit statement of AI persona methodology
-
-### Token Savings
-
-Experimental validation (A/B testing, n=5 papers):
-
-| Metric | Baseline (Database) | Profiles | Savings |
-|--------|---------------------|----------|---------|
-| **Per paper (5 reviewers)** | 37,500 tokens | 24,500 tokens | **34.7%** |
-| **Module (7 reviewers × 5 papers)** | 262,500 tokens | 164,500 tokens | **37.3%** |
-| **Per reviewer (cached)** | 7,500 tokens | 4,500 tokens | **40%** |
-
-**Typical cache hit rate**: 50% on round 2, 100% for module-level panel reviews.
-
-### Master Registry
-
-45 reviewers across 10 categories:
-- Systems & Infrastructure (5)
-- Compilers & PL Theory (4)
-- AI Agents & Orchestration (6)
-- Prompting & LLM Capabilities (5)
-- Human-AI Interaction (7)
-- ML Systems & Efficiency (5)
-- ML Research / Learning (4)
-- Software Engineering & DevOps (3)
-- NLP & Information Retrieval (4)
-- Security & Safety (2)
-
-All indexed in `context/panel/reviewers/_index.yaml` for fast filtering and discovery.
-
-### How It Works
-
-**Four-tier resolution chain**:
-1. **Cache hit** → Return cached profile (<1ms)
-2. **Exact match** → Load from `context/panel/reviewers/profiles/{name}.md`
-3. **Slug match** → Convert "Percy Liang" → "percy-liang.md"
-4. **Database fallback** → Extract from `REVIEWER-DATABASE.md` (graceful degradation)
-
-**Performance**:
-- Cache hits: <1ms
-- File loads: 12ms average
-- Database fallback: 87ms
-- **Speedup**: 15× faster on cache hits
-
-### Integration
-
-Profiles integrate seamlessly across all three tiers:
-
-**Paper Level** (`panel:review`):
-- Profiles loaded during panel assembly
-- Cached for round 2+
-- Full profile context passed to review generation
-
-**Module Level** (`panel:module`):
-- 7-member panel profiles loaded at session start
-- Reused across all papers in module
-- 100% cache hit rate after first paper
-
-**Synthesis** (`SYNTHESIS.md`):
-- Score distribution includes Affiliation + Expertise columns
-- P1/P2/P3 items show reviewer category (e.g., "[ML Research]")
-- Context notes explain reviewer evaluation lens
-
-### See Also
-
-- **Template**: `templates/reviewer-profile-template.md` — 7-section structure
-- **Loader**: `shared/reviewer-profile-loader.md` — Implementation details
-- **Validation**: Wave 7 (Galileo Observer) experimental protocol
-- **Research**: `research/panel-reviewer-profiles/` — Token efficiency study
+Reviews use profiles automatically — no configuration needed. Implementation details (resolution chain, cache behavior, token economics) are in the [appendix](#appendix-profile-system).
 
 ## AI Simulation Methodology
 
@@ -231,6 +132,27 @@ make clean        # Remove build artifacts
 # Sync research to research monorepo
 ./scripts/sync-to-research.sh
 ```
+
+## Appendix: profile system
+
+Each profile is ~2KB and contains seven sections: research background, key publications, evaluation lens, review criteria, characteristic concerns, voice & tone, and an AI-simulation disclosure footer. Profiles are loaded once per session and cached, then reused across rounds and modules.
+
+**Resolution chain** — when `panel:review` asks for a reviewer:
+
+1. Cache hit → return cached profile (<1ms)
+2. Exact match → load from `context/panel/reviewers/profiles/{name}.md`
+3. Slug match → convert "Percy Liang" → `percy-liang.md`
+4. Database fallback → extract from `REVIEWER-DATABASE.md`
+
+**Token economics** (A/B tested, n=5 papers):
+
+| Metric | Baseline (Database) | Profiles | Savings |
+|--------|---------------------|----------|---------|
+| Per paper (5 reviewers) | 37,500 tokens | 24,500 tokens | 34.7% |
+| Module (7 reviewers × 5 papers) | 262,500 tokens | 164,500 tokens | 37.3% |
+| Per reviewer (cached) | 7,500 tokens | 4,500 tokens | 40% |
+
+Cache hits are 15× faster than file loads (<1ms vs 12ms). Typical cache hit rate is 50% on round 2 and 100% for module-level panel reviews. Full registry is indexed in `context/panel/reviewers/_index.yaml`.
 
 ## License
 
