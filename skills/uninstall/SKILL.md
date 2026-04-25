@@ -227,11 +227,11 @@ After uninstall, the plugin remains installed in Claude Code's plugin system. To
 
 ```bash
 # From the plugin development location
-cd C:/src/panel
+cd panel
 rm -rf .claude-plugin/
 
 # Or from the marketplace/plugins directory
-cd C:/src/plugins
+cd plugins
 rm -rf panel/
 ```
 

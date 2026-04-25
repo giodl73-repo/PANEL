@@ -144,8 +144,8 @@ panel/
 │   └── REVIEW_PANEL.md          # Module-level panel review
 ├── docs/                        # Plugin documentation
 ├── scripts/
-│   ├── sync-to-plugin.sh       # → C:\src\plugins\panel
-│   └── sync-to-research.sh     # → C:\src\research\panel
+│   ├── sync-to-plugin.sh       # → plugins\panel
+│   └── sync-to-research.sh     # → research\panel
 └── README.md
 ```
 
@@ -211,12 +211,12 @@ Projects are defined in `.claude/panel.json`:
 
 **Standalone Mode** (default):
 - Single project: `"researchPath": "research"`
-- Papers in `C:\src\panel/research/`
+- Papers in `panel/research/`
 - Traditional panel workflow
 
 **Monorepo Mode** (new):
 - Multiple projects: each with its own `researchPath`
-- Example: `"researchPath": "research/craft"` → `C:\src\workspace/research/craft/`
+- Example: `"researchPath": "research/craft"` → `workspace/research/craft/`
 - Switch between projects using `panel:project`
 - Each project has independent research papers and context
 
@@ -656,10 +656,10 @@ git commit -m "[panel] <message>"
 # 2. Push
 git push
 
-# 3. Sync plugin → C:\src\plugins\panel (pulls, copies, commits, pushes in target repo)
+# 3. Sync plugin → plugins\panel (pulls, copies, commits, pushes in target repo)
 ./scripts/sync-to-plugin.sh --push
 
-# 4. Sync research → C:\src\research\panel (pulls, copies, commits, pushes in target repo)
+# 4. Sync research → research\panel (pulls, copies, commits, pushes in target repo)
 ./scripts/sync-to-research.sh --push
 ```
 

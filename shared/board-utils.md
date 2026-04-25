@@ -11,7 +11,7 @@ Input:  path to monorepo root
 Output: array of {
   name: string,              # directory name (e.g., "merit", "waves", "panel")
   path: string,              # full path to module in monorepo
-  source_repo: string|null,  # external source repo path, if synced (e.g., "C:\src\boost")
+  source_repo: string|null,  # external source repo path, if synced (e.g., "boost")
   has_research: bool,        # contains research/ subdirectory
   paper_count: number,       # number of paper directories
   panel_status: "completed"|"placeholder"|"missing",
@@ -26,7 +26,7 @@ Scans `repo_path` for directories containing:
 
 Excludes: `.git`, `node_modules`, `.claude`, `docs`, `scripts`, hidden directories.
 
-**Synced modules**: Some modules are authored in external source repos (e.g., boost at `C:\src\boost\research/`, waves at `C:\src\waves\research/`) and synced to the monorepo. The board always reads from the monorepo copy — the `source_repo` field is informational only, used for status messages (e.g., "boost: last synced 2h ago, source may be ahead").
+**Synced modules**: Some modules are authored in external source repos (e.g., boost at `boost\research/`, waves at `waves\research/`) and synced to the monorepo. The board always reads from the monorepo copy — the `source_repo` field is informational only, used for status messages (e.g., "boost: last synced 2h ago, source may be ahead").
 
 ### detect_panel_status(module_path)
 

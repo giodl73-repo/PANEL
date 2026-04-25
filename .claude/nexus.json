@@ -5,17 +5,17 @@
   "hubs": {
     "waves": {
       "local": "./.waves-hub",
-      "remotes": ["C:/src/waves-hub"],
+      "remotes": ["waves-hub"],
       "syncMode": "auto"
     },
     "panel": {
       "local": "./.panel-hub",
-      "remotes": ["C:/src/panel-hub"],
+      "remotes": ["panel-hub"],
       "syncMode": "auto"
     },
     "probe": {
       "local": "./.probe-hub",
-      "remotes": ["C:/src/probe-hub"],
+      "remotes": ["probe-hub"],
       "syncMode": "auto"
     }
   }

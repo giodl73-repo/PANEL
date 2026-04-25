@@ -74,7 +74,7 @@ const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 
 ## Configuration Examples
 
-### Standalone Mode (Current - C:\src\panel)
+### Standalone Mode (Current - panel)
 
 ```json
 {
@@ -90,7 +90,7 @@ const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 }
 ```
 
-### Monorepo Mode (Future - C:\src\workspace)
+### Monorepo Mode (Future - workspace)
 
 Create `.claude/panel.json` in workspace:
 
@@ -202,7 +202,7 @@ workspace/
 ### In Workspace Monorepo
 
 ```bash
-cd C:\src\workspace
+cd workspace
 
 # List panel projects
 panel:project
@@ -228,7 +228,7 @@ panel:setup panel-waves-paper "CSCW 2026"
 ### In Standalone Mode
 
 ```bash
-cd C:\src\panel
+cd panel
 
 # Still works as before
 panel:setup
@@ -254,14 +254,14 @@ All three plugins use:
 
 ## Next Steps
 
-### For Panel Standalone (C:\src\panel)
+### For Panel Standalone (panel)
 
 1. ✅ Config updated - no action needed
 2. ⬜ Update commands to use project-config loader
 3. ⬜ Test backward compatibility
 4. ⬜ Update CLAUDE.md with multi-project info
 
-### For Workspace Monorepo (C:\src\workspace)
+### For Workspace Monorepo (workspace)
 
 1. ⬜ Move panel plugin to `workspace/plugins/panel/`
 2. ⬜ Create `.claude/panel.json` with 5 projects (craft, waves, probe, boost, panel)

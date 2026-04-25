@@ -913,6 +913,6 @@ Next steps:
 
 ## See Also
 
-- Waves reference-resolver.md: C:\src\waves\shared\reference-resolver.md
-- Waves wave-index.yaml: C:\src\waves\context\waves\_config\wave-index.yaml
-- Waves CLAUDE.md: C:\src\waves\CLAUDE.md (lines 35-48 for reference syntax)
+- Waves reference-resolver.md: waves\shared\reference-resolver.md
+- Waves wave-index.yaml: waves\context\waves\_config\wave-index.yaml
+- Waves CLAUDE.md: waves\CLAUDE.md (lines 35-48 for reference syntax)

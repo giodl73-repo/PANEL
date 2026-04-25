@@ -421,7 +421,7 @@ When craft is used in wave context:
 
 ## References
 
-- C:\src\craft\CLAUDE.md — Craft patterns and principles
-- C:\src\craft\shared\generators.md — Plugin scaffolding functions
-- C:\src\craft\commands\new.md — Plugin creation workflow
-- C:\src\craft\commands\fork.md — Skill extraction workflow
+- craft\CLAUDE.md — Craft patterns and principles
+- craft\shared\generators.md — Plugin scaffolding functions
+- craft\commands\new.md — Plugin creation workflow
+- craft\commands\fork.md — Skill extraction workflow

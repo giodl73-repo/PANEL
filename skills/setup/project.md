@@ -11,7 +11,7 @@ const targetDir = process.cwd();
 const researchDir = path.join(targetDir, projectConfig.researchPath);
 ```
 
-Research files go in `researchDir` (e.g., `C:\src\panel/research/` or `C:\src\workspace/research/craft/`).
+Research files go in `researchDir` (e.g., `panel/research/` or `workspace/research/craft/`).
 
 ## Step 1: Interactive Topic Discovery
 
@@ -143,7 +143,7 @@ For each detected paper directory (containing `main.tex`) without `_panel.yaml`:
 
 After initializing existing papers, offer to discover and create papers from completed waves. Uses the same pipeline as `panel:import --from waves`: `discover_from_waves()` from shared/topic-discovery.md and `generate_paper()` from shared/paper-generator.md.
 
-**Detection**: Check if `.waves/` exists in cwd or if `C:\src\waves` is available.
+**Detection**: Check if `.waves/` exists in cwd or if `waves` is available.
 
 **If waves detected**, use AskUserQuestion:
 
@@ -161,7 +161,7 @@ options:
 **If user selects yes:**
 
 1. Call `discover_from_waves(waves_dir, project)` from shared/topic-discovery.md
-   - `waves_dir`: `.waves/` in cwd if present, else `C:\src\waves`
+   - `waves_dir`: `.waves/` in cwd if present, else `waves`
    - `project`: inferred from cwd basename
 2. Display proposals table:
 
@@ -226,7 +226,7 @@ At least one of these is always available (Step 1 always asks for research area)
    - At least 1 reviewer from each paper's individual panel
 4. Write REVIEWERS.md with per-paper tables + cross-portfolio panel
 
-   Format matches `C:\src\panel\research\REVIEWERS.md`:
+   Format matches `panel\research\REVIEWERS.md`:
    - Header with module name, paper count, database link
    - One `### Paper N: {title} ({venue})` section per paper with 5-reviewer table
    - `## Cross-Portfolio Panel` section with 7-member table and selection rationale
@@ -282,7 +282,7 @@ At least one of these is always available (Step 1 always asks for research area)
 1. Verify/update monorepo:
    - `cd ../research && git fetch origin && git pull`
 
-2. Generate `scripts/sync-to-research.sh` if missing — follow the exact pattern from `C:\src\panel\scripts\sync-to-research.sh` with substitutions:
+2. Generate `scripts/sync-to-research.sh` if missing — follow the exact pattern from `panel\scripts\sync-to-research.sh` with substitutions:
    - `RESEARCH_REPO` → read from `../research/.git/config` remote origin URL
    - `PANEL_DIR` → `${RESEARCH_DIR}/{module}` where module = `basename(cwd)`
    - Paper glob → `panel-*/`
@@ -316,8 +316,8 @@ Panel Setup — boost
 ═══════════════════════════════════════════════════════════════════════
 
 Research area: AI Systems & Infrastructure
-Project root: C:\src\boost\
-Research directory: C:\src\boost\research\
+Project root: boost\
+Research directory: boost\research\
 
 Discovered from waves:
   - Static analysis for command files (3 waves)

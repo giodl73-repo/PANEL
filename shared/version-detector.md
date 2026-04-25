@@ -16,7 +16,7 @@ Detect the current panel model version in a project and provide upgrade paths.
 Detect the current panel version in a project.
 
 **Parameters**:
-- `researchDir` (string) - Path to research directory (e.g., "C:/src/panel/research")
+- `researchDir` (string) - Path to research directory (e.g., "panel/research")
 
 **Returns**: `string|null` - Version identifier or null if not set up
 
@@ -162,7 +162,7 @@ function isUpgradeRecommended(currentVersion) {
 ```javascript
 // @import ../shared/version-detector.md
 
-const researchDir = 'C:/src/panel/research';
+const researchDir = 'panel/research';
 
 // Detect version
 const version = detectPanelVersion(researchDir);

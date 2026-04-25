@@ -14,7 +14,7 @@ Panel now supports multi-project configuration similar to probe's `testsPath` mo
 
 **File**: `.claude/panel.json`
 
-#### Standalone Mode (C:\src\panel)
+#### Standalone Mode (panel)
 
 ```json
 {
@@ -33,14 +33,14 @@ Panel now supports multi-project configuration similar to probe's `testsPath` mo
   "hubs": {
     "panel": {
       "local": "./.panel-hub",
-      "remotes": ["C:/src/panel-hub"],
+      "remotes": ["panel-hub"],
       "syncMode": "auto"
     }
   }
 }
 ```
 
-#### Monorepo Mode (C:\src\workspace)
+#### Monorepo Mode (workspace)
 
 ```json
 {
@@ -159,7 +159,7 @@ workspace/
 ### Setup in Monorepo
 
 ```bash
-cd C:\src\workspace
+cd workspace
 
 # Setup panel for craft research
 panel:project craft-research
@@ -355,14 +355,14 @@ No changes required! The new config format is backward compatible:
 6. ⬜ Update `commands/convene.md` to use `researchPath`
 7. ⬜ Update `commands/board.md` to use `researchPath`
 8. ⬜ Create `commands/project.md` for project switching
-9. ⬜ Test in standalone mode (C:\src\panel)
-10. ⬜ Test in monorepo mode (C:\src\workspace)
+9. ⬜ Test in standalone mode (panel)
+10. ⬜ Test in monorepo mode (workspace)
 
 ## Example: Adding Panel to Workspace
 
 ### Step 1: Create Config
 
-Add to `C:\src\workspace\.claude\panel.json`:
+Add to `workspace\.claude\panel.json`:
 
 ```json
 {
@@ -383,7 +383,7 @@ Add to `C:\src\workspace\.claude\panel.json`:
 ### Step 2: Initialize
 
 ```bash
-cd C:\src\workspace
+cd workspace
 panel:setup
 ```
 

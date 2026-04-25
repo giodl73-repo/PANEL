@@ -46,7 +46,7 @@ Examples:
 ### discover_from_roadmap(roadmap_path)
 
 ```
-Input:  path to ROADMAP.md (default: C:\src\research\ROADMAP.md)
+Input:  path to ROADMAP.md (default: research\ROADMAP.md)
 Output: array of proposals
 ```
 
@@ -78,7 +78,7 @@ Output: array of proposals
 ### discover_from_waves(waves_dir, project)
 
 ```
-Input:  waves directory (default: C:\src\waves), project name (optional)
+Input:  waves directory (default: waves), project name (optional)
 Output: array of proposals
 ```
 

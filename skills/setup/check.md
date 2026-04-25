@@ -26,7 +26,7 @@ const researchDir = path.join(process.cwd(), projectConfig.researchPath);
 ## Check Output
 
 ```
-Panel Setup Check — C:\src\boost
+Panel Setup Check — boost
 ═══════════════════════════════════════════════════════════════════════
 
 Plugin: ${CLAUDE_PLUGIN_ROOT} ✓

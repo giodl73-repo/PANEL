@@ -2,7 +2,7 @@
 
 ```
 panel:setup --connect
-panel:setup --connect C:\src\research
+panel:setup --connect research
 ```
 
 Standalone mode — connects an existing research directory to a research monorepo without running full setup.
