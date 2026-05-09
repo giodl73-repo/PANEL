@@ -4,5 +4,19 @@
   "description": "AI-simulated expert review lifecycle for research papers. Three-tier architecture: panel:paper (paper lifecycle), panel:module (module review + tracks), panel:board (cross-module program review). Research pipeline: panel:research (pre-write discovery, post-write validation, 14 sub-skills).",
   "author": {
     "name": "Gio Della-Libera"
-  }
+  },
+  "skills": [
+    "./.claude/skills/paper",
+    "./.claude/skills/publication",
+    "./.claude/skills/module",
+    "./.claude/skills/board",
+    "./.claude/skills/setup",
+    "./.claude/skills/upgrade",
+    "./.claude/skills/reviewers",
+    "./.claude/skills/project",
+    "./.claude/skills/report",
+    "./.claude/skills/research",
+    "./.claude/skills/help",
+    "./.claude/skills/uninstall"
+  ]
 }
