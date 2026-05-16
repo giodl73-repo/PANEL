@@ -4,6 +4,10 @@
 
 A Claude Code plugin that simulates expert feedback to help you strengthen your research papers before submission. This is NOT a substitute for peer review—it's a tool for quality improvement.
 
+**Review roles:** This repo uses
+[ROLES](https://github.com/giodl73-repo/ROLES), the `.roles` convention for
+repository-local review panels.
+
 > **What This Is**: AI-generated feedback based on domain expert personas to help identify weaknesses and improve your work.
 >
 > **What This Is NOT**: Real peer review, real reviewer opinions, or a replacement for actual conference submission.
