@@ -127,6 +127,16 @@ make dist         # Copy PDFs to docs/
 make clean        # Remove build artifacts
 ```
 
+## Maintenance ownership
+
+- **Active owner:** the `giodl73-repo/PANEL` repository maintainer.
+- **2026-08-16 reduction:** removed ten tracked LaTeX intermediate files
+  (150.5 KiB) that the existing publication `make clean` targets already
+  classify as disposable build state.
+- **Boundary:** publication sources and final PDFs remain tracked evidence;
+  `.aux`, `.bbl`, `.blg`, `.log`, `.fls`, `.fdb_latexmk`, and related
+  intermediates remain ignored and must not be recommitted.
+
 ## Syncing
 
 ```bash
