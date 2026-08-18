@@ -84,6 +84,22 @@ Re-entrancy: `panel:go` reads `_panel.yaml` to determine current stage, picks up
 ### 💡 Best Practice:
 Treat suggestions like insights from a smart colleague, not mandates from reviewers. Use what strengthens your work, ignore what doesn't align with your research goals.
 
+### Portfolio reuse contract
+
+PANEL's bounded reusable contract is the versioned Claude Code plugin declared
+by `.claude-plugin/plugin.json`, its documented `panel:*` skills, and the
+committed `_panel.yaml` lifecycle state those skills maintain. Adopters must
+record the PANEL repository, plugin version, and immutable revision; the runtime
+installation path remains environment-resolved local state. Generated reviews
+remain advisory evidence and do not establish peer review, factual correctness,
+venue readiness, or endorsement by the named personas.
+
+[BISECT](https://github.com/giodl73-repo/BISECT) is the current portfolio
+adopter: its `.claude/panel.json` records PANEL 2.3.0 provenance at an immutable
+revision, and its research tree contains committed per-paper lifecycle state.
+Reviewer profiles, generated scores, and BISECT-specific research layouts are
+not shared APIs.
+
 ## Reviewers
 
 Panel ships with a registry of 45 simulated reviewer personas across 10 categories — Systems & Infrastructure, Compilers & PL Theory, AI Agents & Orchestration, Prompting & LLM Capabilities, Human-AI Interaction, ML Systems & Efficiency, ML Research / Learning, Software Engineering & DevOps, NLP & Information Retrieval, and Security & Safety. Each persona is loaded as a persistent **profile** (research background, evaluation lens, characteristic concerns, voice) and cached across review rounds for consistency.
