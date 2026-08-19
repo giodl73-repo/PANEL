@@ -186,4 +186,10 @@ Cache hits are 15× faster than file loads (<1ms vs 12ms). Typical cache hit rat
 
 ## License
 
-[MIT](LICENSE) — © 2026 Gio Della-Libera.
+PANEL uses separate licenses for software and content. Source code,
+executable scripts, tests, configuration, and ordinary software
+documentation are MIT-licensed (copyright Gio Della-Libera). Original
+non-software content is licensed CC BY-NC 4.0 (copyright Gio Della-Libera);
+commercial use of that content requires separate written permission.
+Third-party material remains under its own terms.
+See [LICENSE](./LICENSE) for the complete notice.
