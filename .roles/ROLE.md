@@ -30,6 +30,26 @@ turning governance into a straitjacket.
 These are domain lenses, not governance roles, and they intentionally remain in
 their own peer directory.
 
+## Active panel and specialist routing
+
+The two Parliament roles and two Methodology roles are the active core for every relevant
+change. The files under `panel-reviewer/` are a specialist roster, not an always-on panel.
+
+Select three to five reviewer personas that cover the affected subject, operator, and a credible
+skeptical or counter-position. Record selected role paths, routing rationale, and relevant
+limitations or conflicts in the review artifact. Add reviewers only when they contribute a
+distinct evidence source or tension; panel size is not evidence of diversity.
+
+Governance objections about ownership or disclosure block before methodology review. Persona
+Calibration may reject an ungrounded reviewer, while Synthesis Priority may narrow a valid but
+over-broad panel. Resolve that tension by retaining the smallest panel that still includes the
+affected operator and a skeptical view, and preserve dissent in the synthesis.
+
+Add a reviewer persona only with a distinct evidence domain, explicit review questions, and a
+named routing condition. Review the roster annually: merge duplicates and retire personas with
+no distinct scope or no selection across two review cycles. Preserve retired role history and
+prior review attribution.
+
 ## Review order
 
 1. Use Simulation Disclosure Steward for any public text, reviewer naming, or output disclaimer.
