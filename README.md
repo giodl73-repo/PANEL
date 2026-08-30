@@ -8,6 +8,10 @@ A Claude Code plugin that simulates expert feedback to help you strengthen your 
 [ROLES](https://github.com/giodl73-repo/ROLES), the `.roles` convention for
 repository-local review panels.
 
+**PITFALL doctrine:** [`.pitfall/PITFALL.md`](.pitfall/PITFALL.md) indexes the
+simulation, lifecycle, synthesis, persona, and probe-staleness failure patterns
+that must stay visible when PANEL is reused across repositories.
+
 > **What This Is**: AI-generated feedback based on domain expert personas to help identify weaknesses and improve your work.
 >
 > **What This Is NOT**: Real peer review, real reviewer opinions, or a replacement for actual conference submission.
