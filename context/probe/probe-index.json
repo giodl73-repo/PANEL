@@ -49,5 +49,7 @@
       "tiersRun": ["L0", "L1", "L2", "L3"]
     }
   ],
-  "testPlan": "context/probe/test-plan.json"
+  "testPlan": "context/probe/test-plan.json",
+  "currentSurface": "context/probe/current-surface.md",
+  "currentSurfaceCheck": "tests/check-probe-surface.ps1"
 }

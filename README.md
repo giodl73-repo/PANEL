@@ -12,6 +12,13 @@ repository-local review panels.
 simulation, lifecycle, synthesis, persona, and probe-staleness failure patterns
 that must stay visible when PANEL is reused across repositories.
 
+Current probe evidence is tied to the active plugin surface, not only to the
+historical 47/47 report. `PANEL-PF-05` is guarded by
+[`context/probe/current-surface.md`](context/probe/current-surface.md) and
+`pwsh -NoProfile -File tests\check-probe-surface.ps1`, which compare the
+v2.3.0 plugin manifest, 12 skill files, ten-publication inventory, probe plan,
+probe index, and historical-report boundary.
+
 > **What This Is**: AI-generated feedback based on domain expert personas to help identify weaknesses and improve your work.
 >
 > **What This Is NOT**: Real peer review, real reviewer opinions, or a replacement for actual conference submission.

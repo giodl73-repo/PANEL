@@ -50,6 +50,12 @@ named routing condition. Review the roster annually: merge duplicates and retire
 no distinct scope or no selection across two review cycles. Preserve retired role history and
 prior review attribution.
 
+## PITFALL gates
+
+| Gate | Roles | Blocks |
+|---|---|---|
+| `PANEL-PF-05` current probe surface | Lifecycle Integrity Auditor; Simulation Disclosure Steward; Persona Calibration Reviewer; Synthesis Priority Editor | Citing stored probe reports as current adoption evidence unless plugin version, skill files, publication inventory, probe plan, probe index, current-surface record, and historical-report boundary are checked with `tests/check-probe-surface.ps1`. |
+
 ## Review order
 
 1. Use Simulation Disclosure Steward for any public text, reviewer naming, or output disclaimer.

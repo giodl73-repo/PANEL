@@ -1,7 +1,7 @@
 {
   "plugin": "panel",
-  "version": "1.1.0",
-  "generated": "2026-02-06",
+  "version": "2.3.0",
+  "generated": "2026-09-02",
   "meta": {
     "totalTests": 47,
     "tiers": {
@@ -22,10 +22,10 @@
           "assertions": ["file-exists", "valid-json", "has-name", "has-version", "has-commands"]
         },
         {
-          "id": "l0-commands-exist",
-          "name": "All 11 command files exist and are non-empty",
-          "target": "commands/*.md",
-          "assertions": ["files-exist", "count-equals-11", "non-empty"]
+          "id": "l0-skills-exist",
+          "name": "All 12 plugin skill files exist and are non-empty",
+          "target": ".claude/skills/*/SKILL.md",
+          "assertions": ["files-exist", "count-equals-12", "non-empty"]
         },
         {
           "id": "l0-shared-exist",

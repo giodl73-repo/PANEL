@@ -4,6 +4,14 @@
 **Duration**: ~300s (parallel execution, all tiers)
 **Tiers**: L0, L1, L2, L3
 **Plugin**: panel v1.1.0
+
+## Historical probe boundary
+
+This report is historical evidence for the panel v1.1.0 probe surface. Current
+plugin-surface evidence for panel v2.3.0 is recorded in
+`context/probe/current-surface.md` and must be checked with
+`tests/check-probe-surface.ps1` before this 47/47 pass report is cited as
+current adoption evidence.
 **Fixtures**: Sesame Street mock monorepo
 
 ## Summary

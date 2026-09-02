@@ -76,7 +76,7 @@ paper findings to bubble up without losing priority structure.
 
 ## PANEL-I-05: Plugin Provenance Is Recorded For Adopters
 
-**Status:** PARTIAL
+**Status:** VERIFIED
 
 **Claim:** Adopters must record the PANEL repository, plugin version, and
 immutable revision when relying on PANEL behavior.
@@ -84,7 +84,31 @@ immutable revision when relying on PANEL behavior.
 **Why it matters:** Cross-repo users need to know which skill contract produced
 their review state and which local details are not portable.
 
-**Enforcement:** README portfolio reuse contract and plugin manifest versioning
-define the adoption evidence expected from downstream repos.
+**Enforcement:** README portfolio reuse contract, plugin manifest versioning,
+and current-surface probe check define the adoption evidence expected from
+downstream repos.
 
-**Evidence:** `README.md`, `.claude-plugin/plugin.json`, `.claude/panel.json`.
+**Evidence:** `README.md`, `.claude-plugin/plugin.json`, `.claude/panel.json`,
+`context/probe/current-surface.md`, and `tests/check-probe-surface.ps1`.
+
+## PANEL-I-06: Probe Evidence Matches Current Plugin Surface
+
+**Status:** VERIFIED
+
+**Claim:** Stored probe reports are current evidence only when the probe plan,
+probe index, plugin manifest version, skill files, and publication inventory
+match the active PANEL surface.
+
+**Why it matters:** A historical 47/47 pass can be true for the old plugin while
+failing to prove that current skills, publications, and command names still have
+coverage.
+
+**Enforcement:** `tests/check-probe-surface.ps1` checks panel v2.3.0, 12 plugin
+skill files, ten research-publication directories, the updated probe plan, probe
+index, current-surface record, and historical report boundary.
+
+**Evidence:** `context/probe/current-surface.md`,
+`context/probe/test-plan.json`, `context/probe/probe-index.json`,
+`context/probe/results/run-all-1770441200/report.md`,
+`.claude-plugin/plugin.json`, `.roles/ROLE.md`, and
+`tests/check-probe-surface.ps1`.

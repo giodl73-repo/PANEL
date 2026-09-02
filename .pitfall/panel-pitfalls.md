@@ -94,7 +94,7 @@ Persona Calibration Reviewer review for profile changes.
 
 ## PANEL-PF-05: Probe Evidence Goes Stale Against The Plugin Surface
 
-**Status:** OPEN
+**Status:** MITIGATED
 
 **Pattern:** Stored probe reports and test-plan assertions remain green while
 the plugin layout, skill count, publication inventory, or command names have
@@ -110,7 +110,13 @@ the probe plan is regenerated and rerun.
 
 **Structural solution:** Update the probe plan to the current skill/plugin
 surface, add an executable runner or documented command, regenerate the probe
-index, and make PITFALL/portfolio adoption cite the fresh run.
+index, and make PITFALL/portfolio adoption cite the fresh run. PANEL now has a
+current-surface record and policy check that compare plugin version, 12 skill
+files, ten-publication inventory, probe plan, and probe index before stored
+probe reports can be cited as current evidence.
 
 **Evidence:** `context/probe/test-plan.json`,
-`context/probe/probe-index.json`, `.claude-plugin/plugin.json`, `README.md`.
+`context/probe/probe-index.json`, `context/probe/current-surface.md`,
+`context/probe/results/run-all-1770441200/report.md`,
+`.claude-plugin/plugin.json`, `README.md`, `.roles/ROLE.md`, and
+`tests/check-probe-surface.ps1`.
